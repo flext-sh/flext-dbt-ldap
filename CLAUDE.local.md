@@ -247,7 +247,7 @@ dbt snapshot --select ldap_entries_snapshot
 
 - **tap-ldap**: Primary data source for dbt LDAP transformations
 - **target-ldap**: Output destination for transformed directory data
-- **flx-ldap**: Integration with FLX LDAP migration workflows
+- **flext-ldap**: Integration with FLX LDAP migration workflows
 - **ldap-core-shared**: Shared LDAP models and schema definitions
 
 ### **Enterprise Analytics Integration**
