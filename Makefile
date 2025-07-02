@@ -1,46 +1,194 @@
-.PHONY: help install install-dev test test-unit test-integration test-e2e dbt-deps dbt-compile dbt-run dbt-test dbt-docs dbt-clean lint format format-check type-check security clean build docker-test docker-clean pre-commit all
+# =============================================================================
+# FLEXT DBT LDAP - MAKEFILE
+# PEP Strict Compliance with Poetry Build System - dbt Models
+# =============================================================================
 
-# Configuration
-PYTHON := python
-POETRY := poetry
-DBT := dbt
-SOURCE_DIR := models
-TEST_DIR := tests
-PACKAGE_NAME := dbt_ldap
+.DEFAULT_GOAL := help
+SHELL := /bin/bash
+
+# Project Configuration
+PROJECT_NAME := flext-dbt-ldap
+PYTHON_VERSION := 3.13
+SOURCE_DIR := src
+TESTS_DIR := tests
+REPORTS_DIR := reports
+MODULE_NAME := dbt_ldap
+DBT_PROJECT_DIR := dbt_project
 
 # Colors for output
-BLUE := \033[34m
-GREEN := \033[32m
-YELLOW := \033[33m
-RED := \033[31m
-RESET := \033[0m
+CYAN := \\033[0;36m
+GREEN := \\033[0;32m
+YELLOW := \\033[1;33m
+RED := \\033[0;31m
+NC := \\033[0m # No Color
 
-# Default target
+# =============================================================================
+# HELP SYSTEM
+# =============================================================================
+
+.PHONY: help
 help: ## Show this help message
-	@echo "$(BLUE)Available targets:$(RESET)"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-20s$(RESET) %s\n", $$1, $$2}'
+	@echo -e "$(CYAN)$(PROJECT_NAME) - dbt LDAP Models Development Commands$(NC)"
+	@echo -e "$(CYAN)====================================================$(NC)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "$(GREEN)%-20s$(NC) %s\\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-# Installation targets
-install: ## Install package dependencies
-	@echo "$(BLUE)Installing dependencies...$(RESET)"
-	$(POETRY) install
+# =============================================================================
+# ENVIRONMENT SETUP
+# =============================================================================
 
-install-dev: ## Install package with development dependencies
-	@echo "$(BLUE)Installing development dependencies...$(RESET)"
-	$(POETRY) install --with dev
+.PHONY: install
+install: ## Install project dependencies with Poetry
+	@echo -e "$(CYAN)Installing project dependencies...$(NC)"
+	poetry install --all-extras
+	poetry run pre-commit install
+	@echo -e "$(GREEN)✓ Installation complete$(NC)"
 
-install-e2e: ## Install package with E2E testing dependencies
-	@echo "$(BLUE)Installing E2E testing dependencies...$(RESET)"
-	$(POETRY) install --with dev,e2e
+.PHONY: install-dev
+install-dev: ## Install development dependencies
+	@echo -e "$(CYAN)Installing development dependencies...$(NC)"
+	poetry install --with dev,security,build,test
+	poetry run pre-commit install
+	@echo -e "$(GREEN)✓ Development installation complete$(NC)"
 
-install-all: ## Install all dependencies
-	@echo "$(BLUE)Installing all dependencies...$(RESET)"
-	$(POETRY) install --with dev,e2e
+.PHONY: update
+update: ## Update all dependencies
+	@echo -e "$(CYAN)Updating dependencies...$(NC)"
+	poetry update
+	@echo -e "$(GREEN)✓ Dependencies updated$(NC)"
 
-# dbt specific targets
+.PHONY: lock
+lock: ## Generate poetry.lock file
+	@echo -e "$(CYAN)Generating lock file...$(NC)"
+	poetry lock --no-update
+	@echo -e "$(GREEN)✓ Lock file generated$(NC)"
+
+# =============================================================================
+# CODE QUALITY - PEP STRICT COMPLIANCE
+# =============================================================================
+
+.PHONY: format
+format: ## Format code with black and isort
+	@echo -e "$(CYAN)Formatting code...$(NC)"
+	poetry run black $(SOURCE_DIR) $(TESTS_DIR)
+	poetry run isort $(SOURCE_DIR) $(TESTS_DIR)
+	@echo -e "$(GREEN)✓ Code formatted$(NC)"
+
+.PHONY: lint
+lint: ## Run all linters (ruff, mypy, bandit)
+	@echo -e "$(CYAN)Running linters...$(NC)"
+	poetry run ruff check $(SOURCE_DIR) $(TESTS_DIR)
+	poetry run mypy $(SOURCE_DIR)
+	poetry run bandit -r $(SOURCE_DIR)
+	@echo -e "$(GREEN)✓ Linting complete$(NC)"
+
+.PHONY: lint-fix
+lint-fix: ## Run linters with auto-fix
+	@echo -e "$(CYAN)Running linters with auto-fix...$(NC)"
+	poetry run ruff check --fix $(SOURCE_DIR) $(TESTS_DIR)
+	poetry run black $(SOURCE_DIR) $(TESTS_DIR)
+	poetry run isort $(SOURCE_DIR) $(TESTS_DIR)
+	@echo -e "$(GREEN)✓ Linting and formatting complete$(NC)"
+
+.PHONY: type-check
+type-check: ## Run type checking with mypy
+	@echo -e "$(CYAN)Running type checks...$(NC)"
+	poetry run mypy $(SOURCE_DIR)
+	@echo -e "$(GREEN)✓ Type checking complete$(NC)"
+
+.PHONY: security
+security: ## Run security checks
+	@echo -e "$(CYAN)Running security checks...$(NC)"
+	poetry run bandit -r $(SOURCE_DIR)
+	poetry run safety check
+	@echo -e "$(GREEN)✓ Security checks complete$(NC)"
+
+# =============================================================================
+# TESTING
+# =============================================================================
+
+.PHONY: test
+test: ## Run all tests with coverage
+	@echo -e "$(CYAN)Running tests...$(NC)"
+	mkdir -p $(REPORTS_DIR)
+	poetry run pytest
+	@echo -e "$(GREEN)✓ Tests complete$(NC)"
+
+.PHONY: test-unit
+test-unit: ## Run unit tests only
+	@echo -e "$(CYAN)Running unit tests...$(NC)"
+	poetry run pytest -m "unit" -v
+	@echo -e "$(GREEN)✓ Unit tests complete$(NC)"
+
+.PHONY: test-integration
+test-integration: ## Run integration tests only
+	@echo -e "$(CYAN)Running integration tests...$(NC)"
+	poetry run pytest -m "integration" -v
+	@echo -e "$(GREEN)✓ Integration tests complete$(NC)"
+
+.PHONY: test-dbt
+test-dbt: ## Run dbt tests only
+	@echo -e "$(CYAN)Running dbt tests...$(NC)"
+	poetry run pytest -m "dbt" -v
+	@echo -e "$(GREEN)✓ dbt tests complete$(NC)"
+
+.PHONY: test-ldap
+test-ldap: ## Run LDAP tests only
+	@echo -e "$(CYAN)Running LDAP tests...$(NC)"
+	poetry run pytest -m "ldap" -v
+	@echo -e "$(GREEN)✓ LDAP tests complete$(NC)"
+
+.PHONY: test-models
+test-models: ## Run model tests only
+	@echo -e "$(CYAN)Running model tests...$(NC)"
+	poetry run pytest -m "models" -v
+	@echo -e "$(GREEN)✓ Model tests complete$(NC)"
+
+.PHONY: test-macros
+test-macros: ## Run macro tests only
+	@echo -e "$(CYAN)Running macro tests...$(NC)"
+	poetry run pytest -m "macros" -v
+	@echo -e "$(GREEN)✓ Macro tests complete$(NC)"
+
+.PHONY: test-e2e
+test-e2e: ## Run end-to-end tests only
+	@echo -e "$(CYAN)Running E2E tests...$(NC)"
+	poetry run pytest -m "e2e" -v
+	@echo -e "$(GREEN)✓ E2E tests complete$(NC)"
+
+.PHONY: test-watch
+test-watch: ## Run tests in watch mode
+	@echo -e "$(CYAN)Running tests in watch mode...$(NC)"
+	poetry run pytest-watch
+
+.PHONY: coverage
+coverage: ## Generate coverage report
+	@echo -e "$(CYAN)Generating coverage report...$(NC)"
+	mkdir -p $(REPORTS_DIR)
+	poetry run pytest --cov=$(SOURCE_DIR) --cov-report=html:$(REPORTS_DIR)/coverage --cov-report=term-missing
+	@echo -e "$(GREEN)✓ Coverage report generated: $(REPORTS_DIR)/coverage/index.html$(NC)"
+
+# =============================================================================
+# DBT OPERATIONS
+# =============================================================================
+
+.PHONY: dbt-init
+dbt-init: ## Initialize dbt project
+	@echo -e "$(CYAN)Initializing dbt project...$(NC)"
+	mkdir -p $(DBT_PROJECT_DIR)
+	poetry run dbt init --project-dir $(DBT_PROJECT_DIR)
+	@echo -e "$(GREEN)✓ dbt project initialized$(NC)"
+
+.PHONY: dbt-debug
+dbt-debug: ## Debug dbt configuration
+	@echo -e "$(CYAN)Debugging dbt configuration...$(NC)"
+	poetry run dbt debug --project-dir $(DBT_PROJECT_DIR)
+	@echo -e "$(GREEN)✓ dbt debug complete$(NC)"
+
+.PHONY: dbt-deps
 dbt-deps: ## Install dbt dependencies
-	@echo "$(BLUE)Installing dbt dependencies...$(RESET)"
-	$(POETRY) run $(DBT) deps
+	@echo -e "$(CYAN)Installing dbt dependencies...$(NC)"
+	poetry run dbt deps --project-dir $(DBT_PROJECT_DIR)
+	@echo -e "$(GREEN)✓ dbt dependencies installed$(NC)"
 
 dbt-compile: ## Compile dbt models
 	@echo "$(BLUE)Compiling dbt models...$(RESET)"
