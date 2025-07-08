@@ -3,6 +3,14 @@ requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
 
 [project]
+name = "flext-dbt-ldap"
+version = "0.6.0"
+description = "FLEXT dbt LDAP - dbt Models for LDAP Data Transformation"
+authors = [{ name = "FLEXT Team", email = "team@flext.sh" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+keywords = ["flext", "dbt", "ldap", "transformation", "models", "enterprise"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -35,23 +43,7 @@ dependencies = [
 ]
 
 [project.scripts]
-name = "flext-dbt-ldap"
-version = "0.2.0"
-description = "FLEXT DBT LDAP - dbt Models and Transformations for LDAP Directory Data"
-authors = [{ name = "FLEXT Team" }]
-license = { text = "MIT" }
-readme = "README.md"
-requires-python = ">=3.13"
-keywords = [
-    "flext",
-    "dbt",
-    "ldap",
-    "directory",
-    "models",
-    "transformations",
-    "enterprise",
-]
-flext-dbt-ldap = "dbt_ldap.cli:main"
+flext-dbt-ldap = "flext_dbt_ldap.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/flext-sh/flext-dbt-ldap"
@@ -62,7 +54,6 @@ Changelog = "https://github.com/flext-sh/flext-dbt-ldap/blob/main/CHANGELOG.md"
 
 [tool.poetry]
 packages = [{ include = "dbt_ldap" }]
-
 [tool.ruff]
 line-length = 88
 target-version = "py313"
@@ -116,25 +107,20 @@ ignore = [
     "D401",    #  #  # docstring imperative mood (temporarily)
 ]
 select = ["ALL"]
-
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "PLR2004", "D", "ANN"]
 "examples/*" = ["T201", "D", "ERA001"]
 "__init__.py" = ["D104"]
 "models/*" = ["D100", "D101", "D102", "D103"]
 "macros/*" = ["D100", "D101", "D102", "D103"]
-
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 line-ending = "lf"
 
 [tool.black]
-"conftest.py" = ["D"]
-"dbt_packages/*" = ["ALL"]
 line-length = 88
 target-version = ["py313"]
-
 [tool.isort]
 profile = "black"
 line_length = 88
@@ -159,33 +145,32 @@ module = ["ldap3.*", "dbt.*", "jinja2.*", "networkx.*", "sqlparse.*"]
 ignore_missing_imports = true
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.0"
+pytest = "^8.4.0"
 pytest-asyncio = "^0.24.0"
-pytest-cov = "^6.0.0"
-pytest-xdist = "^3.6.0"
+pytest-cov = "^6.2.0"
+pytest-xdist = "^3.8.0"
 pytest-mock = "^3.14.0"
-pytest-timeout = "^2.3.0"
-ruff = "^0.8.4"
-mypy = "^1.13.0"
-black = "^24.10.0"
-isort = "^5.13.0"
-types-requests = "^2.32.0"
-types-setuptools = "^75.6.0"
+pytest-timeout = "^2.4.0"
+ruff = "^0.12.2"
+mypy = "^1.16.1"
+black = "^25.1.0"
+isort = "^6.0.1"
+types-requests = "^2.32.4"
+types-setuptools = "^75.8.2"
 types-python-dateutil = "^2.9.0"
 types-pyyaml = "^6.0.12"
-pre-commit = "^4.0.0"
-mkdocs = "^1.6.0"
-mkdocs-material = "^9.5.0"
-ipython = "^8.29.0"
+pre-commit = "^4.2.0"
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.6.15"
+ipython = "^8.37.0"
 rich = "^13.9.0"
 
 [tool.poetry.group.security.dependencies]
-bandit = { extras = ["toml"], version = "^1.7.0" }
-safety = "^3.2.0"
+bandit = {extras = ["toml"], version = "^1.8.0"}
 
 [tool.poetry.group.build.dependencies]
-build = "^1.2.0"
-twine = "^6.0.0"
+build = "^1.2.2"
+twine = "^6.1.0"
 
 [tool.poetry.group.test.dependencies]
 pytest-benchmark = "^4.0.0"
@@ -275,10 +260,8 @@ exclude_lines = [
 targets = ["src"]
 exclude_dirs = ["tests", "build", "dist", "dbt_packages", "target", "logs"]
 skips = ["B101", "B601"]
-
 [tool.bandit.assert_used]
 skips = ["*/tests/*", "*/test_*.py"]
-
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
@@ -308,10 +291,9 @@ sort_by_size = true
 
 [tool.radon]
 exclude = ["tests/*", "*/tests/*"]
-ignore = ["F401"]
-# Unused imports
+ignore = ["F401"]  # Unused imports
 total_average = true
 show_complexity = true
 average = true
 order = "SCORE"
-minversion = "8.0"
+min_confidence = 100
