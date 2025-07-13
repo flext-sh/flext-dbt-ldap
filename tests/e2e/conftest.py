@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import docker
-import psycopg2
+import psycopg
 import pytest
 
 if TYPE_CHECKING:
@@ -50,10 +50,10 @@ def postgres_container(
     max_retries = 30
     for i in range(max_retries):
         try:
-            conn = psycopg2.connect(
+            conn = psycopg.connect(
                 host="localhost",
                 port=25432,
-                database="dbt_ldap_test",
+                dbname="dbt_ldap_test",
                 user="dbt_user",
                 password="dbt_password",
             )
@@ -80,10 +80,10 @@ def postgres_container(
 @pytest.fixture
 def db_connection(postgres_container: Any) -> Generator[Any]:
     """Get database connection for testing."""
-    conn = psycopg2.connect(
+    conn = psycopg.connect(
         host="localhost",
         port=25432,
-        database="dbt_ldap_test",
+        dbname="dbt_ldap_test",
         user="dbt_user",
         password="dbt_password",
     )
