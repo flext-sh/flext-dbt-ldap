@@ -53,7 +53,7 @@ Documentation = "https://github.com/flext-sh/flext-dbt-ldap/blob/main/README.md"
 Changelog = "https://github.com/flext-sh/flext-dbt-ldap/blob/main/CHANGELOG.md"
 
 [tool.poetry]
-packages = [{ include = "dbt_ldap" }]
+packages = [{ include = "flext_dbt_ldap", from = "src" }]
 [tool.ruff]
 line-length = 88
 target-version = "py313"
@@ -193,8 +193,8 @@ faker = "^37.4.0"
 factory-boy = "^3.3.3"
 testcontainers = "^4.8.0"
 docker = "^7.1.0"
-psycopg2 = "^2.9.10"
-psycopg2-binary = "^2.9.10"
+psycopg = "^3.2.3"
+psycopg-binary = "^3.2.3"
 pytest = "^8.4.1"
 pytest-randomly = "^3.16.0"
 pytest-sugar = "^1.0.0"

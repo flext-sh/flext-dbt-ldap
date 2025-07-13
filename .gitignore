@@ -224,3 +224,9 @@ analytics/
 reporting/
 warehouse/
 reports/
+
+# AI Assistant Files
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.cursor/
