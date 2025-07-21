@@ -110,7 +110,7 @@ def run_dbt_command(
     command: list[str],
     project_dir: Path,
     profiles_dir: Path,
-    vars: dict[str, Any] | None = None,
+    dbt_vars: dict[str, Any] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
@@ -119,8 +119,8 @@ def run_dbt_command(
     }
 
     cmd = ["dbt", *command]
-    if vars:
-        var_string = " ".join(f"{k}:{v}" for k, v in vars.items())
+    if dbt_vars:
+        var_string = " ".join(f"{k}:{v}" for k, v in dbt_vars.items())
         cmd.extend(["--vars", var_string])
 
     return subprocess.run(
