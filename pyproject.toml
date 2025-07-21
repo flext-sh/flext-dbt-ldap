@@ -1,129 +1,43 @@
 [build-system]
-requires = ["poetry-core>=1.9.0"]
+requires = [ "poetry-core>=1.9.0",]
 build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "flext-dbt-ldap"
-version = "0.6.0"
+version = "0.7.0"
 description = "FLEXT dbt LDAP - dbt Models for LDAP Data Transformation"
-authors = [{ name = "FLEXT Team", email = "team@flext.sh" }]
-license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
-keywords = ["flext", "dbt", "ldap", "transformation", "models", "enterprise"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3 :: Only",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Database",
-    "Topic :: System :: Systems Administration :: Authentication/Directory",
-    "Topic :: System :: Systems Administration",
-    "Typing :: Typed",
-]
-dependencies = [
-    "dbt-core>=1.9.0",
-    "ldap3>=2.9.1",
-    "python-ldap>=3.4.4",
-    "pydantic>=2.11.0",
-    "pydantic-settings>=2.5.0",
-    "structlog>=24.0.0",
-    "click>=8.1.7",
-    "python-dateutil>=2.9.0",
-    "pyyaml>=6.0.2",
-    "jinja2>=3.1.4",
-    "networkx>=3.4.2",
-    "sqlparse>=0.5.3",
-    "orjson>=3.10.0",
-    "typing-extensions>=4.12.0",
-]
+keywords = [ "flext", "enterprise", "async", "typed", "dbt", "data-transformation", "sql",]
+classifiers = [ "Development Status :: 5 - Production/Stable", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent", "Programming Language :: Python :: 3.13", "Programming Language :: Python :: 3 :: Only", "Topic :: Software Development :: Libraries :: Python Modules", "Typing :: Typed", "Topic :: Database",]
+dependencies = []
+[[project.authors]]
+name = "FLEXT Team"
+email = "team@flext.sh"
+
+[[project.maintainers]]
+name = "FLEXT Team"
+email = "team@flext.sh"
+
+[project.license]
+text = "MIT"
+
+[project.urls]
+Homepage = "https://github.com/flext-sh/flext"
+Repository = "https://github.com/flext-sh/flext"
+Documentation = "https://github.com/flext-sh/flext/blob/main/README.md"
 
 [project.scripts]
 flext-dbt-ldap = "flext_dbt_ldap.cli:main"
 
-[project.urls]
-Homepage = "https://github.com/flext-sh/flext-dbt-ldap"
-Repository = "https://github.com/flext-sh/flext-dbt-ldap"
-Documentation = "https://github.com/flext-sh/flext-dbt-ldap/blob/main/README.md"
-"Bug Tracker" = "https://github.com/flext-sh/flext-dbt-ldap/issues"
-Changelog = "https://github.com/flext-sh/flext-dbt-ldap/blob/main/CHANGELOG.md"
-
-[tool.poetry]
-packages = [{ include = "flext_dbt_ldap", from = "src" }]
 [tool.ruff]
-line-length = 88
 target-version = "py313"
-fix = true
-
-[tool.ruff.lint]
-ignore = [
-    # MANDATORY: Only formatter conflicts that cannot be auto-fixed
-    "COM812", #  #  # trailing-comma-missing (handled by formatter)
-    "ISC001", #  #  # implicit-str-concat (conflicts with formatter)
-    "D203",   #  #  # one-blank-line-before-class (conflicts with D211)
-    "D213",   #  #  # multi-line-docstring-summary-second-line (conflicts with D212)
-
-    # FOCUS: Only critical errors for now - ignore non-critical temporarily
-    "E501",    #  #  # line-too-long (formatting)
-    "D100",    # "D101", "D102", "D103", "D105", "D107", "D205", "D401", "D417",  #  # docstring issues
-    "ANN001",  # "ANN101", "ANN102", "ANN201", "ANN202", "ANN204", "ANN401", "ANN003", "ANN002",  #  # type annotations
-    "PLR0911", # "PLR0912", "PLR0913", "PLR0915", "C901",  #  # complexity
-    "E402",    #  #  # import-not-at-top (legacy)
-    "S110",    # "S112", "S105", "S106", "S108", "S314", "S603", "S607", "S101", "S102",  #  # security (non-critical)
-    "ARG001",  # "ARG002", "ARG003", "ARG005",  #  # unused arguments
-    "PTH108",  # "PTH110", "PTH116", "PTH117", "PTH118", "PTH120", "PTH123",  #  # pathlib
-    "TRY002",  # "TRY003", "TRY004", "TRY300", "TRY301", "TRY401",  #  # try/except patterns
-    "FBT001",  # "FBT002", "FBT003",  #  # boolean traps
-    "DTZ001",  # "DTZ005", "DTZ006", "DTZ007",  #  # datetime
-    "G004",    # "G201",  #  # logging
-    "N806",    # "N811",  #  # naming
-    "B007",    # "B018", "B019", "B023", "B904",  #  # bugbear non-critical
-    "SIM102",  # "SIM105", "SIM113", "SIM117",  #  # simplify
-    "RUF001",  # "RUF002", "RUF005",  #  # ruff specific
-    "UP035",   #  #  # typing upgrades
-    "ERA001",  #  #  # commented code
-    "TD002",   # "TD003",  #  # todos
-    "FIX002",  #  #  # fixme
-    "PLW0602", # "PLW0603", "PLW2901",  #  # pylint warnings
-    "PLC0415", #  #  # pylint conventions
-    "PLE0605", #  #  # pylint errors non-critical
-    "PERF102", # "PERF203", "PERF402",  #  # performance
-    "A002",    # "A004",  #  # builtins
-    "PT011",   # "PT012", "PT017",  #  # pytest
-    "PD008",   #  #  # pandas
-    "INP001",  #  #  # namespace packages
-    "PLR0124", # "PLR2004",  #  # magic values
-    "PYI056",  #  #  # pyi
-    "EXE001",  #  #  # executable
-    "BLE001",  #  #  # blind except (temporarily)
-    "SLF001",  #  #  # private access (temporarily)
-    "E722",    # "E741",  #  # bare except and ambiguous names
-    "T201",    #  #  # log.error statements (temporarily)
-    "PLW2901", #  #  # redefined loop variable (temporarily)
-    "D401",    #  #  # docstring imperative mood (temporarily)
-]
-select = ["ALL"]
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "D", "ANN"]
-"examples/*" = ["T201", "D", "ERA001"]
-"__init__.py" = ["D104"]
-"models/*" = ["D100", "D101", "D102", "D103"]
-"macros/*" = ["D100", "D101", "D102", "D103"]
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-line-ending = "lf"
-
-[tool.black]
 line-length = 88
-target-version = ["py313"]
-[tool.isort]
-profile = "black"
-line_length = 88
+fix = true
+show-fixes = true
+respect-gitignore = true
+src = [ "src", "tests",]
+extend-exclude = [ "__pycache__", ".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv", "venv", "build", "dist", "htmlcov",]
 
 [tool.mypy]
 python_version = "3.13"
@@ -133,69 +47,115 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
+disallow_untyped_decorators = true
 no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
+show_error_codes = true
+show_error_context = true
+pretty = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+ignore_missing_imports = false
+no_implicit_reexport = true
+files = [ "src", "tests",]
+plugins = [ "pydantic.mypy",]
+exclude = [ "build", "dist", ".venv", ".mypy_cache",]
 
-[[tool.mypy.overrides]]
-module = ["ldap3.*", "dbt.*", "jinja2.*", "networkx.*", "sqlparse.*"]
-ignore_missing_imports = true
+[tool.bandit]
+exclude_dirs = [ "tests", "build", "dist",]
+skips = [ "B101", "B601",]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.poetry]
+[[tool.poetry.packages]]
+include = "flext_dbt_ldap"
+from = "src"
+
+[tool.deptry]
+known_first_party = [ "flext_dbt_ldap",]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+asyncio_mode = "auto"
+addopts = [ "-ra", "--strict-markers", "--strict-config", "--cov=flext_dbt_ldap", "--cov-branch", "--cov-report=term-missing:skip-covered", "--cov-report=html:reports/coverage", "--cov-report=xml:reports/coverage.xml", "--cov-fail-under=90", "--maxfail=1", "--tb=short",]
+testpaths = [ "tests",]
+markers = [ "unit: Unit tests", "integration: Integration tests", "slow: Slow tests", "smoke: Smoke tests", "e2e: End-to-end tests",]
+filterwarnings = [ "error", "ignore::UserWarning", "ignore::DeprecationWarning",]
+
+[tool.ruff.lint]
+select = [ "ALL",]
+ignore = [ "COM812", "D203", "D213", "ISC001", "ANN401", "ARG001", "ARG002", "BLE001", "C901", "D102", "D103", "D105", "D107", "D401", "DTZ001", "DTZ005", "E401", "E501", "EM101", "EM102", "ERA001", "EXE001", "F401", "F823", "FBT001", "FBT002", "FBT003", "FIX002", "G004", "PLC0415", "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR2004", "PLW0603", "PTH118", "PTH123", "RUF001", "S103", "S104", "S105", "S106", "S107", "S603", "S607", "SIM102", "TD002", "TD003", "TRY003", "TRY203", "TRY300", "TRY301", "TRY401",]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+docstring-code-format = true
+
+[tool.coverage.run]
+source = [ "src",]
+branch = true
+omit = [ "*/tests/*", "*/test_*", "*/__pycache__/*", "*/venv/*", "*/.venv/*",]
+
+[tool.coverage.report]
+exclude_lines = [ "pragma: no cover", "def __repr__", "if self.debug:", "if settings.DEBUG", "raise AssertionError", "raise NotImplementedError", "if 0:", "if __name__ == .__main__.:", "class .*\\bProtocol\\):", "@(abc\\.)?abstractmethod",]
+
+[tool.coverage.html]
+directory = "reports/coverage"
+
+[tool.coverage.xml]
+output = "reports/coverage.xml"
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+
+
+[tool.ruff.lint.isort]
+known-first-party = [ "flext",]
+force-single-line = false
+split-on-trailing-comma = true
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = [ "S101", "S103", "S104", "S105", "S106", "S107", "PLR2004", "ARG", "SLF001", "PLC0415",]
+"**/scripts/**" = [ "T201", "S603", "S607", "ANN",]
+"**/__init__.py" = [ "F401",]
+"**/proto/*_pb2.py" = [ "ALL",]
+"**/proto/*_pb2_grpc.py" = [ "ALL",]
+"**/*_pb2.py" = [ "ALL",]
+"**/*_pb2_grpc.py" = [ "ALL",]
+"**/generated/**/*.py" = [ "ALL",]
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.4.0"
-pytest-asyncio = "^0.24.0"
-pytest-cov = "^6.2.0"
-pytest-xdist = "^3.8.0"
-pytest-mock = "^3.14.0"
-pytest-timeout = "^2.4.0"
 ruff = "^0.12.3"
-mypy = "^1.13.0"
 black = "^25.1.0"
 isort = "^6.0.1"
-types-requests = "^2.32.4"
-types-setuptools = "^75.8.2"
-types-python-dateutil = "^2.9.0"
-types-pyyaml = "^6.0.12"
-pre-commit = "^4.0.1"
-mkdocs = "^1.6.1"
-mkdocs-material = "^9.6.15"
-ipython = "^9.4.0"
-rich = "^13.9.0"
+mypy = "^1.13.0"
 pylint = "^3.3.0"
+pre-commit = "^4.0.1"
 vulture = "^2.13"
 radon = "^6.0.1"
 codespell = "^2.3.0"
 pyupgrade = "^3.19.0"
 autoflake = "^2.3.1"
-sphinx = "^8.2.3"
-sphinx-rtd-theme = "^3.0.2"
-myst-parser = "^4.0.1"
-mkdocstrings = "^0.27.0"
-mkdocs-gen-files = "^0.5.0"
-mkdocs-literate-nav = "^0.6.0"
-jupyter = "^1.1.1"
-rich-traceback = "^1.0.3"
-
-[tool.poetry.group.security.dependencies]
-bandit = "^1.8.0"
-pip-audit = "^2.7.3"
-
-[tool.poetry.group.build.dependencies]
-build = "^1.2.2"
-twine = "^6.1.0"
 
 [tool.poetry.group.test.dependencies]
-pytest-benchmark = "^4.0.0"
-faker = "^37.4.0"
-factory-boy = "^3.3.3"
-testcontainers = "^4.8.0"
-docker = "^7.1.0"
-psycopg = "^3.2.3"
-psycopg-binary = "^3.2.3"
-pytest = "^8.4.1"
+pytest = "^8.4.0"
+pytest-asyncio = "^1.0.0"
+pytest-cov = "^6.2.0"
+pytest-xdist = "^3.8.0"
+pytest-mock = "^3.14.0"
+pytest-timeout = "^2.4.0"
+pytest-benchmark = "^5.1.0"
 pytest-randomly = "^3.16.0"
 pytest-sugar = "^1.0.0"
 pytest-clarity = "^1.0.1"
@@ -203,123 +163,18 @@ pytest-deadfixtures = "^2.2.1"
 pytest-env = "^1.1.5"
 pytest-httpx = "^0.35.0"
 hypothesis = "^6.125.0"
+factory-boy = "^3.3.1"
+faker = "^37.4.0"
 
-[tool.pytest.ini_options]
-addopts = [
-    "--strict-markers",
-    "--strict-config",
-    "--verbose",
-    "--tb=short",
-    "--cov=src",
-    "--cov-report=term-missing:skip-covered",
-    "--cov-report=html:reports/coverage",
-    "--cov-report=xml:reports/coverage.xml",
-    "--cov-fail-under=95",
-    "--junitxml=reports/pytest.xml",
-    "--maxfail=10",
-    "--timeout=30",
-]
-testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "unit: marks tests as unit tests",
-    "e2e: marks tests as end-to-end tests",
-    "dbt: marks tests as dbt tests",
-    "ldap: marks tests as LDAP tests",
-    "models: marks tests as model tests",
-    "macros: marks tests as macro tests",
-    "performance: marks tests as performance tests",
-    "requires_ldap_server: tests that need real LDAP server",
-]
-filterwarnings = [
-    "error",
-    "ignore::UserWarning",
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning",
-]
-asyncio_mode = "auto"
+[tool.poetry.group.typings.dependencies]
+types-python-dateutil = "^2.9.0"
+types-pyyaml = "^6.0.12"
+types-setuptools = "^80.9.0"
+types-toml = "^0.10.8.20240310"
+types-requests = "^2.32.4"
+types-redis = "^4.6.0"
+types-psutil = "^7.0.0"
 
-[tool.coverage.run]
-branch = true
-source = ["src"]
-omit = [
-    "*/tests/*",
-    "*/test_*",
-    "*/*_test.py",
-    "*/conftest.py",
-    "*/__pycache__/*",
-    "*/site-packages/*",
-    "*/.venv/*",
-    "*/venv/*",
-    "*/build/*",
-    "*/dist/*",
-    "*/.eggs/*",
-    "*/dbt_packages/*",
-    "*/target/*",
-    "*/logs/*",
-]
-
-[tool.coverage.report]
-skip_empty = true
-skip_covered = false
-show_missing = true
-sort = "Cover"
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-    "TYPE_CHECKING",
-]
-
-[tool.bandit]
-targets = ["src"]
-exclude_dirs = ["tests", "build", "dist", "dbt_packages", "target", "logs"]
-skips = ["B101", "B601"]
-[tool.bandit.assert_used]
-skips = ["*/tests/*", "*/test_*.py"]
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.ruff.lint.flake8-tidy-imports]
-ban-relative-imports = "all"
-
-[tool.ruff.lint.flake8-type-checking]
-strict = true
-
-[tool.ruff.lint.pycodestyle]
-max-doc-length = 88
-
-[tool.ruff.lint.pylint]
-max-args = 10
-max-branches = 15
-max-returns = 8
-max-statements = 60
-
-[tool.vulture]
-min_confidence = 100
-paths = ["src"]
-exclude = ["tests/"]
-ignore_decorators = ["@app.route", "@router.get", "@router.post"]
-ignore_names = ["_*"]
-make_whitelist = true
-sort_by_size = true
-
-[tool.radon]
-exclude = ["tests/*", "*/tests/*"]
-ignore = ["F401"]  # Unused imports
-total_average = true
-show_complexity = true
-average = true
-order = "SCORE"
-min_confidence = 100
+[tool.poetry.group.security.dependencies]
+bandit = "^1.8.0"
+pip-audit = "^2.7.3"
