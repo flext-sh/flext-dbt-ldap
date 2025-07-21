@@ -471,8 +471,8 @@ def mock_ldap_dbt_adapter() -> Any:
     class MockLdapDbtAdapter:
         def __init__(self, config: dict[str, Any]) -> None:
             self.config = config
-            self.ldap_entries = {}
-            self.compiled_models = {}
+            self.ldap_entries: dict[str, Any] = {}
+            self.compiled_models: dict[str, Any] = {}
 
         def extract_ldap_data(
             self,
@@ -508,7 +508,7 @@ def mock_ldap_dbt_adapter() -> Any:
                     parsed[key] = value[0] if value else None
                 else:
                     parsed[key] = value
-            return parsed
+            return parsed  # type: ignore[return-value]
 
         def transform_ldap_to_relational(
             self,
@@ -536,7 +536,7 @@ def mock_ldap_connection() -> Any:
         def __init__(self, config: dict[str, Any]) -> None:
             self.config = config
             self.connected = False
-            self.entries = []
+            self.entries: list[Any] = []
 
         def connect(self) -> bool:
             """Connect to LDAP server."""
