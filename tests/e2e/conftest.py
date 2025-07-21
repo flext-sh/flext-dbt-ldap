@@ -9,7 +9,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import docker
-import psycopg
+
+try:
+    import psycopg  # type: ignore[import-untyped]
+except ImportError:
+    psycopg = None  # type: ignore[misc]
 import pytest
 
 if TYPE_CHECKING:
