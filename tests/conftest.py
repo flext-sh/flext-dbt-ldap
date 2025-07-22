@@ -1,10 +1,8 @@
 """Test configuration for flext-dbt-ldap.
 
 Provides pytest fixtures and configuration for testing dbt LDAP integration
-functionality
-using real LDAP connections and dbt-core patterns.
+functionality using real LDAP connections and dbt-core patterns.
 """
-
 from __future__ import annotations
 
 import os
@@ -174,7 +172,6 @@ def dbt_ldap_models() -> dict[str, str]:
     return {
         "staging_ldap_users": """
             {{ config(materialized='view') }}
-
             SELECT
                 {{ ldap_extract_attribute('dn') }} as user_dn,
                 {{ ldap_extract_attribute('cn', 0) }} as username,
@@ -195,7 +192,6 @@ def dbt_ldap_models() -> dict[str, str]:
                 materialized='table',
                 ldap={'validate_dn': true, 'normalize_attributes': true}
             ) }}
-
             SELECT
                 user_dn,
                 username,
@@ -217,7 +213,6 @@ def dbt_ldap_models() -> dict[str, str]:
         """,
         "staging_ldap_groups": """
             {{ config(materialized='view') }}
-
             SELECT
                 {{ ldap_extract_attribute('dn') }} as group_dn,
                 {{ ldap_extract_attribute('cn', 0) }} as group_name,
@@ -229,7 +224,6 @@ def dbt_ldap_models() -> dict[str, str]:
         """,
         "dim_groups": """
             {{ config(materialized='table') }}
-
             SELECT
                 group_dn,
                 group_name,
@@ -244,7 +238,6 @@ def dbt_ldap_models() -> dict[str, str]:
                 materialized='incremental',
                 unique_key=['group_dn', 'member_dn']
             ) }}
-
             SELECT
                 g.group_dn,
                 g.group_name,
@@ -257,7 +250,6 @@ def dbt_ldap_models() -> dict[str, str]:
             CROSS JOIN LATERAL {{ ldap_split_members('g.members') }} AS member_dn
             LEFT JOIN {{ ref('dim_users') }} u
                 ON u.user_dn = member_dn
-
             {% if is_incremental() %}
                 WHERE g.extracted_at > (SELECT MAX(extracted_at) FROM {{ this }})
             {% endif %}
@@ -467,7 +459,6 @@ def pytest_configure(config: pytest.Config) -> None:
 @pytest.fixture
 def mock_ldap_dbt_adapter() -> Any:
     """Mock LDAP dbt adapter for testing."""
-
     class MockLdapDbtAdapter:
         def __init__(self, config: dict[str, Any]) -> None:
             self.config = config
@@ -496,19 +487,18 @@ def mock_ldap_dbt_adapter() -> Any:
         def validate_dn_format(self, dn: str) -> bool:
             """Validate DN format."""
             import re
-
             pattern = r"^(cn|uid)=.+,(ou|dc)=.+"
             return bool(re.match(pattern, dn))
 
-        def parse_ldap_attributes(self, attributes: dict[str, Any]) -> dict[str, str]:
+        def parse_ldap_attributes(self, attributes: dict[str, Any]) -> dict[str, str | None]:
             """Parse LDAP attributes for dbt models."""
-            parsed = {}
+            parsed: dict[str, str | None] = {}
             for key, value in attributes.items():
                 if isinstance(value, list):
                     parsed[key] = value[0] if value else None
                 else:
-                    parsed[key] = value
-            return parsed  # type: ignore[return-value]
+                    parsed[key] = str(value) if value is not None else None
+            return parsed
 
         def transform_ldap_to_relational(
             self,
@@ -524,14 +514,12 @@ def mock_ldap_dbt_adapter() -> Any:
                 flat_entry.update(self.parse_ldap_attributes(entry["attributes"]))
                 transformed.append(flat_entry)
             return transformed
-
     return MockLdapDbtAdapter
 
 
 @pytest.fixture
 def mock_ldap_connection() -> Any:
     """Mock LDAP connection for testing."""
-
     class MockLdapConnection:
         def __init__(self, config: dict[str, Any]) -> None:
             self.config = config
@@ -583,5 +571,4 @@ def mock_ldap_connection() -> Any:
         def validate_entry(self, dn: str) -> bool:
             """Validate LDAP entry exists."""
             return dn in [entry["dn"] for entry in self.entries]
-
     return MockLdapConnection
