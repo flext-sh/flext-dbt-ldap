@@ -1,5 +1,4 @@
 """E2E test configuration and fixtures for dbt-ldap."""
-
 from __future__ import annotations
 
 import logging
@@ -11,14 +10,14 @@ from typing import TYPE_CHECKING, Any
 import docker
 
 try:
-    import psycopg  # type: ignore[import-untyped]
+    import psycopg
 except ImportError:
-    psycopg = None  # type: ignore[misc]
+    # psycopg not available - E2E tests requiring PostgreSQL will be skipped
+    psycopg = None
 import pytest
 
 if TYPE_CHECKING:
     from collections.abc import Generator
-
 logger = logging.getLogger(__name__)
 
 
@@ -41,7 +40,6 @@ def postgres_container(
 ) -> Generator[Any]:
     """Start PostgreSQL container for testing."""
     compose_file = project_root / "docker-compose.yml"
-
     # Start containers
     logger.info("Starting PostgreSQL container...")
     subprocess.run(
@@ -49,7 +47,6 @@ def postgres_container(
         check=True,
         cwd=str(project_root),
     )
-
     # Wait for PostgreSQL to be ready
     max_retries = 30
     for i in range(max_retries):
@@ -69,9 +66,7 @@ def postgres_container(
                 raise
             logger.info("Waiting for PostgreSQL... (%s/%s)", i + 1, max_retries)
             time.sleep(2)
-
     yield
-
     # Stop containers
     logger.info("Stopping PostgreSQL container...")
     subprocess.run(
@@ -92,9 +87,7 @@ def db_connection(postgres_container: Any) -> Generator[Any]:
         password="dbt_password",
     )
     conn.autocommit = True
-
     yield conn
-
     conn.close()
 
 
@@ -121,12 +114,10 @@ def run_dbt_command(
         "DBT_PROFILES_DIR": str(profiles_dir),
         "DBT_PROJECT_DIR": str(project_dir),
     }
-
     cmd = ["dbt", *command]
     if dbt_vars:
         var_string = " ".join(f"{k}:{v}" for k, v in dbt_vars.items())
         cmd.extend(["--vars", var_string])
-
     return subprocess.run(
         cmd,
         cwd=str(project_dir),
