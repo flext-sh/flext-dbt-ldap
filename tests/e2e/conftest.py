@@ -1,4 +1,5 @@
 """E2E test configuration and fixtures for dbt-ldap."""
+
 from __future__ import annotations
 
 import logging
