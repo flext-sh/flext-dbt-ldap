@@ -3,6 +3,7 @@
 Provides pytest fixtures and configuration for testing dbt LDAP integration
 functionality using real LDAP connections and dbt-core patterns.
 """
+
 from __future__ import annotations
 
 import os
@@ -459,6 +460,7 @@ def pytest_configure(config: pytest.Config) -> None:
 @pytest.fixture
 def mock_ldap_dbt_adapter() -> Any:
     """Mock LDAP dbt adapter for testing."""
+
     class MockLdapDbtAdapter:
         def __init__(self, config: dict[str, Any]) -> None:
             self.config = config
@@ -487,10 +489,13 @@ def mock_ldap_dbt_adapter() -> Any:
         def validate_dn_format(self, dn: str) -> bool:
             """Validate DN format."""
             import re
+
             pattern = r"^(cn|uid)=.+,(ou|dc)=.+"
             return bool(re.match(pattern, dn))
 
-        def parse_ldap_attributes(self, attributes: dict[str, Any]) -> dict[str, str | None]:
+        def parse_ldap_attributes(
+            self, attributes: dict[str, Any]
+        ) -> dict[str, str | None]:
             """Parse LDAP attributes for dbt models."""
             parsed: dict[str, str | None] = {}
             for key, value in attributes.items():
@@ -514,12 +519,14 @@ def mock_ldap_dbt_adapter() -> Any:
                 flat_entry.update(self.parse_ldap_attributes(entry["attributes"]))
                 transformed.append(flat_entry)
             return transformed
+
     return MockLdapDbtAdapter
 
 
 @pytest.fixture
 def mock_ldap_connection() -> Any:
     """Mock LDAP connection for testing."""
+
     class MockLdapConnection:
         def __init__(self, config: dict[str, Any]) -> None:
             self.config = config
@@ -571,4 +578,5 @@ def mock_ldap_connection() -> Any:
         def validate_entry(self, dn: str) -> bool:
             """Validate LDAP entry exists."""
             return dn in [entry["dn"] for entry in self.entries]
+
     return MockLdapConnection

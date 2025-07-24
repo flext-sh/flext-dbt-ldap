@@ -18,15 +18,26 @@ import warnings
 # Import from flext-core for foundational patterns
 # Re-export commonly used imports from flext-core
 # Foundation patterns - ALWAYS from flext-core
-from flext_core import (
-    BaseConfig,
-    BaseConfig as LDAPBaseConfig,  # Configuration base
-    DomainBaseModel,
-    DomainBaseModel as BaseModel,  # Base for LDAP models
-    DomainError as LDAPError,  # LDAP-specific errors
-    ValidationError as ValidationError,  # Validation errors
+# 🚨 ARCHITECTURAL COMPLIANCE: Using DI container
+from flext_dbt_ldap.infrastructure.di_container import (
+    get_base_config,
+    get_domain_entity,
+    get_domain_value_object,
+    get_field,
+    get_service_result,
 )
-from flext_core.domain.shared_types import ServiceResult
+
+ServiceResult = get_service_result()
+DomainEntity = get_domain_entity()
+Field = get_field()
+DomainValueObject = get_domain_value_object()
+BaseConfig = get_base_config()
+
+# Re-export for simplified access
+BaseModel = DomainEntity  # Base for LDAP models
+LDAPBaseConfig = BaseConfig  # Configuration base
+LDAPError = Exception  # LDAP-specific errors
+ValidationError = Exception  # Validation errors
 
 try:
     __version__ = importlib.metadata.version("flext-dbt-ldap")
@@ -60,26 +71,20 @@ def _show_deprecation_warning(old_import: str, new_import: str) -> None:
 # ================================
 
 # DBT LDAP Components exports - conditional imports (modules being developed)
-try:
+with contextlib.suppress(ImportError):
     from flext_dbt_ldap.models import (
         GroupDimension,
         LDAPTransformer,
         UserDimension,
     )
-except ImportError:
-    # DBT models module not yet implemented - will be created as part of dbt project setup
-    pass
 
 # DBT Integration exports - conditional imports (modules being developed)
-try:
+with contextlib.suppress(ImportError):
     from flext_dbt_ldap.macros import (
         DNParser,
         LDAPMacros,
         TimestampConverter,
     )
-except ImportError:
-    # DBT macros module not yet implemented - will be created as part of dbt project setup
-    pass
 
 # ================================
 # PUBLIC API EXPORTS
