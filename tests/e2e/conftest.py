@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import logging
 import subprocess
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import docker
+from flext_core import get_logger
 
 try:
     import psycopg
@@ -19,7 +19,7 @@ import pytest
 
 if TYPE_CHECKING:
     from collections.abc import Generator
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @pytest.fixture(scope="session")

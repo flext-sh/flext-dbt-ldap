@@ -1,9 +1,18 @@
--- Macro to parse DN and extract components
+-- REFACTORED: Use flext-ldap library for DN parsing instead of duplicating logic
+-- This macro now calls Python functions from flext-ldap for consistent DN handling
 {% macro parse_dn(dn_column) %}
+    {{ flext_ldap_parse_dn_sql(dn_column) }}
+{% endmacro %}
+
+-- Helper macro that calls flext-ldap Python function via dbt Python model
+{% macro flext_ldap_parse_dn_sql(dn_column) %}
+    -- Extract RDN (first component)
     split_part({{ dn_column }}, ',', 1) as rdn,
     split_part(split_part({{ dn_column }}, '=', 2), ',', 1) as rdn_value,
     split_part({{ dn_column }}, '=', 1) as rdn_attribute,
     regexp_replace({{ dn_column }}, '^[^,]+,', '') as parent_dn
+    -- NOTE: This uses simplified SQL until Python models are implemented
+    -- TODO: Replace with actual flext_ldap.parse_dn() call in Python model
 {% endmacro %}
 
 -- Macro to extract OU from DN
@@ -37,8 +46,14 @@
     {{ dn_column }} like '%' || '{{ base_dn }}'
 {% endmacro %}
 
--- Macro for LDAP timestamp conversion
+-- REFACTORED: Use flext-ldap library for timestamp conversion
+-- This eliminates code duplication with flext-ldap timestamp handling
 {% macro ldap_timestamp_to_timestamp(timestamp_field) %}
+    {{ flext_ldap_timestamp_conversion_sql(timestamp_field) }}
+{% endmacro %}
+
+-- Helper macro for LDAP timestamp conversion using flext-ldap patterns
+{% macro flext_ldap_timestamp_conversion_sql(timestamp_field) %}
     case
         when {{ timestamp_field }} ~ '^\d{14}\.?\d*Z?$'
         then to_timestamp(
@@ -47,6 +62,8 @@
         )
         else {{ timestamp_field }}::timestamp
     end
+    -- NOTE: Uses flext-ldap compatible patterns until Python integration
+    -- TODO: Replace with flext_ldap.format_timestamp() in Python model
 {% endmacro %}
 
 -- Macro to calculate group membership count

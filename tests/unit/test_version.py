@@ -29,7 +29,7 @@ def test_version_all_exports() -> None:
         "LDAPError",
         "LDAPMacros",
         "LDAPTransformer",
-        "ServiceResult",
+        "FlextResult",
         "TimestampConverter",
         "UserDimension",
         "ValidationError",
@@ -72,7 +72,9 @@ def test_package_metadata_error_handling() -> None:
 
     # Mock the metadata.version to raise PackageNotFoundError
     with patch("importlib.metadata.version") as mock_version:
-        mock_version.side_effect = importlib.metadata.PackageNotFoundError("mocked error")
+        mock_version.side_effect = importlib.metadata.PackageNotFoundError(
+            "mocked error",
+        )
 
         # Import the module - this should trigger the exception handling
         import flext_dbt_ldap as test_module

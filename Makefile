@@ -3,12 +3,12 @@
 # Enterprise dbt project for LDAP directory data analytics and transformations
 # Python 3.13 + dbt Core + PostgreSQL + LDAP Domain + Zero Tolerance Quality Gates
 
-.PHONY: help check validate test lint type-check security format format-check fix
+.PHONY: help info diagnose check validate test lint type-check security format format-check fix
 .PHONY: install dev-install setup pre-commit build clean
 .PHONY: coverage coverage-html test-unit test-integration test-dbt
 .PHONY: deps-update deps-audit deps-tree deps-outdated
-.PHONY: dbt-run dbt-test dbt-compile dbt-debug dbt-docs dbt-seed dbt-snapshot
-.PHONY: dbt-run-dev dbt-run-prod dbt-freshness dbt-deps dbt-clean
+.PHONY: dbt-compile dbt-run dbt-test dbt-docs dbt-debug dbt-seed dbt-snapshot dbt-deps dbt-clean
+.PHONY: ldap-profile-test ldap-macros-test ldap-schema-validate
 
 # ============================================================================
 # 🎯 HELP & INFORMATION
@@ -24,6 +24,38 @@ help: ## Show this help message
 	@echo "🧪 90%+ test coverage requirement with dbt model testing"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\\033[36m%-20s\\033[0m %s\\n", $$1, $$2}'
+
+
+info: ## Mostrar informações do projeto
+	@echo "📊 Informações do Projeto"
+	@echo "======================"
+	@echo "Nome: flext-dbt-ldap"
+	@echo "Título: FLEXT DBT LDAP"
+	@echo "Tipo: dbt-project"
+	@echo "Versão: $(shell poetry version -s 2>/dev/null || echo "0.7.0")"
+	@echo "Python: $(shell python3.13 --version 2>/dev/null || echo "Não encontrado")"
+	@echo "Poetry: $(shell poetry --version 2>/dev/null || echo "Não instalado")"
+	@echo "Venv: $(shell poetry env info --path 2>/dev/null || echo "Não ativado")"
+	@echo "Diretório: $(CURDIR)"
+	@echo "Git Branch: $(shell git branch --show-current 2>/dev/null || echo "Não é repo git")"
+	@echo "Git Status: $(shell git status --porcelain 2>/dev/null | wc -l | xargs echo) arquivos alterados"
+
+diagnose: ## Executar diagnósticos completos
+	@echo "🔍 Executando diagnósticos para flext-dbt-ldap..."
+	@echo "Informações do Sistema:"
+	@echo "OS: $(shell uname -s)"
+	@echo "Arquitetura: $(shell uname -m)"
+	@echo "Python: $(shell python3.13 --version 2>/dev/null || echo "Não encontrado")"
+	@echo "Poetry: $(shell poetry --version 2>/dev/null || echo "Não instalado")"
+	@echo ""
+	@echo "Estrutura do Projeto:"
+	@ls -la
+	@echo ""
+	@echo "Configuração Poetry:"
+	@poetry config --list 2>/dev/null || echo "Poetry não configurado"
+	@echo ""
+	@echo "Status das Dependências:"
+	@poetry show --outdated 2>/dev/null || echo "Nenhuma dependência desatualizada"
 
 # ============================================================================
 # 🎯 CORE QUALITY GATES - ZERO TOLERANCE
@@ -91,17 +123,6 @@ test-dbt: dbt-deps dbt-compile ## Run dbt data tests
 	@poetry run dbt test --profiles-dir profiles/ --target dev
 	@echo "✅ DBT data tests complete"
 
-test-models: dbt-deps dbt-compile ## Test specific dbt models
-	@echo "🧪 Testing dbt models..."
-	@poetry run dbt test --models staging --profiles-dir profiles/ --target dev
-	@poetry run dbt test --models marts --profiles-dir profiles/ --target dev
-	@echo "✅ DBT model tests complete"
-
-test-sources: dbt-deps ## Test dbt source freshness
-	@echo "🧪 Testing source data freshness..."
-	@poetry run dbt source freshness --profiles-dir profiles/ --target dev
-	@echo "✅ Source freshness tests complete"
-
 coverage: ## Generate detailed coverage report
 	@echo "📊 Generating coverage report..."
 	@poetry run pytest tests/ --cov=src/flext_dbt_ldap --cov-report=term-missing --cov-report=html
@@ -160,20 +181,15 @@ dbt-run: dbt-deps dbt-compile ## Run dbt models
 	@poetry run dbt run --profiles-dir profiles/ --target dev
 	@echo "✅ DBT models executed"
 
-dbt-run-dev: dbt-deps ## Run dbt models in development
-	@echo "🚀 Running dbt models (development)..."
-	@poetry run dbt run --profiles-dir profiles/ --target dev --full-refresh
-	@echo "✅ DBT development run complete"
-
-dbt-run-prod: dbt-deps dbt-test ## Run dbt models in production
-	@echo "🚀 Running dbt models (production)..."
-	@poetry run dbt run --profiles-dir profiles/ --target prod
-	@echo "✅ DBT production run complete"
-
 dbt-test: dbt-compile ## Run dbt tests
 	@echo "🧪 Running dbt tests..."
 	@poetry run dbt test --profiles-dir profiles/ --target dev
 	@echo "✅ DBT tests complete"
+
+dbt-docs: dbt-compile ## Generate dbt documentation
+	@echo "📚 Generating dbt documentation..."
+	@poetry run dbt docs generate --profiles-dir profiles/ --target dev
+	@echo "✅ DBT documentation generated"
 
 dbt-seed: dbt-deps ## Load dbt seed data
 	@echo "🌱 Loading dbt seed data..."
@@ -185,25 +201,48 @@ dbt-snapshot: dbt-deps ## Run dbt snapshots
 	@poetry run dbt snapshot --profiles-dir profiles/ --target dev
 	@echo "✅ DBT snapshots complete"
 
-dbt-docs: dbt-compile ## Generate dbt documentation
-	@echo "📚 Generating dbt documentation..."
-	@poetry run dbt docs generate --profiles-dir profiles/ --target dev
-	@echo "✅ DBT documentation generated"
-
-dbt-docs-serve: dbt-docs ## Serve dbt documentation
-	@echo "📚 Serving dbt documentation..."
-	@poetry run dbt docs serve --profiles-dir profiles/ --port 8080
-
-dbt-freshness: dbt-deps ## Check source data freshness
-	@echo "🔄 Checking source data freshness..."
-	@poetry run dbt source freshness --profiles-dir profiles/ --target dev
-	@echo "✅ Source freshness check complete"
-
 dbt-clean: ## Clean dbt artifacts
 	@echo "🧹 Cleaning dbt artifacts..."
 	@poetry run dbt clean --profiles-dir profiles/
 	@rm -rf logs/dbt.log
 	@echo "✅ DBT artifacts cleaned"
+
+# ============================================================================
+# 🔧 LDAP SPECIFIC OPERATIONS
+# ============================================================================
+
+ldap-profile-test: ## Test LDAP connection profiles
+	@echo "🔗 Testing LDAP connection profiles..."
+	@poetry run dbt debug --profiles-dir profiles/ --target dev
+	@poetry run python scripts/test_ldap_connections.py
+	@echo "✅ LDAP profile tests complete"
+
+ldap-macros-test: dbt-deps ## Test LDAP-specific macros
+	@echo "🔧 Testing LDAP macros..."
+	@poetry run dbt test --models test_ldap_macros --profiles-dir profiles/ --target dev
+	@poetry run python scripts/validate_ldap_macros.py
+	@echo "✅ LDAP macros tests complete"
+
+ldap-schema-validate: dbt-compile ## Validate LDAP schema mapping
+	@echo "📋 Validating LDAP schema mapping..."
+	@poetry run python scripts/validate_ldap_schema.py
+	@poetry run dbt test --models schema_mapping --profiles-dir profiles/ --target dev
+	@echo "✅ LDAP schema validation complete"
+
+ldap-hierarchy-analysis: dbt-run ## Analyze LDAP organizational hierarchy
+	@echo "🏢 Analyzing LDAP organizational hierarchy..."
+	@poetry run dbt run --models analysis.organizational_hierarchy --profiles-dir profiles/ --target dev
+	@echo "✅ LDAP hierarchy analysis complete"
+
+ldap-security-audit: dbt-run ## Run LDAP security audit
+	@echo "🔒 Running LDAP security audit..."
+	@poetry run dbt run --models analysis.security_audit --profiles-dir profiles/ --target dev
+	@echo "✅ LDAP security audit complete"
+
+ldap-compliance-check: dbt-test ## Check LDAP compliance
+	@echo "✅ Running LDAP compliance checks..."
+	@poetry run dbt test --models tests.compliance --profiles-dir profiles/ --target dev
+	@echo "✅ LDAP compliance check complete"
 
 # ============================================================================
 # 📊 LDAP DATA ANALYTICS
@@ -233,55 +272,6 @@ analytics-all: analytics-users analytics-groups analytics-memberships analytics-
 	@echo "✅ All LDAP analytics complete"
 
 # ============================================================================
-# 🔍 DATA QUALITY & VALIDATION
-# ============================================================================
-
-validate-staging: dbt-compile ## Validate staging models
-	@echo "🔍 Validating staging models..."
-	@poetry run dbt test --models staging --profiles-dir profiles/ --target dev
-	@echo "✅ Staging validation complete"
-
-validate-marts: dbt-compile ## Validate marts models
-	@echo "🔍 Validating marts models..."
-	@poetry run dbt test --models marts --profiles-dir profiles/ --target dev
-	@echo "✅ Marts validation complete"
-
-validate-relationships: dbt-compile ## Validate data relationships
-	@echo "🔗 Validating data relationships..."
-	@poetry run dbt test --models intermediate --profiles-dir profiles/ --target dev
-	@echo "✅ Relationship validation complete"
-
-data-quality-report: dbt-run ## Generate data quality report
-	@echo "📊 Generating data quality report..."
-	@poetry run dbt run --models analysis.data_quality_report --profiles-dir profiles/ --target dev
-	@poetry run python scripts/generate_quality_report.py
-	@echo "✅ Data quality report generated"
-
-# ============================================================================
-# 🔧 LDAP SPECIFIC OPERATIONS
-# ============================================================================
-
-ldap-schema-discovery: ## Discover LDAP schema patterns
-	@echo "📁 Discovering LDAP schema patterns..."
-	@poetry run python scripts/discover_ldap_schema.py
-	@echo "✅ LDAP schema discovery complete"
-
-ldap-hierarchy-analysis: dbt-run ## Analyze LDAP organizational hierarchy
-	@echo "🏢 Analyzing LDAP organizational hierarchy..."
-	@poetry run dbt run --models analysis.organizational_hierarchy --profiles-dir profiles/ --target dev
-	@echo "✅ LDAP hierarchy analysis complete"
-
-ldap-security-audit: dbt-run ## Run LDAP security audit
-	@echo "🔒 Running LDAP security audit..."
-	@poetry run dbt run --models analysis.security_audit --profiles-dir profiles/ --target dev
-	@echo "✅ LDAP security audit complete"
-
-ldap-compliance-check: dbt-test ## Check LDAP compliance
-	@echo "✅ Running LDAP compliance checks..."
-	@poetry run dbt test --models tests.compliance --profiles-dir profiles/ --target dev
-	@echo "✅ LDAP compliance check complete"
-
-# ============================================================================
 # 📦 BUILD & DISTRIBUTION
 # ============================================================================
 
@@ -289,24 +279,6 @@ build: clean dbt-compile ## Build dbt project
 	@echo "🔨 Building dbt project..."
 	@poetry build
 	@echo "✅ Build complete - packages in dist/"
-
-package: build ## Create deployment package
-	@echo "📦 Creating deployment package..."
-	@tar -czf dist/flext-dbt-ldap-deployment.tar.gz \
-		models/ \
-		macros/ \
-		tests/ \
-		seeds/ \
-		analysis/ \
-		snapshots/ \
-		dbt_project.yml \
-		profiles/ \
-		README.md
-	@echo "✅ Deployment package created: dist/flext-dbt-ldap-deployment.tar.gz"
-
-# ============================================================================
-# 🧹 CLEANUP
-# ============================================================================
 
 clean: ## Remove all artifacts
 	@echo "🧹 Cleaning up..."
@@ -348,14 +320,15 @@ deps-outdated: ## Show outdated dependencies
 	@echo "📋 Outdated dependencies:"
 	@poetry show --outdated
 
-dbt-packages-update: ## Update dbt packages
-	@echo "📦 Updating dbt packages..."
-	@poetry run dbt deps --upgrade --profiles-dir profiles/
-	@echo "✅ DBT packages updated"
-
 # ============================================================================
 # 🔧 ENVIRONMENT CONFIGURATION
 # ============================================================================
+
+# Project information
+PROJECT_NAME := flext-dbt-ldap
+PROJECT_TYPE := meltano-plugin
+PROJECT_VERSION := $(shell poetry version -s)
+PROJECT_DESCRIPTION := FLEXT DBT LDAP - LDAP Directory Data Transformations
 
 # Python settings
 PYTHON := python3.13
@@ -399,15 +372,6 @@ export POETRY_CACHE_DIR := $(HOME)/.cache/pypoetry
 export MYPY_CACHE_DIR := .mypy_cache
 export RUFF_CACHE_DIR := .ruff_cache
 
-# ============================================================================
-# 📝 PROJECT METADATA
-# ============================================================================
-
-# Project information
-PROJECT_NAME := flext-dbt-ldap
-PROJECT_VERSION := $(shell poetry version -s)
-PROJECT_DESCRIPTION := FLEXT DBT LDAP - LDAP Directory Data Transformations
-
 .DEFAULT_GOAL := help
 
 # ============================================================================
@@ -436,30 +400,3 @@ workspace-info: ## Show workspace integration info
 	@echo "🔗 Dependencies: flext-core, dbt-core, dbt-postgres"
 	@echo "📦 Provides: LDAP analytics models and transformations"
 	@echo "🎯 Standards: Enterprise data modeling patterns"
-
-# ============================================================================
-# 🚀 PRODUCTION DEPLOYMENT
-# ============================================================================
-
-deploy-staging: validate dbt-run ## Deploy to staging environment
-	@echo "🚀 Deploying to staging..."
-	@poetry run dbt run --profiles-dir profiles/ --target staging
-	@poetry run dbt test --profiles-dir profiles/ --target staging
-	@echo "✅ Staging deployment complete"
-
-deploy-prod: validate dbt-test ## Deploy to production environment
-	@echo "🚀 Deploying to production..."
-	@poetry run dbt run --profiles-dir profiles/ --target prod
-	@poetry run dbt test --profiles-dir profiles/ --target prod
-	@poetry run dbt docs generate --profiles-dir profiles/ --target prod
-	@echo "✅ Production deployment complete"
-
-rollback-staging: ## Rollback staging deployment
-	@echo "🔄 Rolling back staging deployment..."
-	@poetry run python scripts/rollback_deployment.py --target staging
-	@echo "✅ Staging rollback complete"
-
-rollback-prod: ## Rollback production deployment
-	@echo "🔄 Rolling back production deployment..."
-	@poetry run python scripts/rollback_deployment.py --target prod
-	@echo "✅ Production rollback complete"

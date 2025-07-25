@@ -4,13 +4,19 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "flext-dbt-ldap"
-version = "0.7.0"
+version = "0.8.0"
 description = "FLEXT dbt LDAP - dbt Models for LDAP Data Transformation"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 keywords = [ "flext", "enterprise", "async", "typed", "dbt", "data-transformation", "sql",]
 classifiers = [ "Development Status :: 5 - Production/Stable", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent", "Programming Language :: Python :: 3.13", "Programming Language :: Python :: 3 :: Only", "Topic :: Software Development :: Libraries :: Python Modules", "Typing :: Typed", "Topic :: Database",]
-dependencies = ["flext-core @ file:///home/marlonsc/flext/flext-core"]
+dependencies = [
+    "flext-core @ file:///home/marlonsc/flext/flext-core",
+    "flext-meltano @ file:///home/marlonsc/flext/flext-meltano",
+    "flext-ldap @ file:///home/marlonsc/flext/flext-ldap",
+    "flext-observability @ file:///home/marlonsc/flext/flext-observability",
+    "pydantic>=2.11.7",
+]
 [[project.authors]]
 name = "FLEXT Team"
 email = "team@flext.sh"
@@ -38,6 +44,7 @@ show-fixes = true
 respect-gitignore = true
 src = [ "src", "tests",]
 extend-exclude = [ "__pycache__", ".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv", "venv", "build", "dist", "htmlcov",]
+extend = "../.ruff-shared.toml"
 
 [tool.mypy]
 python_version = "3.13"
