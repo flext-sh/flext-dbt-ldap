@@ -494,7 +494,8 @@ def mock_ldap_dbt_adapter() -> Any:
             return bool(re.match(pattern, dn))
 
         def parse_ldap_attributes(
-            self, attributes: dict[str, Any]
+            self,
+            attributes: dict[str, Any],
         ) -> dict[str, str | None]:
             """Parse LDAP attributes for dbt models."""
             parsed: dict[str, str | None] = {}

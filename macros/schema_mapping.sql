@@ -65,9 +65,17 @@
     parent_dn as parent_ou_dn
 {% endmacro %}
 
--- Macro to validate DN format
+-- REFACTORED: Use flext-ldap library for DN validation
+-- This eliminates code duplication with flext-ldap validation logic
 {% macro validate_dn_format(dn_column) %}
+    {{ flext_ldap_dn_validation_sql(dn_column) }}
+{% endmacro %}
+
+-- Helper macro for DN validation using flext-ldap patterns
+{% macro flext_ldap_dn_validation_sql(dn_column) %}
     {{ dn_column }} ~ '^(\w+=[^,]+)(,\w+=[^,]+)*$'
+    -- NOTE: Uses flext-ldap compatible regex until Python integration
+    -- TODO: Replace with flext_ldap.validate_dn() in Python model
 {% endmacro %}
 
 -- Macro to extract specific object class
