@@ -17,9 +17,9 @@ import warnings
 
 # Import from flext-core for foundational patterns (standardized)
 from flext_core import (
-    FlextCoreSettings as BaseConfig,
+    FlextBaseSettings as BaseConfig,
     FlextEntity as DomainEntity,
-    FlextField as Field,
+    FlextFields as Field,
     FlextResult,
     FlextValueObject as BaseModel,
     FlextValueObject as DomainBaseModel,
@@ -54,17 +54,17 @@ with contextlib.suppress(ImportError):
     )
 
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
-FlextDbtLdap = None  # Will be set to platform when available
+FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
 FlextDbtLdapBaseModel = DomainBaseModel  # FlextDbtLdap base model
 FlextValueObject = DomainValueObject  # Standard value object pattern
 
 # Prefixed helper functions following flext_dbt_ldap_ pattern
 with contextlib.suppress(NameError):
-    flext_dbt_ldap_transform_entry = None
-    flext_dbt_ldap_create_dimension = None
-    flext_dbt_ldap_parse_dn = None
-    flext_dbt_ldap_convert_timestamp = None
+    flext_dbt_ldap_transform_entry: object | None = None
+    flext_dbt_ldap_create_dimension: object | None = None
+    flext_dbt_ldap_parse_dn: object | None = None
+    flext_dbt_ldap_convert_timestamp: object | None = None
 
 # Backwards compatibility aliases
 LDAPBaseConfig = BaseConfig  # Configuration base

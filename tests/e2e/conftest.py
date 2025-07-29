@@ -62,7 +62,7 @@ def postgres_container(
             conn.close()
             logger.info("PostgreSQL is ready")
             break
-        except Exception:
+        except (RuntimeError, ValueError, TypeError):
             if i == max_retries - 1:
                 raise
             logger.info("Waiting for PostgreSQL... (%s/%s)", i + 1, max_retries)
@@ -129,7 +129,7 @@ def run_dbt_command(
     )
 
 
-def query_database(conn: Any, query: str) -> list[tuple[Any, ...]]:
+def query_database(conn: object, query: str) -> list[tuple[Any, ...]]:
     """Execute query and return results."""
     with conn.cursor() as cur:
         cur.execute(query)
@@ -137,7 +137,7 @@ def query_database(conn: Any, query: str) -> list[tuple[Any, ...]]:
         return list(result)
 
 
-def table_exists(conn: Any, schema: str, table: str) -> bool:
+def table_exists(conn: object, schema: str, table: str) -> bool:
     """Check if table exists in database."""
     with conn.cursor() as cur:
         cur.execute(
@@ -153,7 +153,7 @@ def table_exists(conn: Any, schema: str, table: str) -> bool:
         return bool(result[0]) if result else False
 
 
-def count_rows(conn: Any, schema: str, table: str) -> int:
+def count_rows(conn: object, schema: str, table: str) -> int:
     """Count rows in table."""
     with conn.cursor() as cur:
         cur.execute('SELECT COUNT(*) FROM "%s"."%s"', (schema, table))
@@ -161,7 +161,7 @@ def count_rows(conn: Any, schema: str, table: str) -> int:
         return int(result[0]) if result else 0
 
 
-def get_column_names(conn: Any, schema: str, table: str) -> list[str]:
+def get_column_names(conn: object, schema: str, table: str) -> list[str]:
     """Get column names for table."""
     with conn.cursor() as cur:
         cur.execute(

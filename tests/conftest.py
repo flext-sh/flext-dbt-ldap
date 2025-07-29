@@ -7,6 +7,7 @@ functionality using real LDAP connections and dbt-core patterns.
 from __future__ import annotations
 
 import os
+import re
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -458,7 +459,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
 # Mock services
 @pytest.fixture
-def mock_ldap_dbt_adapter() -> Any:
+def mock_ldap_dbt_adapter() -> object:
     """Mock LDAP dbt adapter for testing."""
 
     class MockLdapDbtAdapter:
@@ -488,8 +489,6 @@ def mock_ldap_dbt_adapter() -> Any:
 
         def validate_dn_format(self, dn: str) -> bool:
             """Validate DN format."""
-            import re
-
             pattern = r"^(cn|uid)=.+,(ou|dc)=.+"
             return bool(re.match(pattern, dn))
 
@@ -525,7 +524,7 @@ def mock_ldap_dbt_adapter() -> Any:
 
 
 @pytest.fixture
-def mock_ldap_connection() -> Any:
+def mock_ldap_connection() -> object:
     """Mock LDAP connection for testing."""
 
     class MockLdapConnection:
