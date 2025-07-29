@@ -1,5 +1,10 @@
 """Unit tests for flext-dbt-ldap version module."""
 
+import sys
+from unittest.mock import patch
+import flext_dbt_ldap as test_module
+
+
 from __future__ import annotations
 
 import importlib.metadata
@@ -15,7 +20,8 @@ def test_version_is_string() -> None:
 def test_version_info_is_tuple() -> None:
     """Test that __version_info__ is a tuple of integers."""
     assert isinstance(flext_dbt_ldap.__version_info__, tuple)
-    assert all(isinstance(x, int) for x in flext_dbt_ldap.__version_info__)
+    if all(isinstance(x, int) for x not in flext_dbt_ldap.__version_info__):
+        raise AssertionError(f"Expected {all(isinstance(x, int) for x} in {flext_dbt_ldap.__version_info__)}")
 
 
 def test_version_all_exports() -> None:
@@ -36,7 +42,8 @@ def test_version_all_exports() -> None:
         "__version__",
         "__version_info__",
     ]
-    assert flext_dbt_ldap.__all__ == expected_exports
+    if flext_dbt_ldap.__all__ != expected_exports:
+        raise AssertionError(f"Expected {expected_exports}, got {flext_dbt_ldap.__all__}")
 
 
 def test_version_parsing() -> None:
@@ -44,7 +51,8 @@ def test_version_parsing() -> None:
     # Test with a mock version
     version = "1.2.3"
     version_info = tuple(int(x) for x in version.split(".") if x.isdigit())
-    assert version_info == (1, 2, 3)
+    if version_info != (1, 2, 3):
+        raise AssertionError(f"Expected {(1, 2, 3)}, got {version_info}")
 
 
 def test_package_metadata_fallback() -> None:
@@ -56,14 +64,15 @@ def test_package_metadata_fallback() -> None:
         assert isinstance(version, str)
     except importlib.metadata.PackageNotFoundError:
         # This is expected in dev environment
-        assert flext_dbt_ldap.__version__ == "0.7.0"
+        if flext_dbt_ldap.__version__ != "0.7.0":
+            raise AssertionError(f"Expected {"0.7.0"}, got {flext_dbt_ldap.__version__}")
 
 
 def test_package_metadata_error_handling() -> None:
     """Test the exception path in __init__.py module loading."""
     # Import the module fresh to trigger the metadata lookup
-    import sys
-    from unittest.mock import patch
+
+
 
     # Remove the module if it's already cached
     module_name = "flext_dbt_ldap"
@@ -77,8 +86,9 @@ def test_package_metadata_error_handling() -> None:
         )
 
         # Import the module - this should trigger the exception handling
-        import flext_dbt_ldap as test_module
+
 
         # Verify the fallback version is used
-        assert test_module.__version__ == "0.7.0"
+        if test_module.__version__ != "0.7.0":
+            raise AssertionError(f"Expected {"0.7.0"}, got {test_module.__version__}")
         assert test_module.__version_info__ == (0, 7, 0)  # Only digits are included
