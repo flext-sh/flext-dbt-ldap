@@ -19,8 +19,13 @@ def test_version_info_is_tuple() -> None:
     """Test that __version_info__ is a tuple of integers."""
     assert isinstance(flext_dbt_ldap.__version_info__, tuple)
     if not all(isinstance(x, int) for x in flext_dbt_ldap.__version_info__):
-        invalid_types = [type(x).__name__ for x in flext_dbt_ldap.__version_info__ if not isinstance(x, int)]
-        raise AssertionError(f"Expected all integers in version_info, found types: {invalid_types}")
+        invalid_types = [
+            type(x).__name__
+            for x in flext_dbt_ldap.__version_info__
+            if not isinstance(x, int)
+        ]
+        msg = f"Expected all integers in version_info, found types: {invalid_types}"
+        raise AssertionError(msg)
 
 
 def test_version_all_exports() -> None:
@@ -42,7 +47,8 @@ def test_version_all_exports() -> None:
         "__version_info__",
     ]
     if flext_dbt_ldap.__all__ != expected_exports:
-        raise AssertionError(f"Expected {expected_exports}, got {flext_dbt_ldap.__all__}")
+        msg = f"Expected {expected_exports}, got {flext_dbt_ldap.__all__}"
+        raise AssertionError(msg)
 
 
 def test_version_parsing() -> None:
@@ -51,7 +57,8 @@ def test_version_parsing() -> None:
     version = "1.2.3"
     version_info = tuple(int(x) for x in version.split(".") if x.isdigit())
     if version_info != (1, 2, 3):
-        raise AssertionError(f"Expected {(1, 2, 3)}, got {version_info}")
+        msg = f"Expected {(1, 2, 3)}, got {version_info}"
+        raise AssertionError(msg)
 
 
 def test_package_metadata_fallback() -> None:
@@ -63,15 +70,14 @@ def test_package_metadata_fallback() -> None:
         assert isinstance(version, str)
     except importlib.metadata.PackageNotFoundError:
         # This is expected in dev environment
-        if flext_dbt_ldap.__version__ != "0.7.0":
-            raise AssertionError(f'Expected "0.7.0", got {flext_dbt_ldap.__version__}') from None
+        if flext_dbt_ldap.__version__ != "0.9.0":
+            msg = f'Expected "0.9.0", got {flext_dbt_ldap.__version__}'
+            raise AssertionError(msg) from None
 
 
 def test_package_metadata_error_handling() -> None:
     """Test the exception path in __init__.py module loading."""
     # Import the module fresh to trigger the metadata lookup
-
-
 
     # Remove the module if it's already cached
     module_name = "flext_dbt_ldap"
@@ -86,8 +92,8 @@ def test_package_metadata_error_handling() -> None:
 
         # Import the module - this should trigger the exception handling
 
-
         # Verify the fallback version is used
-        if test_module.__version__ != "0.7.0":
-            raise AssertionError(f'Expected "0.7.0", got {test_module.__version__}') from None
+        if test_module.__version__ != "0.9.0":
+            msg = f'Expected "0.9.0", got {test_module.__version__}'
+            raise AssertionError(msg) from None
         assert test_module.__version_info__ == (0, 7, 0)  # Only digits are included
