@@ -63,7 +63,7 @@ class FlextDbtLdapValidationError(FlextValidationError):
         **kwargs: object,
     ) -> None:
         """Initialize LDAP DBT validation error with context."""
-        validation_details = {}
+        validation_details: dict[str, object] = {}
         if field is not None:
             validation_details["field"] = field
         if value is not None:
@@ -152,7 +152,7 @@ class FlextDbtLdapMacroError(FlextDbtLdapError):
         if macro_name is not None:
             context["macro_name"] = macro_name
 
-        super().__init__(f"LDAP DBT macro: {message}", **context)
+        super().__init__(f"LDAP DBT macro: {message}", model_name=None, **context)
 
 
 class FlextDbtLdapTestError(FlextDbtLdapError):
