@@ -1,15 +1,13 @@
 """Unit tests for flext-dbt-ldap version module."""
 
-import sys
-from unittest.mock import patch
-import flext_dbt_ldap as test_module
-
-
 from __future__ import annotations
 
 import importlib.metadata
+import sys
+from unittest.mock import patch
 
 import flext_dbt_ldap
+import flext_dbt_ldap as test_module
 
 
 def test_version_is_string() -> None:
@@ -20,8 +18,9 @@ def test_version_is_string() -> None:
 def test_version_info_is_tuple() -> None:
     """Test that __version_info__ is a tuple of integers."""
     assert isinstance(flext_dbt_ldap.__version_info__, tuple)
-    if all(isinstance(x, int) for x not in flext_dbt_ldap.__version_info__):
-        raise AssertionError(f"Expected {all(isinstance(x, int) for x} in {flext_dbt_ldap.__version_info__)}")
+    if not all(isinstance(x, int) for x in flext_dbt_ldap.__version_info__):
+        invalid_types = [type(x).__name__ for x in flext_dbt_ldap.__version_info__ if not isinstance(x, int)]
+        raise AssertionError(f"Expected all integers in version_info, found types: {invalid_types}")
 
 
 def test_version_all_exports() -> None:
@@ -65,7 +64,7 @@ def test_package_metadata_fallback() -> None:
     except importlib.metadata.PackageNotFoundError:
         # This is expected in dev environment
         if flext_dbt_ldap.__version__ != "0.7.0":
-            raise AssertionError(f"Expected {"0.7.0"}, got {flext_dbt_ldap.__version__}")
+            raise AssertionError(f'Expected "0.7.0", got {flext_dbt_ldap.__version__}') from None
 
 
 def test_package_metadata_error_handling() -> None:
@@ -90,5 +89,5 @@ def test_package_metadata_error_handling() -> None:
 
         # Verify the fallback version is used
         if test_module.__version__ != "0.7.0":
-            raise AssertionError(f"Expected {"0.7.0"}, got {test_module.__version__}")
+            raise AssertionError(f'Expected "0.7.0", got {test_module.__version__}') from None
         assert test_module.__version_info__ == (0, 7, 0)  # Only digits are included
