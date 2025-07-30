@@ -41,8 +41,27 @@ def configure_flext_dbt_ldap_dependencies() -> None:
     get_flext_dbt_ldap_container()
 
     try:
-        # Register module-specific dependencies
-        # TODO: Add module-specific service registrations here
+        container = get_flext_dbt_ldap_container()
+
+        # Register available dbt-ldap functions as callable services
+        from flext_dbt_ldap.ldap_integration import (
+            process_ldap_entries_for_dbt,
+            validate_ldap_data_quality,
+        )
+        from flext_dbt_ldap.simple_api import (
+            create_flext_group_dimension,
+            create_flext_ldap_transformer,
+            create_flext_user_dimension,
+        )
+
+        # Register LDAP integration functions
+        container.register("ldap_entry_processor", process_ldap_entries_for_dbt)
+        container.register("ldap_data_validator", validate_ldap_data_quality)
+
+        # Register simple API functions
+        container.register("group_dimension_creator", create_flext_group_dimension)
+        container.register("ldap_transformer_creator", create_flext_ldap_transformer)
+        container.register("user_dimension_creator", create_flext_user_dimension)
 
         logger.info("FLEXT_DBT_LDAP dependencies configured successfully")
 
