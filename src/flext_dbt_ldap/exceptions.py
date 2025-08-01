@@ -51,12 +51,14 @@ FlextDbtLdapAuthenticationError = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapAuthenticationError"],
 )
-FlextDbtLdapTimeoutError = cast("type[Exception]", _exceptions["FlextDbtLdapTimeoutError"])
+FlextDbtLdapTimeoutError = cast(
+    "type[Exception]", _exceptions["FlextDbtLdapTimeoutError"]
+)
 
 
-# SOLID SRP: Domain-specific DBT LDAP errors using composition over duplication
+# Domain-specific DBT LDAP errors using composition over duplication
 # =============================================================================
-# SOLID REFACTORING: Template Method Pattern - eliminates massive duplication
+# REFACTORING: Template Method Pattern - eliminates massive duplication
 # =============================================================================
 
 
