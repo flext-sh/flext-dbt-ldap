@@ -36,7 +36,7 @@ def set_test_environment() -> Generator[None]:
 
 # dbt LDAP configuration fixtures
 @pytest.fixture
-def dbt_ldap_profile() -> dict[str, Any]:
+def dbt_ldap_profile() -> dict[str, object]:
     """Dbt LDAP profile configuration for testing."""
     return {
         "config": {
@@ -67,7 +67,7 @@ def dbt_ldap_profile() -> dict[str, Any]:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> dict[str, Any]:
+def dbt_ldap_project_config() -> dict[str, object]:
     """Dbt LDAP project configuration for testing."""
     return {
         "name": "flext_dbt_ldap_test",
@@ -103,7 +103,7 @@ def dbt_ldap_project_config() -> dict[str, Any]:
 
 # LDAP source fixtures
 @pytest.fixture
-def ldap_source_config() -> dict[str, Any]:
+def ldap_source_config() -> dict[str, object]:
     """LDAP source configuration for testing."""
     return {
         "server": "localhost",
@@ -119,7 +119,7 @@ def ldap_source_config() -> dict[str, Any]:
 
 
 @pytest.fixture
-def sample_ldap_entries() -> list[dict[str, Any]]:
+def sample_ldap_entries() -> list[dict[str, object]]:
     """Sample LDAP entries for testing."""
     return [
         {
@@ -314,7 +314,7 @@ def dbt_ldap_macros() -> dict[str, str]:
 
 # dbt LDAP source definitions
 @pytest.fixture
-def dbt_ldap_sources() -> dict[str, Any]:
+def dbt_ldap_sources() -> dict[str, object]:
     """Dbt LDAP source definitions for testing."""
     return {
         "version": 2,
@@ -407,7 +407,7 @@ def dbt_ldap_tests() -> dict[str, str]:
 
 # LDAP validation fixtures
 @pytest.fixture
-def ldap_validation_rules() -> dict[str, Any]:
+def ldap_validation_rules() -> dict[str, object]:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
@@ -431,7 +431,7 @@ def ldap_validation_rules() -> dict[str, Any]:
 
 # Performance test fixtures
 @pytest.fixture
-def ldap_performance_config() -> dict[str, Any]:
+def ldap_performance_config() -> dict[str, object]:
     """LDAP performance test configuration."""
     return {
         "large_directory_entries": 10000,
@@ -463,16 +463,16 @@ def mock_ldap_dbt_adapter() -> object:
     """Mock LDAP dbt adapter for testing."""
 
     class MockLdapDbtAdapter:
-        def __init__(self, config: dict[str, Any]) -> None:
+        def __init__(self, config: dict[str, object]) -> None:
             self.config = config
-            self.ldap_entries: dict[str, Any] = {}
-            self.compiled_models: dict[str, Any] = {}
+            self.ldap_entries: dict[str, object] = {}
+            self.compiled_models: dict[str, object] = {}
 
         def extract_ldap_data(
             self,
             base_dn: str,
             search_filter: str,
-        ) -> list[dict[str, Any]]:
+        ) -> list[dict[str, object]]:
             """Extract LDAP data for dbt processing."""
             # Mock LDAP extraction
             return [
@@ -494,7 +494,7 @@ def mock_ldap_dbt_adapter() -> object:
 
         def parse_ldap_attributes(
             self,
-            attributes: dict[str, Any],
+            attributes: dict[str, object],
         ) -> dict[str, str | None]:
             """Parse LDAP attributes for dbt models."""
             parsed: dict[str, str | None] = {}
@@ -507,8 +507,8 @@ def mock_ldap_dbt_adapter() -> object:
 
         def transform_ldap_to_relational(
             self,
-            ldap_data: list[dict[str, Any]],
-        ) -> list[dict[str, Any]]:
+            ldap_data: list[dict[str, object]],
+        ) -> list[dict[str, object]]:
             """Transform LDAP data to relational format."""
             transformed = []
             for entry in ldap_data:
@@ -528,7 +528,7 @@ def mock_ldap_connection() -> object:
     """Mock LDAP connection for testing."""
 
     class MockLdapConnection:
-        def __init__(self, config: dict[str, Any]) -> None:
+        def __init__(self, config: dict[str, object]) -> None:
             self.config = config
             self.connected = False
             self.entries: list[Any] = []
@@ -548,7 +548,7 @@ def mock_ldap_connection() -> object:
             base_dn: str,
             search_filter: str,
             attributes: list[str] | None = None,
-        ) -> list[dict[str, Any]]:
+        ) -> list[dict[str, object]]:
             """Search LDAP directory."""
             # Mock search results
             if "users" in base_dn:
