@@ -108,7 +108,7 @@ def run_dbt_command(
     command: list[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: dict[str, Any] | None = None,
+    dbt_vars: dict[str, object] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
