@@ -1,4 +1,9 @@
-"""E2E test configuration and fixtures for dbt-ldap."""
+"""E2E test configuration and fixtures for dbt-ldap.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+
+"""
 
 from __future__ import annotations
 
@@ -8,17 +13,13 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import docker
-from flext_core import get_logger
-
-try:
-    import psycopg
-except ImportError:
-    # psycopg not available - E2E tests requiring PostgreSQL will be skipped
-    psycopg = None
+import psycopg
 import pytest
+from flext_core import get_logger
 
 if TYPE_CHECKING:
     from collections.abc import Generator
+
 logger = get_logger(__name__)
 
 
