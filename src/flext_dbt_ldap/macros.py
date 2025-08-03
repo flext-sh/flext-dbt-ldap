@@ -5,6 +5,7 @@ All actual macros are imported from flext-ldap library.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations

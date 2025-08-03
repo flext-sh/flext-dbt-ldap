@@ -1,12 +1,13 @@
 """FLEXT DBT LDAP - LDAP Directory Data Transformations with simplified imports.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Version 0.9.0 - DBT LDAP Transformations with simplified public API:
 - All common imports available from root: from flext_dbt_ldap import LDAPTransformer
 - Built on flext-core foundation for robust LDAP data transformations
 - Deprecation warnings for internal imports
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations
@@ -15,7 +16,6 @@ import contextlib
 import importlib.metadata
 import warnings
 
-# Import from flext-core for foundational patterns (standardized)
 from flext_core import (
     FlextBaseSettings as BaseConfig,
     FlextEntity as DomainEntity,
@@ -25,8 +25,6 @@ from flext_core import (
     FlextValueObject as DomainBaseModel,
     FlextValueObject as DomainValueObject,
 )
-
-# Import from flext-ldap for centralized LDAP patterns - ACTUAL USAGE
 from flext_ldap import (
     FlextLdapAuth,
     FlextLdapClient,
@@ -37,16 +35,12 @@ from flext_ldap import (
     parse_dn,
     validate_dn,
 )
-
-# Import from flext-meltano for DBT integration
-# MIGRATED: Singer SDK imports centralized via flext-meltano
 from flext_meltano.dbt import (
     FlextMeltanoDbtManager,
     FlextMeltanoDbtProject,
     FlextMeltanoDbtRunner,
 )
 
-# Import local integration functions that use flext-ldap
 with contextlib.suppress(ImportError):
     from flext_dbt_ldap.ldap_integration import (
         process_ldap_entries_for_dbt,
