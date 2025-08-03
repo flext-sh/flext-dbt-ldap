@@ -18,11 +18,6 @@ from __future__ import annotations
 from typing import cast
 
 from flext_core.exceptions import (
-    FlextConfigurationError,
-    FlextConnectionError,
-    FlextError,
-    FlextProcessingError,
-    FlextValidationError,
     create_module_exception_classes,
 )
 
@@ -52,7 +47,8 @@ FlextDbtLdapAuthenticationError = cast(
     _exceptions["FlextDbtLdapAuthenticationError"],
 )
 FlextDbtLdapTimeoutError = cast(
-    "type[Exception]", _exceptions["FlextDbtLdapTimeoutError"]
+    "type[Exception]",
+    _exceptions["FlextDbtLdapTimeoutError"],
 )
 
 
