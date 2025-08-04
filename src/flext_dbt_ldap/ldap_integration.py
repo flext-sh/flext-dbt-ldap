@@ -71,7 +71,7 @@ def validate_ldap_data_quality(df: object) -> dict[str, object]:
         return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
 
-__all__ = [
+__all__: list[str] = [
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",
 ]

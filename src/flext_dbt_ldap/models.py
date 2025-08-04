@@ -33,7 +33,7 @@ class UserDimension:
 
 
 # Re-export for backwards compatibility
-__all__ = [
+__all__: list[str] = [
     "FlextLdapCreateUserRequest",
     "FlextLdapDistinguishedName",
     "FlextLdapEntry",

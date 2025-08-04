@@ -34,7 +34,7 @@ def create_flext_user_dimension() -> object:
 
 
 # Re-export for backwards compatibility
-__all__ = [
+__all__: list[str] = [
     "FlextLdapClient",
     "FlextLdapConfig",
     "FlextLdapResult",

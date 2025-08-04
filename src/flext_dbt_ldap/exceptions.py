@@ -116,7 +116,7 @@ class FlextDbtLdapTestError(FlextDbtLdapError):  # type: ignore[valid-type,misc]
         super().__init__(f"LDAP DBT test: {message}", **context)
 
 
-__all__ = [
+__all__: list[str] = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
