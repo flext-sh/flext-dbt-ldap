@@ -29,7 +29,9 @@ def test_version_info_is_tuple() -> None:
             for x in flext_dbt_ldap.__version_info__
             if not isinstance(x, int)
         ]
-        msg = f"Expected all integers in version_info, found types: {invalid_types}"
+        msg: str = (
+            f"Expected all integers in version_info, found types: {invalid_types}"
+        )
         raise AssertionError(msg)
 
 
@@ -52,7 +54,7 @@ def test_version_all_exports() -> None:
         "__version_info__",
     ]
     if flext_dbt_ldap.__all__ != expected_exports:
-        msg = f"Expected {expected_exports}, got {flext_dbt_ldap.__all__}"
+        msg: str = f"Expected {expected_exports}, got {flext_dbt_ldap.__all__}"
         raise AssertionError(msg)
 
 
@@ -62,7 +64,7 @@ def test_version_parsing() -> None:
     version = "1.2.3"
     version_info = tuple(int(x) for x in version.split(".") if x.isdigit())
     if version_info != (1, 2, 3):
-        msg = f"Expected {(1, 2, 3)}, got {version_info}"
+        msg: str = f"Expected {(1, 2, 3)}, got {version_info}"
         raise AssertionError(msg)
 
 
