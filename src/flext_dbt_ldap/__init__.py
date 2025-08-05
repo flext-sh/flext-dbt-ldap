@@ -25,21 +25,6 @@ from flext_core import (
     FlextValueObject as DomainBaseModel,
     FlextValueObject as DomainValueObject,
 )
-from flext_ldap import (
-    FlextLdapAuth,
-    FlextLdapClient,
-    FlextLdapConfig,
-    FlextLdapParser,
-    FlextLdapResult,
-    format_ldap_timestamp,
-    parse_dn,
-    validate_dn,
-)
-from flext_meltano.dbt import (
-    FlextMeltanoDbtManager,
-    FlextMeltanoDbtProject,
-    FlextMeltanoDbtRunner,
-)
 
 with contextlib.suppress(ImportError):
     from flext_dbt_ldap.ldap_integration import (
@@ -163,5 +148,5 @@ __all__: list[str] = [
     "flext_dbt_ldap_convert_timestamp",
     "flext_dbt_ldap_create_dimension",
     "flext_dbt_ldap_parse_dn",
-    "flext_dbt_ldap_transform_entry",
+    "flext_dbt_ldap_transform_entry", "process_ldap_entries_for_dbt", "validate_ldap_data_quality",
 ]
