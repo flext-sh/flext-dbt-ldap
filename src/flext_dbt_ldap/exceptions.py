@@ -59,7 +59,7 @@ FlextDbtLdapTimeoutError = cast(
 # =============================================================================
 
 
-class FlextDbtLdapModelError(FlextDbtLdapError):  # type: ignore[valid-type,misc]
+class FlextDbtLdapModelError(FlextDbtLdapError):
     """LDAP DBT model-specific errors using DRY foundation."""
 
     def __init__(
@@ -79,7 +79,7 @@ class FlextDbtLdapModelError(FlextDbtLdapError):  # type: ignore[valid-type,misc
         super().__init__(f"LDAP DBT model: {message}", **context)
 
 
-class FlextDbtLdapMacroError(FlextDbtLdapError):  # type: ignore[valid-type,misc]
+class FlextDbtLdapMacroError(FlextDbtLdapError):
     """LDAP DBT macro errors using DRY foundation."""
 
     def __init__(
@@ -96,7 +96,7 @@ class FlextDbtLdapMacroError(FlextDbtLdapError):  # type: ignore[valid-type,misc
         super().__init__(f"LDAP DBT macro: {message}", **context)
 
 
-class FlextDbtLdapTestError(FlextDbtLdapError):  # type: ignore[valid-type,misc]
+class FlextDbtLdapTestError(FlextDbtLdapError):
     """LDAP DBT test errors using DRY foundation."""
 
     def __init__(
