@@ -148,5 +148,7 @@ __all__: list[str] = [
     "flext_dbt_ldap_convert_timestamp",
     "flext_dbt_ldap_create_dimension",
     "flext_dbt_ldap_parse_dn",
-    "flext_dbt_ldap_transform_entry", "process_ldap_entries_for_dbt", "validate_ldap_data_quality",
+    "flext_dbt_ldap_transform_entry",
+    "process_ldap_entries_for_dbt",
+    "validate_ldap_data_quality",
 ]
