@@ -59,7 +59,7 @@ FlextDbtLdapTimeoutError = cast(
 # =============================================================================
 
 
-class FlextDbtLdapModelError(FlextDbtLdapError):
+class FlextDbtLdapModelError(FlextDbtLdapError):  # type: ignore[valid-type,misc]
     """LDAP DBT model-specific errors using DRY foundation."""
 
     def __init__(
