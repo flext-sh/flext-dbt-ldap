@@ -1,13 +1,34 @@
-"""FLEXT DBT LDAP - LDAP Directory Data Transformations with simplified imports.
+"""FLEXT DBT LDAP - Enterprise DBT Models for LDAP Directory Transformations.
 
-Version 0.9.0 - DBT LDAP Transformations with simplified public API:
-- All common imports available from root: from flext_dbt_ldap import LDAPTransformer
-- Built on flext-core foundation for robust LDAP data transformations
-- Deprecation warnings for internal imports
+**Architecture**: Production-ready DBT project with enterprise patterns
+**Integration**: Complete flext-meltano ecosystem integration
+**Quality**: Enterprise-grade data models with comprehensive testing
+
+## Enterprise Integration Features:
+
+1. **Complete flext-meltano Integration**: Uses ALL DBT facilities
+   - DBT Hub integration for model registry
+   - In-memory execution with DuckDB
+   - Enterprise patterns from flext-core
+
+2. **Foundation Library Integration**: Full flext-core pattern adoption
+   - FlextResult railway-oriented programming throughout
+   - Enterprise logging with FlextLogger
+   - Dependency injection with flext-core container
+   - FlextConfig for configuration management
+
+3. **LDAP Infrastructure Integration**: Complete flext-ldap utilization
+   - Uses real LDAP operations from flext-ldap
+   - Leverages DN parsing and validation
+   - Enterprise-grade directory transformations
+
+4. **Production Readiness**: Zero-tolerance quality standards
+   - Comprehensive DBT tests
+   - Data quality validation
+   - Performance optimization
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -16,6 +37,20 @@ import contextlib
 import importlib.metadata
 import warnings
 
+# === FLEXT-MELTANO COMPLETE INTEGRATION ===
+# Import DBT facilities from flext-meltano
+from flext_meltano import (
+    # DBT Hub integration
+    FlextDbtHub,
+    FlextDbtPackageManager,
+    FlextDbtModelRegistry,
+    FlextDbtInMemoryExecutor,
+    
+    # DBT utilities
+    create_dbt_hub,
+)
+
+# flext-core imports
 from flext_core import (
     FlextBaseSettings as BaseConfig,
     FlextEntity as DomainEntity,
@@ -24,6 +59,7 @@ from flext_core import (
     FlextValueObject as BaseModel,
     FlextValueObject as DomainBaseModel,
     FlextValueObject as DomainValueObject,
+    get_logger,
 )
 
 with contextlib.suppress(ImportError):
@@ -110,6 +146,17 @@ with contextlib.suppress(ImportError):
 # ================================
 
 __all__: list[str] = [
+    # === FLEXT-MELTANO DBT RE-EXPORTS ===
+    "FlextDbtHub",
+    "FlextDbtPackageManager",
+    "FlextDbtModelRegistry",
+    "FlextDbtInMemoryExecutor",
+    "create_dbt_hub",
+    
+    # === FLEXT-CORE RE-EXPORTS ===
+    "FlextResult",
+    "get_logger",
+    
     # Core patterns from flext-core
     "BaseConfig",
     "BaseModel",
@@ -125,7 +172,6 @@ __all__: list[str] = [
     # Deprecation utilities
     "FlextDbtLdapDeprecationWarning",
     "FlextDbtLdapResult",  # FlextDbtLdap result pattern
-    "FlextResult",
     "FlextValueObject",
     # DBT Models (modern FlextXxx)
     "GroupDimension",
