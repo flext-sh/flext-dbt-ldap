@@ -66,8 +66,8 @@ def validate_ldap_data_quality(df: object) -> dict[str, object]:
 
         return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
-    except (RuntimeError, ValueError, TypeError) as e:
-        logger.exception("Failed to validate LDAP data quality: %s", e)
+    except (RuntimeError, ValueError, TypeError):
+        logger.exception("Failed to validate LDAP data quality")
         return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
 
