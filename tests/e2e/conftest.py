@@ -45,7 +45,7 @@ def postgres_container(
     # Start containers
     logger.info("Starting PostgreSQL container...")
     subprocess.run(
-        ["docker-compose", "-f", str(compose_file), "up", "-d", "postgres"],
+        ["/usr/bin/docker-compose", "-f", str(compose_file), "up", "-d", "postgres"],
         check=True,
         cwd=str(project_root),
     )
@@ -72,7 +72,7 @@ def postgres_container(
     # Stop containers
     logger.info("Stopping PostgreSQL container...")
     subprocess.run(
-        ["docker-compose", "-f", str(compose_file), "down", "-v"],
+        ["/usr/bin/docker-compose", "-f", str(compose_file), "down", "-v"],
         check=True,
         cwd=str(project_root),
     )
