@@ -37,19 +37,6 @@ import contextlib
 import importlib.metadata
 import warnings
 
-# === FLEXT-MELTANO COMPLETE INTEGRATION ===
-# Import DBT facilities from flext-meltano
-from flext_meltano import (
-    # DBT Hub integration
-    FlextDbtHub,
-    FlextDbtPackageManager,
-    FlextDbtModelRegistry,
-    FlextDbtInMemoryExecutor,
-    
-    # DBT utilities
-    create_dbt_hub,
-)
-
 # flext-core imports
 from flext_core import (
     FlextBaseSettings as BaseConfig,
@@ -60,6 +47,18 @@ from flext_core import (
     FlextValueObject as DomainBaseModel,
     FlextValueObject as DomainValueObject,
     get_logger,
+)
+
+# === FLEXT-MELTANO COMPLETE INTEGRATION ===
+# Import DBT facilities from flext-meltano
+from flext_meltano import (
+    # DBT Hub integration
+    FlextDbtHub,
+    FlextDbtInMemoryExecutor,
+    FlextDbtModelRegistry,
+    FlextDbtPackageManager,
+    # DBT utilities
+    create_dbt_hub,
 )
 
 with contextlib.suppress(ImportError):
@@ -146,17 +145,6 @@ with contextlib.suppress(ImportError):
 # ================================
 
 __all__: list[str] = [
-    # === FLEXT-MELTANO DBT RE-EXPORTS ===
-    "FlextDbtHub",
-    "FlextDbtPackageManager",
-    "FlextDbtModelRegistry",
-    "FlextDbtInMemoryExecutor",
-    "create_dbt_hub",
-    
-    # === FLEXT-CORE RE-EXPORTS ===
-    "FlextResult",
-    "get_logger",
-    
     # Core patterns from flext-core
     "BaseConfig",
     "BaseModel",
@@ -166,12 +154,19 @@ __all__: list[str] = [
     "DomainEntity",
     "DomainValueObject",
     "Field",
+    # === FLEXT-MELTANO DBT RE-EXPORTS ===
+    "FlextDbtHub",
+    "FlextDbtInMemoryExecutor",
     # FlextDbtLdap-specific classes (main patterns)
     "FlextDbtLdap",  # Main FlextDbtLdap class
     "FlextDbtLdapBaseModel",  # FlextDbtLdap base model
     # Deprecation utilities
     "FlextDbtLdapDeprecationWarning",
     "FlextDbtLdapResult",  # FlextDbtLdap result pattern
+    "FlextDbtModelRegistry",
+    "FlextDbtPackageManager",
+    # === FLEXT-CORE RE-EXPORTS ===
+    "FlextResult",
     "FlextValueObject",
     # DBT Models (modern FlextXxx)
     "GroupDimension",
@@ -186,6 +181,7 @@ __all__: list[str] = [
     # Metadata
     "__version__",
     "__version_info__",
+    "create_dbt_hub",
     # Simple API (modern FlextXxx)
     "create_flext_group_dimension",
     "create_flext_ldap_transformer",
@@ -195,6 +191,7 @@ __all__: list[str] = [
     "flext_dbt_ldap_create_dimension",
     "flext_dbt_ldap_parse_dn",
     "flext_dbt_ldap_transform_entry",
+    "get_logger",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",
 ]
