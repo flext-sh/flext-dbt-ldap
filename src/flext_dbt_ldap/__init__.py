@@ -39,7 +39,7 @@ import warnings
 
 # flext-core imports
 from flext_core import (
-    FlextBaseSettings as BaseConfig,
+    FlextSettings as BaseConfig,
     FlextEntity as DomainEntity,
     FlextFields as Field,
     FlextResult,
