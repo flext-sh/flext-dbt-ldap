@@ -9,11 +9,17 @@ from __future__ import annotations
 
 import subprocess
 import time
+from collections.abc import Generator
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import docker
-import psycopg
+
+try:
+    import psycopg  # type: ignore[import-not-found]
+except Exception:  # pragma: no cover - test environment dependency
+    import pytest
+    pytest.skip("psycopg not installed; skipping e2e tests", allow_module_level=True)
 import pytest
 from flext_core import get_logger
 
@@ -39,7 +45,7 @@ def project_root() -> Path:
 def postgres_container(
     docker_client: docker.DockerClient,
     project_root: Path,
-) -> Generator[Any]:
+) -> Generator[None]:
     """Start PostgreSQL container for testing."""
     compose_file = project_root / "docker-compose.yml"
     # Start containers
@@ -79,7 +85,7 @@ def postgres_container(
 
 
 @pytest.fixture
-def db_connection(postgres_container: Any) -> Generator[Any]:
+def db_connection(postgres_container: None) -> Generator[object]:
     """Get database connection for testing."""
     conn = psycopg.connect(
         host="localhost",
@@ -130,9 +136,9 @@ def run_dbt_command(
     )
 
 
-def query_database(conn: object, query: str) -> list[tuple[Any, ...]]:
+def query_database(conn: object, query: str) -> list[tuple[object, ...]]:
     """Execute query and return results."""
-    with conn.cursor() as cur:
+    with conn.cursor() as cur:  # type: ignore[attr-defined]
         cur.execute(query)
         result = cur.fetchall()
         return list(result)
@@ -140,7 +146,7 @@ def query_database(conn: object, query: str) -> list[tuple[Any, ...]]:
 
 def table_exists(conn: object, schema: str, table: str) -> bool:
     """Check if table exists in database."""
-    with conn.cursor() as cur:
+    with conn.cursor() as cur:  # type: ignore[attr-defined]
         cur.execute(
             """
             SELECT EXISTS (
@@ -156,7 +162,7 @@ def table_exists(conn: object, schema: str, table: str) -> bool:
 
 def count_rows(conn: object, schema: str, table: str) -> int:
     """Count rows in table."""
-    with conn.cursor() as cur:
+    with conn.cursor() as cur:  # type: ignore[attr-defined]
         cur.execute('SELECT COUNT(*) FROM "%s"."%s"', (schema, table))
         result = cur.fetchone()
         return int(result[0]) if result else 0
@@ -164,7 +170,7 @@ def count_rows(conn: object, schema: str, table: str) -> int:
 
 def get_column_names(conn: object, schema: str, table: str) -> list[str]:
     """Get column names for table."""
-    with conn.cursor() as cur:
+    with conn.cursor() as cur:  # type: ignore[attr-defined]
         cur.execute(
             """
             SELECT column_name

@@ -1,7 +1,7 @@
-"""FLEXT DBT LDAP Models - Placeholder module for MyPy compatibility.
+"""FLEXT DBT LDAP Models - Backward compatibility module.
 
-This module exists to satisfy MyPy import checking.
-All actual models are imported from flext-ldap library.
+Re-exports from dbt_models for backward compatibility.
+All actual models are now in dbt_models module.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -10,7 +10,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import (
+# Import from new location
+from .dbt_models import (
+    FlextDbtLdapGroupDimension,
+    FlextDbtLdapMembershipFact,
+    FlextDbtLdapTransformer,
+    FlextDbtLdapUserDimension,
     FlextLdapCreateUserRequest,
     FlextLdapDistinguishedName,
     FlextLdapEntry,
@@ -18,22 +23,17 @@ from flext_ldap import (
     FlextLdapUser,
 )
 
-
-# Placeholder classes for missing imports
-class GroupDimension:
-    """Placeholder for GroupDimension."""
-
-
-class LDAPTransformer:
-    """Placeholder for LDAPTransformer."""
-
-
-class UserDimension:
-    """Placeholder for UserDimension."""
-
+# Backward compatibility aliases
+GroupDimension = FlextDbtLdapGroupDimension
+LDAPTransformer = FlextDbtLdapTransformer
+UserDimension = FlextDbtLdapUserDimension
 
 # Re-export for backwards compatibility
 __all__: list[str] = [
+    "FlextDbtLdapGroupDimension",
+    "FlextDbtLdapMembershipFact",
+    "FlextDbtLdapTransformer",
+    "FlextDbtLdapUserDimension",
     "FlextLdapCreateUserRequest",
     "FlextLdapDistinguishedName",
     "FlextLdapEntry",
