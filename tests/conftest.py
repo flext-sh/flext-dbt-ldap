@@ -13,7 +13,7 @@ from __future__ import annotations
 import os
 import re
 import tempfile
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -520,7 +520,9 @@ def mock_ldap_dbt_adapter() -> object:
                     "dn": entry["dn"],
                     "extracted_at": entry["extracted_at"],
                 }
-                flat_entry.update(self.parse_ldap_attributes(entry["attributes"]))
+                attrs = entry.get("attributes")
+                if isinstance(attrs, dict):
+                    flat_entry.update(self.parse_ldap_attributes(attrs))
                 transformed.append(flat_entry)
             return transformed
 
@@ -535,7 +537,7 @@ def mock_ldap_connection() -> object:
         def __init__(self, config: dict[str, object]) -> None:
             self.config = config
             self.connected = False
-            self.entries: list[Any] = []
+            self.entries: list[dict[str, object]] = []
 
         def connect(self) -> bool:
             """Connect to LDAP server."""

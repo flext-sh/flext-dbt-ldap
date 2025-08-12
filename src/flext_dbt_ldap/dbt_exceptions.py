@@ -19,35 +19,37 @@ from __future__ import annotations
 from typing import cast
 
 from flext_core.exceptions import (
+    FlextProcessingError,
+    FlextValidationError,
     create_module_exception_classes,
 )
 
 # 🚨 DRY PATTERN: Use create_module_exception_classes to eliminate exception duplication
 _exceptions = create_module_exception_classes("flext_dbt_ldap")
 
-# Extract exception classes with proper names for backward compatibility
-FlextDbtLdapError = cast("type[Exception]", _exceptions["FlextDbtLdapError"])
-FlextDbtLdapValidationError = cast(
+# Extract exception classes with precise typing for MyPy
+FlextDbtLdapError: type[Exception] = cast("type[Exception]", _exceptions["FlextDbtLdapError"])  # noqa: E501
+FlextDbtLdapValidationError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapValidationError"],
 )
-FlextDbtLdapConfigurationError = cast(
+FlextDbtLdapConfigurationError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapConfigurationError"],
 )
-FlextDbtLdapConnectionError = cast(
+FlextDbtLdapConnectionError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapConnectionError"],
 )
-FlextDbtLdapProcessingError = cast(
+FlextDbtLdapProcessingError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapProcessingError"],
 )
-FlextDbtLdapAuthenticationError = cast(
+FlextDbtLdapAuthenticationError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapAuthenticationError"],
 )
-FlextDbtLdapTimeoutError = cast(
+FlextDbtLdapTimeoutError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapTimeoutError"],
 )
@@ -59,7 +61,7 @@ FlextDbtLdapTimeoutError = cast(
 # =============================================================================
 
 
-class FlextDbtLdapModelError(FlextDbtLdapError):
+class FlextDbtLdapModelError(FlextProcessingError):
     """LDAP DBT model-specific errors using DRY foundation."""
 
     def __init__(
@@ -76,10 +78,10 @@ class FlextDbtLdapModelError(FlextDbtLdapError):
         if model_type is not None:
             context["model_type"] = model_type
 
-        super().__init__(f"LDAP DBT model: {message}", **context)
+        super().__init__(f"LDAP DBT model: {message}", context=context)
 
 
-class FlextDbtLdapMacroError(FlextDbtLdapError):
+class FlextDbtLdapMacroError(FlextProcessingError):
     """LDAP DBT macro errors using DRY foundation."""
 
     def __init__(
@@ -93,10 +95,10 @@ class FlextDbtLdapMacroError(FlextDbtLdapError):
         if macro_name is not None:
             context["macro_name"] = macro_name
 
-        super().__init__(f"LDAP DBT macro: {message}", **context)
+        super().__init__(f"LDAP DBT macro: {message}", context=context)
 
 
-class FlextDbtLdapTestError(FlextDbtLdapError):
+class FlextDbtLdapTestError(FlextValidationError):
     """LDAP DBT test errors using DRY foundation."""
 
     def __init__(
@@ -113,7 +115,7 @@ class FlextDbtLdapTestError(FlextDbtLdapError):
         if model_name is not None:
             context["model_name"] = model_name
 
-        super().__init__(f"LDAP DBT test: {message}", **context)
+        super().__init__(f"LDAP DBT test: {message}", validation_details=context)
 
 
 __all__: list[str] = [
