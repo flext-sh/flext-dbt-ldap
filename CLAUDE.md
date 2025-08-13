@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-flext-dbt-ldap is an enterprise-grade dbt project for LDAP directory data transformations, part of the FLEXT ecosystem. It provides comprehensive data models, transformations, and analytics for LDAP/Active Directory environments using dbt Core with PostgreSQL/DuckDB backends.
+flext-dbt-ldap is an enterprise-grade dbt project for LDAP directory data transformations. It provides comprehensive data models, transformations, and analytics for LDAP/Active Directory environments using dbt Core with PostgreSQL/DuckDB backends.
 
 ## Architecture
 
