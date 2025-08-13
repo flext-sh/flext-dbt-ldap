@@ -51,7 +51,12 @@ def postgres_container(
     compose_file = project_root / "docker-compose.yml"
     # Start containers
     logger.info("Starting PostgreSQL container...")
-    async def _run(cmd_list: list[str], cwd: str | None = None, timeout: int = 120) -> int:
+
+    async def _run(
+        cmd_list: list[str],
+        cwd: str | None = None,
+        timeout: int = 120,
+    ) -> int:
         process = await asyncio.create_subprocess_exec(
             *cmd_list,
             stdout=asyncio.subprocess.PIPE,
@@ -67,7 +72,17 @@ def postgres_container(
         return process.returncode
 
     asyncio.run(
-        _run(["/usr/bin/docker-compose", "-f", str(compose_file), "up", "-d", "postgres"], cwd=str(project_root)),
+        _run(
+            [
+                "/usr/bin/docker-compose",
+                "-f",
+                str(compose_file),
+                "up",
+                "-d",
+                "postgres",
+            ],
+            cwd=str(project_root),
+        ),
     )
     # Wait for PostgreSQL to be ready
     max_retries = 30
@@ -92,7 +107,10 @@ def postgres_container(
     # Stop containers
     logger.info("Stopping PostgreSQL container...")
     asyncio.run(
-        _run(["/usr/bin/docker-compose", "-f", str(compose_file), "down", "-v"], cwd=str(project_root)),
+        _run(
+            ["/usr/bin/docker-compose", "-f", str(compose_file), "down", "-v"],
+            cwd=str(project_root),
+        ),
     )
 
 
@@ -138,7 +156,12 @@ def run_dbt_command(
     if dbt_vars:
         var_string = " ".join(f"{k}:{v}" for k, v in dbt_vars.items())
         cmd.extend(["--vars", var_string])
-    async def _run_db(cmd_list: list[str], cwd: str, env: dict[str, str]) -> tuple[int, str, str]:
+
+    async def _run_db(
+        cmd_list: list[str],
+        cwd: str,
+        env: dict[str, str],
+    ) -> tuple[int, str, str]:
         process = await asyncio.create_subprocess_exec(
             *cmd_list,
             cwd=cwd,
