@@ -14,9 +14,9 @@ from pathlib import Path
 from flext_core import FlextResult, get_logger
 from flext_meltano.dbt import FlextMeltanoDbtManager
 
-from .dbt_client import FlextDbtLdapClient
-from .dbt_config import FlextDbtLdapConfig
-from .dbt_models import FlextDbtLdapTransformer
+from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
+from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
+from flext_dbt_ldap.dbt_models import FlextDbtLdapTransformer
 
 logger = get_logger(__name__)
 
@@ -77,7 +77,14 @@ class FlextDbtLdapService:
             result = self.client.run_full_pipeline(
                 search_base=search_base,
                 search_filter=user_filter,
-                attributes=["uid", "cn", "mail", "displayName", "department", "manager"],
+                attributes=[
+                    "uid",
+                    "cn",
+                    "mail",
+                    "displayName",
+                    "department",
+                    "manager",
+                ],
                 model_names=["stg_users", "dim_users"],
             )
 
@@ -199,15 +206,30 @@ class FlextDbtLdapService:
 
         # Sync users
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
-        sync_results["users"] = user_result.data if user_result.is_success else {"error": str(user_result.error)}
+        sync_results["users"] = (
+            user_result.data
+            if user_result.is_success
+            else {"error": str(user_result.error)}
+        )
 
         # Sync groups
-        group_result = self.sync_groups_to_warehouse(search_base, incremental=incremental)
-        sync_results["groups"] = group_result.data if group_result.is_success else {"error": str(group_result.error)}
+        group_result = self.sync_groups_to_warehouse(
+            search_base,
+            incremental=incremental,
+        )
+        sync_results["groups"] = (
+            group_result.data
+            if group_result.is_success
+            else {"error": str(group_result.error)}
+        )
 
         # Sync memberships
         membership_result = self.sync_memberships_to_warehouse(search_base)
-        sync_results["memberships"] = membership_result.data if membership_result.is_success else {"error": str(membership_result.error)}
+        sync_results["memberships"] = (
+            membership_result.data
+            if membership_result.is_success
+            else {"error": str(membership_result.error)}
+        )
 
         # Calculate overall success
         successful_syncs = [

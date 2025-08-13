@@ -10,8 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-# Import from new location
-from .dbt_models import (
+from flext_dbt_ldap.dbt_models import (
     FlextDbtLdapGroupDimension,
     FlextDbtLdapMembershipFact,
     FlextDbtLdapTransformer,

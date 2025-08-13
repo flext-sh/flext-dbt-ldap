@@ -19,6 +19,7 @@ try:
     import psycopg  # type: ignore[import-not-found]
 except Exception:  # pragma: no cover - test environment dependency
     import pytest
+
     pytest.skip("psycopg not installed; skipping e2e tests", allow_module_level=True)
 import pytest
 from flext_core import get_logger

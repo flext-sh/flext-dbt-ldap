@@ -42,7 +42,17 @@ class FlextDbtLdapUserDimension(FlextValueObject):
     @classmethod
     def from_ldap_entry(cls, entry: FlextLdapEntry) -> FlextDbtLdapUserDimension:
         """Create user dimension from LDAP entry."""
-        attrs = entry.attributes
+        # Normalize attributes to dict[str, list[str]]
+        raw = entry.attributes
+        attrs: dict[str, list[str]] = {}
+        if isinstance(raw, dict):
+            for k, v in raw.items():
+                if isinstance(v, list):
+                    attrs[k] = [str(x) for x in v]
+                elif v is None:
+                    attrs[k] = []
+                else:
+                    attrs[k] = [str(v)]
 
         return cls(
             user_id=attrs.get("uid", [""])[0] if "uid" in attrs else "",
@@ -114,7 +124,16 @@ class FlextDbtLdapGroupDimension(FlextValueObject):
     @classmethod
     def from_ldap_entry(cls, entry: FlextLdapEntry) -> FlextDbtLdapGroupDimension:
         """Create group dimension from LDAP entry."""
-        attrs = entry.attributes
+        raw = entry.attributes
+        attrs: dict[str, list[str]] = {}
+        if isinstance(raw, dict):
+            for k, v in raw.items():
+                if isinstance(v, list):
+                    attrs[k] = [str(x) for x in v]
+                elif v is None:
+                    attrs[k] = []
+                else:
+                    attrs[k] = [str(v)]
 
         # Count members
         member_count = 0
@@ -296,7 +315,8 @@ class FlextDbtLdapTransformer:
 
             except Exception:
                 logger.exception(
-                    "Failed to transform memberships for entry: %s", entry.dn,
+                    "Failed to transform memberships for entry: %s",
+                    entry.dn,
                 )
                 continue
 
@@ -305,13 +325,27 @@ class FlextDbtLdapTransformer:
 
     def _is_user_entry(self, entry: FlextLdapEntry) -> bool:
         """Check if entry is a user entry."""
-        object_classes = entry.attributes.get("objectClass", [])
+        raw = entry.attributes
+        object_classes: list[str] = []
+        if isinstance(raw, dict):
+            oc_val = raw.get("objectClass", [])
+            if isinstance(oc_val, list):
+                object_classes = [str(x) for x in oc_val]
+            elif oc_val is not None:
+                object_classes = [str(oc_val)]
         user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
         return any(cls in object_classes for cls in user_classes)
 
     def _is_group_entry(self, entry: FlextLdapEntry) -> bool:
         """Check if entry is a group entry."""
-        object_classes = entry.attributes.get("objectClass", [])
+        raw = entry.attributes
+        object_classes: list[str] = []
+        if isinstance(raw, dict):
+            oc_val = raw.get("objectClass", [])
+            if isinstance(oc_val, list):
+                object_classes = [str(x) for x in oc_val]
+            elif oc_val is not None:
+                object_classes = [str(oc_val)]
         group_classes = ["group", "groupOfNames", "groupOfUniqueNames", "posixGroup"]
         return any(cls in object_classes for cls in group_classes)
 
@@ -321,7 +355,16 @@ class FlextDbtLdapTransformer:
     ) -> list[FlextDbtLdapMembershipFact]:
         """Extract memberships from a group entry."""
         memberships = []
-        attrs = group_entry.attributes
+        raw = group_entry.attributes
+        attrs: dict[str, list[str]] = {}
+        if isinstance(raw, dict):
+            for k, v in raw.items():
+                if isinstance(v, list):
+                    attrs[k] = [str(x) for x in v]
+                elif v is None:
+                    attrs[k] = []
+                else:
+                    attrs[k] = [str(v)]
 
         # Handle different membership attribute types
         member_attrs = ["member", "uniqueMember", "memberUid"]
@@ -344,7 +387,16 @@ class FlextDbtLdapTransformer:
     ) -> list[FlextDbtLdapMembershipFact]:
         """Extract memberships from a user entry."""
         memberships = []
-        attrs = user_entry.attributes
+        raw = user_entry.attributes
+        attrs: dict[str, list[str]] = {}
+        if isinstance(raw, dict):
+            for k, v in raw.items():
+                if isinstance(v, list):
+                    attrs[k] = [str(x) for x in v]
+                elif v is None:
+                    attrs[k] = []
+                else:
+                    attrs[k] = [str(v)]
 
         # Handle memberOf attribute
         if "memberOf" in attrs:

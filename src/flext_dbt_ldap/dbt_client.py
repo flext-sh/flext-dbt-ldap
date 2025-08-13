@@ -11,17 +11,19 @@ from __future__ import annotations
 
 import asyncio
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from flext_core import FlextResult, get_logger
 from flext_ldap import get_ldap_api
 from flext_meltano.dbt import FlextMeltanoDbtManager
 
-from .dbt_config import FlextDbtLdapConfig
+from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 
 if TYPE_CHECKING:
     from flext_ldap.api import FlextLdapApi
-    from flext_ldap.entities import FlextLdapEntry
+
+    # Use local protocol-friendly import guarded by TYPE_CHECKING to avoid untyped import issues
+    from flext_ldap.models import FlextLdapEntry
 
 logger = get_logger(__name__)
 
@@ -44,8 +46,8 @@ class FlextDbtLdapClient:
 
         """
         self.config = config or FlextDbtLdapConfig()
-        # Precisely type the LDAP API to enable method access in type-checking
-        self._ldap_api = cast("FlextLdapApi", get_ldap_api())
+        # Precisely type the LDAP API to enable method access
+        self._ldap_api: FlextLdapApi = get_ldap_api()
         self._dbt_manager: FlextMeltanoDbtManager | None = None
 
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
@@ -54,7 +56,11 @@ class FlextDbtLdapClient:
     def dbt_manager(self) -> FlextMeltanoDbtManager:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
-            project_dir = Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None
+            project_dir = (
+                Path(self.config.dbt_project_dir)
+                if self.config.dbt_project_dir
+                else None
+            )
             self._dbt_manager = FlextMeltanoDbtManager(project_dir)
         return self._dbt_manager
 
@@ -137,7 +143,9 @@ class FlextDbtLdapClient:
                 if all(attr in attrs and attrs[attr] for attr in required_attributes):
                     valid_entries += 1
 
-            quality_score = (valid_entries / total_entries) if total_entries > 0 else 0.0
+            quality_score = (
+                (valid_entries / total_entries) if total_entries > 0 else 0.0
+            )
             metrics: dict[str, object] = {
                 "total_entries": total_entries,
                 "valid_dns": valid_dns,
@@ -147,7 +155,8 @@ class FlextDbtLdapClient:
             }
 
             logger.info(
-                "LDAP data validation completed: quality_score=%.3f", metrics["quality_score"],
+                "LDAP data validation completed: quality_score=%.3f",
+                metrics["quality_score"],
             )
 
             if not metrics["validation_passed"]:
@@ -230,7 +239,11 @@ class FlextDbtLdapClient:
         logger.info("Starting full LDAP-to-DBT pipeline")
 
         # Step 1: Extract LDAP data
-        extract_result = self.extract_ldap_entries(search_base, search_filter, attributes)
+        extract_result = self.extract_ldap_entries(
+            search_base,
+            search_filter,
+            attributes,
+        )
         if extract_result.is_failure:
             return FlextResult.fail(extract_result.error or "LDAP extraction failed")
 
@@ -244,7 +257,9 @@ class FlextDbtLdapClient:
         # Step 3: Transform with DBT
         transform_result = self.transform_with_dbt(entries, model_names)
         if transform_result.is_failure:
-            return FlextResult.fail(transform_result.error or "DBT transformation failed")
+            return FlextResult.fail(
+                transform_result.error or "DBT transformation failed",
+            )
 
         # Combine results
         pipeline_results: dict[str, object] = {
@@ -256,7 +271,10 @@ class FlextDbtLdapClient:
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
         return FlextResult.ok(pipeline_results)
 
-    def _prepare_ldap_data_for_dbt(self, entries: list[FlextLdapEntry]) -> dict[str, list[dict[str, object]]]:
+    def _prepare_ldap_data_for_dbt(
+        self,
+        entries: list[FlextLdapEntry],
+    ) -> dict[str, list[dict[str, object]]]:
         """Prepare LDAP entries for DBT processing.
 
         Converts LDAP entries to format suitable for DBT models.
@@ -274,14 +292,12 @@ class FlextDbtLdapClient:
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             # Filter entries by schema type and prepare for DBT
             schema_entries = [
-                entry for entry in entries
-                if self._matches_schema(entry, schema_name)
+                entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
 
             # Convert to tabular format with attribute mapping
             table_data: list[dict[str, object]] = [
-                self._map_entry_attributes(entry)
-                for entry in schema_entries
+                self._map_entry_attributes(entry) for entry in schema_entries
             ]
 
             prepared_data[table_name] = table_data
@@ -313,13 +329,29 @@ class FlextDbtLdapClient:
 
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry.attributes:
-                values = entry.attributes[ldap_attr]
-                mapped_attrs[dbt_attr] = values[0] if values else ""
+                values_obj = entry.attributes[ldap_attr]
+                first_value = (
+                    values_obj[0]
+                    if isinstance(values_obj, list) and values_obj
+                    else values_obj
+                )
+                mapped_attrs[dbt_attr] = (
+                    first_value
+                    if isinstance(first_value, str)
+                    else str(first_value or "")
+                )
 
         # Add unmapped attributes with original names
         for attr, values in entry.attributes.items():
             if attr not in self.config.ldap_attribute_mapping:
-                mapped_attrs[attr] = values[0] if values else ""
+                first_value = (
+                    values[0] if isinstance(values, list) and values else values
+                )
+                mapped_attrs[attr] = (
+                    first_value
+                    if isinstance(first_value, str)
+                    else str(first_value or "")
+                )
         return mapped_attrs
 
     def _search_entries_sync(
@@ -338,15 +370,18 @@ class FlextDbtLdapClient:
 
         async def _run_search() -> FlextResult[list[FlextLdapEntry]]:
             api = get_ldap_api()
-            async with api.connection(server_uri, self.config.ldap_bind_dn, self.config.ldap_bind_password) as session:
-                result = await api.search(
+            async with api.connection(
+                server_uri,
+                self.config.ldap_bind_dn,
+                self.config.ldap_bind_password,
+            ) as session:
+                return await api.search(
                     session_id=session,
                     base_dn=base_dn,
                     search_filter=search_filter,
                     scope="subtree",
                     attributes=attributes,
                 )
-                return cast("FlextResult[list[FlextLdapEntry]]", result)
 
         return asyncio.run(_run_search())
 
