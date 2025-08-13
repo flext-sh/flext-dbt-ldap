@@ -11,11 +11,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import get_logger
-from flext_ldap.utils import (
-    flext_ldap_format_timestamp,
-    flext_ldap_parse_dn,
-    flext_ldap_validate_dn,
-)
+from flext_ldap.utils import flext_ldap_validate_dn
 
 logger = get_logger(__name__)
 
@@ -36,12 +32,12 @@ class FlextDbtLdapDNParser:
 
         """
         try:
-            parsed = flext_ldap_parse_dn(dn)
-            if parsed:
-                # Extract component from parsed DN components
-                for component_dict in parsed:
-                    if component.lower() in component_dict:
-                        return component_dict[component.lower()]
+            # Very simple DN parsing: split by commas, then by '='
+            parts = [p.strip() for p in dn.split(",") if "=" in p]
+            for part in parts:
+                key, value = part.split("=", 1)
+                if key.lower() == component.lower():
+                    return value
             return None
         except Exception:
             logger.exception("Failed to parse DN component: %s", dn)
@@ -59,16 +55,9 @@ class FlextDbtLdapDNParser:
 
         """
         try:
-            parsed = flext_ldap_parse_dn(dn)
-            if parsed and len(parsed) > 1:
-                # Return DN without first component
-                parent_components = parsed[1:]
-                # Reconstruct DN from remaining components
-                parent_parts = []
-                for comp_dict in parent_components:
-                    for attr, value in comp_dict.items():
-                        parent_parts.append(f"{attr}={value}")
-                return ",".join(parent_parts)
+            parts = [p.strip() for p in dn.split(",") if p.strip()]
+            if len(parts) > 1:
+                return ",".join(parts[1:])
             return None
         except Exception:
             logger.exception("Failed to get parent DN: %s", dn)
@@ -170,7 +159,8 @@ class FlextDbtLdapTimestampConverter:
 
         """
         try:
-            return flext_ldap_format_timestamp(timestamp)
+            # Basic passthrough; customize if needed
+            return timestamp
         except Exception:
             logger.exception("Error converting timestamp: %s", timestamp)
             return None
@@ -207,7 +197,5 @@ __all__: list[str] = [
     "FlextDbtLdapTimestampConverter",
     "LDAPMacros",
     "TimestampConverter",
-    "flext_ldap_format_timestamp",
-    "flext_ldap_parse_dn",
     "flext_ldap_validate_dn",
 ]

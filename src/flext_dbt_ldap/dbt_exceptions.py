@@ -28,7 +28,10 @@ from flext_core.exceptions import (
 _exceptions = create_module_exception_classes("flext_dbt_ldap")
 
 # Extract exception classes with precise typing for MyPy
-FlextDbtLdapError: type[Exception] = cast("type[Exception]", _exceptions["FlextDbtLdapError"])  # noqa: E501
+FlextDbtLdapError: type[Exception] = cast(
+    "type[Exception]",
+    _exceptions["FlextDbtLdapError"],
+)
 FlextDbtLdapValidationError: type[Exception] = cast(
     "type[Exception]",
     _exceptions["FlextDbtLdapValidationError"],

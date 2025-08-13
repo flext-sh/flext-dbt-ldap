@@ -66,12 +66,18 @@ def validate_ldap_data_quality(df: object) -> dict[str, object]:
             entry_count = len(df)
             logger.info("Validating %d LDAP entries via flext-ldap API", entry_count)
             # Minimal quality metrics without external API dependency
-            return {"total_entries": entry_count, "valid_dns": entry_count, "quality_score": 1.0}
+            return {
+                "total_entries": entry_count,
+                "valid_dns": entry_count,
+                "quality_score": 1.0,
+            }
 
         return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
     except Exception:
-        logger.exception("Failed to validate LDAP data quality via flext-ldap delegation")
+        logger.exception(
+            "Failed to validate LDAP data quality via flext-ldap delegation",
+        )
         return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
 

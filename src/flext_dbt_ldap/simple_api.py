@@ -12,14 +12,14 @@ from __future__ import annotations
 
 from flext_core import get_logger
 
-from .dbt_client import FlextDbtLdapClient
-from .dbt_config import FlextDbtLdapConfig
-from .dbt_models import (
+from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
+from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
+from flext_dbt_ldap.dbt_models import (
     FlextDbtLdapGroupDimension,
     FlextDbtLdapTransformer,
     FlextDbtLdapUserDimension,
 )
-from .dbt_services import FlextDbtLdapService
+from flext_dbt_ldap.dbt_services import FlextDbtLdapService
 
 logger = get_logger(__name__)
 
@@ -165,7 +165,11 @@ def create_flext_group_dimension(
         FlextDbtLdapGroupDimension instance
 
     """
-    logger.debug("Creating group dimension: group_id=%s, name=%s", group_id, common_name)
+    logger.debug(
+        "Creating group dimension: group_id=%s, name=%s",
+        group_id,
+        common_name,
+    )
 
     group = FlextDbtLdapGroupDimension(
         group_id=group_id,
