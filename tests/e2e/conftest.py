@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import subprocess
+import asyncio
 import time
 from collections.abc import Generator
 from pathlib import Path
@@ -51,10 +51,23 @@ def postgres_container(
     compose_file = project_root / "docker-compose.yml"
     # Start containers
     logger.info("Starting PostgreSQL container...")
-    subprocess.run(
-        ["/usr/bin/docker-compose", "-f", str(compose_file), "up", "-d", "postgres"],
-        check=True,
-        cwd=str(project_root),
+    async def _run(cmd_list: list[str], cwd: str | None = None, timeout: int = 120) -> int:
+        process = await asyncio.create_subprocess_exec(
+            *cmd_list,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            cwd=cwd,
+        )
+        try:
+            await asyncio.wait_for(process.communicate(), timeout=timeout)
+        except TimeoutError:
+            process.kill()
+            await process.communicate()
+            raise
+        return process.returncode
+
+    asyncio.run(
+        _run(["/usr/bin/docker-compose", "-f", str(compose_file), "up", "-d", "postgres"], cwd=str(project_root)),
     )
     # Wait for PostgreSQL to be ready
     max_retries = 30
@@ -78,10 +91,8 @@ def postgres_container(
     yield
     # Stop containers
     logger.info("Stopping PostgreSQL container...")
-    subprocess.run(
-        ["/usr/bin/docker-compose", "-f", str(compose_file), "down", "-v"],
-        check=True,
-        cwd=str(project_root),
+    asyncio.run(
+        _run(["/usr/bin/docker-compose", "-f", str(compose_file), "down", "-v"], cwd=str(project_root)),
     )
 
 
@@ -117,7 +128,7 @@ def run_dbt_command(
     project_dir: Path,
     profiles_dir: Path,
     dbt_vars: dict[str, object] | None = None,
-) -> subprocess.CompletedProcess[str]:
+) -> CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
         "DBT_PROFILES_DIR": str(profiles_dir),
@@ -127,14 +138,26 @@ def run_dbt_command(
     if dbt_vars:
         var_string = " ".join(f"{k}:{v}" for k, v in dbt_vars.items())
         cmd.extend(["--vars", var_string])
-    return subprocess.run(
-        cmd,
-        cwd=str(project_dir),
-        env=env,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
+    async def _run_db(cmd_list: list[str], cwd: str, env: dict[str, str]) -> tuple[int, str, str]:
+        process = await asyncio.create_subprocess_exec(
+            *cmd_list,
+            cwd=cwd,
+            env=env,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        stdout, stderr = await process.communicate()
+        return process.returncode, stdout.decode(), stderr.decode()
+
+    rc, out, err = asyncio.run(_run_db(cmd, str(project_dir), env))
+
+    class CompletedProcess:
+        def __init__(self, returncode: int, stdout: str, stderr: str) -> None:
+            self.returncode = returncode
+            self.stdout = stdout
+            self.stderr = stderr
+
+    return CompletedProcess(rc, out, err)
 
 
 def query_database(conn: object, query: str) -> list[tuple[object, ...]]:
