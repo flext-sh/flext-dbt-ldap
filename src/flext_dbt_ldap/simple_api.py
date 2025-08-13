@@ -14,12 +14,12 @@ from flext_core import get_logger
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
-from flext_dbt_ldap.dbt_models import (
+from flext_dbt_ldap.dbt_services import FlextDbtLdapService
+from flext_dbt_ldap.models import (
     FlextDbtLdapGroupDimension,
     FlextDbtLdapTransformer,
     FlextDbtLdapUserDimension,
 )
-from flext_dbt_ldap.dbt_services import FlextDbtLdapService
 
 logger = get_logger(__name__)
 

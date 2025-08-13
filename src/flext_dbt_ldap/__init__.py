@@ -108,7 +108,7 @@ def _show_deprecation_warning(old_import: str, new_import: str) -> None:
 # Import from new PEP8 modules
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
-from flext_dbt_ldap.dbt_models import (
+from flext_dbt_ldap.models import (
     FlextDbtLdapGroupDimension,
     FlextDbtLdapMembershipFact,
     FlextDbtLdapTransformer,
