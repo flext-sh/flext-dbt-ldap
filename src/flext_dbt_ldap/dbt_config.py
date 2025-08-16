@@ -14,6 +14,7 @@ from typing import ClassVar
 from flext_core import FlextSettings, get_logger
 from flext_ldap import FlextLdapConnectionConfig
 from flext_meltano.config import FlextMeltanoConfig
+from pydantic import SecretStr
 
 logger = get_logger(__name__)
 
@@ -65,7 +66,7 @@ class FlextDbtLdapConfig(FlextSettings):
             server=self.ldap_host,
             port=self.ldap_port,
             bind_dn=self.ldap_bind_dn,
-            bind_password=self.ldap_bind_password,
+            bind_password=SecretStr(self.ldap_bind_password),
             search_base=self.ldap_base_dn,
             use_ssl=self.ldap_use_tls,
         )

@@ -1,35 +1,4 @@
-"""FLEXT DBT LDAP - Enterprise DBT Models for LDAP Directory Transformations.
-
-**Architecture**: Production-ready DBT project with enterprise patterns
-**Integration**: Complete flext-meltano ecosystem integration
-**Quality**: Enterprise-grade data models with comprehensive testing
-
-## Enterprise Integration Features:
-
-1. **Complete flext-meltano Integration**: Uses ALL DBT facilities
-   - DBT Hub integration for model registry
-   - In-memory execution with DuckDB
-   - Enterprise patterns from flext-core
-
-2. **Foundation Library Integration**: Full flext-core pattern adoption
-   - FlextResult railway-oriented programming throughout
-   - Enterprise logging with FlextLogger
-   - Dependency injection with flext-core container
-   - FlextConfig for configuration management
-
-3. **LDAP Infrastructure Integration**: Complete flext-ldap utilization
-   - Uses real LDAP operations from flext-ldap
-   - Leverages DN parsing and validation
-   - Enterprise-grade directory transformations
-
-4. **Production Readiness**: Zero-tolerance quality standards
-   - Comprehensive DBT tests
-   - Data quality validation
-   - Performance optimization
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
+"""Enterprise DBT Models for LDAP Directory Transformations and Analytics."""
 
 from __future__ import annotations
 
