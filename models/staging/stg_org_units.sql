@@ -8,7 +8,7 @@
 
 with source_data as (
     select *
-    from {{ source('ldap', 'organizational_units') }}
+from {{ source('ldap', 'organizational_units') }}
     where {{ validate_dn_format('dn') }}
 ),
 
@@ -38,7 +38,7 @@ transformed as (
         -- Extract year from created timestamp
         extract(year from {{ ldap_timestamp_to_timestamp('createTimestamp') }}) as created_year
 
-    from source_data
+from source_data
 )
 
 select * from transformed

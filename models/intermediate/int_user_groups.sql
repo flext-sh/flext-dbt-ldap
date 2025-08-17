@@ -19,7 +19,7 @@ user_memberships as (
         u.email,
         u.account_type,
         json_array_elements_text(u.member_of::json) as group_dn
-    from users u
+from users u
     where u.member_of != '[]'::json
 ),
 
@@ -41,7 +41,7 @@ enriched_memberships as (
             when g.dn = um.group_dn then true
             else false
         end as is_direct_member
-    from user_memberships um
+from user_memberships um
     left join groups g on g.dn = um.group_dn
 ),
 
@@ -59,7 +59,7 @@ final as (
             partition by uid
             order by group_name
         ) as primary_group
-    from enriched_memberships
+from enriched_memberships
 )
 
 select * from final

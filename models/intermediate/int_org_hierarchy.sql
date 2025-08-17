@@ -19,7 +19,7 @@ ou_hierarchy as (
         dn as root_ou_dn,
         ou_name as root_ou_name,
         1 as level_from_root
-    from org_units
+from org_units
     where is_top_level = true
 
     union all
@@ -35,7 +35,7 @@ ou_hierarchy as (
         h.root_ou_dn,
         h.root_ou_name,
         h.level_from_root + 1 as level_from_root
-    from org_units o
+from org_units o
     inner join ou_hierarchy h on o.parent_ou_dn = h.dn
 ),
 
@@ -58,7 +58,7 @@ hierarchy_stats as (
             and h2.dn != ou_hierarchy.dn
         ) as total_descendant_count
 
-    from ou_hierarchy
+from ou_hierarchy
 ),
 
 -- Identify leaf nodes (OUs with no children)
@@ -73,7 +73,7 @@ final as (
         -- Calculate the breadth of the tree at this level
         count(*) over (partition by root_ou_dn, level_from_root) as siblings_at_level
 
-    from hierarchy_stats
+from hierarchy_stats
 )
 
 select * from final

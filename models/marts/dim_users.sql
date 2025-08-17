@@ -20,7 +20,7 @@ user_groups as (
         count(distinct case when group_category = 'Security' then group_dn end) as security_group_count,
         string_agg(distinct group_name, ', ' order by group_name) as group_names,
         max(primary_group) as primary_group
-    from {{ ref('int_user_groups') }}
+from {{ ref('int_user_groups') }}
     group by uid
 ),
 
@@ -86,7 +86,7 @@ final as (
         u.created_year,
         current_timestamp as last_updated_at
 
-    from users u
+from users u
     left join user_groups ug on u.uid = ug.uid
     left join org_hierarchy oh on u.organizational_unit = oh.ou_name
 )

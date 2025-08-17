@@ -83,7 +83,23 @@ flext-dbt-ldap is an enterprise-grade dbt project for LDAP directory data transf
 - **FLEXT Libraries**: flext-core, flext-ldap, flext-observability
 - **Testing**: pytest with 90%+ coverage requirement
 
-## Development Commands
+## Essential Commands for Development
+
+### Most Common Development Workflow
+
+```bash
+# Setup (first time only)
+make setup            # Complete development setup
+poetry install        # Install dependencies
+
+# Daily development cycle
+make check            # Essential checks (lint + type + test + dbt-compile)
+make dbt-run          # Execute dbt models
+make dbt-test         # Run dbt data quality tests
+
+# Before committing (mandatory)
+make validate         # Complete validation (lint + type + security + test + dbt-test)
+```
 
 ### Essential Quality Gates (Must Pass)
 
@@ -210,6 +226,17 @@ ldap_user_base: "ou=users"
 ldap_group_base: "ou=groups"
 ldap_ou_base: "ou=departments"
 ```
+
+### Key Files and Their Purpose
+
+- **dbt_project.yml**: dbt project configuration with LDAP-specific variables
+- **profiles.yml**: Database connection profiles (dev: DuckDB, prod: PostgreSQL)
+- **Makefile**: Development commands and quality gates
+- **pyproject.toml**: Python dependencies and tool configuration
+- **src/flext_dbt_ldap/__init__.py**: Main module exports and FLEXT ecosystem integration
+- **macros/ldap_macros.sql**: LDAP-specific dbt macros for DN parsing and attribute handling
+- **models/**: dbt models organized in staging → intermediate → marts layers
+- **tests/**: Python unit/integration tests and dbt SQL tests
 
 ## Data Models Architecture
 
@@ -346,6 +373,21 @@ ldap_ou_base: "ou=departments"
 - **DuckDB**: Development and testing
 - **Analytics Tools**: BI dashboards and reporting
 
+## Current Development Status & Limitations
+
+### Known Issues & Workarounds
+
+- **dbt Profile**: Currently uses `dbt_ldap` profile name (check profiles.yml vs dbt_project.yml)
+- **Python Integration**: Hybrid dbt-Python architecture may need simplification
+- **LDAP Macros**: Some macros reference undefined functions (ldap_timestamp_to_timestamp, validate_dn_format)
+- **Test Coverage**: Python tests exist but may need DBT model integration tests
+
+### Architecture Gaps Identified
+
+1. **Integration with flext-ldap**: May have code duplication - leverage flext-ldap library more efficiently
+2. **Meltano Integration**: Data flow from Singer taps → dbt → targets needs clearer documentation
+3. **Python Components**: DI container in dbt project may be over-engineered for this use case
+
 ## Troubleshooting
 
 ### Common dbt Issues
@@ -394,6 +436,34 @@ poetry run pip-audit --fix
 
 # Test coverage below 90%
 make coverage-html  # View detailed coverage report
+```
+
+### dbt Model Development Workflow
+
+```bash
+# Develop new model
+1. Create SQL file in appropriate layer (staging/intermediate/marts)
+2. Add model documentation to schema.yml
+3. Add tests (generic + custom) to schema.yml
+4. Compile and test: make dbt-compile && make dbt-test
+5. Run specific model: poetry run dbt run --select +model_name
+6. Validate with: make validate
+```
+
+### Testing Individual Models
+
+```bash
+# Test specific model
+poetry run dbt test --select model_name
+
+# Test model with dependencies
+poetry run dbt test --select +model_name
+
+# Run model and test
+poetry run dbt run --select model_name && poetry run dbt test --select model_name
+
+# Test with fresh rebuild
+poetry run dbt run --select model_name --full-refresh
 ```
 
 ## Best Practices
