@@ -4,7 +4,7 @@
 select count(*) as failures
 from (
     select uid, count(*) as cnt
-    from {{ ref('stg_users') }}
+from {{ ref('stg_users') }}
     group by uid
     having count(*) > 1
 ) duplicates
@@ -31,13 +31,13 @@ where u.user_id is null or g.group_id is null;
 -- Test that organizational units form a valid hierarchy
 with recursive ou_check as (
     select dn, parent_ou_dn, 1 as depth
-    from {{ ref('stg_org_units') }}
+from {{ ref('stg_org_units') }}
     where parent_ou_dn = '{{ var("ldap_base_dn") }}'
 
     union all
 
     select o.dn, o.parent_ou_dn, oc.depth + 1
-    from {{ ref('stg_org_units') }} o
+from {{ ref('stg_org_units') }} o
     join ou_check oc on o.parent_ou_dn = oc.dn
     where oc.depth < 10  -- Prevent infinite loops
 )

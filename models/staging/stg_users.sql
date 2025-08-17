@@ -9,7 +9,7 @@
 
 with source_data as (
     select *
-    from {{ source('ldap', 'users') }}
+from {{ source('ldap', 'users') }}
     where {{ validate_dn_format('dn') }}
 ),
 
@@ -35,7 +35,7 @@ transformed as (
         -- Days since last modification
         current_date - {{ ldap_timestamp_to_timestamp('modifyTimestamp') }}::date as days_since_modified
 
-    from source_data
+from source_data
 )
 
 select * from transformed

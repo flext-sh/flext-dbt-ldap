@@ -8,7 +8,7 @@
 
 with source_data as (
     select *
-    from {{ source('ldap', 'groups') }}
+from {{ source('ldap', 'groups') }}
     where {{ validate_dn_format('dn') }}
 ),
 
@@ -44,7 +44,7 @@ transformed as (
             else false
         end as recently_modified
 
-    from source_data
+from source_data
 )
 
 select * from transformed

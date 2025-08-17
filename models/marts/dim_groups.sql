@@ -17,7 +17,7 @@ group_members as (
         group_dn,
         count(distinct uid) as unique_member_count,
         string_agg(distinct account_type, ', ' order by account_type) as member_account_types
-    from {{ ref('int_user_groups') }}
+from {{ ref('int_user_groups') }}
     group by group_dn
 ),
 
@@ -80,7 +80,7 @@ final as (
         g.created_year,
         current_timestamp as last_updated_at
 
-    from groups g
+from groups g
     left join group_members gm on g.dn = gm.group_dn
     left join org_hierarchy oh on g.organizational_unit = oh.ou_name
 )

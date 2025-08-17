@@ -21,7 +21,7 @@ users as (
         is_disabled,
         organizational_unit_id,
         created_at as user_created_at
-    from {{ ref('dim_users') }}
+from {{ ref('dim_users') }}
 ),
 
 groups as (
@@ -32,7 +32,7 @@ groups as (
         group_classification,
         organizational_unit_id,
         created_at as group_created_at
-    from {{ ref('dim_groups') }}
+from {{ ref('dim_groups') }}
 ),
 
 final as (
@@ -76,7 +76,7 @@ final as (
         m.group_dn,
         current_timestamp as last_updated_at
 
-    from memberships m
+from memberships m
     inner join users u on m.uid = u.user_id
     inner join groups g on m.group_name = g.group_id
 )
