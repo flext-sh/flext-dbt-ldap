@@ -43,16 +43,16 @@ class FlextDbtLdapConfig(FlextSettings):
 
     # LDAP-specific DBT Settings
     ldap_schema_mapping: ClassVar[dict[str, str]] = {
-      "users": "stg_users",
-      "groups": "stg_groups",
-      "org_units": "stg_org_units",
+        "users": "stg_users",
+        "groups": "stg_groups",
+        "org_units": "stg_org_units",
     }
 
     ldap_attribute_mapping: ClassVar[dict[str, str]] = {
-      "cn": "common_name",
-      "uid": "user_id",
-      "mail": "email",
-      "memberOf": "member_of",
+        "cn": "common_name",
+        "uid": "user_id",
+        "mail": "email",
+        "memberOf": "member_of",
     }
 
     # Data Quality Settings
@@ -61,32 +61,32 @@ class FlextDbtLdapConfig(FlextSettings):
     validate_dns: bool = True
 
     def get_ldap_config(self) -> FlextLdapConnectionConfig:
-      """Get LDAP configuration for flext-ldap integration."""
-      return FlextLdapConnectionConfig(
-          server=self.ldap_host,
-          port=self.ldap_port,
-          bind_dn=self.ldap_bind_dn,
-          bind_password=SecretStr(self.ldap_bind_password),
-          search_base=self.ldap_base_dn,
-          use_ssl=self.ldap_use_tls,
-      )
+        """Get LDAP configuration for flext-ldap integration."""
+        return FlextLdapConnectionConfig(
+            server=self.ldap_host,
+            port=self.ldap_port,
+            bind_dn=self.ldap_bind_dn,
+            bind_password=SecretStr(self.ldap_bind_password),
+            search_base=self.ldap_base_dn,
+            use_ssl=self.ldap_use_tls,
+        )
 
     def get_meltano_config(self) -> FlextMeltanoConfig:
-      """Get Meltano configuration for flext-meltano integration."""
-      return FlextMeltanoConfig(
-          project_root=self.dbt_project_dir,
-          environment=self.dbt_target,
-          dbt_project_dir=self.dbt_project_dir,
-          dbt_profiles_dir=self.dbt_profiles_dir,
-      )
+        """Get Meltano configuration for flext-meltano integration."""
+        return FlextMeltanoConfig(
+            project_root=self.dbt_project_dir,
+            environment=self.dbt_target,
+            dbt_project_dir=self.dbt_project_dir,
+            dbt_profiles_dir=self.dbt_profiles_dir,
+        )
 
     def get_ldap_quality_config(self) -> dict[str, object]:
-      """Get data quality configuration for LDAP validation."""
-      return {
-          "min_quality_threshold": self.min_quality_threshold,
-          "required_attributes": self.required_attributes,
-          "validate_dns": self.validate_dns,
-      }
+        """Get data quality configuration for LDAP validation."""
+        return {
+            "min_quality_threshold": self.min_quality_threshold,
+            "required_attributes": self.required_attributes,
+            "validate_dns": self.validate_dns,
+        }
 
 
 __all__: list[str] = [

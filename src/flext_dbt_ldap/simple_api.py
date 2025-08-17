@@ -54,14 +54,14 @@ def create_flext_dbt_ldap_config(
 
     # Support only known fields to satisfy strict typing
     config = FlextDbtLdapConfig(
-      ldap_host=ldap_host,
-      ldap_port=ldap_port,
-      ldap_base_dn=ldap_base_dn,
+        ldap_host=ldap_host,
+        ldap_port=ldap_port,
+        ldap_base_dn=ldap_base_dn,
     )
     # Apply optional kwargs if they match model attributes
     for key, value in kwargs.items():
-      if hasattr(config, key):
-          setattr(config, key, value)
+        if hasattr(config, key):
+            setattr(config, key, value)
     return config
 
 
@@ -78,7 +78,7 @@ def create_flext_dbt_ldap_client(
 
     """
     if config is None:
-      config = create_flext_dbt_ldap_config()
+        config = create_flext_dbt_ldap_config()
 
     logger.info("Creating DBT LDAP client")
     return FlextDbtLdapClient(config)
@@ -97,7 +97,7 @@ def create_flext_dbt_ldap_service(
 
     """
     if config is None:
-      config = create_flext_dbt_ldap_config()
+        config = create_flext_dbt_ldap_config()
 
     logger.info("Creating DBT LDAP service")
     return FlextDbtLdapService(config)
@@ -132,13 +132,13 @@ def create_flext_user_dimension(
     logger.debug("Creating user dimension: user_id=%s, name=%s", user_id, common_name)
 
     user = FlextDbtLdapUserDimension(
-      user_id=user_id,
-      common_name=common_name,
-      email=email,
+        user_id=user_id,
+        common_name=common_name,
+        email=email,
     )
     for key, value in kwargs.items():
-      if hasattr(user, key):
-          setattr(user, key, value)
+        if hasattr(user, key):
+            setattr(user, key, value)
     return user
 
 
@@ -166,19 +166,19 @@ def create_flext_group_dimension(
 
     """
     logger.debug(
-      "Creating group dimension: group_id=%s, name=%s",
-      group_id,
-      common_name,
+        "Creating group dimension: group_id=%s, name=%s",
+        group_id,
+        common_name,
     )
 
     group = FlextDbtLdapGroupDimension(
-      group_id=group_id,
-      common_name=common_name,
-      description=description,
+        group_id=group_id,
+        common_name=common_name,
+        description=description,
     )
     for key, value in kwargs.items():
-      if hasattr(group, key):
-          setattr(group, key, value)
+        if hasattr(group, key):
+            setattr(group, key, value)
     return group
 
 
@@ -216,10 +216,10 @@ def create_simple_dbt_ldap_pipeline(
     logger.info("Creating simple DBT LDAP pipeline")
 
     config = create_flext_dbt_ldap_config(
-      ldap_host=ldap_host,
-      ldap_port=ldap_port,
-      ldap_base_dn=ldap_base_dn,
-      **config_kwargs,
+        ldap_host=ldap_host,
+        ldap_port=ldap_port,
+        ldap_base_dn=ldap_base_dn,
+        **config_kwargs,
     )
 
     return create_flext_dbt_ldap_service(config)
