@@ -86,8 +86,8 @@ class FlextDbtLdapUserDimension(FlextValueObject):
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate user dimension business rules."""
         if not self.user_id or not self.common_name:
-            return FlextResult.fail("User ID and common name are required")
-        return FlextResult.ok(None)
+            return FlextResult[None].fail("User ID and common name are required")
+        return FlextResult[None].ok(None)
 
     def to_dbt_dict(self) -> dict[str, object]:
         """Convert to dictionary suitable for DBT processing."""
@@ -164,10 +164,10 @@ class FlextDbtLdapGroupDimension(FlextValueObject):
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate group dimension business rules."""
         if not self.group_id or not self.common_name:
-            return FlextResult.fail("Group ID and common name are required")
+            return FlextResult[None].fail("Group ID and common name are required")
         if self.member_count < 0:
-            return FlextResult.fail("Member count cannot be negative")
-        return FlextResult.ok(None)
+            return FlextResult[None].fail("Member count cannot be negative")
+        return FlextResult[None].ok(None)
 
     def to_dbt_dict(self) -> dict[str, object]:
         """Convert to dictionary suitable for DBT processing."""
@@ -199,8 +199,8 @@ class FlextDbtLdapMembershipFact(FlextValueObject):
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate membership fact business rules."""
         if not self.user_dn or not self.group_dn:
-            return FlextResult.fail("User DN and Group DN are required")
-        return FlextResult.ok(None)
+            return FlextResult[None].fail("User DN and Group DN are required")
+        return FlextResult[None].ok(None)
 
     def to_dbt_dict(self) -> dict[str, object]:
         """Convert to dictionary suitable for DBT processing."""

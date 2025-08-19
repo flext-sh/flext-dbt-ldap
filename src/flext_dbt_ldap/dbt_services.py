@@ -97,7 +97,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during user sync")
-            return FlextResult.fail(f"User sync error: {e}")
+            return FlextResult[None].fail(f"User sync error: {e}")
 
     def sync_groups_to_warehouse(
         self,
@@ -140,7 +140,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during group sync")
-            return FlextResult.fail(f"Group sync error: {e}")
+            return FlextResult[None].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
         self,
@@ -178,7 +178,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during membership sync")
-            return FlextResult.fail(f"Membership sync error: {e}")
+            return FlextResult[None].fail(f"Membership sync error: {e}")
 
     def run_full_data_warehouse_sync(
         self,
@@ -245,13 +245,13 @@ class FlextDbtLdapService:
 
         if overall_success:
             logger.info("Full data warehouse sync completed successfully")
-            return FlextResult.ok(sync_results)
+            return FlextResult[None].ok(sync_results)
         logger.warning(
             "Full data warehouse sync completed with %d/%d successful components",
             sum(successful_syncs),
             len(successful_syncs),
         )
-        return FlextResult.fail("Some components failed in full sync")
+        return FlextResult[None].fail("Some components failed in full sync")
 
     def validate_warehouse_data_quality(
         self,
@@ -282,7 +282,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
-            return FlextResult.fail(f"Data quality validation error: {e}")
+            return FlextResult[None].fail(f"Data quality validation error: {e}")
 
     def generate_analytics_report(
         self,
@@ -317,11 +317,11 @@ class FlextDbtLdapService:
             }
 
             logger.info("Analytics report generated successfully")
-            return FlextResult.ok(report_data)
+            return FlextResult[None].ok(report_data)
 
         except Exception as e:
             logger.exception("Unexpected error during report generation")
-            return FlextResult.fail(f"Report generation error: {e}")
+            return FlextResult[None].fail(f"Report generation error: {e}")
 
 
 __all__: list[str] = [
