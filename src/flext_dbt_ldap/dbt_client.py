@@ -91,13 +91,13 @@ class FlextDbtLdapClient:
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error)
-                return FlextResult.fail(
+                return FlextResult[None].fail(
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return FlextResult.fail(
+            return FlextResult[None].fail(
                 f"LDAP extraction error: {e}",
             )
 
@@ -141,13 +141,13 @@ class FlextDbtLdapClient:
                 metrics["quality_score"],
             )
             if not metrics["validation_passed"]:
-                return FlextResult.fail(
+                return FlextResult[None].fail(
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
-            return FlextResult.ok(metrics)
+            return FlextResult[None].ok(metrics)
         except Exception as e:
             logger.exception("Unexpected error during LDAP validation")
-            return FlextResult.fail(
+            return FlextResult[None].fail(
                 f"LDAP validation error: {e}",
             )
 
@@ -181,13 +181,13 @@ class FlextDbtLdapClient:
                 logger.info("DBT transformation completed successfully")
             else:
                 logger.error("DBT transformation failed: %s", result.error)
-                return FlextResult.fail(
+                return FlextResult[None].fail(
                     f"DBT transformation failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during DBT transformation")
-            return FlextResult.fail(
+            return FlextResult[None].fail(
                 f"DBT transformation error: {e}",
             )
 
@@ -217,16 +217,16 @@ class FlextDbtLdapClient:
             attributes,
         )
         if extract_result.is_failure:
-            return FlextResult.fail(extract_result.error or "LDAP extraction failed")
+            return FlextResult[None].fail(extract_result.error or "LDAP extraction failed")
         entries = extract_result.data or []
         # Step 2: Validate data quality
         validate_result = self.validate_ldap_data(entries)
         if validate_result.is_failure:
-            return FlextResult.fail(validate_result.error or "LDAP validation failed")
+            return FlextResult[None].fail(validate_result.error or "LDAP validation failed")
         # Step 3: Transform with DBT
         transform_result = self.transform_with_dbt(entries, model_names)
         if transform_result.is_failure:
-            return FlextResult.fail(
+            return FlextResult[None].fail(
                 transform_result.error or "DBT transformation failed",
             )
         # Combine results
@@ -236,7 +236,7 @@ class FlextDbtLdapClient:
             "transformation_results": transform_result.data,
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
-        return FlextResult.ok(pipeline_results)
+        return FlextResult[None].ok(pipeline_results)
 
     def _prepare_ldap_data_for_dbt(
         self,
