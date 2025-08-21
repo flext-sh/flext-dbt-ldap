@@ -11,9 +11,9 @@ from flext_core import (
     FlextEntity as DomainEntity,
     FlextFields as Field,
     FlextResult,
-    FlextValueObject as BaseModel,
-    FlextValueObject as DomainBaseModel,
-    FlextValueObject as DomainValueObject,
+    FlextValue as BaseModel,
+    FlextValue as DomainBaseModel,
+    FlextValue as DomainValueObject,
     get_logger,
 )
 
@@ -34,7 +34,7 @@ from flext_dbt_ldap.ldap_integration import (
 FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
 FlextDbtLdapBaseModel = DomainBaseModel  # FlextDbtLdap base model
-FlextValueObject = DomainValueObject  # Standard value object pattern
+FlextValue = DomainValueObject  # Standard value object pattern
 
 flext_dbt_ldap_transform_entry: object | None = None
 flext_dbt_ldap_create_dimension: object | None = None
@@ -136,7 +136,7 @@ __all__: list[str] = [
     "DomainValueObject",
     "Field",
     "FlextResult",
-    "FlextValueObject",
+    "FlextValue",
     "get_logger",
     # === FLEXT-MELTANO DBT RE-EXPORTS ===
     "FlextDbtHub",
