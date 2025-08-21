@@ -207,7 +207,7 @@ class FlextDbtLdapService:
         # Sync users
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         sync_results["users"] = (
-            user_result.data
+            user_result.value
             if user_result.is_success
             else {"error": str(user_result.error)}
         )
@@ -218,7 +218,7 @@ class FlextDbtLdapService:
             incremental=incremental,
         )
         sync_results["groups"] = (
-            group_result.data
+            group_result.value
             if group_result.is_success
             else {"error": str(group_result.error)}
         )
@@ -226,7 +226,7 @@ class FlextDbtLdapService:
         # Sync memberships
         membership_result = self.sync_memberships_to_warehouse(search_base)
         sync_results["memberships"] = (
-            membership_result.data
+            membership_result.value
             if membership_result.is_success
             else {"error": str(membership_result.error)}
         )
