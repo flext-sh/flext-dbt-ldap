@@ -87,7 +87,7 @@ class FlextDbtLdapClient:
             if result.is_success:
                 logger.info(
                     "Successfully extracted %d LDAP entries",
-                    len(result.data) if result.data else 0,
+                    len(result.value) if result.value else 0,
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error)
@@ -217,12 +217,16 @@ class FlextDbtLdapClient:
             attributes,
         )
         if extract_result.is_failure:
-            return FlextResult[None].fail(extract_result.error or "LDAP extraction failed")
-        entries = extract_result.data or []
+            return FlextResult[None].fail(
+                extract_result.error or "LDAP extraction failed"
+            )
+        entries = extract_result.value or []
         # Step 2: Validate data quality
         validate_result = self.validate_ldap_data(entries)
         if validate_result.is_failure:
-            return FlextResult[None].fail(validate_result.error or "LDAP validation failed")
+            return FlextResult[None].fail(
+                validate_result.error or "LDAP validation failed"
+            )
         # Step 3: Transform with DBT
         transform_result = self.transform_with_dbt(entries, model_names)
         if transform_result.is_failure:
@@ -232,8 +236,8 @@ class FlextDbtLdapClient:
         # Combine results
         pipeline_results: dict[str, object] = {
             "extracted_entries": len(entries),
-            "validation_metrics": validate_result.data,
-            "transformation_results": transform_result.data,
+            "validation_metrics": validate_result.value,
+            "transformation_results": transform_result.value,
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
         return FlextResult[None].ok(pipeline_results)
