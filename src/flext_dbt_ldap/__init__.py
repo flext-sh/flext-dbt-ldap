@@ -18,11 +18,7 @@ from flext_core import (
 )
 
 from flext_meltano import (
-    FlextDbtHub,
-    FlextDbtInMemoryExecutor,
-    FlextDbtModelRegistry,
-    FlextDbtPackageManager,
-    create_dbt_hub,
+    FlextMeltanoDbtService,
 )
 
 from flext_dbt_ldap.ldap_integration import (
@@ -139,11 +135,7 @@ __all__: list[str] = [
     "FlextValue",
     "get_logger",
     # === FLEXT-MELTANO DBT RE-EXPORTS ===
-    "FlextDbtHub",
-    "FlextDbtInMemoryExecutor",
-    "FlextDbtModelRegistry",
-    "FlextDbtPackageManager",
-    "create_dbt_hub",
+    "FlextMeltanoDbtService",
     # === NEW DBT LDAP COMPONENTS (PEP8 NAMES) ===
     # Configuration
     "FlextDbtLdapConfig",

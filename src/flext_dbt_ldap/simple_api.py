@@ -53,7 +53,7 @@ def create_flext_dbt_ldap_config(
     logger.info("Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port)
 
     # Support only known fields to satisfy strict typing
-    config = FlextDbtLdapConfig(
+    config = FlextDbtLdapConfig(  # type: ignore[call-arg]
         ldap_host=ldap_host,
         ldap_port=ldap_port,
         ldap_base_dn=ldap_base_dn,
