@@ -14,7 +14,7 @@ from pathlib import Path
 
 from flext_core import FlextResult, get_logger
 from flext_ldap import FlextLdapApi, FlextLdapEntry, get_ldap_api
-from flext_meltano.dbt import FlextMeltanoDbtManager
+from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 
@@ -41,19 +41,19 @@ class FlextDbtLdapClient:
         self.config = config or FlextDbtLdapConfig()
         # Precisely type the LDAP API to enable method access
         self._ldap_api: FlextLdapApi = get_ldap_api()
-        self._dbt_manager: FlextMeltanoDbtManager | None = None
+        self._dbt_manager: FlextMeltanoDbtService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
     @property
-    def dbt_manager(self) -> FlextMeltanoDbtManager:
+    def dbt_manager(self) -> FlextMeltanoDbtService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
-            project_dir = (
+            (
                 Path(self.config.dbt_project_dir)
                 if self.config.dbt_project_dir
                 else None
             )
-            self._dbt_manager = FlextMeltanoDbtManager(project_dir)
+            self._dbt_manager = FlextMeltanoDbtService()
         return self._dbt_manager
 
     def extract_ldap_entries(
@@ -91,13 +91,13 @@ class FlextDbtLdapClient:
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error)
-                return FlextResult[None].fail(
+                return FlextResult[list[FlextLdapEntry]].fail(
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return FlextResult[None].fail(
+            return FlextResult[list[FlextLdapEntry]].fail(
                 f"LDAP extraction error: {e}",
             )
 
@@ -141,13 +141,13 @@ class FlextDbtLdapClient:
                 metrics["quality_score"],
             )
             if not metrics["validation_passed"]:
-                return FlextResult[None].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
-            return FlextResult[None].ok(metrics)
+            return FlextResult[dict[str, object]].ok(metrics)
         except Exception as e:
             logger.exception("Unexpected error during LDAP validation")
-            return FlextResult[None].fail(
+            return FlextResult[dict[str, object]].fail(
                 f"LDAP validation error: {e}",
             )
 
@@ -181,13 +181,13 @@ class FlextDbtLdapClient:
                 logger.info("DBT transformation completed successfully")
             else:
                 logger.error("DBT transformation failed: %s", result.error)
-                return FlextResult[None].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"DBT transformation failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during DBT transformation")
-            return FlextResult[None].fail(
+            return FlextResult[dict[str, object]].fail(
                 f"DBT transformation error: {e}",
             )
 
@@ -217,20 +217,20 @@ class FlextDbtLdapClient:
             attributes,
         )
         if extract_result.is_failure:
-            return FlextResult[None].fail(
+            return FlextResult[dict[str, object]].fail(
                 extract_result.error or "LDAP extraction failed"
             )
         entries = extract_result.value or []
         # Step 2: Validate data quality
         validate_result = self.validate_ldap_data(entries)
         if validate_result.is_failure:
-            return FlextResult[None].fail(
+            return FlextResult[dict[str, object]].fail(
                 validate_result.error or "LDAP validation failed"
             )
         # Step 3: Transform with DBT
         transform_result = self.transform_with_dbt(entries, model_names)
         if transform_result.is_failure:
-            return FlextResult[None].fail(
+            return FlextResult[dict[str, object]].fail(
                 transform_result.error or "DBT transformation failed",
             )
         # Combine results
@@ -240,7 +240,7 @@ class FlextDbtLdapClient:
             "transformation_results": transform_result.value,
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
-        return FlextResult[None].ok(pipeline_results)
+        return FlextResult[dict[str, object]].ok(pipeline_results)
 
     def _prepare_ldap_data_for_dbt(
         self,
@@ -322,29 +322,18 @@ class FlextDbtLdapClient:
         search_filter: str,
         attributes: list[str] | None,
     ) -> FlextResult[list[FlextLdapEntry]]:
-        """Synchronously perform LDAP search using flext-ldap async API."""
-        server_uri = (
-            f"ldaps://{self.config.ldap_host}:{self.config.ldap_port}"
-            if self.config.ldap_use_tls
-            else f"ldap://{self.config.ldap_host}:{self.config.ldap_port}"
-        )
-
-        async def _run_search() -> FlextResult[list[FlextLdapEntry]]:
+        """Synchronously perform LDAP search using flext-ldap API."""
+        try:
             api = get_ldap_api()
-            async with api.connection(
-                server_uri,
-                self.config.ldap_bind_dn,
-                self.config.ldap_bind_password,
-            ) as session:
-                return await api.search(
-                    session_id=session,
-                    base_dn=base_dn,
-                    search_filter=search_filter,
-                    scope="subtree",
-                    attributes=attributes,
-                )
-
-        return asyncio.run(_run_search())
+            # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
+            return asyncio.run(api.search(
+                base_dn=base_dn,
+                search_filter=search_filter,
+                attributes=attributes,
+                scope="subtree",
+            ))
+        except Exception as e:
+            return FlextResult[list[FlextLdapEntry]].fail(f"LDAP search failed: {e}")
 
 
 __all__: list[str] = [

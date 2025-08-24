@@ -9,10 +9,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from flext_core import FlextResult, get_logger
-from flext_meltano.dbt import FlextMeltanoDbtManager
+from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
@@ -97,7 +95,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during user sync")
-            return FlextResult[None].fail(f"User sync error: {e}")
+            return FlextResult[dict[str, object]].fail(f"User sync error: {e}")
 
     def sync_groups_to_warehouse(
         self,
@@ -140,7 +138,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during group sync")
-            return FlextResult[None].fail(f"Group sync error: {e}")
+            return FlextResult[dict[str, object]].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
         self,
@@ -178,7 +176,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during membership sync")
-            return FlextResult[None].fail(f"Membership sync error: {e}")
+            return FlextResult[dict[str, object]].fail(f"Membership sync error: {e}")
 
     def run_full_data_warehouse_sync(
         self,
@@ -245,13 +243,13 @@ class FlextDbtLdapService:
 
         if overall_success:
             logger.info("Full data warehouse sync completed successfully")
-            return FlextResult[None].ok(sync_results)
+            return FlextResult[dict[str, object]].ok(sync_results)
         logger.warning(
             "Full data warehouse sync completed with %d/%d successful components",
             sum(successful_syncs),
             len(successful_syncs),
         )
-        return FlextResult[None].fail("Some components failed in full sync")
+        return FlextResult[dict[str, object]].fail("Some components failed in full sync")
 
     def validate_warehouse_data_quality(
         self,
@@ -269,9 +267,18 @@ class FlextDbtLdapService:
         try:
             logger.info("Validating warehouse data quality for models: %s", model_names)
 
-            # Use DBT hub to run tests
-            manager = FlextMeltanoDbtManager(Path(self.config.dbt_project_dir))
-            result = manager.test_models(model_names)
+            # Use DBT service to run tests
+            manager = FlextMeltanoDbtService(project_name="flext_dbt_ldap")
+
+            # Create DBT runner first
+            runner_result = manager.wrapper_dbt.create_runner()
+            if runner_result.is_failure:
+                return FlextResult[dict[str, object]].fail(
+                    runner_result.error or "Failed to create DBT runner"
+                )
+
+            # Run tests with the runner
+            result = manager.test_models(runner_result.value, model_names)
 
             if result.is_success:
                 logger.info("Data quality validation completed")
@@ -282,7 +289,7 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
-            return FlextResult[None].fail(f"Data quality validation error: {e}")
+            return FlextResult[dict[str, object]].fail(f"Data quality validation error: {e}")
 
     def generate_analytics_report(
         self,
@@ -317,11 +324,11 @@ class FlextDbtLdapService:
             }
 
             logger.info("Analytics report generated successfully")
-            return FlextResult[None].ok(report_data)
+            return FlextResult[dict[str, object]].ok(report_data)
 
         except Exception as e:
             logger.exception("Unexpected error during report generation")
-            return FlextResult[None].fail(f"Report generation error: {e}")
+            return FlextResult[dict[str, object]].fail(f"Report generation error: {e}")
 
 
 __all__: list[str] = [

@@ -28,34 +28,25 @@ from flext_core import (
 _exceptions = create_module_exception_classes("flext_dbt_ldap")
 
 # Extract exception classes with precise typing for MyPy
+# Only create aliases for exceptions that actually exist in the factory
 FlextDbtLdapError: type[Exception] = cast(
     "type[Exception]",
-    _exceptions["FlextDbtLdapError"],
+    _exceptions["FLEXT_DBT_LDAPError"],
 )
 FlextDbtLdapValidationError: type[Exception] = cast(
     "type[Exception]",
-    _exceptions["FlextDbtLdapValidationError"],
+    _exceptions["FLEXT_DBT_LDAPValidationError"],
 )
 FlextDbtLdapConfigurationError: type[Exception] = cast(
     "type[Exception]",
-    _exceptions["FlextDbtLdapConfigurationError"],
+    _exceptions["FLEXT_DBT_LDAPConfigurationError"],
 )
-FlextDbtLdapConnectionError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FlextDbtLdapConnectionError"],
-)
-FlextDbtLdapProcessingError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FlextDbtLdapProcessingError"],
-)
-FlextDbtLdapAuthenticationError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FlextDbtLdapAuthenticationError"],
-)
-FlextDbtLdapTimeoutError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FlextDbtLdapTimeoutError"],
-)
+
+# Create aliases for additional exception types using existing base classes
+FlextDbtLdapConnectionError = FlextDbtLdapError
+FlextDbtLdapProcessingError = FlextDbtLdapError
+FlextDbtLdapAuthenticationError = FlextDbtLdapError
+FlextDbtLdapTimeoutError = FlextDbtLdapError
 
 
 # Domain-specific DBT LDAP errors using composition over duplication

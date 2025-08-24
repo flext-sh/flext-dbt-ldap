@@ -50,7 +50,7 @@ class FlextDbtLdapUserDimension(FlextValue):
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []
+                    attrs[k] = []  # type: ignore[unreachable]
                 else:
                     attrs[k] = [str(v)]
 
@@ -131,7 +131,7 @@ class FlextDbtLdapGroupDimension(FlextValue):
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []
+                    attrs[k] = []  # type: ignore[unreachable]
                 else:
                     attrs[k] = [str(v)]
 
@@ -362,7 +362,7 @@ class FlextDbtLdapTransformer:
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []
+                    attrs[k] = []  # type: ignore[unreachable]
                 else:
                     attrs[k] = [str(v)]
 
@@ -394,7 +394,7 @@ class FlextDbtLdapTransformer:
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []
+                    attrs[k] = []  # type: ignore[unreachable]
                 else:
                     attrs[k] = [str(v)]
 
