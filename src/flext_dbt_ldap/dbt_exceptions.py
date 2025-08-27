@@ -20,7 +20,7 @@ from typing import cast
 
 from flext_core import (
     FlextProcessingError,
-    FlextExceptions.ValidationError,
+    FlextExceptions,
     create_module_exception_classes,
 )
 
@@ -92,7 +92,7 @@ class FlextDbtLdapMacroError(FlextProcessingError):
         super().__init__(f"LDAP DBT macro: {message}", context=context)
 
 
-class FlextDbtLdapTestError(FlextExceptions.ValidationError):
+class FlextDbtLdapTestError(FlextExceptions):
     """LDAP DBT test errors using DRY foundation."""
 
     def __init__(

@@ -7,7 +7,7 @@ import importlib.metadata
 import warnings
 
 from flext_core import (
-    FlextSettings as BaseConfig,
+    FlextConfig as BaseConfig,
     FlextEntity as DomainEntity,
     FlextFields as Field,
     FlextResult,
