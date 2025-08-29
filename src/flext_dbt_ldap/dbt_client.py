@@ -12,13 +12,13 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
-from flext_core import FlextResult, get_logger
+from flext_core import FlextLogger, FlextResult
 from flext_ldap import FlextLdapApi, FlextLdapEntry, get_ldap_api
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 
-logger = get_logger(__name__)
+logger = FlextLogger(__name__)
 
 
 class FlextDbtLdapClient:
@@ -48,11 +48,7 @@ class FlextDbtLdapClient:
     def dbt_manager(self) -> FlextMeltanoDbtService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
-            (
-                Path(self.config.dbt_project_dir)
-                if self.config.dbt_project_dir
-                else None
-            )
+            (Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None)
             self._dbt_manager = FlextMeltanoDbtService()
         return self._dbt_manager
 
@@ -326,12 +322,14 @@ class FlextDbtLdapClient:
         try:
             api = get_ldap_api()
             # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
-            return asyncio.run(api.search(
-                base_dn=base_dn,
-                search_filter=search_filter,
-                attributes=attributes,
-                scope="subtree",
-            ))
+            return asyncio.run(
+                api.search(
+                    base_dn=base_dn,
+                    search_filter=search_filter,
+                    attributes=attributes,
+                    scope="subtree",
+                )
+            )
         except Exception as e:
             return FlextResult[list[FlextLdapEntry]].fail(f"LDAP search failed: {e}")
 

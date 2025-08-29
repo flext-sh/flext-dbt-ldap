@@ -10,10 +10,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import get_logger
+from flext_core import FlextLogger
 from flext_ldap.utils import flext_ldap_validate_dn
 
-logger = get_logger(__name__)
+logger = FlextLogger(__name__)
 
 
 class FlextDbtLdapDNParser:

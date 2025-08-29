@@ -9,14 +9,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextResult, get_logger
+from flext_core import FlextLogger, FlextResult
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.models import FlextDbtLdapTransformer
 
-logger = get_logger(__name__)
+logger = FlextLogger(__name__)
 
 
 class FlextDbtLdapService:
@@ -249,7 +249,9 @@ class FlextDbtLdapService:
             sum(successful_syncs),
             len(successful_syncs),
         )
-        return FlextResult[dict[str, object]].fail("Some components failed in full sync")
+        return FlextResult[dict[str, object]].fail(
+            "Some components failed in full sync"
+        )
 
     def validate_warehouse_data_quality(
         self,
@@ -289,7 +291,9 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
-            return FlextResult[dict[str, object]].fail(f"Data quality validation error: {e}")
+            return FlextResult[dict[str, object]].fail(
+                f"Data quality validation error: {e}"
+            )
 
     def generate_analytics_report(
         self,
