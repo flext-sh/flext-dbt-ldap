@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextResult, FlextValue, get_logger
+from flext_core import FlextResult, FlextModels.Value, FlextLogger
 from flext_ldap import (
     FlextLdapCreateUserRequest,
     FlextLdapDistinguishedName,
@@ -18,10 +18,10 @@ from flext_ldap import (
     FlextLdapUser,
 )
 
-logger = get_logger(__name__)
+logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapUserDimension(FlextValue):
+class FlextDbtLdapUserDimension(FlextModels.Value):
     """User dimension model for DBT LDAP transformations.
 
     Represents a user dimension table structure optimized for analytics.
@@ -106,7 +106,7 @@ class FlextDbtLdapUserDimension(FlextValue):
         }
 
 
-class FlextDbtLdapGroupDimension(FlextValue):
+class FlextDbtLdapGroupDimension(FlextModels.Value):
     """Group dimension model for DBT LDAP transformations.
 
     Represents a group dimension table structure optimized for analytics.
@@ -183,7 +183,7 @@ class FlextDbtLdapGroupDimension(FlextValue):
         }
 
 
-class FlextDbtLdapMembershipFact(FlextValue):
+class FlextDbtLdapMembershipFact(FlextModels.Value):
     """Membership fact model for DBT LDAP transformations.
 
     Represents user-group membership relationships as fact table.

@@ -16,9 +16,9 @@ from subprocess import CompletedProcess
 import docker
 import psycopg
 import pytest
-from flext_core import get_logger
+from flext_core import FlextLogger
 
-logger = get_logger(__name__)
+logger = FlextLogger(__name__)
 
 
 @pytest.fixture(scope="session")

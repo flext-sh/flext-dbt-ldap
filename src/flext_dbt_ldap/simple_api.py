@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import get_logger
+from flext_core import FlextLogger
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
@@ -21,7 +21,7 @@ from flext_dbt_ldap.models import (
     FlextDbtLdapUserDimension,
 )
 
-logger = get_logger(__name__)
+logger = FlextLogger(__name__)
 
 
 def create_flext_dbt_ldap_config(
