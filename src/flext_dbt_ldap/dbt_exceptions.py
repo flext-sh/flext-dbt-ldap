@@ -20,7 +20,7 @@ from typing import cast
 
 from flext_core import (
     FlextExceptions,
-    FlextProcessingError,
+    FlextExceptions.ProcessingError,
     create_module_exception_classes,
 )
 
@@ -55,7 +55,7 @@ FlextDbtLdapTimeoutError = FlextDbtLdapError
 # =============================================================================
 
 
-class FlextDbtLdapModelError(FlextProcessingError):
+class FlextDbtLdapModelError(FlextExceptions.ProcessingError):
     """LDAP DBT model-specific errors using DRY foundation."""
 
     def __init__(
@@ -75,7 +75,7 @@ class FlextDbtLdapModelError(FlextProcessingError):
         super().__init__(f"LDAP DBT model: {message}", context=context)
 
 
-class FlextDbtLdapMacroError(FlextProcessingError):
+class FlextDbtLdapMacroError(FlextExceptions.ProcessingError):
     """LDAP DBT macro errors using DRY foundation."""
 
     def __init__(
