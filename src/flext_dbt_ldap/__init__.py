@@ -7,8 +7,8 @@ import importlib.metadata
 import warnings
 
 from flext_core import (
-    FlextConfig as BaseConfig,
-    FlextFields as Field,
+    FlextConfig,
+    FlextFields,
     FlextResult,
     FlextLogger,
     FlextModels,
@@ -26,8 +26,11 @@ from flext_dbt_ldap.ldap_integration import (
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
 FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
-FlextDbtLdapBaseModel = DomainBaseModel  # FlextDbtLdap base model
-FlextModels = DomainValueObject  # Standard value object pattern
+FlextDbtLdapBaseModel = FlextModels.BaseConfig  # FlextDbtLdap base model
+# Legacy compatibility - use FlextModels.BaseConfig directly instead
+DomainBaseModel = FlextModels.BaseConfig  # Domain base model
+DomainEntity = FlextModels.Entity  # Domain entity
+DomainValueObject = FlextModels.Value  # Domain value object
 
 flext_dbt_ldap_transform_entry: object | None = None
 flext_dbt_ldap_create_dimension: object | None = None
@@ -35,7 +38,7 @@ flext_dbt_ldap_parse_dn: object | None = None
 flext_dbt_ldap_convert_timestamp: object | None = None
 
 # Backwards compatibility aliases
-LDAPBaseConfig = BaseConfig  # Configuration base
+LDAPBaseConfig = FlextConfig  # Configuration base
 LDAPError = Exception  # LDAP-specific errors
 ValidationError = Exception  # Validation errors
 
