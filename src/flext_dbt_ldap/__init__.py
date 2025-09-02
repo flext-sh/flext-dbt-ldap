@@ -8,13 +8,10 @@ import warnings
 
 from flext_core import (
     FlextConfig as BaseConfig,
-    FlextModels.Entity as DomainEntity,
     FlextFields as Field,
     FlextResult,
-    FlextModels.Value as BaseModel,
-    FlextModels.Value as DomainBaseModel,
-    FlextModels.Value as DomainValueObject,
     FlextLogger,
+    FlextModels,
 )
 
 from flext_meltano import (
@@ -30,7 +27,7 @@ from flext_dbt_ldap.ldap_integration import (
 FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
 FlextDbtLdapBaseModel = DomainBaseModel  # FlextDbtLdap base model
-FlextModels.Value = DomainValueObject  # Standard value object pattern
+FlextModels = DomainValueObject  # Standard value object pattern
 
 flext_dbt_ldap_transform_entry: object | None = None
 flext_dbt_ldap_create_dimension: object | None = None
@@ -132,7 +129,7 @@ __all__: list[str] = [
     "DomainValueObject",
     "Field",
     "FlextResult",
-    "FlextModels.Value",
+    "FlextModels",
     "FlextLogger",
     # === FLEXT-MELTANO DBT RE-EXPORTS ===
     "FlextMeltanoDbtService",
