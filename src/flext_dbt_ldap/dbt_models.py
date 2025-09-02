@@ -21,7 +21,7 @@ from flext_ldap import (
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapUserDimension(FlextModels):
+class FlextDbtLdapUserDimension(FlextModels.Entity):
     """User dimension model for DBT LDAP transformations.
 
     Represents a user dimension table structure optimized for analytics.
@@ -106,7 +106,7 @@ class FlextDbtLdapUserDimension(FlextModels):
         }
 
 
-class FlextDbtLdapGroupDimension(FlextModels):
+class FlextDbtLdapGroupDimension(FlextModels.Entity):
     """Group dimension model for DBT LDAP transformations.
 
     Represents a group dimension table structure optimized for analytics.
@@ -183,7 +183,7 @@ class FlextDbtLdapGroupDimension(FlextModels):
         }
 
 
-class FlextDbtLdapMembershipFact(FlextModels):
+class FlextDbtLdapMembershipFact(FlextModels.Entity):
     """Membership fact model for DBT LDAP transformations.
 
     Represents user-group membership relationships as fact table.
