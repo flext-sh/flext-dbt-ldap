@@ -11,17 +11,17 @@ from __future__ import annotations
 
 from flext_core import FlextLogger, FlextModels, FlextResult
 from flext_ldap import (
-    FlextLdapCreateUserRequest,
-    FlextLdapDistinguishedName,
-    FlextLdapEntry,
-    FlextLdapGroup,
-    FlextLdapUser,
+    FlextLDAPCreateUserRequest,
+    FlextLDAPDistinguishedName,
+    FlextLDAPEntry,
+    FlextLDAPGroup,
+    FlextLDAPUser,
 )
 
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapUserDimension(FlextModels.Value):
+class FlextDbtLdapUserDimension(FlextModels):
     """User dimension model for DBT LDAP transformations.
 
     Represents a user dimension table structure optimized for analytics.
@@ -40,7 +40,7 @@ class FlextDbtLdapUserDimension(FlextModels.Value):
     modified_date: str | None = None
 
     @classmethod
-    def from_ldap_entry(cls, entry: FlextLdapEntry) -> FlextDbtLdapUserDimension:
+    def from_ldap_entry(cls, entry: FlextLDAPEntry) -> FlextDbtLdapUserDimension:
         """Create user dimension from LDAP entry."""
         # Normalize attributes to dict[str, list[str]]
         raw = entry.attributes
@@ -50,7 +50,7 @@ class FlextDbtLdapUserDimension(FlextModels.Value):
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []  # type: ignore[unreachable]
+                    attrs[k] = []
                 else:
                     attrs[k] = [str(v)]
 
@@ -106,7 +106,7 @@ class FlextDbtLdapUserDimension(FlextModels.Value):
         }
 
 
-class FlextDbtLdapGroupDimension(FlextModels.Value):
+class FlextDbtLdapGroupDimension(FlextModels):
     """Group dimension model for DBT LDAP transformations.
 
     Represents a group dimension table structure optimized for analytics.
@@ -122,7 +122,7 @@ class FlextDbtLdapGroupDimension(FlextModels.Value):
     modified_date: str | None = None
 
     @classmethod
-    def from_ldap_entry(cls, entry: FlextLdapEntry) -> FlextDbtLdapGroupDimension:
+    def from_ldap_entry(cls, entry: FlextLDAPEntry) -> FlextDbtLdapGroupDimension:
         """Create group dimension from LDAP entry."""
         raw = entry.attributes
         attrs: dict[str, list[str]] = {}
@@ -131,7 +131,7 @@ class FlextDbtLdapGroupDimension(FlextModels.Value):
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []  # type: ignore[unreachable]
+                    attrs[k] = []
                 else:
                     attrs[k] = [str(v)]
 
@@ -183,7 +183,7 @@ class FlextDbtLdapGroupDimension(FlextModels.Value):
         }
 
 
-class FlextDbtLdapMembershipFact(FlextModels.Value):
+class FlextDbtLdapMembershipFact(FlextModels):
     """Membership fact model for DBT LDAP transformations.
 
     Represents user-group membership relationships as fact table.
@@ -226,7 +226,7 @@ class FlextDbtLdapTransformer:
 
     def transform_users(
         self,
-        entries: list[FlextLdapEntry],
+        entries: list[FlextLDAPEntry],
     ) -> list[FlextDbtLdapUserDimension]:
         """Transform LDAP entries to user dimensions.
 
@@ -256,7 +256,7 @@ class FlextDbtLdapTransformer:
 
     def transform_groups(
         self,
-        entries: list[FlextLdapEntry],
+        entries: list[FlextLDAPEntry],
     ) -> list[FlextDbtLdapGroupDimension]:
         """Transform LDAP entries to group dimensions.
 
@@ -286,7 +286,7 @@ class FlextDbtLdapTransformer:
 
     def transform_memberships(
         self,
-        entries: list[FlextLdapEntry],
+        entries: list[FlextLDAPEntry],
     ) -> list[FlextDbtLdapMembershipFact]:
         """Transform LDAP entries to membership facts.
 
@@ -323,7 +323,7 @@ class FlextDbtLdapTransformer:
         logger.info("Transformed %d membership facts", len(membership_facts))
         return membership_facts
 
-    def _is_user_entry(self, entry: FlextLdapEntry) -> bool:
+    def _is_user_entry(self, entry: FlextLDAPEntry) -> bool:
         """Check if entry is a user entry."""
         raw = entry.attributes
         object_classes: list[str] = []
@@ -336,7 +336,7 @@ class FlextDbtLdapTransformer:
         user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
         return any(cls in object_classes for cls in user_classes)
 
-    def _is_group_entry(self, entry: FlextLdapEntry) -> bool:
+    def _is_group_entry(self, entry: FlextLDAPEntry) -> bool:
         """Check if entry is a group entry."""
         raw = entry.attributes
         object_classes: list[str] = []
@@ -351,7 +351,7 @@ class FlextDbtLdapTransformer:
 
     def _extract_group_memberships(
         self,
-        group_entry: FlextLdapEntry,
+        group_entry: FlextLDAPEntry,
     ) -> list[FlextDbtLdapMembershipFact]:
         """Extract memberships from a group entry."""
         memberships = []
@@ -362,7 +362,7 @@ class FlextDbtLdapTransformer:
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []  # type: ignore[unreachable]
+                    attrs[k] = []
                 else:
                     attrs[k] = [str(v)]
 
@@ -383,7 +383,7 @@ class FlextDbtLdapTransformer:
 
     def _extract_user_memberships(
         self,
-        user_entry: FlextLdapEntry,
+        user_entry: FlextLDAPEntry,
     ) -> list[FlextDbtLdapMembershipFact]:
         """Extract memberships from a user entry."""
         memberships = []
@@ -394,7 +394,7 @@ class FlextDbtLdapTransformer:
                 if isinstance(v, list):
                     attrs[k] = [str(x) for x in v]
                 elif v is None:
-                    attrs[k] = []  # type: ignore[unreachable]
+                    attrs[k] = []
                 else:
                     attrs[k] = [str(v)]
 
@@ -423,11 +423,11 @@ __all__: list[str] = [
     "FlextDbtLdapTransformer",
     "FlextDbtLdapUserDimension",
     # Re-exports from flext-ldap for convenience
-    "FlextLdapCreateUserRequest",
-    "FlextLdapDistinguishedName",
-    "FlextLdapEntry",
-    "FlextLdapGroup",
-    "FlextLdapUser",
+    "FlextLDAPCreateUserRequest",
+    "FlextLDAPDistinguishedName",
+    "FlextLDAPEntry",
+    "FlextLDAPGroup",
+    "FlextLDAPUser",
     # Backward compatibility
     "GroupDimension",
     "LDAPTransformer",
