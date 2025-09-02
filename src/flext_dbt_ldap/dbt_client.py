@@ -13,8 +13,8 @@ import asyncio
 from pathlib import Path
 
 from flext_core import FlextLogger, FlextResult
-from flext_ldap import FlextLDAPApi, FlextLDAPEntry, get_ldap_api
-from flext_meltano import FlextMeltanoDbtService
+from flext_ldap import FlextLDAPApi, FlextLDAPEntry
+from flext_meltano import FlextMeltanoService
 
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 
@@ -40,16 +40,16 @@ class FlextDbtLdapClient:
         """
         self.config = config or FlextDbtLdapConfig()
         # Precisely type the LDAP API to enable method access
-        self._ldap_api: FlextLDAPApi = get_ldap_api()
-        self._dbt_manager: FlextMeltanoDbtService | None = None
+        self._ldap_api: FlextLDAPApi = FlextLDAPApi()
+        self._dbt_manager: FlextMeltanoService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
     @property
-    def dbt_manager(self) -> FlextMeltanoDbtService:
+    def dbt_manager(self) -> FlextMeltanoService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
             (Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None)
-            self._dbt_manager = FlextMeltanoDbtService()
+            self._dbt_manager = FlextMeltanoService()
         return self._dbt_manager
 
     def extract_ldap_entries(
@@ -320,7 +320,7 @@ class FlextDbtLdapClient:
     ) -> FlextResult[list[FlextLDAPEntry]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
-            api = get_ldap_api()
+            api = FlextLDAPApi()
             # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
             return asyncio.run(
                 api.search(

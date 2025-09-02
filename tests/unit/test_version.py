@@ -38,7 +38,7 @@ def test_version_info_is_tuple() -> None:
 def test_version_all_exports() -> None:
     """Test that __all__ contains expected exports."""
     expected_exports = [
-        "BaseModel",
+        "BaseConfig",
         "DNParser",
         "FlextDbtLdapDeprecationWarning",
         "GroupDimension",
