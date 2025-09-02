@@ -14,9 +14,9 @@ from flext_core import (
     FlextModels,
 )
 
-from flext_meltano import (
-    FlextMeltanoDbtService,
-)
+# from flext_meltano import (
+#     FlextMeltanoDbtService,  # This service doesn't exist yet
+# )
 
 from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
@@ -26,11 +26,14 @@ from flext_dbt_ldap.ldap_integration import (
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
 FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
-FlextDbtLdapBaseModel = FlextModels.BaseConfig  # FlextDbtLdap base model
 # Legacy compatibility - use FlextModels.BaseConfig directly instead
 DomainBaseModel = FlextModels.BaseConfig  # Domain base model
 DomainEntity = FlextModels.Entity  # Domain entity
 DomainValueObject = FlextModels.Value  # Domain value object
+
+# Define exports that are listed in __all__
+BaseConfig = FlextModels.BaseConfig  # Base configuration model
+Field = FlextFields  # Field definitions
 
 flext_dbt_ldap_transform_entry: object | None = None
 flext_dbt_ldap_create_dimension: object | None = None
@@ -126,7 +129,6 @@ from flext_dbt_ldap.simple_api import (
 __all__: list[str] = [
     # Core patterns from flext-core
     "BaseConfig",
-    "BaseModel",
     "DomainBaseModel",
     "DomainEntity",
     "DomainValueObject",
@@ -135,7 +137,7 @@ __all__: list[str] = [
     "FlextModels",
     "FlextLogger",
     # === FLEXT-MELTANO DBT RE-EXPORTS ===
-    "FlextMeltanoDbtService",
+    # "FlextMeltanoDbtService",  # Service doesn't exist yet
     # === NEW DBT LDAP COMPONENTS (PEP8 NAMES) ===
     # Configuration
     "FlextDbtLdapConfig",

@@ -16,30 +16,16 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import cast
+from flext_core import FlextExceptions
 
-from flext_core import (
-    FlextExceptions,
-    create_module_exception_classes,
-)
-
-# 🚨 DRY PATTERN: Use create_module_exception_classes to eliminate exception duplication
-_exceptions = create_module_exception_classes("flext_dbt_ldap")
+# Use FlextExceptions directly (current signature)
+_exceptions = FlextExceptions
 
 # Extract exception classes with precise typing for MyPy
 # Only create aliases for exceptions that actually exist in the factory
-FlextDbtLdapError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FLEXT_DBT_LDAPError"],
-)
-FlextDbtLdapValidationError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FLEXT_DBT_LDAPValidationError"],
-)
-FlextDbtLdapConfigurationError: type[Exception] = cast(
-    "type[Exception]",
-    _exceptions["FLEXT_DBT_LDAPConfigurationError"],
-)
+FlextDbtLdapError = FlextExceptions.BaseError
+FlextDbtLdapValidationError = FlextExceptions.ValidationError
+FlextDbtLdapConfigurationError = FlextExceptions.ConfigurationError
 
 # Create aliases for additional exception types using existing base classes
 FlextDbtLdapConnectionError = FlextDbtLdapError

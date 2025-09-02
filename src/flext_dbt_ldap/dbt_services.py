@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import FlextLogger, FlextResult
-from flext_meltano import FlextMeltanoDbtService
+from flext_meltano import FlextDbt, FlextMeltanoTypeAdapters
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
@@ -22,7 +22,8 @@ logger = FlextLogger(__name__)
 class FlextDbtLdapService:
     """High-level service for DBT LDAP operations.
 
-    Provides workflow orchestration and automation for LDAP data transformations.
+    Provides workflow orchestration and automation for LDAP data transformations
+    using modern FlextMeltano APIs and FlextDbt wrapper for type-safe operations.
     """
 
     def __init__(
@@ -30,6 +31,7 @@ class FlextDbtLdapService:
         config: FlextDbtLdapConfig | None = None,
         client: FlextDbtLdapClient | None = None,
         transformer: FlextDbtLdapTransformer | None = None,
+        project_path: str | None = None,
     ) -> None:
         """Initialize DBT LDAP service.
 
@@ -37,11 +39,31 @@ class FlextDbtLdapService:
             config: Configuration for operations
             client: DBT LDAP client (created if None)
             transformer: Data transformer (created if None)
+            project_path: Path to dBT project (uses config if None)
 
         """
         self.config = config or FlextDbtLdapConfig()
         self.client = client or FlextDbtLdapClient(self.config)
         self.transformer = transformer or FlextDbtLdapTransformer()
+
+        # Initialize FlextMeltano type adapters for modern API access
+        self._type_adapters = FlextMeltanoTypeAdapters()
+
+        # Create FlextDbt wrapper for dBT operations
+        default_path = getattr(self.config, "dbt_project_path", "./dbt")
+        dbt_project_path: str = (
+            project_path if project_path is not None else str(default_path)
+        )
+        dbt_result = self._type_adapters.create_flext_dbt(dbt_project_path)
+        if dbt_result.success:
+            self._flext_dbt: FlextDbt | None = dbt_result.value
+            logger.info(
+                "Initialized DBT LDAP service with FlextDbt wrapper",
+                project_path=dbt_project_path,
+            )
+        else:
+            logger.warning("Failed to create FlextDbt wrapper: %s", dbt_result.error)
+            self._flext_dbt = None
 
         logger.info("Initialized DBT LDAP service")
 
@@ -257,7 +279,7 @@ class FlextDbtLdapService:
         self,
         model_names: list[str] | None = None,
     ) -> FlextResult[dict[str, object]]:
-        """Validate data quality in the warehouse.
+        """Validate data quality in the warehouse using modern FlextDbt API.
 
         Args:
             model_names: Specific models to validate (None = all)
@@ -269,30 +291,66 @@ class FlextDbtLdapService:
         try:
             logger.info("Validating warehouse data quality for models: %s", model_names)
 
-            # Use DBT service to run tests
-            manager = FlextMeltanoDbtService(project_name="flext_dbt_ldap")
+            if self._flext_dbt is None:
+                error_msg = "FlextDbt wrapper not initialized - cannot run tests"
+                logger.error(error_msg)
+                return FlextResult[dict[str, object]].fail(error_msg)
 
-            # Create DBT runner first
-            runner_result = manager.wrapper_dbt.create_runner()
-            if runner_result.is_failure:
-                return FlextResult[dict[str, object]].fail(
-                    runner_result.error or "Failed to create DBT runner"
-                )
+            # Use modern FlextDbt API to run tests
+            test_result = self._flext_dbt.test_models()
 
-            # Run tests with the runner
-            result = manager.test_models(runner_result.value, model_names)
+            if test_result.success:
+                logger.info("Data quality validation completed successfully")
+                return FlextResult[dict[str, object]].ok(test_result.value)
 
-            if result.is_success:
-                logger.info("Data quality validation completed")
-            else:
-                logger.error("Data quality validation failed: %s", result.error)
-
-            return result
+            logger.error("Data quality validation failed: %s", test_result.error)
+            return FlextResult[dict[str, object]].fail(
+                test_result.error or "dBT tests failed"
+            )
 
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
             return FlextResult[dict[str, object]].fail(
                 f"Data quality validation error: {e}"
+            )
+
+    def run_dbt_models(
+        self,
+        model_names: list[str] | None = None,
+    ) -> FlextResult[dict[str, object]]:
+        """Run dBT models using modern FlextDbt API.
+
+        Args:
+            model_names: Specific models to run (None = all)
+
+        Returns:
+            FlextResult with execution results
+
+        """
+        try:
+            logger.info("Running dBT models: %s", model_names)
+
+            if self._flext_dbt is None:
+                error_msg = "FlextDbt wrapper not initialized - cannot run models"
+                logger.error(error_msg)
+                return FlextResult[dict[str, object]].fail(error_msg)
+
+            # Use modern FlextDbt API to run models
+            run_result = self._flext_dbt.run_models(model_names)
+
+            if run_result.success:
+                logger.info("dBT models executed successfully")
+                return FlextResult[dict[str, object]].ok(run_result.value)
+
+            logger.error("dBT model execution failed: %s", run_result.error)
+            return FlextResult[dict[str, object]].fail(
+                run_result.error or "dBT model execution failed"
+            )
+
+        except Exception as e:
+            logger.exception("Unexpected error during dBT model execution")
+            return FlextResult[dict[str, object]].fail(
+                f"dBT model execution error: {e}"
             )
 
     def generate_analytics_report(
