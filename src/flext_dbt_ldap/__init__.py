@@ -26,13 +26,13 @@ from flext_dbt_ldap.ldap_integration import (
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
 FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
-# Legacy compatibility - use FlextModels.BaseConfig directly instead
-DomainBaseModel = FlextModels.BaseConfig  # Domain base model
+# Legacy compatibility - use FlextModels.Config directly instead
+DomainBaseModel = FlextModels.Config  # Domain base model
 DomainEntity = FlextModels.Entity  # Domain entity
 DomainValueObject = FlextModels.Value  # Domain value object
 
 # Define exports that are listed in __all__
-BaseConfig = FlextModels.BaseConfig  # Base configuration model
+Config = FlextModels.Config  # Base configuration model
 Field = FlextFields  # Field definitions
 
 flext_dbt_ldap_transform_entry: object | None = None
@@ -128,7 +128,7 @@ from flext_dbt_ldap.simple_api import (
 
 __all__: list[str] = [
     # Core patterns from flext-core
-    "BaseConfig",
+    "Config",
     "DomainBaseModel",
     "DomainEntity",
     "DomainValueObject",
