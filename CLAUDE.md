@@ -233,7 +233,7 @@ ldap_ou_base: "ou=departments"
 - **profiles.yml**: Database connection profiles (dev: DuckDB, prod: PostgreSQL)
 - **Makefile**: Development commands and quality gates
 - **pyproject.toml**: Python dependencies and tool configuration
-- **src/flext_dbt_ldap/__init__.py**: Main module exports and FLEXT ecosystem integration
+- **src/flext_dbt_ldap/**init**.py**: Main module exports and FLEXT ecosystem integration
 - **macros/ldap_macros.sql**: LDAP-specific dbt macros for DN parsing and attribute handling
 - **models/**: dbt models organized in staging → intermediate → marts layers
 - **tests/**: Python unit/integration tests and dbt SQL tests
