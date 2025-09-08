@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextConfig, FlextLogger
+from flext_core import FlextConfig, FlextLogger, FlextTypes
 from flext_ldap import FlextLDAPConnectionConfig
 from flext_meltano.config import FlextMeltanoConfig
 
@@ -41,13 +41,13 @@ class FlextDbtLdapConfig(FlextConfig):
     dbt_log_level: str = "info"
 
     # LDAP-specific DBT Settings
-    ldap_schema_mapping: ClassVar[dict[str, str]] = {
+    ldap_schema_mapping: ClassVar[FlextTypes.Core.Headers] = {
         "users": "stg_users",
         "groups": "stg_groups",
         "org_units": "stg_org_units",
     }
 
-    ldap_attribute_mapping: ClassVar[dict[str, str]] = {
+    ldap_attribute_mapping: ClassVar[FlextTypes.Core.Headers] = {
         "cn": "common_name",
         "uid": "user_id",
         "mail": "email",
@@ -56,7 +56,7 @@ class FlextDbtLdapConfig(FlextConfig):
 
     # Data Quality Settings
     min_quality_threshold: float = 0.8
-    required_attributes: ClassVar[list[str]] = ["cn", "objectClass"]
+    required_attributes: ClassVar[FlextTypes.Core.StringList] = ["cn", "objectClass"]
     validate_dns: bool = True
 
     def get_ldap_config(self) -> FlextLDAPConnectionConfig:
@@ -74,7 +74,7 @@ class FlextDbtLdapConfig(FlextConfig):
             environment=self.dbt_target,
         )
 
-    def get_ldap_quality_config(self) -> dict[str, object]:
+    def get_ldap_quality_config(self) -> FlextTypes.Core.Dict:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": self.min_quality_threshold,
@@ -83,6 +83,6 @@ class FlextDbtLdapConfig(FlextConfig):
         }
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapConfig",
 ]

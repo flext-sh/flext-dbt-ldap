@@ -12,7 +12,7 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
-from flext_core import FlextLogger, FlextResult
+from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_ldap import FlextLDAPApi, FlextLDAPEntry
 from flext_meltano import FlextMeltanoService
 
@@ -56,7 +56,7 @@ class FlextDbtLdapClient:
         self,
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
-        attributes: list[str] | None = None,
+        attributes: FlextTypes.Core.StringList | None = None,
     ) -> FlextResult[list[FlextLDAPEntry]]:
         """Extract LDAP entries for DBT processing.
 
@@ -100,7 +100,7 @@ class FlextDbtLdapClient:
     def validate_ldap_data(
         self,
         entries: list[FlextLDAPEntry],
-    ) -> FlextResult[dict[str, object]]:
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Validate LDAP data quality for DBT processing.
 
         Args:
@@ -119,13 +119,15 @@ class FlextDbtLdapClient:
             for entry in entries:
                 if getattr(entry, "dn", ""):
                     valid_dns += 1
-                attrs: dict[str, list[str]] = getattr(entry, "attributes", {})
+                attrs: dict[str, FlextTypes.Core.StringList] = getattr(
+                    entry, "attributes", {}
+                )
                 if all(attr in attrs and attrs[attr] for attr in required_attributes):
                     valid_entries += 1
             quality_score = (
                 (valid_entries / total_entries) if total_entries > 0 else 0.0
             )
-            metrics: dict[str, object] = {
+            metrics: FlextTypes.Core.Dict = {
                 "total_entries": total_entries,
                 "valid_dns": valid_dns,
                 "valid_entries": valid_entries,
@@ -137,21 +139,21 @@ class FlextDbtLdapClient:
                 metrics["quality_score"],
             )
             if not metrics["validation_passed"]:
-                return FlextResult[dict[str, object]].fail(
+                return FlextResult[FlextTypes.Core.Dict].fail(
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
-            return FlextResult[dict[str, object]].ok(metrics)
+            return FlextResult[FlextTypes.Core.Dict].ok(metrics)
         except Exception as e:
             logger.exception("Unexpected error during LDAP validation")
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 f"LDAP validation error: {e}",
             )
 
     def transform_with_dbt(
         self,
         entries: list[FlextLDAPEntry],
-        model_names: list[str] | None = None,
-    ) -> FlextResult[dict[str, object]]:
+        model_names: FlextTypes.Core.StringList | None = None,
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Transform LDAP data using DBT models.
 
         Args:
@@ -177,13 +179,13 @@ class FlextDbtLdapClient:
                 logger.info("DBT transformation completed successfully")
             else:
                 logger.error("DBT transformation failed: %s", result.error)
-                return FlextResult[dict[str, object]].fail(
+                return FlextResult[FlextTypes.Core.Dict].fail(
                     f"DBT transformation failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during DBT transformation")
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 f"DBT transformation error: {e}",
             )
 
@@ -191,9 +193,9 @@ class FlextDbtLdapClient:
         self,
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
-        attributes: list[str] | None = None,
-        model_names: list[str] | None = None,
-    ) -> FlextResult[dict[str, object]]:
+        attributes: FlextTypes.Core.StringList | None = None,
+        model_names: FlextTypes.Core.StringList | None = None,
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Run complete LDAP to DBT transformation pipeline.
 
         Args:
@@ -213,35 +215,35 @@ class FlextDbtLdapClient:
             attributes,
         )
         if extract_result.is_failure:
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 extract_result.error or "LDAP extraction failed"
             )
         entries = extract_result.value or []
         # Step 2: Validate data quality
         validate_result = self.validate_ldap_data(entries)
         if validate_result.is_failure:
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 validate_result.error or "LDAP validation failed"
             )
         # Step 3: Transform with DBT
         transform_result = self.transform_with_dbt(entries, model_names)
         if transform_result.is_failure:
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 transform_result.error or "DBT transformation failed",
             )
         # Combine results
-        pipeline_results: dict[str, object] = {
+        pipeline_results: FlextTypes.Core.Dict = {
             "extracted_entries": len(entries),
             "validation_metrics": validate_result.value,
             "transformation_results": transform_result.value,
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
-        return FlextResult[dict[str, object]].ok(pipeline_results)
+        return FlextResult[FlextTypes.Core.Dict].ok(pipeline_results)
 
     def _prepare_ldap_data_for_dbt(
         self,
         entries: list[FlextLDAPEntry],
-    ) -> dict[str, list[dict[str, object]]]:
+    ) -> dict[str, list[FlextTypes.Core.Dict]]:
         """Prepare LDAP entries for DBT processing.
 
         Converts LDAP entries to format suitable for DBT models.
@@ -253,14 +255,14 @@ class FlextDbtLdapClient:
 
         """
         # Apply schema and attribute mapping from config
-        prepared_data: dict[str, list[dict[str, object]]] = {}
+        prepared_data: dict[str, list[FlextTypes.Core.Dict]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             # Filter entries by schema type and prepare for DBT
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
             # Convert to tabular format with attribute mapping
-            table_data: list[dict[str, object]] = [
+            table_data: list[FlextTypes.Core.Dict] = [
                 self._map_entry_attributes(entry) for entry in schema_entries
             ]
             prepared_data[table_name] = table_data
@@ -282,9 +284,9 @@ class FlextDbtLdapClient:
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
 
-    def _map_entry_attributes(self, entry: FlextLDAPEntry) -> dict[str, object]:
+    def _map_entry_attributes(self, entry: FlextLDAPEntry) -> FlextTypes.Core.Dict:
         """Map LDAP entry attributes using configuration mapping."""
-        mapped_attrs: dict[str, object] = {"dn": entry.dn}
+        mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry.attributes:
                 values_obj = entry.attributes[ldap_attr]
@@ -316,7 +318,7 @@ class FlextDbtLdapClient:
         *,
         base_dn: str,
         search_filter: str,
-        attributes: list[str] | None,
+        attributes: FlextTypes.Core.StringList | None,
     ) -> FlextResult[list[FlextLDAPEntry]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
@@ -334,6 +336,6 @@ class FlextDbtLdapClient:
             return FlextResult[list[FlextLDAPEntry]].fail(f"LDAP search failed: {e}")
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapClient",
 ]

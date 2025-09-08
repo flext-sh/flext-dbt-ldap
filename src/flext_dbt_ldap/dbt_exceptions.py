@@ -16,7 +16,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextExceptions
+from flext_core import FlextExceptions, FlextTypes
 
 # Use FlextExceptions directly (current signature)
 _exceptions = FlextExceptions
@@ -97,7 +97,7 @@ class FlextDbtLdapTestError(FlextExceptions):
         super().__init__(f"LDAP DBT test: {message}", validation_details=context)
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",

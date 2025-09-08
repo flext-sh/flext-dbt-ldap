@@ -10,6 +10,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from flext_core import FlextTypes
+
 from flext_dbt_ldap.dbt_models import (
     FlextDbtLdapGroupDimension,
     FlextDbtLdapMembershipFact,
@@ -28,7 +30,7 @@ LDAPTransformer = FlextDbtLdapTransformer
 UserDimension = FlextDbtLdapUserDimension
 
 # Re-export for backwards compatibility
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapGroupDimension",
     "FlextDbtLdapMembershipFact",
     "FlextDbtLdapTransformer",
