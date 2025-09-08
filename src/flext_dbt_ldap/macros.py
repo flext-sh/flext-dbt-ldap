@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextLogger
+from flext_core import FlextLogger, FlextTypes
 from flext_ldap.utils import flext_ldap_validate_dn
 
 logger = FlextLogger(__name__)
@@ -190,7 +190,7 @@ TimestampConverter = FlextDbtLdapTimestampConverter
 
 
 # Re-export for backwards compatibility
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "DNParser",
     "FlextDbtLdapDNParser",
     "FlextDbtLdapMacros",

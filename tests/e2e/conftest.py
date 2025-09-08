@@ -2,7 +2,6 @@
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -16,7 +15,7 @@ from subprocess import CompletedProcess
 import docker
 import psycopg
 import pytest
-from flext_core import FlextLogger
+from flext_core import FlextLogger, FlextTypes
 
 logger = FlextLogger(__name__)
 
@@ -44,7 +43,7 @@ def postgres_container(
     logger.info("Starting PostgreSQL container...")
 
     async def _run(
-        cmd_list: list[str],
+        cmd_list: FlextTypes.Core.StringList,
         cwd: str | None = None,
         timeout_seconds: int = 120,
     ) -> int:
@@ -133,10 +132,10 @@ def dbt_profiles_dir(project_root: Path) -> Path:
 
 
 def run_dbt_command(
-    command: list[str],
+    command: FlextTypes.Core.StringList,
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: dict[str, object] | None = None,
+    dbt_vars: FlextTypes.Core.Dict | None = None,
 ) -> CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
@@ -149,9 +148,9 @@ def run_dbt_command(
         cmd.extend(["--vars", var_string])
 
     async def _run_db(
-        cmd_list: list[str],
+        cmd_list: FlextTypes.Core.StringList,
         cwd: str,
-        env: dict[str, str],
+        env: FlextTypes.Core.Headers,
     ) -> tuple[int, str, str]:
         process = await asyncio.create_subprocess_exec(
             *cmd_list,
@@ -206,7 +205,9 @@ def count_rows(conn: object, schema: str, table: str) -> int:
         return int(result[0]) if result else 0
 
 
-def get_column_names(conn: object, schema: str, table: str) -> list[str]:
+def get_column_names(
+    conn: object, schema: str, table: str
+) -> FlextTypes.Core.StringList:
     """Get column names for table."""
     with conn.cursor() as cur:
         cur.execute(

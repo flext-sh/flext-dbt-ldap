@@ -5,7 +5,6 @@ functionality using real LDAP connections and dbt-core patterns.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -16,6 +15,7 @@ import tempfile
 from collections.abc import Generator
 
 import pytest
+from flext_core import FlextTypes
 
 
 # Test environment setup
@@ -37,7 +37,7 @@ def set_test_environment() -> Generator[None]:
 
 # dbt LDAP configuration fixtures
 @pytest.fixture
-def dbt_ldap_profile() -> dict[str, object]:
+def dbt_ldap_profile() -> FlextTypes.Core.Dict:
     """Dbt LDAP profile configuration for testing."""
     return {
         "config": {
@@ -68,7 +68,7 @@ def dbt_ldap_profile() -> dict[str, object]:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> dict[str, object]:
+def dbt_ldap_project_config() -> FlextTypes.Core.Dict:
     """Dbt LDAP project configuration for testing."""
     return {
         "name": "flext_dbt_ldap_test",
@@ -104,7 +104,7 @@ def dbt_ldap_project_config() -> dict[str, object]:
 
 # LDAP source fixtures
 @pytest.fixture
-def ldap_source_config() -> dict[str, object]:
+def ldap_source_config() -> FlextTypes.Core.Dict:
     """LDAP source configuration for testing."""
     return {
         "server": "localhost",
@@ -120,7 +120,7 @@ def ldap_source_config() -> dict[str, object]:
 
 
 @pytest.fixture
-def sample_ldap_entries() -> list[dict[str, object]]:
+def sample_ldap_entries() -> list[FlextTypes.Core.Dict]:
     """Sample LDAP entries for testing."""
     return [
         {
@@ -170,7 +170,7 @@ def sample_ldap_entries() -> list[dict[str, object]]:
 
 # dbt LDAP model definitions
 @pytest.fixture
-def dbt_ldap_models() -> dict[str, str]:
+def dbt_ldap_models() -> FlextTypes.Core.Headers:
     """Dbt LDAP model SQL definitions for testing."""
     return {
         "staging_ldap_users": """
@@ -262,7 +262,7 @@ def dbt_ldap_models() -> dict[str, str]:
 
 # dbt LDAP macro definitions
 @pytest.fixture
-def dbt_ldap_macros() -> dict[str, str]:
+def dbt_ldap_macros() -> FlextTypes.Core.Headers:
     """Dbt LDAP macro definitions for testing."""
     return {
         "ldap_extract_attribute": """
@@ -315,7 +315,7 @@ def dbt_ldap_macros() -> dict[str, str]:
 
 # dbt LDAP source definitions
 @pytest.fixture
-def dbt_ldap_sources() -> dict[str, object]:
+def dbt_ldap_sources() -> FlextTypes.Core.Dict:
     """Dbt LDAP source definitions for testing."""
     return {
         "version": 2,
@@ -375,7 +375,7 @@ def dbt_ldap_sources() -> dict[str, object]:
 
 # LDAP test fixtures
 @pytest.fixture
-def dbt_ldap_tests() -> dict[str, str]:
+def dbt_ldap_tests() -> FlextTypes.Core.Headers:
     """Dbt LDAP test definitions for testing."""
     return {
         "test_ldap_valid_user_dn": """
@@ -408,7 +408,7 @@ def dbt_ldap_tests() -> dict[str, str]:
 
 # LDAP validation fixtures
 @pytest.fixture
-def ldap_validation_rules() -> dict[str, object]:
+def ldap_validation_rules() -> FlextTypes.Core.Dict:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
@@ -432,7 +432,7 @@ def ldap_validation_rules() -> dict[str, object]:
 
 # Performance test fixtures
 @pytest.fixture
-def ldap_performance_config() -> dict[str, object]:
+def ldap_performance_config() -> FlextTypes.Core.Dict:
     """LDAP performance test configuration."""
     return {
         "large_directory_entries": 10000,
@@ -464,16 +464,16 @@ def mock_ldap_dbt_adapter() -> object:
     """Mock LDAP dbt adapter for testing."""
 
     class MockLdapDbtAdapter:
-        def __init__(self, config: dict[str, object]) -> None:
+        def __init__(self, config: FlextTypes.Core.Dict) -> None:
             self.config = config
-            self.ldap_entries: dict[str, object] = {}
-            self.compiled_models: dict[str, object] = {}
+            self.ldap_entries: FlextTypes.Core.Dict = {}
+            self.compiled_models: FlextTypes.Core.Dict = {}
 
         def extract_ldap_data(
             self,
             _base_dn: str,
             _search_filter: str,
-        ) -> list[dict[str, object]]:
+        ) -> list[FlextTypes.Core.Dict]:
             """Extract LDAP data for dbt processing."""
             # Mock LDAP extraction
             return [
@@ -495,7 +495,7 @@ def mock_ldap_dbt_adapter() -> object:
 
         def parse_ldap_attributes(
             self,
-            attributes: dict[str, object],
+            attributes: FlextTypes.Core.Dict,
         ) -> dict[str, str | None]:
             """Parse LDAP attributes for dbt models."""
             parsed: dict[str, str | None] = {}
@@ -508,8 +508,8 @@ def mock_ldap_dbt_adapter() -> object:
 
         def transform_ldap_to_relational(
             self,
-            ldap_data: list[dict[str, object]],
-        ) -> list[dict[str, object]]:
+            ldap_data: list[FlextTypes.Core.Dict],
+        ) -> list[FlextTypes.Core.Dict]:
             """Transform LDAP data to relational format."""
             transformed = []
             for entry in ldap_data:
@@ -531,10 +531,10 @@ def mock_ldap_connection() -> object:
     """Mock LDAP connection for testing."""
 
     class MockLdapConnection:
-        def __init__(self, config: dict[str, object]) -> None:
+        def __init__(self, config: FlextTypes.Core.Dict) -> None:
             self.config = config
             self.connected = False
-            self.entries: list[dict[str, object]] = []
+            self.entries: list[FlextTypes.Core.Dict] = []
 
         def connect(self) -> bool:
             """Connect to LDAP server."""
@@ -550,8 +550,8 @@ def mock_ldap_connection() -> object:
             self,
             base_dn: str,
             _search_filter: str,
-            _attributes: list[str] | None = None,
-        ) -> list[dict[str, object]]:
+            _attributes: FlextTypes.Core.StringList | None = None,
+        ) -> list[FlextTypes.Core.Dict]:
             """Search LDAP directory."""
             # Mock search results
             if "users" in base_dn:

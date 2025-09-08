@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextResult
+from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_meltano import FlextDbt, FlextMeltanoTypeAdapters
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
@@ -72,7 +72,7 @@ class FlextDbtLdapService:
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> FlextResult[dict[str, object]]:
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Synchronize LDAP users to data warehouse.
 
         Args:
@@ -117,14 +117,14 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during user sync")
-            return FlextResult[dict[str, object]].fail(f"User sync error: {e}")
+            return FlextResult[FlextTypes.Core.Dict].fail(f"User sync error: {e}")
 
     def sync_groups_to_warehouse(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> FlextResult[dict[str, object]]:
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Synchronize LDAP groups to data warehouse.
 
         Args:
@@ -160,12 +160,12 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during group sync")
-            return FlextResult[dict[str, object]].fail(f"Group sync error: {e}")
+            return FlextResult[FlextTypes.Core.Dict].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
         self,
         search_base: str | None = None,
-    ) -> FlextResult[dict[str, object]]:
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Synchronize LDAP memberships to data warehouse.
 
         Args:
@@ -198,14 +198,14 @@ class FlextDbtLdapService:
 
         except Exception as e:
             logger.exception("Unexpected error during membership sync")
-            return FlextResult[dict[str, object]].fail(f"Membership sync error: {e}")
+            return FlextResult[FlextTypes.Core.Dict].fail(f"Membership sync error: {e}")
 
     def run_full_data_warehouse_sync(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> FlextResult[dict[str, object]]:
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Run complete LDAP to data warehouse synchronization.
 
         Args:
@@ -222,7 +222,7 @@ class FlextDbtLdapService:
             incremental,
         )
 
-        sync_results: dict[str, object] = {}
+        sync_results: FlextTypes.Core.Dict = {}
 
         # Sync users
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
@@ -265,20 +265,20 @@ class FlextDbtLdapService:
 
         if overall_success:
             logger.info("Full data warehouse sync completed successfully")
-            return FlextResult[dict[str, object]].ok(sync_results)
+            return FlextResult[FlextTypes.Core.Dict].ok(sync_results)
         logger.warning(
             "Full data warehouse sync completed with %d/%d successful components",
             sum(successful_syncs),
             len(successful_syncs),
         )
-        return FlextResult[dict[str, object]].fail(
+        return FlextResult[FlextTypes.Core.Dict].fail(
             "Some components failed in full sync"
         )
 
     def validate_warehouse_data_quality(
         self,
-        model_names: list[str] | None = None,
-    ) -> FlextResult[dict[str, object]]:
+        model_names: FlextTypes.Core.StringList | None = None,
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Validate data quality in the warehouse using modern FlextDbt API.
 
         Args:
@@ -294,30 +294,30 @@ class FlextDbtLdapService:
             if self._flext_dbt is None:
                 error_msg = "FlextDbt wrapper not initialized - cannot run tests"
                 logger.error(error_msg)
-                return FlextResult[dict[str, object]].fail(error_msg)
+                return FlextResult[FlextTypes.Core.Dict].fail(error_msg)
 
             # Use modern FlextDbt API to run tests
             test_result = self._flext_dbt.test_models()
 
             if test_result.success:
                 logger.info("Data quality validation completed successfully")
-                return FlextResult[dict[str, object]].ok(test_result.value)
+                return FlextResult[FlextTypes.Core.Dict].ok(test_result.value)
 
             logger.error("Data quality validation failed: %s", test_result.error)
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 test_result.error or "dBT tests failed"
             )
 
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 f"Data quality validation error: {e}"
             )
 
     def run_dbt_models(
         self,
-        model_names: list[str] | None = None,
-    ) -> FlextResult[dict[str, object]]:
+        model_names: FlextTypes.Core.StringList | None = None,
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Run dBT models using modern FlextDbt API.
 
         Args:
@@ -333,30 +333,30 @@ class FlextDbtLdapService:
             if self._flext_dbt is None:
                 error_msg = "FlextDbt wrapper not initialized - cannot run models"
                 logger.error(error_msg)
-                return FlextResult[dict[str, object]].fail(error_msg)
+                return FlextResult[FlextTypes.Core.Dict].fail(error_msg)
 
             # Use modern FlextDbt API to run models
             run_result = self._flext_dbt.run_models(model_names)
 
             if run_result.success:
                 logger.info("dBT models executed successfully")
-                return FlextResult[dict[str, object]].ok(run_result.value)
+                return FlextResult[FlextTypes.Core.Dict].ok(run_result.value)
 
             logger.error("dBT model execution failed: %s", run_result.error)
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 run_result.error or "dBT model execution failed"
             )
 
         except Exception as e:
             logger.exception("Unexpected error during dBT model execution")
-            return FlextResult[dict[str, object]].fail(
+            return FlextResult[FlextTypes.Core.Dict].fail(
                 f"dBT model execution error: {e}"
             )
 
     def generate_analytics_report(
         self,
         report_type: str = "summary",
-    ) -> FlextResult[dict[str, object]]:
+    ) -> FlextResult[FlextTypes.Core.Dict]:
         """Generate analytics report from warehouse data.
 
         Args:
@@ -371,7 +371,7 @@ class FlextDbtLdapService:
 
             # This would typically run specific DBT models or queries
             # For now, return a placeholder structure
-            report_data: dict[str, object] = {
+            report_data: FlextTypes.Core.Dict = {
                 "report_type": report_type,
                 "generated_at": "2025-01-01T00:00:00Z",  # Would use actual timestamp
                 "summary": {
@@ -386,13 +386,15 @@ class FlextDbtLdapService:
             }
 
             logger.info("Analytics report generated successfully")
-            return FlextResult[dict[str, object]].ok(report_data)
+            return FlextResult[FlextTypes.Core.Dict].ok(report_data)
 
         except Exception as e:
             logger.exception("Unexpected error during report generation")
-            return FlextResult[dict[str, object]].fail(f"Report generation error: {e}")
+            return FlextResult[FlextTypes.Core.Dict].fail(
+                f"Report generation error: {e}"
+            )
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapService",
 ]

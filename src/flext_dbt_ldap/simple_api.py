@@ -5,12 +5,11 @@ Integrates with flext-ldap for client operations.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
 
-from flext_core import FlextLogger
+from flext_core import FlextLogger, FlextTypes
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
@@ -225,7 +224,7 @@ def create_simple_dbt_ldap_pipeline(
     return create_flext_dbt_ldap_service(config)
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "create_flext_dbt_ldap_client",
     "create_flext_dbt_ldap_config",
     "create_flext_dbt_ldap_service",

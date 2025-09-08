@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextModels, FlextResult
+from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
 from flext_ldap import (
     FlextLDAPCreateUserRequest,
     FlextLDAPDistinguishedName,
@@ -42,9 +42,9 @@ class FlextDbtLdapUserDimension(FlextModels.Entity):
     @classmethod
     def from_ldap_entry(cls, entry: FlextLDAPEntry) -> FlextDbtLdapUserDimension:
         """Create user dimension from LDAP entry."""
-        # Normalize attributes to dict[str, list[str]]
+        # Normalize attributes to dict[str, FlextTypes.Core.StringList]
         raw = entry.attributes
-        attrs: dict[str, list[str]] = {}
+        attrs: dict[str, FlextTypes.Core.StringList] = {}
         if isinstance(raw, dict):
             for k, v in raw.items():
                 if isinstance(v, list):
@@ -89,7 +89,7 @@ class FlextDbtLdapUserDimension(FlextModels.Entity):
             return FlextResult[None].fail("User ID and common name are required")
         return FlextResult[None].ok(None)
 
-    def to_dbt_dict(self) -> dict[str, object]:
+    def to_dbt_dict(self) -> FlextTypes.Core.Dict:
         """Convert to dictionary suitable for DBT processing."""
         return {
             "user_id": self.user_id,
@@ -125,7 +125,7 @@ class FlextDbtLdapGroupDimension(FlextModels.Entity):
     def from_ldap_entry(cls, entry: FlextLDAPEntry) -> FlextDbtLdapGroupDimension:
         """Create group dimension from LDAP entry."""
         raw = entry.attributes
-        attrs: dict[str, list[str]] = {}
+        attrs: dict[str, FlextTypes.Core.StringList] = {}
         if isinstance(raw, dict):
             for k, v in raw.items():
                 if isinstance(v, list):
@@ -169,7 +169,7 @@ class FlextDbtLdapGroupDimension(FlextModels.Entity):
             return FlextResult[None].fail("Member count cannot be negative")
         return FlextResult[None].ok(None)
 
-    def to_dbt_dict(self) -> dict[str, object]:
+    def to_dbt_dict(self) -> FlextTypes.Core.Dict:
         """Convert to dictionary suitable for DBT processing."""
         return {
             "group_id": self.group_id,
@@ -202,7 +202,7 @@ class FlextDbtLdapMembershipFact(FlextModels.Entity):
             return FlextResult[None].fail("User DN and Group DN are required")
         return FlextResult[None].ok(None)
 
-    def to_dbt_dict(self) -> dict[str, object]:
+    def to_dbt_dict(self) -> FlextTypes.Core.Dict:
         """Convert to dictionary suitable for DBT processing."""
         return {
             "user_dn": self.user_dn,
@@ -326,7 +326,7 @@ class FlextDbtLdapTransformer:
     def _is_user_entry(self, entry: FlextLDAPEntry) -> bool:
         """Check if entry is a user entry."""
         raw = entry.attributes
-        object_classes: list[str] = []
+        object_classes: FlextTypes.Core.StringList = []
         if isinstance(raw, dict):
             oc_val = raw.get("objectClass", [])
             if isinstance(oc_val, list):
@@ -339,7 +339,7 @@ class FlextDbtLdapTransformer:
     def _is_group_entry(self, entry: FlextLDAPEntry) -> bool:
         """Check if entry is a group entry."""
         raw = entry.attributes
-        object_classes: list[str] = []
+        object_classes: FlextTypes.Core.StringList = []
         if isinstance(raw, dict):
             oc_val = raw.get("objectClass", [])
             if isinstance(oc_val, list):
@@ -356,7 +356,7 @@ class FlextDbtLdapTransformer:
         """Extract memberships from a group entry."""
         memberships = []
         raw = group_entry.attributes
-        attrs: dict[str, list[str]] = {}
+        attrs: dict[str, FlextTypes.Core.StringList] = {}
         if isinstance(raw, dict):
             for k, v in raw.items():
                 if isinstance(v, list):
@@ -388,7 +388,7 @@ class FlextDbtLdapTransformer:
         """Extract memberships from a user entry."""
         memberships = []
         raw = user_entry.attributes
-        attrs: dict[str, list[str]] = {}
+        attrs: dict[str, FlextTypes.Core.StringList] = {}
         if isinstance(raw, dict):
             for k, v in raw.items():
                 if isinstance(v, list):
@@ -417,7 +417,7 @@ GroupDimension = FlextDbtLdapGroupDimension
 LDAPTransformer = FlextDbtLdapTransformer
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapGroupDimension",
     "FlextDbtLdapMembershipFact",
     "FlextDbtLdapTransformer",

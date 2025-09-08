@@ -1,6 +1,11 @@
-"""Enterprise DBT Models for LDAP Directory Transformations and Analytics."""
+"""Enterprise DBT Models for LDAP Directory Transformations and Analytics.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
+from flext_core import FlextTypes
 
 import contextlib
 import importlib.metadata
@@ -14,14 +19,11 @@ from flext_core import (
     FlextModels,
 )
 
-# from flext_meltano import (
-#     FlextMeltanoDbtService,  # This service doesn't exist yet
-# )
-
 from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
     validate_ldap_data_quality,
 )
+
 
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
 FlextDbtLdap: type | None = None  # Will be set to platform when available
@@ -126,7 +128,7 @@ from flext_dbt_ldap.simple_api import (
 # PUBLIC API EXPORTS
 # ================================
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     # Core patterns from flext-core
     "Config",
     "DomainBaseModel",
