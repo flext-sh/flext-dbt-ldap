@@ -1,497 +1,902 @@
-# CLAUDE.md
+# COMPREHENSIVE QUALITY REFACTORING FOR FLEXT-DBT-LDAP
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+**Enterprise-Grade LDAP Data Transformations Quality Assurance & Refactoring Guidelines**
+**Version**: 2.1.0 | **Authority**: WORKSPACE | **Updated**: 2025-01-08
+**Environment**: `/home/marlonsc/flext/.venv/bin/python` (No PYTHONPATH required)
+**Based on**: flext-core 0.9.0 with 79% test coverage (PROVEN FOUNDATION)
+**Project Context**: dbt project for LDAP directory data transformations using dbt Core with PostgreSQL/DuckDB backends
 
-## Project Overview
+---
 
-flext-dbt-ldap is an enterprise-grade dbt project for LDAP directory data transformations. It provides comprehensive data models, transformations, and analytics for LDAP/Active Directory environments using dbt Core with PostgreSQL/DuckDB backends.
+## 🎯 MISSION STATEMENT (NON-NEGOTIABLE)
 
-## Architecture
+**OBJECTIVE**: Achieve 100% professional quality compliance for flext-dbt-ldap with zero regressions, following SOLID principles, Python 3.13+ standards, Pydantic best practices, dbt Core patterns, and flext-core foundation patterns for LDAP data transformations.
 
-### dbt Project Structure
+**CRITICAL REQUIREMENTS FOR LDAP DBT PROJECT**:
+- ✅ **95%+ pytest pass rate** with **75%+ coverage** for LDAP transformation logic (flext-core proven achievable at 79%)
+- ✅ **Zero errors** in ruff, mypy (strict mode), and pyright across ALL LDAP data transformation source code
+- ✅ **Unified LDAP service classes** - single responsibility, no aliases, no wrappers, no helpers
+- ✅ **Direct flext-core integration** - eliminate LDAP complexity, reduce dbt configuration overhead  
+- ✅ **MANDATORY flext-cli usage** - ALL LDAP CLI projects use flext-cli for CLI AND output, NO direct Click/Rich
+- ✅ **ZERO fallback tolerance** - no try/except fallbacks in LDAP handlers, no workarounds, always correct dbt solutions
+- ✅ **SOLID compliance** - proper LDAP abstraction, dependency injection, clean dbt architecture
+- ✅ **Professional English** - all LDAP docstrings, comments, variable names, function names
+- ✅ **Incremental LDAP refactoring** - never rewrite entire dbt modules, always step-by-step improvements
+- ✅ **Real functional LDAP tests** - minimal mocks, test actual LDAP functionality with real dbt environments
+- ✅ **Production-ready LDAP code** - no workarounds, fallbacks, try-pass blocks, or incomplete dbt implementations
 
-- **Staging Models** (`models/staging/`): Raw LDAP data transformation and cleansing
-- **Intermediate Models** (`models/intermediate/`): Business logic and data enrichment
-- **Marts Models** (`models/marts/`): Final dimensional/fact tables for analytics
-- **Macros** (`macros/`): LDAP-specific dbt macros and utility functions
-- **Snapshots** (`snapshots/`): Historical tracking of LDAP entries
-- **Tests** (`tests/`): Data quality and validation tests
+**CURRENT FLEXT-DBT-LDAP STATUS** (Evidence-based):
+- 🔴 **Ruff Issues**: LDAP-specific violations in dbt transformations and LDAP integration
+- 🟡 **MyPy Issues**: 0 in main src/ LDAP modules (already compliant)  
+- 🟡 **Pyright Issues**: Minor LDAP API mismatches in dbt service definitions
+- 🔴 **Pytest Status**: LDAP test infrastructure needs fixing for dbt transformation testing
+- 🟢 **flext-core Foundation**: 79% coverage, fully functional API for LDAP operations
 
-### Python Components (`src/flext_dbt_ldap/`)
+---
 
-- **ldap_integration.py**: LDAP connectivity and data extraction
-- **models.py**: Pydantic models for LDAP entities
-- **macros.py**: Python-based macro helpers
-- **simple_api.py**: Simple API for dbt model execution
-- **infrastructure/**: Dependency injection and service configuration
+## 🚨 ABSOLUTE PROHIBITIONS FOR LDAP DBT PROJECT (ZERO TOLERANCE)
 
-## TODO: GAPS DE ARQUITETURA IDENTIFICADOS - PRIORIDADE ALTA
+### ❌ FORBIDDEN LDAP DBT PRACTICES
 
-### 🚨 GAP 1: DBT-Python Integration Complexity
+1. **LDAP DATA TRANSFORMATION QUALITY VIOLATIONS**:
+   - Any use of `# type: ignore` without specific error codes in LDAP handlers
+   - Any use of `Any` types instead of proper LDAP type annotations
+   - Silencing LDAP errors with ignore hints instead of fixing dbt root causes
+   - Creating LDAP wrappers, aliases, or compatibility facades
+   - Using sed, awk, or automated scripts for complex LDAP refactoring
 
-**Status**: ALTO - Hybrid dbt-Python architecture pode ser over-engineered
-**Problema**:
+2. **LDAP DBT ARCHITECTURE VIOLATIONS**:
+   - Multiple LDAP service classes per module (use single unified LDAP service per module)
+   - Helper functions or constants outside of unified LDAP service classes
+   - Local reimplementation of flext-core LDAP functionality
+   - Creating new LDAP modules instead of refactoring existing dbt services
+   - Changing lint, type checker, or test framework behavior for LDAP code
 
-- Python components em dbt project pode criar maintenance overhead
-- LDAP integration logic duplicated com flext-ldap library
-- DI container em dbt project pode be overkill
+3. **LDAP/DBT CLI PROJECT VIOLATIONS** (ABSOLUTE ZERO TOLERANCE):
+   - **MANDATORY**: ALL LDAP CLI projects MUST use `flext-cli` exclusively for CLI functionality AND data output
+   - **FORBIDDEN**: Direct `import click` in any LDAP project code
+   - **FORBIDDEN**: Direct `import rich` in any LDAP project code for output/formatting
+   - **FORBIDDEN**: Direct `from dbt import` bypassing FlextDbtLdapService
+   - **FORBIDDEN**: Local LDAP CLI implementations bypassing flext-cli
+   - **FORBIDDEN**: Any LDAP CLI functionality not going through flext-cli layer
+   - **REQUIRED**: If flext-cli lacks LDAP functionality, IMPROVE flext-cli first - NEVER work around
+   - **PRINCIPLE**: Fix the foundation, don't work around LDAP patterns
+   - **OUTPUT RULE**: ALL LDAP data output, formatting, tables, progress bars MUST use flext-cli wrappers
+   - **NO EXCEPTIONS**: Even if flext-cli needs improvement, IMPROVE it, don't bypass LDAP patterns
 
-**TODO**:
+4. **LDAP DBT FALLBACK/WORKAROUND VIOLATIONS** (ABSOLUTE PROHIBITION):
+   - **FORBIDDEN**: `try/except` blocks as fallback mechanisms in LDAP handlers
+   - **FORBIDDEN**: Palliative LDAP solutions that mask root dbt problems
+   - **FORBIDDEN**: Temporary LDAP workarounds that become permanent
+   - **FORBIDDEN**: "Good enough" LDAP solutions instead of correct dbt solutions
+   - **REQUIRED**: Always implement the correct LDAP solution, never approximate dbt patterns
 
-- [ ] Simplify dbt-Python integration architecture
-- [ ] Leverage flext-ldap library mais efficiently
-- [ ] Review need para DI container em dbt context
-- [ ] Document integration patterns clearly
+5. **LDAP DBT TESTING VIOLATIONS**:
+   - Using excessive mocks instead of real functional LDAP tests
+   - Accepting LDAP test failures and continuing dbt development
+   - Creating fake or placeholder LDAP test implementations
+   - Testing LDAP code that doesn't actually execute real dbt functionality
 
-### 🚨 GAP 2: LDAP Library Integration Optimization
+6. **LDAP DBT DEVELOPMENT VIOLATIONS**:
+   - Rewriting entire LDAP modules instead of incremental dbt improvements
+   - Skipping quality gates (ruff, mypy, pyright, pytest) for LDAP code
+   - Modifying behavior of linting tools instead of fixing LDAP code
+   - Rolling back git versions instead of fixing LDAP forward
 
-**Status**: ALTO - Integration com flext-ldap pode não be optimal
-**Problema**:
+7. **SPECIFIC LDAP DBT VIOLATIONS** (LDAP DATA TRANSFORMATION SPECIFIC):
+   - **FORBIDDEN**: Custom LDAP integrations bypassing FlextDbtLdapService
+   - **FORBIDDEN**: Direct LDAP connection handling outside unified dbt handlers
+   - **FORBIDDEN**: LDAP data state management outside domain entities
+   - **FORBIDDEN**: Custom dbt implementations bypassing established LDAP patterns
+   - **FORBIDDEN**: LDAP configuration outside FlextDbtLdapConfig entities
+   - **FORBIDDEN**: LDAP security implementations bypassing FlextDbtLdapSecurity
+   - **MANDATORY**: ALL LDAP operations MUST use FlextDbtLdapService and unified patterns
 
-- ldap_integration.py pode duplicate flext-ldap functionality
-- LDAP connectivity patterns podem divergir between projects
-- DN parsing logic pode be duplicated
+---
 
-**TODO**:
+## 🏗️ ARCHITECTURAL FOUNDATION FOR LDAP DBT PROJECT (MANDATORY PATTERNS)
 
-- [ ] Optimize integration com flext-ldap library
-- [ ] Eliminate duplication de LDAP functionality
-- [ ] Align LDAP connectivity patterns
-- [ ] Consolidate DN parsing logic
+### Core LDAP dbt Integration Strategy
 
-### 🚨 GAP 3: Meltano Integration Gap
+**PRIMARY FOUNDATION**: `flext-core` contains ALL base patterns for LDAP dbt operations - use exclusively, never reimplement locally
 
-**Status**: ALTO - Integration com flext-meltano não clearly defined
-**Problema**:
+```python
+# ✅ CORRECT - Direct usage of flext-core foundation for LDAP dbt (VERIFIED API)
+from flext_core import (
+    FlextResult,           # Railway pattern for LDAP operations - has .data, .value, .unwrap()
+    FlextModels,           # Pydantic models for LDAP entities
+    FlextDomainService,    # Base service for LDAP dbt operations
+    FlextContainer,        # Dependency injection for LDAP services
+    FlextLogger,           # Structured logging for LDAP operations
+    FlextConstants,        # LDAP system constants
+    FlextExceptions        # LDAP exception hierarchy
+)
 
-- dbt project relationship com Singer ecosystem não clear
-- Integration com flext-tap-ldap patterns podem be suboptimal
-- Data flow from taps → dbt → targets não fully documented
+# ✅ MANDATORY - For ALL LDAP CLI projects use flext-cli exclusively
+from flext_cli import (
+    FlextCliApi,           # High-level CLI API for LDAP operations
+    FlextCliMain,          # Main CLI entry point for LDAP commands
+    FlextCliConfig,        # Configuration management for LDAP CLI
+    FlextCliConstants,     # LDAP CLI-specific constants
+    # NEVER import click or rich directly - ALL LDAP CLI + OUTPUT through flext-cli
+)
 
-**TODO**:
+# ✅ CORRECT - LDAP-specific integrations (when available)
+from flext_ldap import (
+    get_flext_ldap_api,    # LDAP API integration (if available)
+    FlextLdapConfig,       # LDAP configuration models (if available)
+)
 
-- [ ] Define clear integration patterns com flext-meltano
-- [ ] Document data flow from Singer taps to dbt models
-- [ ] Optimize integration com flext-tap-ldap e flext-tap-ldif
-- [ ] Create integrated pipeline documentation
+# ❌ ABSOLUTELY FORBIDDEN - These imports are ZERO TOLERANCE violations in LDAP projects
+# import click           # FORBIDDEN - use flext-cli for LDAP operations
+# import rich            # FORBIDDEN - use flext-cli output wrappers for LDAP
+# from dbt import        # FORBIDDEN - use UnifiedFlextDbtLdapService
+# import ldap3           # FORBIDDEN - use flext-ldap integration
 
-## Technology Stack
+# ✅ CORRECT - Unified LDAP dbt service class (VERIFIED WORKING PATTERN)
+class UnifiedFlextDbtLdapService(FlextDomainService):
+    """Single unified LDAP dbt service class following flext-core patterns.
+    
+    This class consolidates all LDAP dbt-related operations:
+    - LDAP directory data extraction and transformation
+    - dbt model generation for LDAP analytics
+    - LDAP-specific data quality validation
+    - LDAP dimensional modeling operations
+    
+    Note: FlextDomainService is Pydantic-based, inherits from BaseModel
+    """
+    
+    def __init__(self, **data) -> None:
+        """Initialize LDAP dbt service with proper dependency injection."""
+        super().__init__(**data)
+        # Use direct class access - NO wrapper functions (per updated flext-core)
+        self._container = FlextContainer.get_global()
+        self._logger = FlextLogger(__name__)
+    
+    def extract_ldap_data(self, ldap_config: dict) -> FlextResult[LdapDataFrame]:
+        """Extract LDAP directory data with proper error handling."""
+        if not ldap_config:
+            return FlextResult[LdapDataFrame].fail("LDAP configuration cannot be empty")
+        
+        # Validate LDAP configuration
+        validation_result = self._validate_ldap_config(ldap_config)
+        if validation_result.is_failure:
+            return FlextResult[LdapDataFrame].fail(f"LDAP config validation failed: {validation_result.error}")
+        
+        # Extract LDAP data through flext-ldap integration (NO direct ldap3)
+        extraction_result = self._extract_ldap_entries(ldap_config)
+        if extraction_result.is_failure:
+            return FlextResult[LdapDataFrame].fail(f"LDAP extraction failed: {extraction_result.error}")
+            
+        return FlextResult[LdapDataFrame].ok(extraction_result.unwrap())
+    
+    def generate_ldap_dbt_models(self, ldap_data: LdapDataFrame) -> FlextResult[DbtModelCollection]:
+        """Generate dbt models for LDAP data with dimensional modeling patterns."""
+        if not ldap_data or ldap_data.empty:
+            return FlextResult[DbtModelCollection].fail("LDAP data cannot be empty")
+        
+        # Generate dimensional models for LDAP analytics
+        models_result = (
+            self._create_ldap_staging_models(ldap_data)
+            .flat_map(self._create_ldap_dimension_models)
+            .flat_map(self._create_ldap_fact_models)
+            .flat_map(self._create_ldap_analytics_models)
+        )
+        
+        if models_result.is_failure:
+            return FlextResult[DbtModelCollection].fail(f"LDAP dbt model generation failed: {models_result.error}")
+            
+        return FlextResult[DbtModelCollection].ok(models_result.unwrap())
+    
+    def execute_ldap_dbt_pipeline(self, pipeline_config: LdapDbtPipelineConfig) -> FlextResult[LdapPipelineResult]:
+        """Execute complete LDAP dbt pipeline with error handling."""
+        return (
+            self._validate_ldap_pipeline_config(pipeline_config)
+            .flat_map(lambda config: self.extract_ldap_data(config.ldap_config))
+            .flat_map(lambda data: self.generate_ldap_dbt_models(data))
+            .flat_map(lambda models: self._compile_ldap_dbt_models(models))
+            .flat_map(lambda compiled: self._execute_ldap_dbt_models(compiled))
+            .flat_map(lambda executed: self._run_ldap_dbt_tests(executed))
+            .map(lambda results: self._create_ldap_pipeline_result(results))
+            .map_error(lambda e: f"LDAP dbt pipeline failed: {e}")
+        )
+    
+    def _validate_ldap_config(self, config: dict) -> FlextResult[dict]:
+        """Validate LDAP configuration structure."""
+        required_fields = ["host", "port", "base_dn", "bind_dn", "bind_password"]
+        for field in required_fields:
+            if field not in config:
+                return FlextResult[dict].fail(f"Missing required LDAP field: {field}")
+        return FlextResult[dict].ok(config)
+    
+    def _extract_ldap_entries(self, config: dict) -> FlextResult[LdapDataFrame]:
+        """Extract LDAP entries through flext-ldap integration."""
+        # Implementation using flext-ldap API (NO direct ldap3)
+        ldap_api_result = self._container.get("ldap_api")
+        if ldap_api_result.is_failure:
+            return FlextResult[LdapDataFrame].fail("LDAP API service unavailable")
+        
+        ldap_api = ldap_api_result.unwrap()
+        return ldap_api.extract_directory_data(config)
+    
+    def _create_ldap_staging_models(self, data: LdapDataFrame) -> FlextResult[DbtModelCollection]:
+        """Create staging models for raw LDAP data."""
+        # Implementation for LDAP staging models
+        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+    
+    def _create_ldap_dimension_models(self, staging_models: DbtModelCollection) -> FlextResult[DbtModelCollection]:
+        """Create dimension models for LDAP analytics (users, groups, organizational units)."""
+        # Implementation for LDAP dimensional modeling
+        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+    
+    def _create_ldap_fact_models(self, dimension_models: DbtModelCollection) -> FlextResult[DbtModelCollection]:
+        """Create fact models for LDAP events and relationships."""
+        # Implementation for LDAP fact models
+        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+    
+    def _create_ldap_analytics_models(self, fact_models: DbtModelCollection) -> FlextResult[DbtModelCollection]:
+        """Create analytics models for LDAP insights and reporting."""
+        # Implementation for LDAP analytics models
+        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
 
-- **dbt Core**: Data transformation framework
-- **Python 3.13**: Runtime with Poetry dependency management
-- **PostgreSQL/DuckDB**: Data warehouse backends
-- **FLEXT Libraries**: flext-core, flext-ldap, flext-observability
-- **Testing**: pytest with 90%+ coverage requirement
+# ✅ CORRECT - LDAP domain models using VERIFIED flext-core API patterns
+from flext_core import FlextModels
 
-## Essential Commands for Development
+class LdapDirectoryEntry(FlextModels.Entity):
+    """LDAP directory entry entity with business rules validation."""
+    
+    dn: str
+    attributes: dict
+    object_classes: list[str]
+    
+    def validate_business_rules(self) -> FlextResult[None]:
+        """Required abstract method implementation for LDAP entries."""
+        if not self.dn.strip():
+            return FlextResult[None].fail("LDAP DN cannot be empty")
+        if not self.object_classes:
+            return FlextResult[None].fail("LDAP entry must have object classes")
+        return FlextResult[None].ok(None)
 
-### Most Common Development Workflow
+class LdapDbtPipelineConfig(FlextModels.Value):
+    """LDAP dbt pipeline configuration value object."""
+    
+    ldap_config: dict
+    dbt_config: dict
+    output_config: dict
+    
+    def validate_business_rules(self) -> FlextResult[None]:
+        """Required abstract method implementation for pipeline config."""
+        if not self.ldap_config:
+            return FlextResult[None].fail("LDAP configuration is required")
+        if not self.dbt_config:
+            return FlextResult[None].fail("dbt configuration is required")
+        return FlextResult[None].ok(None)
+
+# ✅ CORRECT - Module exports for LDAP dbt
+__all__ = ["UnifiedFlextDbtLdapService", "LdapDirectoryEntry", "LdapDbtPipelineConfig"]
+```
+
+### LDAP CLI Development Patterns (MANDATORY FOR ALL LDAP CLI PROJECTS)
+
+```python
+# ✅ CORRECT - ALL LDAP CLI projects MUST use flext-cli exclusively
+from flext_cli import FlextCliApi, FlextCliMain, FlextCliConfig
+# ❌ FORBIDDEN - NEVER import click directly in LDAP projects
+# import click  # THIS IS ABSOLUTELY FORBIDDEN IN LDAP PROJECTS
+
+class LdapCliService:
+    """LDAP CLI service using flext-cli foundation - NO Click imports allowed.
+    
+    CONFIGURATION AUTHORITY: 
+    - flext-cli automatically loads .env from execution root
+    - flext-core provides configuration infrastructure for LDAP
+    - Project ONLY describes LDAP configuration schema, never loads manually
+    """
+    
+    def __init__(self) -> None:
+        """Initialize LDAP CLI service with automatic configuration loading."""
+        # ✅ AUTOMATIC: LDAP configuration loaded transparently by flext-cli/flext-core
+        self._cli_api = FlextCliApi()
+        self._config = FlextCliConfig()  # Automatically includes .env + defaults + CLI params for LDAP
+        
+    def define_ldap_configuration_schema(self) -> FlextResult[dict]:
+        """Define LDAP-specific configuration schema.
+        
+        Project ONLY describes LDAP configuration needs - flext-cli handles:
+        1. Multi-format file detection (.env, .toml, .yaml, .json)
+        2. Environment variable precedence for LDAP settings
+        3. Default constants fallback for LDAP
+        4. CLI parameter overrides for LDAP operations
+        5. Automatic validation and type conversion
+        """
+        # ✅ CORRECT: LDAP-specific configuration schema
+        ldap_config_schema = {
+            # LDAP Server configuration
+            "ldap": {
+                "host": {
+                    "default": "localhost",              # Level 3: DEFAULT CONSTANTS  
+                    "env_var": "LDAP_HOST",              # Levels 1&2: ENV VARS → CONFIG FILE
+                    "cli_param": "--ldap-host",          # Level 4: CLI PARAMETERS
+                    "config_formats": {
+                        "env": "LDAP_HOST",
+                        "toml": "ldap.host",
+                        "yaml": "ldap.host",
+                        "json": "ldap.host"
+                    },
+                    "type": str,
+                    "required": True
+                },
+                "port": {
+                    "default": 389,                      # Level 3: DEFAULT CONSTANTS
+                    "env_var": "LDAP_PORT",              # Levels 1&2: ENV VARS → CONFIG FILE
+                    "cli_param": "--ldap-port",          # Level 4: CLI PARAMETERS
+                    "type": int,
+                    "required": False
+                },
+                "base_dn": {
+                    "default": "dc=example,dc=com",      # Level 3: DEFAULT CONSTANTS
+                    "env_var": "LDAP_BASE_DN",           # Levels 1&2: ENV VARS → CONFIG FILE
+                    "cli_param": "--base-dn",            # Level 4: CLI PARAMETERS
+                    "type": str,
+                    "required": True
+                },
+                "bind_dn": {
+                    "default": "cn=admin,dc=example,dc=com",
+                    "env_var": "LDAP_BIND_DN",
+                    "cli_param": "--bind-dn",
+                    "type": str,
+                    "required": True
+                },
+                "bind_password": {
+                    "default": None,                     # Level 3: No default for security
+                    "env_var": "LDAP_BIND_PASSWORD",     # Levels 1&2: ENV VARS → CONFIG FILE
+                    "cli_param": "--bind-password",      # Level 4: CLI PARAMETERS (discouraged)
+                    "type": str,
+                    "required": True,
+                    "sensitive": True                    # Mark as sensitive data
+                }
+            },
+            # dbt configuration for LDAP models
+            "dbt": {
+                "profiles_dir": {
+                    "default": "./profiles",
+                    "env_var": "DBT_PROFILES_DIR",
+                    "cli_param": "--profiles-dir",
+                    "type": str,
+                    "required": False
+                },
+                "target": {
+                    "default": "dev",
+                    "env_var": "DBT_TARGET",
+                    "cli_param": "--target",
+                    "type": str,
+                    "choices": ["dev", "staging", "prod"],
+                    "required": False
+                }
+            }
+        }
+        
+        # Register LDAP schema with flext-cli - handles ALL formats automatically
+        schema_result = self._config.register_universal_schema(ldap_config_schema)
+        if schema_result.is_failure:
+            return FlextResult[dict].fail(f"LDAP schema registration failed: {schema_result.error}")
+            
+        return FlextResult[dict].ok(ldap_config_schema)
+    
+    def create_ldap_cli_interface(self) -> FlextResult[FlextCliMain]:
+        """Create LDAP CLI interface using flext-cli patterns."""
+        # Initialize main CLI handler for LDAP operations
+        main_cli = FlextCliMain(
+            name="flext-dbt-ldap",
+            description="FLEXT dbt LDAP - Enterprise LDAP Data Transformations"
+        )
+        
+        # Register LDAP command groups through flext-cli
+        extract_result = main_cli.register_command_group("extract", self._create_ldap_extract_commands)
+        if extract_result.is_failure:
+            return FlextResult[FlextCliMain].fail(f"LDAP extract commands registration failed: {extract_result.error}")
+            
+        transform_result = main_cli.register_command_group("transform", self._create_ldap_transform_commands)  
+        if transform_result.is_failure:
+            return FlextResult[FlextCliMain].fail(f"LDAP transform commands registration failed: {transform_result.error}")
+            
+        return FlextResult[FlextCliMain].ok(main_cli)
+    
+    def _create_ldap_extract_commands(self) -> FlextResult[dict]:
+        """Create LDAP extraction commands using flext-cli patterns."""
+        # Use flext-cli command builders, NEVER Click decorators OR Rich output for LDAP
+        commands = {
+            "directory": self._cli_api.create_command(
+                name="directory",
+                description="Extract LDAP directory data",
+                handler=self._handle_ldap_directory_extraction,
+                arguments=["base_dn", "search_filter"],
+                output_format="table"  # Use flext-cli output formatting for LDAP data
+            ),
+            "users": self._cli_api.create_command(
+                name="users", 
+                description="Extract LDAP user data",
+                handler=self._handle_ldap_user_extraction,
+                output_format="json"   # Use flext-cli output formatting
+            )
+        }
+        return FlextResult[dict].ok(commands)
+    
+    def _handle_ldap_directory_extraction(self, args: dict) -> FlextResult[str]:
+        """Handle LDAP directory extraction command."""
+        # Validate required arguments
+        if not args.get("base_dn"):
+            return FlextResult[str].fail("Base DN is required for LDAP extraction")
+        
+        # Get LDAP service from container
+        container = FlextContainer.get_global()
+        ldap_service_result = container.get("ldap_dbt_service")
+        if ldap_service_result.is_failure:
+            return FlextResult[str].fail("LDAP dbt service unavailable")
+        
+        # Extract LDAP data - NO try/except fallbacks
+        ldap_service = ldap_service_result.unwrap()
+        ldap_config = {
+            "base_dn": args["base_dn"],
+            "search_filter": args.get("search_filter", "(objectClass=*)"),
+            # Configuration automatically loaded from flext-cli config
+        }
+        
+        extraction_result = ldap_service.extract_ldap_data(ldap_config)
+        if extraction_result.is_failure:
+            return FlextResult[str].fail(f"LDAP extraction failed: {extraction_result.error}")
+        
+        # Display results using flext-cli output wrappers
+        ldap_data = extraction_result.unwrap()
+        display_result = self._cli_api.format_output(
+            data=ldap_data.to_dict(),
+            format_type="table",
+            headers=["DN", "Object Classes", "Attributes"],
+            style="ldap_directory"
+        )
+        
+        return FlextResult[str].ok(f"LDAP extraction successful: {len(ldap_data)} entries processed")
+
+# ✅ CORRECT - LDAP CLI entry point using flext-cli
+def main() -> None:
+    """Main LDAP CLI entry point - uses flext-cli, never Click directly."""
+    cli_service = LdapCliService()
+    cli_result = cli_service.create_ldap_cli_interface()
+    
+    if cli_result.is_failure:
+        # Use flext-cli for error output too - NO direct print/rich usage
+        cli_api = FlextCliApi()
+        error_output = cli_api.format_error_message(
+            message=f"LDAP CLI initialization failed: {cli_result.error}",
+            error_type="initialization",
+            suggestions=["Check flext-cli installation", "Verify LDAP configuration"]
+        )
+        cli_api.display_error(error_output.unwrap() if error_output.is_success else cli_result.error)
+        exit(1)
+        
+    cli = cli_result.unwrap()
+    cli.run()
+```
+
+---
+
+## 📊 QUALITY ASSESSMENT PROTOCOL FOR LDAP DBT PROJECT
+
+### Phase 1: LDAP-Specific Issue Identification
+
+**MANDATORY FIRST STEP**: Get precise counts of all LDAP dbt quality issues:
 
 ```bash
-# Setup (first time only)
-make setup            # Complete development setup
-poetry install        # Install dependencies
+# Count exact number of LDAP-specific issues across all tools
+echo "=== LDAP DBT RUFF ISSUES ==="
+ruff check . --output-format=github | grep -i ldap | wc -l
 
-# Daily development cycle
-make check            # Essential checks (lint + type + test + dbt-compile)
-make dbt-run          # Execute dbt models
-make dbt-test         # Run dbt data quality tests
+echo "=== LDAP DBT MYPY ISSUES ==="  
+mypy src/ --show-error-codes --no-error-summary 2>&1 | grep -E "error:|note:" | grep -i ldap | wc -l
 
-# Before committing (mandatory)
-make validate         # Complete validation (lint + type + security + test + dbt-test)
+echo "=== LDAP DBT PYRIGHT ISSUES ==="
+pyright src/ --level error 2>&1 | grep -E "error|warning" | grep -i ldap | wc -l
+
+echo "=== LDAP DBT PYTEST RESULTS ==="
+pytest tests/ --tb=no -q -k ldap 2>&1 | grep -E "failed|passed|error" | tail -1
+
+echo "=== LDAP DBT COVERAGE ==="
+pytest tests/ --cov=src --cov-report=term-missing --tb=no -k ldap 2>&1 | grep "TOTAL"
 ```
 
-### Essential Quality Gates (Must Pass)
+---
+
+## 🛠️ INCREMENTAL REFACTORING METHODOLOGY FOR LDAP DBT
+
+### Strategy: Progressive LDAP Enhancement (NOT Rewriting)
+
+#### Cycle 1: LDAP Foundation Consolidation
+
+```python
+# BEFORE - Multiple scattered LDAP implementations
+class LdapExtractor:
+    def extract(self): pass
+
+class LdapTransformer:
+    def transform(self): pass
+    
+class DbtModelGenerator:
+    def generate(self): pass
+
+# Scattered LDAP helper functions
+def parse_ldap_dn(): pass
+
+# AFTER - Single unified LDAP dbt class (incremental improvement)
+class UnifiedFlextDbtLdapService:
+    """Consolidated LDAP dbt service following single responsibility principle."""
+    
+    def extract_ldap_data(self, config: dict) -> FlextResult[LdapDataFrame]:
+        """Former LdapExtractor.extract with proper error handling."""
+        # Implementation using flext-core patterns for LDAP
+        
+    def transform_ldap_data(self, data: LdapDataFrame) -> FlextResult[TransformedLdapData]:
+        """Former LdapTransformer.transform with proper error handling."""
+        # Implementation using flext-core patterns for LDAP
+        
+    def generate_dbt_models(self, data: TransformedLdapData) -> FlextResult[DbtModelCollection]:
+        """Former DbtModelGenerator.generate with proper error handling."""
+        # Implementation using flext-core patterns for LDAP dbt
+        
+    def _parse_ldap_dn(self, dn: str) -> FlextResult[ParsedDn]:
+        """Former parse_ldap_dn now as private method."""
+        # Implementation as part of unified LDAP class
+```
+
+---
+
+## 🔧 TOOL-SPECIFIC RESOLUTION STRATEGIES FOR LDAP DBT
+
+### LDAP-Specific Ruff Issues Resolution
 
 ```bash
-make validate          # Complete validation (lint + type + security + test + dbt-test)
-make check            # Essential checks (lint + type + test + dbt-compile)
-make test             # Run pytest with 90% coverage minimum
-make dbt-test         # Run dbt data quality tests
+# Identify high-priority LDAP issues first
+ruff check . --select F --output-format=github | grep -i ldap  # LDAP Pyflakes errors (critical)
+ruff check . --select E9 --output-format=github | grep -i ldap # LDAP Syntax errors (critical)
+ruff check . --select F821 --output-format=github | grep -i ldap # LDAP Undefined name (critical)
+
+# Address LDAP import issues
+ruff check . --select I --output-format=github | grep -i ldap    # LDAP Import sorting
+ruff check . --select F401 --output-format=github | grep -i ldap # LDAP Unused imports
+
+# Apply auto-fixes where safe for LDAP code
+ruff check . --fix-only --select I,F401,E,W
 ```
 
-### dbt Operations
+---
+
+## 🔬 CLI TESTING AND DEBUGGING METHODOLOGY FOR LDAP DBT (FLEXT ECOSYSTEM INTEGRATION)
+
+### Universal LDAP CLI Testing Pattern
 
 ```bash
-# Core dbt workflow
-make dbt-deps         # Install dbt dependencies
-make dbt-debug        # Debug dbt configuration and connections
-make dbt-compile      # Compile dbt models without execution
-make dbt-run          # Execute dbt models
-make dbt-test         # Run dbt data tests
-make dbt-docs         # Generate dbt documentation
+# ✅ CORRECT - Universal LDAP CLI testing pattern
+# Configuration file automatically detected from current directory
 
-# Data operations
-make dbt-seed         # Load seed data
-make dbt-snapshot     # Run snapshot models
-make dbt-clean        # Clean dbt artifacts
+# Phase 1: LDAP CLI Debug Mode Testing (MANDATORY FLEXT-CLI)
+python -m flext_dbt_ldap --debug extract directory \
+  --base-dn "dc=example,dc=com" \
+  --search-filter "(objectClass=person)" \
+  --output-dir data/output \
+  --config-file ldap.env
 
-# Full dbt workflow (deps -> compile -> run -> test)
-make dbt-deps dbt-compile dbt-run dbt-test
+# Phase 2: LDAP CLI Trace Mode Testing (FLEXT-CLI + FLEXT-CORE LOGGING)
+export LOG_LEVEL=DEBUG
+export ENABLE_TRACE=true
+python -m flext_dbt_ldap extract directory \
+  --base-dn "ou=users,dc=example,dc=com" \
+  --config-format toml
+
+# Phase 3: LDAP dbt Configuration Validation (AUTOMATIC MULTI-FORMAT LOADING)
+python -m flext_dbt_ldap validate-environment --debug --config-format yaml
+
+# Phase 4: LDAP Service Connection Testing (FLEXT ECOSYSTEM INTEGRATION)
+python -m flext_dbt_ldap test-service-connectivity --debug --trace
+
+# Phase 5: LDAP dbt Model Testing (FLEXT ECOSYSTEM COMPONENTS)
+python -m flext_dbt_ldap test-component --component=ldap-extractor \
+  --debug --trace --config-file production.toml
 ```
 
-### LDAP-Specific Operations
+### LDAP CLI Testing Service
 
-```bash
-make ldap-profile-test       # Test LDAP connection profiles
-make ldap-macros-test        # Test LDAP-specific macros
-make ldap-schema-validate    # Validate LDAP schema mapping
-make ldap-hierarchy-analysis # Analyze organizational hierarchy
-make ldap-security-audit     # Run LDAP security audit
-make ldap-compliance-check   # Check LDAP compliance
+```python
+from flext_core import FlextResult, get_logger
+from flext_cli import FlextCliApi, FlextCliConfig
+from flext_ldap import get_flext_ldap_api  # If available
+
+class LdapDbtCliTestingService:
+    """LDAP dbt CLI testing service using FLEXT ecosystem - .env automatically loaded."""
+    
+    def __init__(self) -> None:
+        """Initialize LDAP CLI testing with automatic .env configuration loading."""
+        # ✅ AUTOMATIC: .env loaded transparently by FLEXT ecosystem
+        self._logger = get_logger("ldap_cli_testing")
+        self._cli_api = FlextCliApi()
+        self._config = FlextCliConfig()  # Automatically loads .env + defaults + CLI params
+        self._ldap_api = get_flext_ldap_api() if 'flext_ldap' in globals() else None
+        
+    def debug_ldap_configuration(self) -> FlextResult[dict]:
+        """Debug LDAP CLI configuration using FLEXT patterns - .env as source of truth."""
+        self._logger.debug("Starting LDAP CLI configuration debugging")
+        
+        # ✅ CORRECT: Access LDAP configuration through FLEXT API (includes .env automatically)
+        config_result = self._config.get_all_configuration()
+        if config_result.is_failure:
+            return FlextResult[dict].fail(f"LDAP configuration access failed: {config_result.error}")
+            
+        config_data = config_result.unwrap()
+        
+        # Filter LDAP-specific configuration
+        ldap_config = {k: v for k, v in config_data.items() if 'ldap' in k.lower()}
+        
+        # Debug output through FLEXT CLI API
+        debug_display_result = self._cli_api.display_debug_information(
+            title="LDAP CLI Configuration Debug (ENV → .env → DEFAULT → CLI)",
+            data=ldap_config,
+            format_type="tree"  # flext-cli handles formatted output
+        )
+        
+        if debug_display_result.is_failure:
+            return FlextResult[dict].fail(f"LDAP debug display failed: {debug_display_result.error}")
+            
+        return FlextResult[dict].ok(ldap_config)
+    
+    def test_ldap_connectivity_debug(self) -> FlextResult[dict]:
+        """Test LDAP connectivity with debug logging - FLEXT-LDAP exclusively."""
+        self._logger.debug("Starting LDAP connectivity testing")
+        
+        # ✅ CORRECT: Get LDAP configuration from .env through FLEXT config
+        ldap_config_result = self._config.get_ldap_configuration()
+        if ldap_config_result.is_failure:
+            return FlextResult[dict].fail(f"LDAP config access failed: {ldap_config_result.error}")
+            
+        ldap_config = ldap_config_result.unwrap()
+        
+        # ✅ CORRECT: Test connection through FLEXT-LDAP API (NO external tools)
+        if self._ldap_api:
+            connection_result = self._ldap_api.test_connection_with_debug(
+                host=ldap_config["host"],
+                port=ldap_config["port"], 
+                bind_dn=ldap_config["bind_dn"],
+                bind_password=ldap_config["bind_password"],
+                debug_mode=True
+            )
+        else:
+            # Fallback to direct service testing
+            ldap_service_result = self._test_ldap_service_directly(ldap_config)
+            connection_result = ldap_service_result
+        
+        if connection_result.is_failure:
+            # Display debug information through FLEXT CLI
+            self._cli_api.display_error_with_debug(
+                error_message=f"LDAP connection failed: {connection_result.error}",
+                debug_data=ldap_config,
+                suggestions=[
+                    "Check .env file LDAP configuration",
+                    "Verify LDAP server is running", 
+                    "Validate network connectivity to LDAP server",
+                    "Check LDAP bind credentials"
+                ]
+            )
+            return FlextResult[dict].fail(connection_result.error)
+            
+        # Display success with debug information
+        connection_info = connection_result.unwrap()
+        self._cli_api.display_success_with_debug(
+            success_message="LDAP connection successful",
+            debug_data=connection_info,
+            format_type="table"
+        )
+        
+        return FlextResult[dict].ok(connection_info)
 ```
 
-### Analytics Operations
+---
 
-```bash
-make analytics-users         # Run user analytics models
-make analytics-groups        # Run group analytics models
-make analytics-memberships   # Run membership analytics
-make analytics-activity      # Run activity analytics
-make analytics-all          # Run all analytics models
+## 📚 SPECIFIC LDAP DBT PROJECT EXAMPLES
+
+### LDAP Directory Analytics Implementation
+
+```python
+# ✅ CORRECT - LDAP-specific dbt model generation
+class LdapDimensionalModelGenerator:
+    """Generate dimensional models for LDAP directory data."""
+    
+    def generate_user_dimension(self, ldap_users: LdapDataFrame) -> FlextResult[DbtModel]:
+        """Generate user dimension model from LDAP user data."""
+        user_dimension_sql = """
+        {{ config(materialized='table') }}
+        
+        select
+            {{ dbt_utils.surrogate_key(['dn']) }} as user_sk,
+            dn as user_dn,
+            cn as common_name,
+            sn as surname,
+            givenname as first_name,
+            mail as email,
+            department as department,
+            title as job_title,
+            manager as manager_dn,
+            created_date,
+            modified_date,
+            is_active
+        from {{ ref('stg_ldap_users') }}
+        """
+        
+        return FlextResult[DbtModel].ok(DbtModel(
+            name="dim_users",
+            sql=user_dimension_sql,
+            materialization="table"
+        ))
+    
+    def generate_group_dimension(self, ldap_groups: LdapDataFrame) -> FlextResult[DbtModel]:
+        """Generate group dimension model from LDAP group data."""
+        group_dimension_sql = """
+        {{ config(materialized='table') }}
+        
+        select
+            {{ dbt_utils.surrogate_key(['dn']) }} as group_sk,
+            dn as group_dn,
+            cn as group_name,
+            description as group_description,
+            group_type,
+            created_date,
+            modified_date
+        from {{ ref('stg_ldap_groups') }}
+        """
+        
+        return FlextResult[DbtModel].ok(DbtModel(
+            name="dim_groups",
+            sql=group_dimension_sql,
+            materialization="table"
+        ))
+    
+    def generate_membership_fact(self, ldap_memberships: LdapDataFrame) -> FlextResult[DbtModel]:
+        """Generate membership fact table from LDAP group membership data."""
+        membership_fact_sql = """
+        {{ config(materialized='incremental', unique_key='membership_sk') }}
+        
+        select
+            {{ dbt_utils.surrogate_key(['user_dn', 'group_dn']) }} as membership_sk,
+            u.user_sk,
+            g.group_sk,
+            membership_date,
+            is_active,
+            created_date,
+            modified_date
+        from {{ ref('stg_ldap_memberships') }} m
+        join {{ ref('dim_users') }} u on m.user_dn = u.user_dn
+        join {{ ref('dim_groups') }} g on m.group_dn = g.group_dn
+        
+        {% if is_incremental() %}
+            where modified_date > (select max(modified_date) from {{ this }})
+        {% endif %}
+        """
+        
+        return FlextResult[DbtModel].ok(DbtModel(
+            name="fact_ldap_memberships",
+            sql=membership_fact_sql,
+            materialization="incremental"
+        ))
 ```
 
-### Development Setup
-
-```bash
-make setup              # Complete development setup
-make install            # Install dependencies with Poetry
-make dev-install        # Development environment setup
-make pre-commit         # Setup pre-commit hooks
-
-# Quality and formatting
-make lint               # Ruff linting (ALL rules enabled)
-make type-check         # MyPy strict type checking
-make security           # Security scans (bandit + pip-audit)
-make format             # Format code with ruff
-make fix                # Auto-fix all issues
-```
-
-### Testing
-
-```bash
-# Python tests
-make test-unit          # Unit tests only
-make test-integration   # Integration tests only
-make coverage           # Generate coverage report
-make coverage-html      # Generate HTML coverage report
-
-# Test with specific markers
-poetry run pytest -m unit                    # Unit tests
-poetry run pytest -m integration             # Integration tests
-poetry run pytest -m e2e                     # End-to-end tests
-poetry run pytest -m dbt                     # dbt-specific tests
-poetry run pytest -m ldap                    # LDAP integration tests
-poetry run pytest -m transformation          # Data transformation tests
-poetry run pytest -m validation              # Data validation tests
-poetry run pytest -m performance             # Performance tests
-poetry run pytest -m slow                    # Slow tests
-poetry run pytest -m "not slow"              # Exclude slow tests
-```
-
-## Project Configuration
-
-### dbt Profiles
-
-- **Dev Target**: DuckDB (`./target/ldap_transform.db`)
-- **Prod Target**: PostgreSQL with environment variables
-- **Profile Name**: `flext_ldap` (configured in `dbt_project.yml`)
-
-### Environment Variables
-
-```bash
-# dbt Configuration
-export DBT_PROFILES_DIR=$(PWD)/profiles
-export DBT_TARGET=dev
-export DBT_THREADS=4
-
-# LDAP Analytics
-export LDAP_SOURCE_SCHEMA=ldap_raw
-export LDAP_TARGET_SCHEMA=ldap_analytics
-export LDAP_ANALYTICS_TIMEZONE=UTC
-
-# Data Warehouse (Prod)
-export DW_HOST=localhost
-export DW_PORT=5432
-export DW_DATABASE=flext_analytics
-export DW_USER=dbt_user
-```
-
-### dbt Variables
-
-```yaml
-# Configured in dbt_project.yml
-ldap_base_dn: "dc=example,dc=com"
-ldap_user_base: "ou=users"
-ldap_group_base: "ou=groups"
-ldap_ou_base: "ou=departments"
-```
-
-### Key Files and Their Purpose
-
-- **dbt_project.yml**: dbt project configuration with LDAP-specific variables
-- **profiles.yml**: Database connection profiles (dev: DuckDB, prod: PostgreSQL)
-- **Makefile**: Development commands and quality gates
-- **pyproject.toml**: Python dependencies and tool configuration
-- **src/flext_dbt_ldap/**init**.py**: Main module exports and FLEXT ecosystem integration
-- **macros/ldap_macros.sql**: LDAP-specific dbt macros for DN parsing and attribute handling
-- **models/**: dbt models organized in staging → intermediate → marts layers
-- **tests/**: Python unit/integration tests and dbt SQL tests
-
-## Data Models Architecture
-
-### Staging Layer (`models/staging/`)
-
-- **stg_users**: User entries with basic transformations
-- **stg_groups**: Group entries with member processing
-- **stg_org_units**: Organizational unit hierarchy
-
-### Intermediate Layer (`models/intermediate/`)
-
-- **int_org_hierarchy**: Organizational hierarchy enrichment
-- **int_user_groups**: User-group relationship processing
-
-### Marts Layer (`models/marts/`)
-
-- **dim_users**: User dimension table
-- **dim_groups**: Group dimension table
-- **fact_memberships**: Group membership facts
-
-## LDAP-Specific Macros
-
-### DN (Distinguished Name) Processing
+### LDAP dbt Macros
 
 ```sql
-{{ parse_dn('dn_column') }}                    -- Parse DN components
-{{ extract_ou_from_dn('dn_column') }}          -- Extract OU from DN
-{{ is_under_base('dn_column', 'base_dn') }}    -- Check if DN under base
+-- LDAP-specific dbt macros for DN processing
+{% macro parse_ldap_dn(dn_column) %}
+    regexp_split_to_array({{ dn_column }}, ',\s*')
+{% endmacro %}
+
+{% macro extract_cn_from_dn(dn_column) %}
+    regexp_replace(
+        split_part({{ dn_column }}, ',', 1),
+        '^cn=',
+        '',
+        'i'
+    )
+{% endmacro %}
+
+{% macro extract_ou_from_dn(dn_column) %}
+    array_to_string(
+        array(
+            select regexp_replace(unnest, '^ou=', '', 'i')
+            from unnest(regexp_split_to_array({{ dn_column }}, ',\s*')) as unnest
+            where unnest ilike 'ou=%'
+        ),
+        ','
+    )
+{% endmacro %}
 ```
 
-### Attribute Processing
+---
 
-```sql
-{{ normalize_array_field('field_name') }}      -- Normalize multi-valued fields
-{{ count_group_members('member_field') }}      -- Count group members
-{{ extract_email_domain('email_field') }}      -- Extract email domain
-```
+## ⚡ EXECUTION CHECKLIST FOR LDAP DBT PROJECT
 
-### Timestamp Conversion
+### Before Starting Any LDAP Work
 
-```sql
-{{ ldap_timestamp_to_timestamp('timestamp_field') }}  -- Convert LDAP timestamps
-```
+- [ ] Read all documentation: `CLAUDE.md`, `FLEXT_REFACTORING_PROMPT.md`, project `README.md`
+- [ ] Verify virtual environment: `/home/marlonsc/flext/.venv/bin/python` (VERIFIED WORKING)
+- [ ] Run baseline LDAP quality assessment using exact commands provided
+- [ ] Plan incremental LDAP improvements (never wholesale rewrites)
+- [ ] Establish measurable success criteria from current LDAP baseline
 
-### Hierarchy Operations
+### During Each LDAP Development Cycle  
 
-```sql
-{{ generate_hierarchy_path('dn_column') }}     -- Generate hierarchy path
-```
+- [ ] Make minimal, focused LDAP changes (single aspect per change)
+- [ ] Validate after every LDAP modification using quality gates
+- [ ] Test actual LDAP functionality (no mocks, real LDAP execution)
+- [ ] Document LDAP changes with professional English
+- [ ] Update LDAP tests to maintain coverage near 100%
 
-## Testing Strategy
+### After Each LDAP Development Session
 
-### Data Quality Tests
+- [ ] Full quality gate validation (ruff + mypy + pyright + pytest) for LDAP code
+- [ ] LDAP coverage measurement and improvement tracking  
+- [ ] Integration testing with real LDAP dependencies
+- [ ] Update LDAP documentation reflecting current reality
+- [ ] Commit with descriptive messages explaining LDAP improvements
 
-- **Source Tests**: Validate raw LDAP data integrity
-- **Model Tests**: Ensure transformation accuracy
-- **Generic Tests**: unique, not_null, accepted_values
-- **Custom Tests**: LDAP-specific validation rules
+### LDAP Project Completion Criteria
 
-### Test Categories
+- [ ] **Code Quality**: Zero ruff violations across all LDAP code
+- [ ] **Type Safety**: Zero mypy/pyright errors in LDAP src/
+- [ ] **Test Coverage**: 95%+ with real functional LDAP tests
+- [ ] **Documentation**: Professional English throughout LDAP components
+- [ ] **Architecture**: Clean SOLID principles implementation for LDAP
+- [ ] **Integration**: Seamless flext-core foundation usage for LDAP
+- [ ] **Maintainability**: Clear, readable, well-structured LDAP code
 
-- **Unit**: Individual function/macro testing
-- **Integration**: LDAP connection and data extraction
-- **dbt**: Model compilation and execution
-- **E2E**: Full pipeline testing
-- **Performance**: Large dataset processing
-- **Validation**: Business rule compliance
+---
 
-### Coverage Requirements
-
-- **Python Code**: 90% minimum coverage
-- **dbt Models**: All models must have tests
-- **LDAP Macros**: Comprehensive test coverage
-
-## Common Workflows
-
-### Adding New LDAP Source
-
-1. Update `models/staging/schema.yml` with source definition
-2. Create staging model in `models/staging/stg_<source>.sql`
-3. Add appropriate tests and documentation
-4. Create corresponding intermediate/marts models
-5. Run `make dbt-compile dbt-test` to validate
-
-### Creating Custom LDAP Macro
-
-1. Add macro to `macros/ldap_macros.sql`
-2. Follow existing patterns for DN/attribute processing
-3. Add tests in `tests/test_macros.sql`
-4. Run `make ldap-macros-test` to validate
-
-### Performance Optimization
-
-1. Use appropriate materialization strategies
-2. Implement incremental models for large datasets
-3. Add indexes and partitioning in target warehouse
-4. Monitor with `make analytics-all` performance
-
-## Data Quality Standards
-
-### LDAP Data Validation
-
-- **DN Format**: Must follow RFC 4514 format
-- **Email Validation**: RFC 5322 compliant addresses
-- **Required Attributes**: cn, objectClass for all entries
-- **Object Classes**: Validate against LDAP schema
-- **Referential Integrity**: Member DNs must exist in users
-
-### Business Rules
-
-- **Unique Constraints**: DN, uid, email uniqueness
-- **Account Types**: Employee, Service, Application, Standard
-- **Group Categories**: Security vs Distribution groups
-- **OU Hierarchy**: Valid organizational structure
-
-## Integration Points
-
-### FLEXT Ecosystem
-
-- **flext-core**: Base patterns and ServiceResult handling
-- **flext-ldap**: LDAP connectivity and DN parsing
-- **flext-observability**: Monitoring and metrics
-- **flext-meltano**: Integration with Singer taps/targets
-
-### Data Sources
-
-- **Raw LDAP**: Via flext-tap-ldap
-- **LDIF Files**: Via flext-tap-ldif
-- **Oracle WMS**: Via flext-tap-oracle-wms
-
-### Output Targets
-
-- **PostgreSQL**: Production data warehouse
-- **DuckDB**: Development and testing
-- **Analytics Tools**: BI dashboards and reporting
-
-## Current Development Status & Limitations
-
-### Known Issues & Workarounds
-
-- **dbt Profile**: Currently uses `dbt_ldap` profile name (check profiles.yml vs dbt_project.yml)
-- **Python Integration**: Hybrid dbt-Python architecture may need simplification
-- **LDAP Macros**: Some macros reference undefined functions (ldap_timestamp_to_timestamp, validate_dn_format)
-- **Test Coverage**: Python tests exist but may need DBT model integration tests
-
-### Architecture Gaps Identified
-
-1. **Integration with flext-ldap**: May have code duplication - leverage flext-ldap library more efficiently
-2. **Meltano Integration**: Data flow from Singer taps → dbt → targets needs clearer documentation
-3. **Python Components**: DI container in dbt project may be over-engineered for this use case
-
-## Troubleshooting
-
-### Common dbt Issues
+## 🏁 FINAL SUCCESS VALIDATION FOR LDAP DBT PROJECT
 
 ```bash
-# Connection problems
-make dbt-debug                    # Check profiles and connections
+#!/bin/bash
+# final_ldap_validation.sh - Complete LDAP dbt ecosystem validation
 
-# Compilation errors
-make dbt-compile                  # Test model compilation
-poetry run dbt compile --select model_name
+echo "=== FLEXT LDAP DBT FINAL VALIDATION ==="
 
-# Test failures
-make dbt-test                     # Run all dbt tests
-poetry run dbt test --select model_name
+# LDAP Quality Gates
+ruff check . --statistics | grep -i ldap
+mypy src/ --strict --show-error-codes | grep -i ldap
+pyright src/ --stats | grep -i ldap
+pytest tests/ --cov=src --cov-report=term-missing --cov-fail-under=95 -k ldap
 
-# Performance issues
-poetry run dbt run --select model_name --full-refresh
+# LDAP Functional Validation  
+python -c "
+import sys
+sys.path.insert(0, 'src')
+
+try:
+    # Test all major LDAP imports
+    from flext_core import FlextResult, FlextContainer, FlextModels
+    print('✅ flext-core integration: SUCCESS')
+    
+    # Test LDAP dbt functionality
+    from src.unified_flext_dbt_ldap_service import UnifiedFlextDbtLdapService
+    print('✅ LDAP dbt service import: SUCCESS')
+    
+    # Test LDAP service instantiation
+    ldap_service = UnifiedFlextDbtLdapService()
+    print('✅ LDAP service creation: SUCCESS')
+    
+    print('✅ All LDAP imports: SUCCESS')
+    print('✅ FINAL LDAP VALIDATION: PASSED')
+    
+except Exception as e:
+    print(f'❌ LDAP VALIDATION FAILED: {e}')
+    sys.exit(1)
+"
+
+echo "=== LDAP DBT ECOSYSTEM READY FOR PRODUCTION ==="
 ```
 
-### Python Integration Issues
+---
 
-```bash
-# Import errors
-poetry run python -c "import flext_dbt_ldap"
-
-# Dependency conflicts
-poetry show --tree
-poetry update
-
-# LDAP connection issues
-make ldap-profile-test
-```
-
-### Quality Gate Failures
-
-```bash
-# Fix linting automatically
-make format
-
-# Type checking issues
-poetry run mypy src/ --show-error-codes
-
-# Security vulnerabilities
-poetry run pip-audit --fix
-
-# Test coverage below 90%
-make coverage-html  # View detailed coverage report
-```
-
-### dbt Model Development Workflow
-
-```bash
-# Develop new model
-1. Create SQL file in appropriate layer (staging/intermediate/marts)
-2. Add model documentation to schema.yml
-3. Add tests (generic + custom) to schema.yml
-4. Compile and test: make dbt-compile && make dbt-test
-5. Run specific model: poetry run dbt run --select +model_name
-6. Validate with: make validate
-```
-
-### Testing Individual Models
-
-```bash
-# Test specific model
-poetry run dbt test --select model_name
-
-# Test model with dependencies
-poetry run dbt test --select +model_name
-
-# Run model and test
-poetry run dbt run --select model_name && poetry run dbt test --select model_name
-
-# Test with fresh rebuild
-poetry run dbt run --select model_name --full-refresh
-```
-
-## Best Practices
-
-### dbt Model Development
-
-- Use staging -> intermediate -> marts layering
-- Implement incremental models for large datasets
-- Add comprehensive tests and documentation
-- Follow consistent naming conventions
-
-### LDAP Data Handling
-
-- Always validate DN formats
-- Handle multi-valued attributes properly
-- Implement proper error handling for missing data
-- Use LDAP-specific macros consistently
-
-### Performance Considerations
-
-- Use appropriate materialization strategies
-- Implement proper indexing in target warehouse
-- Monitor transformation performance
-- Use incremental strategies for large datasets
-
-### Code Quality
-
-- Maintain 90%+ test coverage
-- Follow strict typing with MyPy
-- Use comprehensive linting with Ruff
-- Implement proper error handling patterns
+**The path to LDAP excellence is clear: Follow these standards precisely, validate continuously, never compromise on quality, and ALWAYS use FLEXT ecosystem for LDAP CLI testing and debugging with correct configuration priority (ENV → .env → DEFAULT → CLI) and automatic .env detection from current execution directory.**
