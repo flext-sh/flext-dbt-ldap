@@ -5,25 +5,23 @@ SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
-from flext_core import FlextTypes
 
-import contextlib
 import importlib.metadata
 import warnings
 
 from flext_core import (
     FlextConfig,
     FlextFields,
-    FlextResult,
     FlextLogger,
     FlextModels,
+    FlextResult,
+    FlextTypes,
 )
 
 from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
     validate_ldap_data_quality,
 )
-
 
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
 FlextDbtLdap: type | None = None  # Will be set to platform when available
@@ -76,8 +74,32 @@ def _show_deprecation_warning(old_import: str, new_import: str) -> None:
 # ================================
 
 # Import from new PEP8 modules
-from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
+from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
+from flext_dbt_ldap.dbt_exceptions import (
+    FlextDbtLdapAuthenticationError,
+    FlextDbtLdapConfigurationError,
+    FlextDbtLdapConnectionError,
+    FlextDbtLdapError,
+    FlextDbtLdapMacroError,
+    FlextDbtLdapModelError,
+    FlextDbtLdapProcessingError,
+    FlextDbtLdapTestError,
+    FlextDbtLdapTimeoutError,
+    FlextDbtLdapValidationError,
+)
+from flext_dbt_ldap.dbt_services import FlextDbtLdapService
+
+# DBT Integration exports
+from flext_dbt_ldap.macros import (
+    # Backward compatibility aliases
+    DNParser,
+    FlextDbtLdapDNParser,
+    FlextDbtLdapMacros,
+    FlextDbtLdapTimestampConverter,
+    LDAPMacros,
+    TimestampConverter,
+)
 from flext_dbt_ldap.models import (
     FlextDbtLdapGroupDimension,
     FlextDbtLdapMembershipFact,
@@ -88,35 +110,11 @@ from flext_dbt_ldap.models import (
     LDAPTransformer,
     UserDimension,
 )
-from flext_dbt_ldap.dbt_exceptions import (
-    FlextDbtLdapError,
-    FlextDbtLdapValidationError,
-    FlextDbtLdapConfigurationError,
-    FlextDbtLdapConnectionError,
-    FlextDbtLdapProcessingError,
-    FlextDbtLdapAuthenticationError,
-    FlextDbtLdapTimeoutError,
-    FlextDbtLdapModelError,
-    FlextDbtLdapMacroError,
-    FlextDbtLdapTestError,
-)
-from flext_dbt_ldap.dbt_services import FlextDbtLdapService
-
-# DBT Integration exports
-from flext_dbt_ldap.macros import (
-    FlextDbtLdapDNParser,
-    FlextDbtLdapMacros,
-    FlextDbtLdapTimestampConverter,
-    # Backward compatibility aliases
-    DNParser,
-    LDAPMacros,
-    TimestampConverter,
-)
 
 # Simple API exports
 from flext_dbt_ldap.simple_api import (
-    create_flext_dbt_ldap_config,
     create_flext_dbt_ldap_client,
+    create_flext_dbt_ldap_config,
     create_flext_dbt_ldap_service,
     create_flext_group_dimension,
     create_flext_ldap_transformer,
@@ -131,76 +129,76 @@ from flext_dbt_ldap.simple_api import (
 __all__: FlextTypes.Core.StringList = [
     # Core patterns from flext-core
     "Config",
+    # DBT Macros (legacy names)
+    "DNParser",
     "DomainBaseModel",
     "DomainEntity",
     "DomainValueObject",
     "Field",
-    "FlextResult",
-    "FlextModels",
-    "FlextLogger",
+    # FlextDbtLdap-specific aliases
+    "FlextDbtLdap",  # Main FlextDbtLdap class alias
+    "FlextDbtLdapAuthenticationError",
+    "FlextDbtLdapBaseModel",  # FlextDbtLdap base model alias
+    # Client and Services
+    "FlextDbtLdapClient",
     # === FLEXT-MELTANO DBT RE-EXPORTS ===
     # "FlextMeltanoDbtService",  # Service doesn't exist yet
     # === NEW DBT LDAP COMPONENTS (PEP8 NAMES) ===
     # Configuration
     "FlextDbtLdapConfig",
-    # Client and Services
-    "FlextDbtLdapClient",
-    "FlextDbtLdapService",
-    # Data Models
-    "FlextDbtLdapGroupDimension",
-    "FlextDbtLdapMembershipFact",
-    "FlextDbtLdapTransformer",
-    "FlextDbtLdapUserDimension",
-    # Macros and Utilities
-    "FlextDbtLdapDNParser",
-    "FlextDbtLdapMacros",
-    "FlextDbtLdapTimestampConverter",
-    # Exceptions
-    "FlextDbtLdapError",
-    "FlextDbtLdapValidationError",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
-    "FlextDbtLdapProcessingError",
-    "FlextDbtLdapAuthenticationError",
-    "FlextDbtLdapTimeoutError",
-    "FlextDbtLdapModelError",
+    # Macros and Utilities
+    "FlextDbtLdapDNParser",
+    # Deprecation utilities
+    "FlextDbtLdapDeprecationWarning",
+    # Exceptions
+    "FlextDbtLdapError",
+    # Data Models
+    "FlextDbtLdapGroupDimension",
     "FlextDbtLdapMacroError",
+    "FlextDbtLdapMacros",
+    "FlextDbtLdapMembershipFact",
+    "FlextDbtLdapModelError",
+    "FlextDbtLdapProcessingError",
+    "FlextDbtLdapResult",  # FlextDbtLdap result pattern alias
+    "FlextDbtLdapService",
     "FlextDbtLdapTestError",
-    "create_flext_dbt_ldap_config",
+    "FlextDbtLdapTimeoutError",
+    "FlextDbtLdapTimestampConverter",
+    "FlextDbtLdapTransformer",
+    "FlextDbtLdapUserDimension",
+    "FlextDbtLdapValidationError",
+    "FlextLogger",
+    "FlextModels",
+    "FlextResult",
+    # === BACKWARD COMPATIBILITY ALIASES ===
+    # DBT Models (legacy names)
+    "GroupDimension",
+    # Legacy configuration and errors
+    "LDAPBaseConfig",
+    "LDAPError",
+    "LDAPMacros",
+    "LDAPTransformer",
+    "TimestampConverter",
+    "UserDimension",
+    "ValidationError",
+    # Metadata
+    "__version__",
+    "__version_info__",
     "create_flext_dbt_ldap_client",
+    "create_flext_dbt_ldap_config",
     "create_flext_dbt_ldap_service",
     "create_flext_group_dimension",
     "create_flext_ldap_transformer",
     "create_flext_user_dimension",
     "create_simple_dbt_ldap_pipeline",
-    # === BACKWARD COMPATIBILITY ALIASES ===
-    # DBT Models (legacy names)
-    "GroupDimension",
-    "LDAPTransformer",
-    "UserDimension",
-    # DBT Macros (legacy names)
-    "DNParser",
-    "LDAPMacros",
-    "TimestampConverter",
-    # Legacy configuration and errors
-    "LDAPBaseConfig",
-    "LDAPError",
-    "ValidationError",
-    # Deprecation utilities
-    "FlextDbtLdapDeprecationWarning",
-    # FlextDbtLdap-specific aliases
-    "FlextDbtLdap",  # Main FlextDbtLdap class alias
-    "FlextDbtLdapBaseModel",  # FlextDbtLdap base model alias
-    "FlextDbtLdapResult",  # FlextDbtLdap result pattern alias
-    # Integration helper functions
-    "process_ldap_entries_for_dbt",
-    "validate_ldap_data_quality",
-    # Metadata
-    "__version__",
-    "__version_info__",
     # Prefixed helper function placeholders
     "flext_dbt_ldap_convert_timestamp",
     "flext_dbt_ldap_create_dimension",
     "flext_dbt_ldap_parse_dn",
     "flext_dbt_ldap_transform_entry",
+    # Integration helper functions
+    "process_ldap_entries_for_dbt",
+    "validate_ldap_data_quality",
 ]
