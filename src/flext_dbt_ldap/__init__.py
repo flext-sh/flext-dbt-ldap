@@ -166,7 +166,6 @@ __all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapModelError",
     "FlextDbtLdapMacroError",
     "FlextDbtLdapTestError",
-    # Simple API Factory Functions
     "create_flext_dbt_ldap_config",
     "create_flext_dbt_ldap_client",
     "create_flext_dbt_ldap_service",
