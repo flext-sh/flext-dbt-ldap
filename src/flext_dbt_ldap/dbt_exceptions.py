@@ -35,9 +35,6 @@ FlextDbtLdapTimeoutError = FlextDbtLdapError
 
 
 # Domain-specific DBT LDAP errors using composition over duplication
-# =============================================================================
-# REFACTORING: Template Method Pattern - eliminates massive duplication
-# =============================================================================
 
 
 class FlextDbtLdapModelError(FlextExceptions.ProcessingError):

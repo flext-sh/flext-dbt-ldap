@@ -272,7 +272,7 @@ diagnose: ## Show environment diagnostics
 doctor: diagnose check ## Full health check
 
 # =============================================================================
-# ALIASES (SINGLE LETTER SHORTCUTS)
+
 # =============================================================================
 
 .PHONY: t l f tc c i v dr dt dc la lv
