@@ -1,7 +1,4 @@
-"""LDAP Integration for DBT using flext-ldap library.
-
-ELIMINATES CODE DUPLICATION by delegating ALL LDAP processing to flext-ldap API.
-This module provides DBT-specific wrappers that delegate to generic flext-ldap functionality.
+"""DBT-specific wrappers that delegate to generic flext-ldap functionality.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -14,74 +11,84 @@ from flext_core import FlextLogger, FlextTypes
 logger = FlextLogger(__name__)
 
 
-def process_ldap_entries_for_dbt(df: object) -> object:
-    """Process LDAP entries DataFrame using flext-ldap generic processing.
+class FlextDbtLdapIntegration:
+    """Unified DBT LDAP integration service with nested processing methods."""
 
-    ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
-    instead of implementing local processing logic.
+    @staticmethod
+    def process_ldap_entries_for_dbt(df: object) -> object:
+        """Process LDAP entries DataFrame using flext-ldap generic processing.
 
-    Args:
-      df: DataFrame-like object with LDAP entries (DBT Python model compatible)
+        ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
+        instead of implementing local processing logic.
 
-    Returns:
-      Processed DataFrame with flext-ldap enhancements
+        Args:
+          df: DataFrame-like object with LDAP entries (DBT Python model compatible)
 
-    """
-    try:
-        logger.info("Processing LDAP entries for DBT using flext-ldap delegation")
+        Returns:
+          Processed DataFrame with flext-ldap enhancements
 
-        # For DBT compatibility, handle DataFrame-like objects
-        if hasattr(df, "__len__"):
-            entry_count = len(df)
-            logger.info("Processing %d LDAP entries via flext-ldap API", entry_count)
+        """
+        try:
+            logger.info("Processing LDAP entries for DBT using flext-ldap delegation")
 
-            # Placeholder: return input unchanged (DBT Python model compatibility)
-            logger.debug("Returning original dataframe after no-op processing")
+            # For DBT compatibility, handle DataFrame-like objects
+            if hasattr(df, "__len__"):
+                entry_count = len(df)
+                logger.info("Processing %d LDAP entries via flext-ldap API", entry_count)
 
-        return df
+                # Placeholder: return input unchanged (DBT Python model compatibility)
+                logger.debug("Returning original dataframe after no-op processing")
 
-    except Exception:
-        logger.exception("Failed to process LDAP entries via flext-ldap delegation")
-        return df
+            return df
+
+        except Exception:
+            logger.exception("Failed to process LDAP entries via flext-ldap delegation")
+            return df
+
+    @staticmethod
+    def validate_ldap_data_quality(df: object) -> FlextTypes.Core.Dict:
+        """Validate LDAP data quality using flext-ldap generic validation.
+
+        ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
+        instead of implementing local validation logic.
+
+        Args:
+          df: DataFrame-like object to validate
+
+        Returns:
+          Quality metrics dictionary from flext-ldap validation
+
+        """
+        try:
+            logger.info("Validating LDAP data quality for DBT using flext-ldap delegation")
+
+            # For DBT compatibility, handle DataFrame-like objects
+            if hasattr(df, "__len__"):
+                entry_count = len(df)
+                logger.info("Validating %d LDAP entries via flext-ldap API", entry_count)
+                # Minimal quality metrics without external API dependency
+                return {
+                    "total_entries": entry_count,
+                    "valid_dns": entry_count,
+                    "quality_score": 1.0,
+                }
+
+            return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
+
+        except Exception:
+            logger.exception(
+                "Failed to validate LDAP data quality via flext-ldap delegation",
+            )
+            return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
 
-def validate_ldap_data_quality(df: object) -> FlextTypes.Core.Dict:
-    """Validate LDAP data quality using flext-ldap generic validation.
-
-    ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
-    instead of implementing local validation logic.
-
-    Args:
-      df: DataFrame-like object to validate
-
-    Returns:
-      Quality metrics dictionary from flext-ldap validation
-
-    """
-    try:
-        logger.info("Validating LDAP data quality for DBT using flext-ldap delegation")
-
-        # For DBT compatibility, handle DataFrame-like objects
-        if hasattr(df, "__len__"):
-            entry_count = len(df)
-            logger.info("Validating %d LDAP entries via flext-ldap API", entry_count)
-            # Minimal quality metrics without external API dependency
-            return {
-                "total_entries": entry_count,
-                "valid_dns": entry_count,
-                "quality_score": 1.0,
-            }
-
-        return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
-
-    except Exception:
-        logger.exception(
-            "Failed to validate LDAP data quality via flext-ldap delegation",
-        )
-        return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
+# Backward compatibility aliases
+process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_dbt
+validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
 
 
 __all__: FlextTypes.Core.StringList = [
+    "FlextDbtLdapIntegration",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",
 ]

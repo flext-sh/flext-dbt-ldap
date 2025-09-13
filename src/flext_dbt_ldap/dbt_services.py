@@ -1,10 +1,6 @@
-"""DBT services for LDAP operations.
+"""FLEXT DBT LDAP Services.
 
-Provides high-level service operations for DBT LDAP workflows.
-Builds on dbt_client to provide workflow orchestration and automation.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
+High-level service classes for DBT LDAP operations.
 """
 
 from __future__ import annotations

@@ -1,11 +1,4 @@
-"""Test configuration for flext-dbt-ldap.
-
-Provides pytest fixtures and configuration for testing dbt LDAP integration
-functionality using real LDAP connections and dbt-core patterns.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
+"""Test configuration and fixtures for flext-dbt-ldap."""
 
 from __future__ import annotations
 
@@ -174,6 +167,7 @@ def dbt_ldap_models() -> FlextTypes.Core.Headers:
     """Dbt LDAP model SQL definitions for testing."""
     return {
         "staging_ldap_users": """
+
           {{ config(materialized='view') }}
           SELECT
               {{ ldap_extract_attribute('dn') }} as user_dn,
@@ -191,6 +185,7 @@ def dbt_ldap_models() -> FlextTypes.Core.Headers:
           WHERE {{ ldap_filter_object_class('inetOrgPerson') }}
       """,
         "dim_users": """
+
           {{ config(
               materialized='table',
               ldap={'validate_dn': true, 'normalize_attributes': true}
@@ -215,6 +210,7 @@ def dbt_ldap_models() -> FlextTypes.Core.Headers:
           WHERE email IS NOT NULL
       """,
         "staging_ldap_groups": """
+
           {{ config(materialized='view') }}
           SELECT
               {{ ldap_extract_attribute('dn') }} as group_dn,
@@ -226,6 +222,7 @@ def dbt_ldap_models() -> FlextTypes.Core.Headers:
           WHERE {{ ldap_filter_object_class('groupOfNames') }}
       """,
         "dim_groups": """
+
           {{ config(materialized='table') }}
           SELECT
               group_dn,
@@ -237,6 +234,7 @@ def dbt_ldap_models() -> FlextTypes.Core.Headers:
           FROM {{ ref('staging_ldap_groups') }}
       """,
         "fact_group_memberships": """
+
           {{ config(
               materialized='incremental',
               unique_key=['group_dn', 'member_dn']
@@ -266,6 +264,7 @@ def dbt_ldap_macros() -> FlextTypes.Core.Headers:
     """Dbt LDAP macro definitions for testing."""
     return {
         "ldap_extract_attribute": """
+
           {% macro ldap_extract_attribute(attribute_name, index=None) -%}
               {% if index is not none %}
                   JSON_EXTRACT_PATH_TEXT(
@@ -277,17 +276,20 @@ def dbt_ldap_macros() -> FlextTypes.Core.Headers:
           {%- endmacro %}
       """,
         "ldap_filter_object_class": """
+
           {% macro ldap_filter_object_class(object_class) -%}
               JSON_EXTRACT_PATH_TEXT(attributes, 'objectClass')
               LIKE '%{{ object_class }}%'
           {%- endmacro %}
       """,
         "ldap_parse_dn_component": """
+
           {% macro ldap_parse_dn_component(dn_field, component) -%}
               REGEXP_EXTRACT({{ dn_field }}, '{{ component }}=([^,]+)', 1)
           {%- endmacro %}
       """,
         "ldap_validate_email": r"""
+
           {% macro ldap_validate_email(email_field) -%}
               CASE
                   WHEN {{ email_field }}
@@ -298,11 +300,13 @@ def dbt_ldap_macros() -> FlextTypes.Core.Headers:
           {%- endmacro %}
       """,
         "ldap_extract_multi_attribute": """
+
           {% macro ldap_extract_multi_attribute(attribute_name) -%}
               JSON_EXTRACT_PATH_TEXT(attributes, '{{ attribute_name }}')
           {%- endmacro %}
       """,
         "ldap_count_members": """
+
           {% macro ldap_count_members(members_field) -%}
               CASE
                   WHEN {{ members_field }} IS NULL THEN 0
@@ -379,11 +383,13 @@ def dbt_ldap_tests() -> FlextTypes.Core.Headers:
     """Dbt LDAP test definitions for testing."""
     return {
         "test_ldap_valid_user_dn": """
+
           SELECT dn
           FROM {{ source('ldap_raw', 'users') }}
           WHERE dn !~ '^cn=.+,ou=.+,dc=.+,dc=.+'
       """,
         "test_unique_email_addresses": """
+
           SELECT email_normalized, COUNT(*)
           FROM {{ ref('dim_users') }}
           WHERE email_normalized IS NOT NULL
@@ -391,6 +397,7 @@ def dbt_ldap_tests() -> FlextTypes.Core.Headers:
           HAVING COUNT(*) > 1
       """,
         "test_valid_group_memberships": """
+
           SELECT member_dn
           FROM {{ ref('fact_group_memberships') }}
           WHERE member_dn NOT IN (
@@ -398,6 +405,7 @@ def dbt_ldap_tests() -> FlextTypes.Core.Headers:
           )
       """,
         "test_ldap_attribute_consistency": """
+
           SELECT dn
           FROM {{ source('ldap_raw', 'users') }}
           WHERE JSON_EXTRACT_PATH_TEXT(attributes, 'objectClass') IS NULL
@@ -465,6 +473,7 @@ def mock_ldap_dbt_adapter() -> object:
 
     class MockLdapDbtAdapter:
         def __init__(self, config: FlextTypes.Core.Dict) -> None:
+            """Initialize the instance."""
             self.config = config
             self.ldap_entries: FlextTypes.Core.Dict = {}
             self.compiled_models: FlextTypes.Core.Dict = {}
@@ -532,6 +541,7 @@ def mock_ldap_connection() -> object:
 
     class MockLdapConnection:
         def __init__(self, config: FlextTypes.Core.Dict) -> None:
+            """Initialize the instance."""
             self.config = config
             self.connected = False
             self.entries: list[FlextTypes.Core.Dict] = []

@@ -105,7 +105,7 @@ def postgres_container(
 
 
 @pytest.fixture
-def db_connection(_postgres_container: None) -> Generator[object]:
+def db_connection(__postgres_container: None, /) -> Generator[object]:
     """Get database connection for testing."""
     conn = psycopg.connect(
         host="localhost",
@@ -166,6 +166,7 @@ def run_dbt_command(
 
     class CompletedProcess:
         def __init__(self, returncode: int, stdout: str, stderr: str) -> None:
+            """Initialize the instance."""
             self.returncode = returncode
             self.stdout = stdout
             self.stderr = stderr
@@ -186,6 +187,7 @@ def table_exists(conn: object, schema: str, table: str) -> bool:
     with conn.cursor() as cur:
         cur.execute(
             """
+
           SELECT EXISTS (
               SELECT 1 FROM information_schema.tables
               WHERE table_schema = %s AND table_name = %s
@@ -212,6 +214,7 @@ def get_column_names(
     with conn.cursor() as cur:
         cur.execute(
             """
+
           SELECT column_name
           FROM information_schema.columns
           WHERE table_schema = %s AND table_name = %s

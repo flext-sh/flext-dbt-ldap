@@ -1,7 +1,7 @@
-"""DBT client for LDAP operations.
+"""DBT client for LDAP data transformations with FLEXT ecosystem integration.
 
-Provides high-level interface for DBT LDAP transformations.
-Integrates flext-ldap and flext-meltano for complete data pipeline operations.
+This module provides dbt functionality for LDAP directory data transformations
+using FLEXT ecosystem patterns for data processing and analytics.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -13,7 +13,7 @@ import asyncio
 from pathlib import Path
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
-from flext_ldap import FlextLDAPApi, FlextLDAPEntry
+from flext_ldap import FlextLDAPApi, FlextLDAPEntities
 from flext_meltano import FlextMeltanoService
 
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
@@ -57,7 +57,7 @@ class FlextDbtLdapClient:
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
         attributes: FlextTypes.Core.StringList | None = None,
-    ) -> FlextResult[list[FlextLDAPEntry]]:
+    ) -> FlextResult[list[FlextLDAPEntities]]:
         """Extract LDAP entries for DBT processing.
 
         Args:
@@ -87,19 +87,19 @@ class FlextDbtLdapClient:
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error)
-                return FlextResult[list[FlextLDAPEntry]].fail(
+                return FlextResult[list[FlextLDAPEntities]].fail(
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return FlextResult[list[FlextLDAPEntry]].fail(
+            return FlextResult[list[FlextLDAPEntities]].fail(
                 f"LDAP extraction error: {e}",
             )
 
     def validate_ldap_data(
         self,
-        entries: list[FlextLDAPEntry],
+        entries: list[FlextLDAPEntities],
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Validate LDAP data quality for DBT processing.
 
@@ -151,7 +151,7 @@ class FlextDbtLdapClient:
 
     def transform_with_dbt(
         self,
-        entries: list[FlextLDAPEntry],
+        entries: list[FlextLDAPEntities],
         model_names: FlextTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Transform LDAP data using DBT models.
@@ -242,7 +242,7 @@ class FlextDbtLdapClient:
 
     def _prepare_ldap_data_for_dbt(
         self,
-        entries: list[FlextLDAPEntry],
+        entries: list[FlextLDAPEntities],
     ) -> dict[str, list[FlextTypes.Core.Dict]]:
         """Prepare LDAP entries for DBT processing.
 
@@ -272,7 +272,7 @@ class FlextDbtLdapClient:
         )
         return prepared_data
 
-    def _matches_schema(self, entry: FlextLDAPEntry, schema_name: str) -> bool:
+    def _matches_schema(self, entry: FlextLDAPEntities, schema_name: str) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes = entry.object_classes
         schema_mapping = {
@@ -283,7 +283,7 @@ class FlextDbtLdapClient:
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
 
-    def _map_entry_attributes(self, entry: FlextLDAPEntry) -> FlextTypes.Core.Dict:
+    def _map_entry_attributes(self, entry: FlextLDAPEntities) -> FlextTypes.Core.Dict:
         """Map LDAP entry attributes using configuration mapping."""
         mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
@@ -318,7 +318,7 @@ class FlextDbtLdapClient:
         base_dn: str,
         search_filter: str,
         attributes: FlextTypes.Core.StringList | None,
-    ) -> FlextResult[list[FlextLDAPEntry]]:
+    ) -> FlextResult[list[FlextLDAPEntities]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
             api = FlextLDAPApi()
@@ -332,7 +332,7 @@ class FlextDbtLdapClient:
                 )
             )
         except Exception as e:
-            return FlextResult[list[FlextLDAPEntry]].fail(f"LDAP search failed: {e}")
+            return FlextResult[list[FlextLDAPEntities]].fail(f"LDAP search failed: {e}")
 
 
 __all__: FlextTypes.Core.StringList = [
