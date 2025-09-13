@@ -1,11 +1,7 @@
-"""FLEXT DBT LDAP Models - Backward compatibility module.
-
-Re-exports from dbt_models for backward compatibility.
-All actual models are now in dbt_models module.
+"""FLEXT dbt LDAP Models - DBT LDAP data transformation models.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -19,7 +15,7 @@ from flext_dbt_ldap.dbt_models import (
     FlextDbtLdapUserDimension,
     FlextLDAPCreateUserRequest,
     FlextLDAPDistinguishedName,
-    FlextLDAPEntry,
+    FlextLDAPEntities,
     FlextLDAPGroup,
     FlextLDAPUser,
 )
@@ -37,7 +33,7 @@ __all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapUserDimension",
     "FlextLDAPCreateUserRequest",
     "FlextLDAPDistinguishedName",
-    "FlextLDAPEntry",
+    "FlextLDAPEntities",
     "FlextLDAPGroup",
     "FlextLDAPUser",
     "GroupDimension",

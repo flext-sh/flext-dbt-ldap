@@ -1,9 +1,5 @@
-"""DBT configuration for LDAP transformations.
+"""FLEXT DBT LDAP Configuration.
 
-Provides configuration management for DBT LDAP projects using flext-core patterns.
-Integrates with flext-ldap for connection settings and flext-meltano for DBT execution.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
 

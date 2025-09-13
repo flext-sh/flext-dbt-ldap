@@ -1,11 +1,7 @@
-"""FLEXT DBT LDAP Macros - DBT macro utilities for LDAP transformations.
-
-Provides DBT macro utilities and helper functions for LDAP data transformations.
-Integrates with flext-ldap functions for DN parsing and timestamp formatting.
+"""FLEXT DBT LDAP Macros.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -16,56 +12,93 @@ from flext_ldap.utils import flext_ldap_validate_dn
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapDNParser:
-    """DN parser utilities for DBT LDAP macros."""
-
-    @staticmethod
-    def parse_dn_component(dn: str, component: str) -> str | None:
-        """Parse specific component from DN.
-
-        Args:
-            dn: Distinguished name to parse
-            component: Component to extract (cn, ou, dc, etc.)
-
-        Returns:
-            Component value or None if not found
-
-        """
-        try:
-            # Very simple DN parsing: split by commas, then by '='
-            parts = [p.strip() for p in dn.split(",") if "=" in p]
-            for part in parts:
-                key, value = part.split("=", 1)
-                if key.lower() == component.lower():
-                    return value
-            return None
-        except Exception:
-            logger.exception("Failed to parse DN component: %s", dn)
-            return None
-
-    @staticmethod
-    def get_parent_dn(dn: str) -> str | None:
-        """Get parent DN from a distinguished name.
-
-        Args:
-            dn: Distinguished name
-
-        Returns:
-            Parent DN or None if error
-
-        """
-        try:
-            parts = [p.strip() for p in dn.split(",") if p.strip()]
-            if len(parts) > 1:
-                return ",".join(parts[1:])
-            return None
-        except Exception:
-            logger.exception("Failed to get parent DN: %s", dn)
-            return None
-
-
 class FlextDbtLdapMacros:
-    """Main DBT LDAP macros collection."""
+    """Unified DBT LDAP macros collection with nested helpers."""
+
+    class _DNParser:
+        """DN parser utilities for DBT LDAP macros."""
+
+        @staticmethod
+        def parse_dn_component(dn: str, component: str) -> str | None:
+            """Parse specific component from DN.
+
+            Args:
+                dn: Distinguished name to parse
+                component: Component to extract (cn, ou, dc, etc.)
+
+            Returns:
+                Component value or None if not found
+
+            """
+            try:
+                # Very simple DN parsing: split by commas, then by '='
+                parts = [p.strip() for p in dn.split(",") if "=" in p]
+                for part in parts:
+                    key, value = part.split("=", 1)
+                    if key.lower() == component.lower():
+                        return value
+                return None
+            except Exception:
+                logger.exception("Failed to parse DN component: %s", dn)
+                return None
+
+        @staticmethod
+        def get_parent_dn(dn: str) -> str | None:
+            """Get parent DN from a distinguished name.
+
+            Args:
+                dn: Distinguished name
+
+            Returns:
+                Parent DN or None if error
+
+            """
+            try:
+                parts = [p.strip() for p in dn.split(",") if p.strip()]
+                if len(parts) > 1:
+                    return ",".join(parts[1:])
+                return None
+            except Exception:
+                logger.exception("Failed to get parent DN: %s", dn)
+                return None
+
+    class _TimestampConverter:
+        """Timestamp conversion utilities for DBT LDAP macros."""
+
+        @staticmethod
+        def convert_ldap_timestamp(timestamp: str) -> str | None:
+            """Convert LDAP timestamp to standard format.
+
+            Args:
+                timestamp: LDAP timestamp string
+
+            Returns:
+                ISO format timestamp or None if conversion fails
+
+            """
+            try:
+                # Basic passthrough; customize if needed
+                return timestamp
+            except Exception:
+                logger.exception("Error converting timestamp: %s", timestamp)
+                return None
+
+        @staticmethod
+        def extract_date_from_timestamp(timestamp: str) -> str | None:
+            """Extract date part from LDAP timestamp.
+
+            Args:
+                timestamp: LDAP timestamp string
+
+            Returns:
+                Date string (YYYY-MM-DD) or None if extraction fails
+
+            """
+            converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(timestamp)
+            if converted:
+                # Extract date part (assuming ISO format)
+                return converted.split("T")[0] if "T" in converted else converted[:10]
+            return None
 
     @staticmethod
     def extract_user_id_from_dn(dn: str) -> str | None:
@@ -80,11 +113,9 @@ class FlextDbtLdapMacros:
             User ID or None if not found
 
         """
-        parser = FlextDbtLdapDNParser()
-
         # Try different common user ID attributes
         for attr in ["uid", "cn", "samaccountname"]:
-            user_id = parser.parse_dn_component(dn, attr)
+            user_id = FlextDbtLdapMacros._DNParser.parse_dn_component(dn, attr)
             if user_id:
                 return user_id
 
@@ -103,8 +134,7 @@ class FlextDbtLdapMacros:
             Group name or None if not found
 
         """
-        parser = FlextDbtLdapDNParser()
-        return parser.parse_dn_component(dn, "cn")
+        return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, "cn")
 
     @staticmethod
     def normalize_ldap_attribute(value: object) -> str:
@@ -143,9 +173,32 @@ class FlextDbtLdapMacros:
         # Check if account is disabled (bit 1)
         return not bool(user_account_control & 0x0002)
 
+    @staticmethod
+    def parse_dn_component(dn: str, component: str) -> str | None:
+        """Parse specific component from DN.
 
-class FlextDbtLdapTimestampConverter:
-    """Timestamp conversion utilities for DBT LDAP macros."""
+        Args:
+            dn: Distinguished name to parse
+            component: Component to extract (cn, ou, dc, etc.)
+
+        Returns:
+            Component value or None if not found
+
+        """
+        return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, component)
+
+    @staticmethod
+    def get_parent_dn(dn: str) -> str | None:
+        """Get parent DN from a distinguished name.
+
+        Args:
+            dn: Distinguished name
+
+        Returns:
+            Parent DN or None if error
+
+        """
+        return FlextDbtLdapMacros._DNParser.get_parent_dn(dn)
 
     @staticmethod
     def convert_ldap_timestamp(timestamp: str) -> str | None:
@@ -158,12 +211,7 @@ class FlextDbtLdapTimestampConverter:
             ISO format timestamp or None if conversion fails
 
         """
-        try:
-            # Basic passthrough; customize if needed
-            return timestamp
-        except Exception:
-            logger.exception("Error converting timestamp: %s", timestamp)
-            return None
+        return FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(timestamp)
 
     @staticmethod
     def extract_date_from_timestamp(timestamp: str) -> str | None:
@@ -176,25 +224,19 @@ class FlextDbtLdapTimestampConverter:
             Date string (YYYY-MM-DD) or None if extraction fails
 
         """
-        converted = FlextDbtLdapTimestampConverter.convert_ldap_timestamp(timestamp)
-        if converted:
-            # Extract date part (assuming ISO format)
-            return converted.split("T")[0] if "T" in converted else converted[:10]
-        return None
+        return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(timestamp)
 
 
 # Backward compatibility aliases
-DNParser = FlextDbtLdapDNParser
+DNParser = FlextDbtLdapMacros._DNParser
 LDAPMacros = FlextDbtLdapMacros
-TimestampConverter = FlextDbtLdapTimestampConverter
+TimestampConverter = FlextDbtLdapMacros._TimestampConverter
 
 
 # Re-export for backwards compatibility
 __all__: FlextTypes.Core.StringList = [
     "DNParser",
-    "FlextDbtLdapDNParser",
     "FlextDbtLdapMacros",
-    "FlextDbtLdapTimestampConverter",
     "LDAPMacros",
     "TimestampConverter",
     "flext_ldap_validate_dn",
