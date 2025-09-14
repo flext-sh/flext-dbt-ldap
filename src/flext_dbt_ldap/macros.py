@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import FlextLogger, FlextTypes
-from flext_ldap.utils import flext_ldap_validate_dn
 
 logger = FlextLogger(__name__)
 
@@ -94,7 +93,9 @@ class FlextDbtLdapMacros:
                 Date string (YYYY-MM-DD) or None if extraction fails
 
             """
-            converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(timestamp)
+            converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(
+                timestamp
+            )
             if converted:
                 # Extract date part (assuming ISO format)
                 return converted.split("T")[0] if "T" in converted else converted[:10]
@@ -224,7 +225,9 @@ class FlextDbtLdapMacros:
             Date string (YYYY-MM-DD) or None if extraction fails
 
         """
-        return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(timestamp)
+        return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(
+            timestamp
+        )
 
 
 # Backward compatibility aliases
@@ -239,5 +242,4 @@ __all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapMacros",
     "LDAPMacros",
     "TimestampConverter",
-    "flext_ldap_validate_dn",
 ]
