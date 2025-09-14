@@ -40,7 +40,9 @@ class FlextDbtLdapModels:
         modified_date: str | None = None
 
         @classmethod
-        def from_ldap_entry(cls, entry: FlextLDAPEntities) -> FlextDbtLdapModels.UserDimension:
+        def from_ldap_entry(
+            cls, entry: FlextLDAPEntities
+        ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, FlextTypes.Core.StringList]
             raw = entry.attributes
@@ -64,7 +66,9 @@ class FlextDbtLdapModels:
                 department=attrs.get("department", [None])[0]
                 if "department" in attrs
                 else None,
-                manager_dn=attrs.get("manager", [None])[0] if "manager" in attrs else None,
+                manager_dn=attrs.get("manager", [None])[0]
+                if "manager" in attrs
+                else None,
                 employee_number=attrs.get("employeeNumber", [None])[0]
                 if "employeeNumber" in attrs
                 else None,
@@ -121,7 +125,9 @@ class FlextDbtLdapModels:
         modified_date: str | None = None
 
         @classmethod
-        def from_ldap_entry(cls, entry: FlextLDAPEntities) -> FlextDbtLdapModels.GroupDimension:
+        def from_ldap_entry(
+            cls, entry: FlextLDAPEntities
+        ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
             attrs: dict[str, FlextTypes.Core.StringList] = {}
@@ -242,7 +248,9 @@ class FlextDbtLdapModels:
                 # Filter user entries
                 if self._is_user_entry(entry):
                     try:
-                        user_dim = FlextDbtLdapModels.UserDimension.from_ldap_entry(entry)
+                        user_dim = FlextDbtLdapModels.UserDimension.from_ldap_entry(
+                            entry
+                        )
                         user_dims.append(user_dim)
                     except Exception:
                         logger.exception("Failed to transform user entry: %s", entry.dn)
@@ -264,7 +272,9 @@ class FlextDbtLdapModels:
                 List of group dimension models
 
             """
-            logger.info("Transforming %d LDAP entries to group dimensions", len(entries))
+            logger.info(
+                "Transforming %d LDAP entries to group dimensions", len(entries)
+            )
 
             group_dims = []
 
@@ -272,10 +282,14 @@ class FlextDbtLdapModels:
                 # Filter group entries
                 if self._is_group_entry(entry):
                     try:
-                        group_dim = FlextDbtLdapModels.GroupDimension.from_ldap_entry(entry)
+                        group_dim = FlextDbtLdapModels.GroupDimension.from_ldap_entry(
+                            entry
+                        )
                         group_dims.append(group_dim)
                     except Exception:
-                        logger.exception("Failed to transform group entry: %s", entry.dn)
+                        logger.exception(
+                            "Failed to transform group entry: %s", entry.dn
+                        )
                         continue
 
             logger.info("Transformed %d group dimensions", len(group_dims))
@@ -294,7 +308,9 @@ class FlextDbtLdapModels:
                 List of membership fact models
 
             """
-            logger.info("Transforming %d LDAP entries to membership facts", len(entries))
+            logger.info(
+                "Transforming %d LDAP entries to membership facts", len(entries)
+            )
 
             membership_facts = []
 
@@ -343,7 +359,12 @@ class FlextDbtLdapModels:
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
                     object_classes = [str(oc_val)]
-            group_classes = ["group", "groupOfNames", "groupOfUniqueNames", "posixGroup"]
+            group_classes = [
+                "group",
+                "groupOfNames",
+                "groupOfUniqueNames",
+                "posixGroup",
+            ]
             return any(cls in object_classes for cls in group_classes)
 
         def _extract_group_memberships(

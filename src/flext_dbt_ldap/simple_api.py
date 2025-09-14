@@ -128,7 +128,9 @@ class FlextDbtLdapSimpleApi:
           FlextDbtLdapUserDimension instance
 
         """
-        logger.debug("Creating user dimension: user_id=%s, name=%s", user_id, common_name)
+        logger.debug(
+            "Creating user dimension: user_id=%s, name=%s", user_id, common_name
+        )
 
         user = FlextDbtLdapUserDimension(
             user_id=user_id,

@@ -13,7 +13,6 @@ from flext_core import (
     FlextResult,
 )
 
-# Local FLEXT DBT LDAP imports
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_exceptions import (
@@ -44,19 +43,14 @@ from flext_dbt_ldap.type_aliases import (
 from flext_dbt_ldap.version_info import __version__, __version_info__
 
 __all__ = [
-    # Type aliases
     "DomainBaseModel",
-    # Core imports
     "FlextConfig",
     "FlextDbtLdap",
-    # Exceptions
     "FlextDbtLdapAuthenticationError",
-    # DBT LDAP components
     "FlextDbtLdapClient",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
-    # Deprecation system
     "FlextDbtLdapDeprecationWarning",
     "FlextDbtLdapError",
     "FlextDbtLdapMacroError",
@@ -69,11 +63,9 @@ __all__ = [
     "FlextFields",
     "FlextModels",
     "FlextResult",
-    # Version info
     "__version__",
     "__version_info__",
     "_show_deprecation_warning",
-    # LDAP integration
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",
 ]

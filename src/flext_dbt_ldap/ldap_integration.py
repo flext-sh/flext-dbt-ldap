@@ -32,9 +32,11 @@ class FlextDbtLdapIntegration:
             logger.info("Processing LDAP entries for DBT using flext-ldap delegation")
 
             # For DBT compatibility, handle DataFrame-like objects
-            if hasattr(df, "__len__"):
+            if hasattr(df, "__len__") and callable(getattr(df, "__len__", None)):
                 entry_count = len(df)
-                logger.info("Processing %d LDAP entries via flext-ldap API", entry_count)
+                logger.info(
+                    "Processing %d LDAP entries via flext-ldap API", entry_count
+                )
 
                 # Placeholder: return input unchanged (DBT Python model compatibility)
                 logger.debug("Returning original dataframe after no-op processing")
@@ -60,12 +62,16 @@ class FlextDbtLdapIntegration:
 
         """
         try:
-            logger.info("Validating LDAP data quality for DBT using flext-ldap delegation")
+            logger.info(
+                "Validating LDAP data quality for DBT using flext-ldap delegation"
+            )
 
             # For DBT compatibility, handle DataFrame-like objects
-            if hasattr(df, "__len__"):
+            if hasattr(df, "__len__") and callable(getattr(df, "__len__", None)):
                 entry_count = len(df)
-                logger.info("Validating %d LDAP entries via flext-ldap API", entry_count)
+                logger.info(
+                    "Validating %d LDAP entries via flext-ldap API", entry_count
+                )
                 # Minimal quality metrics without external API dependency
                 return {
                     "total_entries": entry_count,
