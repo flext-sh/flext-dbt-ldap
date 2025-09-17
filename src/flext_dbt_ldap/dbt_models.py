@@ -8,11 +8,11 @@ from __future__ import annotations
 
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
 from flext_ldap import (
-    FlextLDAPCreateUserRequest,
-    FlextLDAPDistinguishedName,
-    FlextLDAPEntities,
-    FlextLDAPGroup,
-    FlextLDAPUser,
+    FlextLdapCreateUserRequest,
+    FlextLdapDistinguishedName,
+    FlextLdapEntities,
+    FlextLdapGroup,
+    FlextLdapUser,
 )
 
 logger = FlextLogger(__name__)
@@ -41,7 +41,7 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLDAPEntities
+            cls, entry: FlextLdapEntities
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, FlextTypes.Core.StringList]
@@ -126,7 +126,7 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLDAPEntities
+            cls, entry: FlextLdapEntities
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
@@ -229,7 +229,7 @@ class FlextDbtLdapModels:
 
         def transform_users(
             self,
-            entries: list[FlextLDAPEntities],
+            entries: list[FlextLdapEntities],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions.
 
@@ -261,7 +261,7 @@ class FlextDbtLdapModels:
 
         def transform_groups(
             self,
-            entries: list[FlextLDAPEntities],
+            entries: list[FlextLdapEntities],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions.
 
@@ -297,7 +297,7 @@ class FlextDbtLdapModels:
 
         def transform_memberships(
             self,
-            entries: list[FlextLDAPEntities],
+            entries: list[FlextLdapEntities],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts.
 
@@ -336,7 +336,7 @@ class FlextDbtLdapModels:
             logger.info("Transformed %d membership facts", len(membership_facts))
             return membership_facts
 
-        def _is_user_entry(self, entry: FlextLDAPEntities) -> bool:
+        def _is_user_entry(self, entry: FlextLdapEntities) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
             object_classes: FlextTypes.Core.StringList = []
@@ -349,7 +349,7 @@ class FlextDbtLdapModels:
             user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
             return any(cls in object_classes for cls in user_classes)
 
-        def _is_group_entry(self, entry: FlextLDAPEntities) -> bool:
+        def _is_group_entry(self, entry: FlextLdapEntities) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
             object_classes: FlextTypes.Core.StringList = []
@@ -369,7 +369,7 @@ class FlextDbtLdapModels:
 
         def _extract_group_memberships(
             self,
-            group_entry: FlextLDAPEntities,
+            group_entry: FlextLdapEntities,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships = []
@@ -401,7 +401,7 @@ class FlextDbtLdapModels:
 
         def _extract_user_memberships(
             self,
-            user_entry: FlextLDAPEntities,
+            user_entry: FlextLdapEntities,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships = []
@@ -439,11 +439,11 @@ LDAPTransformer = FlextDbtLdapModels.Transformer
 __all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapModels",
     # Re-exports from flext-ldap for convenience
-    "FlextLDAPCreateUserRequest",
-    "FlextLDAPDistinguishedName",
-    "FlextLDAPEntities",
-    "FlextLDAPGroup",
-    "FlextLDAPUser",
+    "FlextLdapCreateUserRequest",
+    "FlextLdapDistinguishedName",
+    "FlextLdapEntities",
+    "FlextLdapGroup",
+    "FlextLdapUser",
     # Backward compatibility
     "GroupDimension",
     "LDAPTransformer",

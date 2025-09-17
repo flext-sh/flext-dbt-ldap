@@ -13,10 +13,9 @@ import asyncio
 from pathlib import Path
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
-from flext_ldap import FlextLDAPApi, FlextLDAPEntities
-from flext_meltano import FlextMeltanoService
-
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
+from flext_ldap import FlextLdapApi, FlextLdapEntities
+from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
 
@@ -40,7 +39,7 @@ class FlextDbtLdapClient:
         """
         self.config = config or FlextDbtLdapConfig()
         # Precisely type the LDAP API to enable method access
-        self._ldap_api: FlextLDAPApi = FlextLDAPApi()
+        self._ldap_api: FlextLdapApi = FlextLdapApi()
         self._dbt_manager: FlextMeltanoService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
@@ -57,7 +56,7 @@ class FlextDbtLdapClient:
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
         attributes: FlextTypes.Core.StringList | None = None,
-    ) -> FlextResult[list[FlextLDAPEntities]]:
+    ) -> FlextResult[list[FlextLdapEntities]]:
         """Extract LDAP entries for DBT processing.
 
         Args:
@@ -87,19 +86,19 @@ class FlextDbtLdapClient:
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error)
-                return FlextResult[list[FlextLDAPEntities]].fail(
+                return FlextResult[list[FlextLdapEntities]].fail(
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return FlextResult[list[FlextLDAPEntities]].fail(
+            return FlextResult[list[FlextLdapEntities]].fail(
                 f"LDAP extraction error: {e}",
             )
 
     def validate_ldap_data(
         self,
-        entries: list[FlextLDAPEntities],
+        entries: list[FlextLdapEntities],
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Validate LDAP data quality for DBT processing.
 
@@ -151,7 +150,7 @@ class FlextDbtLdapClient:
 
     def transform_with_dbt(
         self,
-        entries: list[FlextLDAPEntities],
+        entries: list[FlextLdapEntities],
         model_names: FlextTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Transform LDAP data using DBT models.
@@ -242,7 +241,7 @@ class FlextDbtLdapClient:
 
     def _prepare_ldap_data_for_dbt(
         self,
-        entries: list[FlextLDAPEntities],
+        entries: list[FlextLdapEntities],
     ) -> dict[str, list[FlextTypes.Core.Dict]]:
         """Prepare LDAP entries for DBT processing.
 
@@ -272,7 +271,7 @@ class FlextDbtLdapClient:
         )
         return prepared_data
 
-    def _matches_schema(self, entry: FlextLDAPEntities, schema_name: str) -> bool:
+    def _matches_schema(self, entry: FlextLdapEntities, schema_name: str) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes = entry.object_classes
         schema_mapping = {
@@ -283,7 +282,7 @@ class FlextDbtLdapClient:
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
 
-    def _map_entry_attributes(self, entry: FlextLDAPEntities) -> FlextTypes.Core.Dict:
+    def _map_entry_attributes(self, entry: FlextLdapEntities) -> FlextTypes.Core.Dict:
         """Map LDAP entry attributes using configuration mapping."""
         mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
@@ -318,10 +317,10 @@ class FlextDbtLdapClient:
         base_dn: str,
         search_filter: str,
         attributes: FlextTypes.Core.StringList | None,
-    ) -> FlextResult[list[FlextLDAPEntities]]:
+    ) -> FlextResult[list[FlextLdapEntities]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
-            api = FlextLDAPApi()
+            api = FlextLdapApi()
             # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
             return asyncio.run(
                 api.search(
@@ -332,7 +331,7 @@ class FlextDbtLdapClient:
                 )
             )
         except Exception as e:
-            return FlextResult[list[FlextLDAPEntities]].fail(f"LDAP search failed: {e}")
+            return FlextResult[list[FlextLdapEntities]].fail(f"LDAP search failed: {e}")
 
 
 __all__: FlextTypes.Core.StringList = [

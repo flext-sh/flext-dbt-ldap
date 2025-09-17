@@ -7,9 +7,10 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextConfig, FlextLogger, FlextTypes
-from flext_ldap import FlextLDAPConnectionConfig
 from flext_meltano.config import FlextMeltanoConfig
+
+from flext_core import FlextConfig, FlextLogger, FlextTypes
+from flext_ldap import FlextLdapConnectionConfig
 
 logger = FlextLogger(__name__)
 
@@ -55,9 +56,9 @@ class FlextDbtLdapConfig(FlextConfig):
     required_attributes: ClassVar[FlextTypes.Core.StringList] = ["cn", "objectClass"]
     validate_dns: bool = True
 
-    def get_ldap_config(self) -> FlextLDAPConnectionConfig:
+    def get_ldap_config(self) -> FlextLdapConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
-        return FlextLDAPConnectionConfig(
+        return FlextLdapConnectionConfig(
             server=self.ldap_host,
             port=self.ldap_port,
             base_dn=self.ldap_base_dn,

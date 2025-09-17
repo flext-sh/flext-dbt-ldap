@@ -6,11 +6,10 @@ High-level service classes for DBT LDAP operations.
 from __future__ import annotations
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
-from flext_meltano import FlextDbt, FlextMeltanoTypeAdapters
-
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.models import FlextDbtLdapTransformer
+from flext_meltano import FlextDbt, FlextMeltanoTypeAdapters
 
 logger = FlextLogger(__name__)
 

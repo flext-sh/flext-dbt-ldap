@@ -8,11 +8,9 @@ from __future__ import annotations
 
 from flext_core import (
     FlextConfig,
-    FlextFields,
     FlextModels,
     FlextResult,
 )
-
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_exceptions import (
@@ -60,7 +58,6 @@ __all__ = [
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapValidationError",
-    "FlextFields",
     "FlextModels",
     "FlextResult",
     "__version__",
