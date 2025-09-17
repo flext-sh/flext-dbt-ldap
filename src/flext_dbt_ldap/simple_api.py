@@ -6,7 +6,6 @@ Simple API for FLEXT DBT LDAP operations.
 from __future__ import annotations
 
 from flext_core import FlextLogger, FlextTypes
-
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService

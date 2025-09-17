@@ -15,6 +15,7 @@ from subprocess import CompletedProcess
 import docker
 import psycopg
 import pytest
+
 from flext_core import FlextLogger, FlextTypes
 
 logger = FlextLogger(__name__)
