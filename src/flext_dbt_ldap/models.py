@@ -8,26 +8,29 @@ from __future__ import annotations
 
 from flext_core import FlextTypes
 from flext_dbt_ldap.dbt_models import (
-    FlextDbtLdapGroupDimension,
-    FlextDbtLdapMembershipFact,
-    FlextDbtLdapTransformer,
-    FlextDbtLdapUserDimension,
+    FlextDbtLdapModels,
     FlextLdapCreateUserRequest,
     FlextLdapDistinguishedName,
     FlextLdapEntities,
     FlextLdapGroup,
     FlextLdapUser,
+    GroupDimension,
+    LDAPTransformer,
+    MembershipFact,
+    UserDimension,
 )
 
-# Backward compatibility aliases
-GroupDimension = FlextDbtLdapGroupDimension
-LDAPTransformer = FlextDbtLdapTransformer
-UserDimension = FlextDbtLdapUserDimension
+# Backward compatibility aliases - now using correct imports
+FlextDbtLdapGroupDimension = GroupDimension
+FlextDbtLdapTransformer = LDAPTransformer
+FlextDbtLdapUserDimension = UserDimension
+FlextDbtLdapMembershipFact = MembershipFact
 
 # Re-export for backwards compatibility
 __all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapGroupDimension",
     "FlextDbtLdapMembershipFact",
+    "FlextDbtLdapModels",
     "FlextDbtLdapTransformer",
     "FlextDbtLdapUserDimension",
     "FlextLdapCreateUserRequest",
@@ -37,5 +40,6 @@ __all__: FlextTypes.Core.StringList = [
     "FlextLdapUser",
     "GroupDimension",
     "LDAPTransformer",
+    "MembershipFact",
     "UserDimension",
 ]

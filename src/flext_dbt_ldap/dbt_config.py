@@ -69,7 +69,7 @@ class FlextDbtLdapConfig(FlextConfig):
         """Get Meltano configuration for flext-meltano integration."""
         # Convert string to proper Environment string value
         # Map dbt_target values to FlextMeltanoConfig environment literal strings
-        environment_mapping = {
+        environment_mapping: dict[str, FlextTypes.Config.Environment] = {
             "dev": "development",
             "development": "development",
             "staging": "staging",
@@ -80,8 +80,7 @@ class FlextDbtLdapConfig(FlextConfig):
         }
 
         environment_value = environment_mapping.get(
-            self.dbt_target.lower(),
-            "development"
+            self.dbt_target.lower(), "development"
         )
 
         return FlextMeltanoConfig(
