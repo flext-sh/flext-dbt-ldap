@@ -5,6 +5,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import ClassVar
 
 from flext_meltano.config import FlextMeltanoConfig
@@ -66,9 +67,26 @@ class FlextDbtLdapConfig(FlextConfig):
 
     def get_meltano_config(self) -> FlextMeltanoConfig:
         """Get Meltano configuration for flext-meltano integration."""
+        # Convert string to proper Environment string value
+        # Map dbt_target values to FlextMeltanoConfig environment literal strings
+        environment_mapping = {
+            "dev": "development",
+            "development": "development",
+            "staging": "staging",
+            "prod": "production",
+            "production": "production",
+            "test": "test",
+            "local": "local",
+        }
+
+        environment_value = environment_mapping.get(
+            self.dbt_target.lower(),
+            "development"
+        )
+
         return FlextMeltanoConfig(
-            project_root=self.dbt_project_dir,
-            environment=self.dbt_target,
+            project_root=Path(self.dbt_project_dir),
+            environment=environment_value,
         )
 
     def get_ldap_quality_config(self) -> FlextTypes.Core.Dict:
