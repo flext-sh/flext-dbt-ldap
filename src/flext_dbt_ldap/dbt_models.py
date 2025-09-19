@@ -7,13 +7,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
-from flext_ldap import (
-    FlextLdapCreateUserRequest,
-    FlextLdapDistinguishedName,
-    FlextLdapEntities,
-    FlextLdapGroup,
-    FlextLdapUser,
-)
+from flext_ldap import FlextLdapEntities, FlextLdapModels
 
 logger = FlextLogger(__name__)
 
@@ -41,7 +35,8 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLdapEntities.Entry,
+            cls,
+            entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, FlextTypes.Core.StringList]
@@ -124,7 +119,8 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLdapEntities.Entry,
+            cls,
+            entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
@@ -269,7 +265,8 @@ class FlextDbtLdapModels:
 
             """
             logger.info(
-                "Transforming %d LDAP entries to group dimensions", len(entries),
+                "Transforming %d LDAP entries to group dimensions",
+                len(entries),
             )
 
             group_dims = []
@@ -284,7 +281,8 @@ class FlextDbtLdapModels:
                         group_dims.append(group_dim)
                     except Exception:
                         logger.exception(
-                            "Failed to transform group entry: %s", entry.dn,
+                            "Failed to transform group entry: %s",
+                            entry.dn,
                         )
                         continue
 
@@ -305,7 +303,8 @@ class FlextDbtLdapModels:
 
             """
             logger.info(
-                "Transforming %d LDAP entries to membership facts", len(entries),
+                "Transforming %d LDAP entries to membership facts",
+                len(entries),
             )
 
             membership_facts = []
@@ -430,12 +429,9 @@ LDAPTransformer = FlextDbtLdapModels.Transformer
 
 __all__: FlextTypes.Core.StringList = [
     "FlextDbtLdapModels",
-    # Re-exports from flext-ldap for convenience
-    "FlextLdapCreateUserRequest",
-    "FlextLdapDistinguishedName",
+    # Re-exports from flext-ldap for convenience - use unified class pattern
     "FlextLdapEntities",
-    "FlextLdapGroup",
-    "FlextLdapUser",
+    "FlextLdapModels",
     # Backward compatibility
     "GroupDimension",
     "LDAPTransformer",
