@@ -41,7 +41,7 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLdapEntities
+            cls, entry: FlextLdapEntities.Entry
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, FlextTypes.Core.StringList]
@@ -51,10 +51,8 @@ class FlextDbtLdapModels:
                 for k, v in raw.items():
                     if isinstance(v, list):
                         attrs[k] = [str(x) for x in v]
-                    elif v is None:
-                        attrs[k] = []
                     else:
-                        attrs[k] = [str(v)]
+                        attrs[k] = [str(v)] if v is not None else []
 
             return cls(
                 user_id=attrs.get("uid", [""])[0] if "uid" in attrs else "",
@@ -126,7 +124,7 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLdapEntities
+            cls, entry: FlextLdapEntities.Entry
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
@@ -135,10 +133,8 @@ class FlextDbtLdapModels:
                 for k, v in raw.items():
                     if isinstance(v, list):
                         attrs[k] = [str(x) for x in v]
-                    elif v is None:
-                        attrs[k] = []
                     else:
-                        attrs[k] = [str(v)]
+                        attrs[k] = [str(v)] if v is not None else []
 
             # Count members
             member_count = 0
@@ -229,7 +225,7 @@ class FlextDbtLdapModels:
 
         def transform_users(
             self,
-            entries: list[FlextLdapEntities],
+            entries: list[FlextLdapEntities.Entry],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions.
 
@@ -261,7 +257,7 @@ class FlextDbtLdapModels:
 
         def transform_groups(
             self,
-            entries: list[FlextLdapEntities],
+            entries: list[FlextLdapEntities.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions.
 
@@ -297,7 +293,7 @@ class FlextDbtLdapModels:
 
         def transform_memberships(
             self,
-            entries: list[FlextLdapEntities],
+            entries: list[FlextLdapEntities.Entry],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts.
 
@@ -336,7 +332,7 @@ class FlextDbtLdapModels:
             logger.info("Transformed %d membership facts", len(membership_facts))
             return membership_facts
 
-        def _is_user_entry(self, entry: FlextLdapEntities) -> bool:
+        def _is_user_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
             object_classes: FlextTypes.Core.StringList = []
@@ -349,7 +345,7 @@ class FlextDbtLdapModels:
             user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
             return any(cls in object_classes for cls in user_classes)
 
-        def _is_group_entry(self, entry: FlextLdapEntities) -> bool:
+        def _is_group_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
             object_classes: FlextTypes.Core.StringList = []
@@ -369,7 +365,7 @@ class FlextDbtLdapModels:
 
         def _extract_group_memberships(
             self,
-            group_entry: FlextLdapEntities,
+            group_entry: FlextLdapEntities.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships = []
@@ -379,10 +375,8 @@ class FlextDbtLdapModels:
                 for k, v in raw.items():
                     if isinstance(v, list):
                         attrs[k] = [str(x) for x in v]
-                    elif v is None:
-                        attrs[k] = []
                     else:
-                        attrs[k] = [str(v)]
+                        attrs[k] = [str(v)] if v is not None else []
 
             # Handle different membership attribute types
             member_attrs = ["member", "uniqueMember", "memberUid"]
@@ -401,7 +395,7 @@ class FlextDbtLdapModels:
 
         def _extract_user_memberships(
             self,
-            user_entry: FlextLdapEntities,
+            user_entry: FlextLdapEntities.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships = []
@@ -411,10 +405,8 @@ class FlextDbtLdapModels:
                 for k, v in raw.items():
                     if isinstance(v, list):
                         attrs[k] = [str(x) for x in v]
-                    elif v is None:
-                        attrs[k] = []
                     else:
-                        attrs[k] = [str(v)]
+                        attrs[k] = [str(v)] if v is not None else []
 
             # Handle memberOf attribute
             if "memberOf" in attrs:

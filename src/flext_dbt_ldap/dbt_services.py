@@ -9,7 +9,7 @@ from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.models import FlextDbtLdapTransformer
-from flext_meltano import FlextDbt, FlextMeltanoTypeAdapters
+from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
 
@@ -26,7 +26,6 @@ class FlextDbtLdapService:
         config: FlextDbtLdapConfig | None = None,
         client: FlextDbtLdapClient | None = None,
         transformer: FlextDbtLdapTransformer | None = None,
-        project_path: str | None = None,
     ) -> None:
         """Initialize DBT LDAP service.
 
@@ -34,31 +33,14 @@ class FlextDbtLdapService:
             config: Configuration for operations
             client: DBT LDAP client (created if None)
             transformer: Data transformer (created if None)
-            project_path: Path to dBT project (uses config if None)
 
         """
         self.config = config or FlextDbtLdapConfig()
         self.client = client or FlextDbtLdapClient(self.config)
         self.transformer = transformer or FlextDbtLdapTransformer()
 
-        # Initialize FlextMeltano type adapters for modern API access
-        self._type_adapters = FlextMeltanoTypeAdapters()
-
-        # Create FlextDbt wrapper for dBT operations
-        default_path = getattr(self.config, "dbt_project_path", "./dbt")
-        dbt_project_path: str = (
-            project_path if project_path is not None else str(default_path)
-        )
-        dbt_result = self._type_adapters.create_flext_dbt(dbt_project_path)
-        if dbt_result.success:
-            self._flext_dbt: FlextDbt | None = dbt_result.value
-            logger.info(
-                "Initialized DBT LDAP service with FlextDbt wrapper",
-                project_path=dbt_project_path,
-            )
-        else:
-            logger.warning("Failed to create FlextDbt wrapper: %s", dbt_result.error)
-            self._flext_dbt = None
+        # Initialize FlextMeltano service for DBT operations
+        self._meltano_service = FlextMeltanoService(service_type="dbt")
 
         logger.info("Initialized DBT LDAP service")
 
@@ -286,17 +268,14 @@ class FlextDbtLdapService:
         try:
             logger.info("Validating warehouse data quality for models: %s", model_names)
 
-            if self._flext_dbt is None:
-                error_msg = "FlextDbt wrapper not initialized - cannot run tests"
-                logger.error(error_msg)
-                return FlextResult[FlextTypes.Core.Dict].fail(error_msg)
+            # FlextMeltano service is always initialized
 
             # Use modern FlextDbt API to run tests
-            test_result = self._flext_dbt.test_models()
+            test_result = self._meltano_service.run_models(model_names=None)
 
-            if test_result.success:
+            if test_result.is_success:
                 logger.info("Data quality validation completed successfully")
-                return FlextResult[FlextTypes.Core.Dict].ok(test_result.value)
+                return FlextResult[FlextTypes.Core.Dict].ok(test_result.unwrap())
 
             logger.error("Data quality validation failed: %s", test_result.error)
             return FlextResult[FlextTypes.Core.Dict].fail(
@@ -325,17 +304,14 @@ class FlextDbtLdapService:
         try:
             logger.info("Running dBT models: %s", model_names)
 
-            if self._flext_dbt is None:
-                error_msg = "FlextDbt wrapper not initialized - cannot run models"
-                logger.error(error_msg)
-                return FlextResult[FlextTypes.Core.Dict].fail(error_msg)
+            # FlextMeltano service is always initialized
 
             # Use modern FlextDbt API to run models
-            run_result = self._flext_dbt.run_models(model_names)
+            run_result = self._meltano_service.run_models(model_names)
 
-            if run_result.success:
+            if run_result.is_success:
                 logger.info("dBT models executed successfully")
-                return FlextResult[FlextTypes.Core.Dict].ok(run_result.value)
+                return FlextResult[FlextTypes.Core.Dict].ok(run_result.unwrap())
 
             logger.error("dBT model execution failed: %s", run_result.error)
             return FlextResult[FlextTypes.Core.Dict].fail(
