@@ -119,7 +119,9 @@ class FlextDbtLdapClient:
                 if getattr(entry, "dn", ""):
                     valid_dns += 1
                 attrs: dict[str, FlextTypes.Core.StringList] = getattr(
-                    entry, "attributes", {},
+                    entry,
+                    "attributes",
+                    {},
                 )
                 if all(attr in attrs and attrs[attr] for attr in required_attributes):
                     valid_entries += 1
@@ -283,7 +285,8 @@ class FlextDbtLdapClient:
         return any(cls in object_classes for cls in expected_classes)
 
     def _map_entry_attributes(
-        self, entry: FlextLdapEntities.Entry,
+        self,
+        entry: FlextLdapEntities.Entry,
     ) -> FlextTypes.Core.Dict:
         """Map LDAP entry attributes using configuration mapping."""
         mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
