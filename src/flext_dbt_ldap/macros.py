@@ -94,7 +94,7 @@ class FlextDbtLdapMacros:
 
             """
             converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(
-                timestamp
+                timestamp,
             )
             if converted:
                 # Extract date part (assuming ISO format)
@@ -226,7 +226,7 @@ class FlextDbtLdapMacros:
 
         """
         return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(
-            timestamp
+            timestamp,
         )
 
 
