@@ -14,7 +14,7 @@ from pathlib import Path
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
-from flext_ldap import FlextLdapApi, FlextLdapEntities
+from flext_ldap import FlextLdapApi, FlextLdapEntities, FlextLdapModels
 from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
@@ -56,7 +56,7 @@ class FlextDbtLdapClient:
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
         attributes: FlextTypes.Core.StringList | None = None,
-    ) -> FlextResult[list[FlextLdapEntities]]:
+    ) -> FlextResult[list[FlextLdapEntities.Entry]]:
         """Extract LDAP entries for DBT processing.
 
         Args:
@@ -86,19 +86,19 @@ class FlextDbtLdapClient:
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error)
-                return FlextResult[list[FlextLdapEntities]].fail(
+                return FlextResult[list[FlextLdapEntities.Entry]].fail(
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return FlextResult[list[FlextLdapEntities]].fail(
+            return FlextResult[list[FlextLdapEntities.Entry]].fail(
                 f"LDAP extraction error: {e}",
             )
 
     def validate_ldap_data(
         self,
-        entries: list[FlextLdapEntities],
+        entries: list[FlextLdapEntities.Entry],
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Validate LDAP data quality for DBT processing.
 
@@ -150,7 +150,7 @@ class FlextDbtLdapClient:
 
     def transform_with_dbt(
         self,
-        entries: list[FlextLdapEntities],
+        entries: list[FlextLdapEntities.Entry],
         model_names: FlextTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Transform LDAP data using DBT models.
@@ -241,7 +241,7 @@ class FlextDbtLdapClient:
 
     def _prepare_ldap_data_for_dbt(
         self,
-        entries: list[FlextLdapEntities],
+        entries: list[FlextLdapEntities.Entry],
     ) -> dict[str, list[FlextTypes.Core.Dict]]:
         """Prepare LDAP entries for DBT processing.
 
@@ -271,7 +271,7 @@ class FlextDbtLdapClient:
         )
         return prepared_data
 
-    def _matches_schema(self, entry: FlextLdapEntities, schema_name: str) -> bool:
+    def _matches_schema(self, entry: FlextLdapEntities.Entry, schema_name: str) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes = entry.object_classes
         schema_mapping = {
@@ -282,7 +282,9 @@ class FlextDbtLdapClient:
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
 
-    def _map_entry_attributes(self, entry: FlextLdapEntities) -> FlextTypes.Core.Dict:
+    def _map_entry_attributes(
+        self, entry: FlextLdapEntities.Entry
+    ) -> FlextTypes.Core.Dict:
         """Map LDAP entry attributes using configuration mapping."""
         mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
@@ -317,21 +319,42 @@ class FlextDbtLdapClient:
         base_dn: str,
         search_filter: str,
         attributes: FlextTypes.Core.StringList | None,
-    ) -> FlextResult[list[FlextLdapEntities]]:
+    ) -> FlextResult[list[FlextLdapEntities.Entry]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
             api = FlextLdapApi()
+
+            # Create SearchRequest object as required by flext-ldap API
+            search_request = FlextLdapModels.SearchRequest(
+                base_dn=base_dn,
+                filter_str=search_filter,
+                attributes=attributes or [],
+                scope="subtree",
+            )
+
             # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
-            return asyncio.run(
-                api.search(
-                    base_dn=base_dn,
-                    search_filter=search_filter,
-                    attributes=attributes,
-                    scope="subtree",
-                )
+            result = asyncio.run(api.search(search_request))
+
+            # Convert FlextLdapModels.Entry to FlextLdapEntities.Entry
+            if result.is_success and result.value:
+                # Convert models to entities
+                entities = []
+                for model_entry in result.value:
+                    entity = FlextLdapEntities.Entry(
+                        dn=model_entry.dn,
+                        attributes=model_entry.attributes,
+                        object_classes=getattr(model_entry, "object_classes", []),
+                    )
+                    entities.append(entity)
+                return FlextResult[list[FlextLdapEntities.Entry]].ok(entities)
+
+            return FlextResult[list[FlextLdapEntities.Entry]].fail(
+                result.error or "Search returned no results"
             )
         except Exception as e:
-            return FlextResult[list[FlextLdapEntities]].fail(f"LDAP search failed: {e}")
+            return FlextResult[list[FlextLdapEntities.Entry]].fail(
+                f"LDAP search failed: {e}"
+            )
 
 
 __all__: FlextTypes.Core.StringList = [
