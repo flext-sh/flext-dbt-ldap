@@ -41,7 +41,7 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLdapEntities.Entry
+            cls, entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, FlextTypes.Core.StringList]
@@ -124,7 +124,7 @@ class FlextDbtLdapModels:
 
         @classmethod
         def from_ldap_entry(
-            cls, entry: FlextLdapEntities.Entry
+            cls, entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
@@ -245,7 +245,7 @@ class FlextDbtLdapModels:
                 if self._is_user_entry(entry):
                     try:
                         user_dim = FlextDbtLdapModels.UserDimension.from_ldap_entry(
-                            entry
+                            entry,
                         )
                         user_dims.append(user_dim)
                     except Exception:
@@ -269,7 +269,7 @@ class FlextDbtLdapModels:
 
             """
             logger.info(
-                "Transforming %d LDAP entries to group dimensions", len(entries)
+                "Transforming %d LDAP entries to group dimensions", len(entries),
             )
 
             group_dims = []
@@ -279,12 +279,12 @@ class FlextDbtLdapModels:
                 if self._is_group_entry(entry):
                     try:
                         group_dim = FlextDbtLdapModels.GroupDimension.from_ldap_entry(
-                            entry
+                            entry,
                         )
                         group_dims.append(group_dim)
                     except Exception:
                         logger.exception(
-                            "Failed to transform group entry: %s", entry.dn
+                            "Failed to transform group entry: %s", entry.dn,
                         )
                         continue
 
@@ -305,7 +305,7 @@ class FlextDbtLdapModels:
 
             """
             logger.info(
-                "Transforming %d LDAP entries to membership facts", len(entries)
+                "Transforming %d LDAP entries to membership facts", len(entries),
             )
 
             membership_facts = []

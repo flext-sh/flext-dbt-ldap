@@ -209,7 +209,7 @@ def count_rows(conn: object, schema: str, table: str) -> int:
 
 
 def get_column_names(
-    conn: object, schema: str, table: str
+    conn: object, schema: str, table: str,
 ) -> FlextTypes.Core.StringList:
     """Get column names for table."""
     with conn.cursor() as cur:

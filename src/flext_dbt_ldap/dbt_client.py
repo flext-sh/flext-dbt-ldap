@@ -119,7 +119,7 @@ class FlextDbtLdapClient:
                 if getattr(entry, "dn", ""):
                     valid_dns += 1
                 attrs: dict[str, FlextTypes.Core.StringList] = getattr(
-                    entry, "attributes", {}
+                    entry, "attributes", {},
                 )
                 if all(attr in attrs and attrs[attr] for attr in required_attributes):
                     valid_entries += 1
@@ -215,14 +215,14 @@ class FlextDbtLdapClient:
         )
         if extract_result.is_failure:
             return FlextResult[FlextTypes.Core.Dict].fail(
-                extract_result.error or "LDAP extraction failed"
+                extract_result.error or "LDAP extraction failed",
             )
         entries = extract_result.value or []
         # Step 2: Validate data quality
         validate_result = self.validate_ldap_data(entries)
         if validate_result.is_failure:
             return FlextResult[FlextTypes.Core.Dict].fail(
-                validate_result.error or "LDAP validation failed"
+                validate_result.error or "LDAP validation failed",
             )
         # Step 3: Transform with DBT
         transform_result = self.transform_with_dbt(entries, model_names)
@@ -283,7 +283,7 @@ class FlextDbtLdapClient:
         return any(cls in object_classes for cls in expected_classes)
 
     def _map_entry_attributes(
-        self, entry: FlextLdapEntities.Entry
+        self, entry: FlextLdapEntities.Entry,
     ) -> FlextTypes.Core.Dict:
         """Map LDAP entry attributes using configuration mapping."""
         mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
@@ -349,11 +349,11 @@ class FlextDbtLdapClient:
                 return FlextResult[list[FlextLdapEntities.Entry]].ok(entities)
 
             return FlextResult[list[FlextLdapEntities.Entry]].fail(
-                result.error or "Search returned no results"
+                result.error or "Search returned no results",
             )
         except Exception as e:
             return FlextResult[list[FlextLdapEntities.Entry]].fail(
-                f"LDAP search failed: {e}"
+                f"LDAP search failed: {e}",
             )
 
 

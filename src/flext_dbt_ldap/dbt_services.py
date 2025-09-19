@@ -249,7 +249,7 @@ class FlextDbtLdapService:
             len(successful_syncs),
         )
         return FlextResult[FlextTypes.Core.Dict].fail(
-            "Some components failed in full sync"
+            "Some components failed in full sync",
         )
 
     def validate_warehouse_data_quality(
@@ -279,13 +279,13 @@ class FlextDbtLdapService:
 
             logger.error("Data quality validation failed: %s", test_result.error)
             return FlextResult[FlextTypes.Core.Dict].fail(
-                test_result.error or "dBT tests failed"
+                test_result.error or "dBT tests failed",
             )
 
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
             return FlextResult[FlextTypes.Core.Dict].fail(
-                f"Data quality validation error: {e}"
+                f"Data quality validation error: {e}",
             )
 
     def run_dbt_models(
@@ -315,13 +315,13 @@ class FlextDbtLdapService:
 
             logger.error("dBT model execution failed: %s", run_result.error)
             return FlextResult[FlextTypes.Core.Dict].fail(
-                run_result.error or "dBT model execution failed"
+                run_result.error or "dBT model execution failed",
             )
 
         except Exception as e:
             logger.exception("Unexpected error during dBT model execution")
             return FlextResult[FlextTypes.Core.Dict].fail(
-                f"dBT model execution error: {e}"
+                f"dBT model execution error: {e}",
             )
 
     def generate_analytics_report(
@@ -362,7 +362,7 @@ class FlextDbtLdapService:
         except Exception as e:
             logger.exception("Unexpected error during report generation")
             return FlextResult[FlextTypes.Core.Dict].fail(
-                f"Report generation error: {e}"
+                f"Report generation error: {e}",
             )
 
 
