@@ -1,5 +1,8 @@
 """FLEXT DBT LDAP Simple API.
 
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+
 Simple API for FLEXT DBT LDAP operations.
 """
 
