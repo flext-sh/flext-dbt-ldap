@@ -7,11 +7,12 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, Final
 
 from flext_meltano.config import FlextMeltanoConfig
+from pydantic import Field
 
-from flext_core import FlextConfig, FlextLogger, FlextTypes
+from flext_core import FlextConfig, FlextConstants, FlextLogger, FlextTypes
 from flext_ldap import FlextLdapModels
 
 logger = FlextLogger(__name__)
@@ -26,8 +27,8 @@ class FlextDbtLdapLoggingConstants:
     """
 
     # Default Logging Levels for DBT LDAP
-    DEFAULT_LEVEL: Final[str] = FlextLoggingConstants.DEFAULT_LEVEL
-    AUDIT_LOG_LEVEL: Final[str] = FlextLoggingConstants.AUDIT_LOG_LEVEL
+    DEFAULT_LEVEL: Final[str] = FlextConstants.Logging.DEFAULT_LEVEL
+    AUDIT_LOG_LEVEL: Final[str] = FlextConstants.Logging.INFO
 
     # DBT Operation Logging
     LOG_DBT_OPERATIONS: Final[bool] = True
