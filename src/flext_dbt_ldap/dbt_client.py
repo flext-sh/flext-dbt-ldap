@@ -14,7 +14,7 @@ from pathlib import Path
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
-from flext_ldap import FlextLdapApi, FlextLdapEntities, FlextLdapModels
+from flext_ldap import FlextLdapClient, FlextLdapEntities, FlextLdapModels
 from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
@@ -39,7 +39,7 @@ class FlextDbtLdapClient:
         """
         self.config = config or FlextDbtLdapConfig()
         # Precisely type the LDAP API to enable method access
-        self._ldap_api: FlextLdapApi = FlextLdapApi()
+        self._ldap_api: FlextLdapClient = FlextLdapClient()
         self._dbt_manager: FlextMeltanoService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
@@ -325,7 +325,7 @@ class FlextDbtLdapClient:
     ) -> FlextResult[list[FlextLdapEntities.Entry]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
-            api = FlextLdapApi()
+            api = FlextLdapClient()
 
             # Create SearchRequest object as required by flext-ldap API
             search_request = FlextLdapModels.SearchRequest(
