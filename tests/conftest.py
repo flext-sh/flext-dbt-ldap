@@ -567,7 +567,7 @@ def mock_ldap_dbt_adapter() -> object:
             ldap_data: list[FlextTypes.Core.Dict],
         ) -> list[FlextTypes.Core.Dict]:
             """Transform LDAP data to relational format."""
-            transformed = []
+            transformed: list[dict[str, object]] = []
             for entry in ldap_data:
                 flat_entry = {
                     "dn": entry["dn"],
