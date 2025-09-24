@@ -343,7 +343,7 @@ class FlextDbtLdapClient:
             # Convert FlextLdapModels.Entry to FlextLdapModels.Entry
             if result.is_success and result.value:
                 # Convert models to entities
-                entities = []
+                entities: list[FlextLdapModels.Entry] = []
                 for model_entry in result.value:
                     entity = FlextLdapModels.Entry(
                         dn=model_entry.dn,
