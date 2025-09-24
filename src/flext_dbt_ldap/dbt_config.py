@@ -18,7 +18,7 @@ from flext_ldap import FlextLdapModels
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapLoggingConstants:
+class FlextDbtLdapLoggingConstants(FlextConstants):
     """DBT LDAP-specific logging constants for FLEXT DBT LDAP module.
 
     Provides domain-specific logging defaults, levels, and configuration
@@ -131,28 +131,28 @@ class FlextDbtLdapLoggingConstants:
     class EnvironmentOverrides:
         """Environment-specific DBT LDAP logging configuration."""
 
-        DEVELOPMENT = {
+        DEVELOPMENT: ClassVar[FlextTypes.Core.Dict] = {
             "log_dbt_sql": True,  # Log SQL in dev
             "log_ldap_queries": True,  # Log LDAP queries in dev
             "log_transformation_sql": True,  # Log transformation SQL in dev
             "audit_log_level": FlextConstants.Config.LogLevel.DEBUG,
         }
 
-        STAGING = {
+        STAGING: ClassVar[FlextTypes.Core.Dict] = {
             "log_dbt_sql": False,
             "log_ldap_queries": False,
             "log_transformation_sql": False,
             "audit_log_level": FlextConstants.Config.LogLevel.INFO,
         }
 
-        PRODUCTION = {
+        PRODUCTION: ClassVar[FlextTypes.Core.Dict] = {
             "log_dbt_sql": False,
             "log_ldap_queries": False,
             "log_transformation_sql": False,
             "audit_log_level": FlextConstants.Config.LogLevel.WARNING,
         }
 
-        TESTING = {
+        TESTING: ClassVar[FlextTypes.Core.Dict] = {
             "log_dbt_sql": True,  # Log SQL in testing
             "log_ldap_queries": True,  # Log LDAP queries in testing
             "log_transformation_sql": True,  # Log transformation SQL in testing
@@ -587,7 +587,7 @@ class FlextDbtLdapConfig(FlextConfig):
         description="Audit log file path",
     )
 
-    def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
+    def get_ldap_config(self: object) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
         return FlextLdapModels.ConnectionConfig(
             server=self.ldap_host,
@@ -596,7 +596,7 @@ class FlextDbtLdapConfig(FlextConfig):
             bind_password=self.ldap_bind_password,
         )
 
-    def get_meltano_config(self) -> FlextMeltanoConfig:
+    def get_meltano_config(self: object) -> FlextMeltanoConfig:
         """Get Meltano configuration for flext-meltano integration."""
         # Convert string to proper Environment string value
         # Map dbt_target values to FlextMeltanoConfig environment literal strings
@@ -620,7 +620,7 @@ class FlextDbtLdapConfig(FlextConfig):
             environment=environment_value,
         )
 
-    def get_ldap_quality_config(self) -> FlextTypes.Core.Dict:
+    def get_ldap_quality_config(self: object) -> FlextTypes.Core.Dict:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": self.min_quality_threshold,
@@ -628,7 +628,7 @@ class FlextDbtLdapConfig(FlextConfig):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> dict[str, object]:
+    def get_dbt_ldap_logging_config(self: object) -> FlextTypes.Core.Dict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,

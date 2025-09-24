@@ -38,7 +38,7 @@ class FlextDbtLdapService:
             transformer: Data transformer (created if None)
 
         """
-        self.config = config or FlextDbtLdapConfig()
+        self.config: dict[str, object] = config or FlextDbtLdapConfig()
         self.client = client or FlextDbtLdapClient(self.config)
         self.transformer = transformer or FlextDbtLdapTransformer()
 
@@ -205,7 +205,9 @@ class FlextDbtLdapService:
         sync_results: FlextTypes.Core.Dict = {}
 
         # Sync users
-        user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
+        user_result: FlextResult[object] = self.sync_users_to_warehouse(
+            search_base, incremental=incremental
+        )
         sync_results["users"] = (
             user_result.value
             if user_result.is_success
@@ -224,7 +226,9 @@ class FlextDbtLdapService:
         )
 
         # Sync memberships
-        membership_result = self.sync_memberships_to_warehouse(search_base)
+        membership_result: FlextResult[object] = self.sync_memberships_to_warehouse(
+            search_base
+        )
         sync_results["memberships"] = (
             membership_result.value
             if membership_result.is_success
@@ -274,7 +278,9 @@ class FlextDbtLdapService:
             # FlextMeltano service is always initialized
 
             # Use modern FlextDbt API to run tests
-            test_result = self._meltano_service.run_models(model_names=None)
+            test_result: FlextResult[object] = self._meltano_service.run_models(
+                model_names=None
+            )
 
             if test_result.is_success:
                 logger.info("Data quality validation completed successfully")
@@ -310,7 +316,9 @@ class FlextDbtLdapService:
             # FlextMeltano service is always initialized
 
             # Use modern FlextDbt API to run models
-            run_result = self._meltano_service.run_models(model_names)
+            run_result: FlextResult[object] = self._meltano_service.run_models(
+                model_names
+            )
 
             if run_result.is_success:
                 logger.info("dBT models executed successfully")

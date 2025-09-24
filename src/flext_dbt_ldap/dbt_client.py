@@ -37,14 +37,14 @@ class FlextDbtLdapClient:
             config: Configuration for LDAP and DBT operations
 
         """
-        self.config = config or FlextDbtLdapConfig()
+        self.config: dict[str, object] = config or FlextDbtLdapConfig()
         # Precisely type the LDAP API to enable method access
         self._ldap_api: FlextLdapClient = FlextLdapClient()
         self._dbt_manager: FlextMeltanoService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
     @property
-    def dbt_manager(self) -> FlextMeltanoService:
+    def dbt_manager(self: object) -> FlextMeltanoService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
             (Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None)
@@ -175,7 +175,7 @@ class FlextDbtLdapClient:
             _ = self._prepare_ldap_data_for_dbt(entries)
             # Use flext-meltano DBT manager for execution
             manager = self.dbt_manager
-            result = manager.run_models(model_names)
+            result: FlextResult[object] = manager.run_models(model_names)
             if result.is_success:
                 logger.info("DBT transformation completed successfully")
             else:
@@ -221,13 +221,15 @@ class FlextDbtLdapClient:
             )
         entries = extract_result.value or []
         # Step 2: Validate data quality
-        validate_result = self.validate_ldap_data(entries)
+        validate_result: FlextResult[object] = self.validate_ldap_data(entries)
         if validate_result.is_failure:
             return FlextResult[FlextTypes.Core.Dict].fail(
                 validate_result.error or "LDAP validation failed",
             )
         # Step 3: Transform with DBT
-        transform_result = self.transform_with_dbt(entries, model_names)
+        transform_result: FlextResult[object] = self.transform_with_dbt(
+            entries, model_names
+        )
         if transform_result.is_failure:
             return FlextResult[FlextTypes.Core.Dict].fail(
                 transform_result.error or "DBT transformation failed",
@@ -281,7 +283,7 @@ class FlextDbtLdapClient:
             "groups": ["group", "groupOfNames", "groupOfUniqueNames"],
             "org_units": ["organizationalUnit", "organization"],
         }
-        expected_classes = schema_mapping.get(schema_name, [])
+        expected_classes: list[object] = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
 
     def _map_entry_attributes(
@@ -336,7 +338,7 @@ class FlextDbtLdapClient:
             )
 
             # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
-            result = asyncio.run(api.search(search_request))
+            result: FlextResult[object] = asyncio.run(api.search(search_request))
 
             # Convert FlextLdapModels.Entry to FlextLdapModels.Entry
             if result.is_success and result.value:

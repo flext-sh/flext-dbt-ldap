@@ -54,7 +54,7 @@ class FlextDbtLdapSimpleApi:
         logger.info("Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port)
 
         # Support only known fields to satisfy strict typing
-        config = FlextDbtLdapConfig(
+        config: dict[str, object] = FlextDbtLdapConfig(
             ldap_host=ldap_host,
             ldap_port=ldap_port,
             ldap_base_dn=ldap_base_dn,
@@ -79,7 +79,9 @@ class FlextDbtLdapSimpleApi:
 
         """
         if config is None:
-            config = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config()
+            config: dict[str, object] = (
+                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config()
+            )
 
         logger.info("Creating DBT LDAP client")
         return FlextDbtLdapClient(config)
@@ -98,7 +100,9 @@ class FlextDbtLdapSimpleApi:
 
         """
         if config is None:
-            config = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config()
+            config: dict[str, object] = (
+                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config()
+            )
 
         logger.info("Creating DBT LDAP service")
         return FlextDbtLdapService(config)
@@ -220,7 +224,7 @@ class FlextDbtLdapSimpleApi:
         """
         logger.info("Creating simple DBT LDAP pipeline")
 
-        config = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
+        config: dict[str, object] = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
             ldap_host=ldap_host,
             ldap_port=ldap_port,
             ldap_base_dn=ldap_base_dn,
