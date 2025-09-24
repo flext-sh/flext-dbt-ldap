@@ -80,13 +80,13 @@ class FlextDbtLdapModels:
                 else None,
             )
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self: object) -> FlextResult[None]:
             """Validate user dimension business rules."""
             if not self.user_id or not self.common_name:
                 return FlextResult[None].fail("User ID and common name are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextTypes.Core.Dict:
+        def to_dbt_dict(self: object) -> FlextTypes.Core.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -158,7 +158,7 @@ class FlextDbtLdapModels:
                 else None,
             )
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self: object) -> FlextResult[None]:
             """Validate group dimension business rules."""
             if not self.group_id or not self.common_name:
                 return FlextResult[None].fail("Group ID and common name are required")
@@ -166,7 +166,7 @@ class FlextDbtLdapModels:
                 return FlextResult[None].fail("Member count cannot be negative")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextTypes.Core.Dict:
+        def to_dbt_dict(self: object) -> FlextTypes.Core.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -192,13 +192,13 @@ class FlextDbtLdapModels:
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self: object) -> FlextResult[None]:
             """Validate membership fact business rules."""
             if not self.user_dn or not self.group_dn:
                 return FlextResult[None].fail("User DN and Group DN are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextTypes.Core.Dict:
+        def to_dbt_dict(self: object) -> FlextTypes.Core.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -215,7 +215,7 @@ class FlextDbtLdapModels:
         Transforms LDAP entries into DBT-compatible data models.
         """
 
-        def __init__(self) -> None:
+        def __init__(self: object) -> None:
             """Initialize LDAP transformer."""
             logger.info("Initialized LDAP DBT transformer")
 
@@ -336,7 +336,7 @@ class FlextDbtLdapModels:
             raw = entry.attributes
             object_classes: FlextTypes.Core.StringList = []
             if isinstance(raw, dict):
-                oc_val = raw.get("objectClass", [])
+                oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
@@ -349,7 +349,7 @@ class FlextDbtLdapModels:
             raw = entry.attributes
             object_classes: FlextTypes.Core.StringList = []
             if isinstance(raw, dict):
-                oc_val = raw.get("objectClass", [])
+                oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
@@ -367,7 +367,7 @@ class FlextDbtLdapModels:
             group_entry: FlextLdapEntities.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
-            memberships = []
+            memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = group_entry.attributes
             attrs: dict[str, FlextTypes.Core.StringList] = {}
             if isinstance(raw, dict):
@@ -397,7 +397,7 @@ class FlextDbtLdapModels:
             user_entry: FlextLdapEntities.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
-            memberships = []
+            memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = user_entry.attributes
             attrs: dict[str, FlextTypes.Core.StringList] = {}
             if isinstance(raw, dict):

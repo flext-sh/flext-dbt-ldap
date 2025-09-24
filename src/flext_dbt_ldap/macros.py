@@ -231,15 +231,11 @@ class FlextDbtLdapMacros:
 
 
 # Backward compatibility aliases
-DNParser = FlextDbtLdapMacros._DNParser
 LDAPMacros = FlextDbtLdapMacros
-TimestampConverter = FlextDbtLdapMacros._TimestampConverter
 
 
 # Re-export for backwards compatibility
 __all__: FlextTypes.Core.StringList = [
-    "DNParser",
     "FlextDbtLdapMacros",
     "LDAPMacros",
-    "TimestampConverter",
 ]
