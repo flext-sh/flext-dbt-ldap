@@ -8,12 +8,19 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 import tempfile
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 
 from flext_core import FlextTypes
+
+# Add docker directory to path to import shared fixtures
+docker_dir = Path("/home/marlonsc/flext/docker")
+if str(docker_dir) not in sys.path:
+    sys.path.insert(0, str(docker_dir))
 
 
 # Test environment setup
@@ -31,6 +38,20 @@ def set_test_environment() -> Generator[None]:
     os.environ.pop("FLEXT_LOG_LEVEL", None)
     os.environ.pop("DBT_PROFILES_DIR", None)
     os.environ.pop("LDAP_TEST_MODE", None)
+
+
+# Shared LDAP container fixture
+@pytest.fixture(scope="session", autouse=True)
+def ensure_shared_docker_container(shared_ldap_container: object) -> None:
+    """Ensure shared Docker container is started for the test session.
+    
+    This fixture automatically starts the shared LDAP container if not running,
+    and ensures it's available for all tests in the session.
+    """
+    # Suppress unused parameter warning - fixture is used for side effects
+    _ = shared_ldap_container
+    # The shared_ldap_container fixture will be invoked automatically
+    # and will start/stop the container for the entire test session
 
 
 # dbt LDAP configuration fixtures
@@ -102,14 +123,14 @@ def dbt_ldap_project_config() -> FlextTypes.Core.Dict:
 
 # LDAP source fixtures
 @pytest.fixture
-def ldap_source_config() -> FlextTypes.Core.Dict:
-    """LDAP source configuration for testing."""
+def ldap_source_config(shared_ldap_config: dict) -> FlextTypes.Core.Dict:
+    """LDAP source configuration for testing using shared container."""
     return {
         "server": "localhost",
-        "port": 389,
-        "base_dn": "dc=test,dc=com",
-        "bind_dn": "cn=REDACTED_LDAP_BIND_PASSWORD,dc=test,dc=com",
-        "bind_password": "REDACTED_LDAP_BIND_PASSWORD_pass",
+        "port": 3390,  # Use shared container port
+        "base_dn": "dc=flext,dc=local",  # Use shared container domain
+        "bind_dn": "cn=REDACTED_LDAP_BIND_PASSWORD,dc=flext,dc=local",  # Use shared container REDACTED_LDAP_BIND_PASSWORD DN
+        "bind_password": "REDACTED_LDAP_BIND_PASSWORD123",  # Use shared container password
         "use_ssl": False,
         "use_tls": False,
         "timeout": 30,
@@ -119,14 +140,14 @@ def ldap_source_config() -> FlextTypes.Core.Dict:
 
 @pytest.fixture
 def sample_ldap_entries() -> list[FlextTypes.Core.Dict]:
-    """Sample LDAP entries for testing."""
+    """Sample LDAP entries for testing using shared container domain."""
     return [
         {
-            "dn": "cn=john.doe,ou=users,dc=test,dc=com",
+            "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
             "attributes": {
                 "cn": ["john.doe"],
                 "uid": ["jdoe"],
-                "mail": ["john.doe@test.com"],
+                "mail": ["john.doe@internal.invalid"],
                 "givenName": ["John"],
                 "sn": ["Doe"],
                 "employeeNumber": ["12345"],
@@ -137,11 +158,11 @@ def sample_ldap_entries() -> list[FlextTypes.Core.Dict]:
             },
         },
         {
-            "dn": "cn=jane.smith,ou=users,dc=test,dc=com",
+            "dn": "cn=jane.smith,ou=people,dc=flext,dc=local",
             "attributes": {
                 "cn": ["jane.smith"],
                 "uid": ["jsmith"],
-                "mail": ["jane.smith@test.com"],
+                "mail": ["jane.smith@internal.invalid"],
                 "givenName": ["Jane"],
                 "sn": ["Smith"],
                 "employeeNumber": ["12346"],
@@ -152,13 +173,13 @@ def sample_ldap_entries() -> list[FlextTypes.Core.Dict]:
             },
         },
         {
-            "dn": "cn=developers,ou=groups,dc=test,dc=com",
+            "dn": "cn=developers,ou=groups,dc=flext,dc=local",
             "attributes": {
                 "cn": ["developers"],
                 "description": ["Software Developers Group"],
                 "member": [
-                    "cn=john.doe,ou=users,dc=test,dc=com",
-                    "cn=bob.johnson,ou=users,dc=test,dc=com",
+                    "cn=john.doe,ou=people,dc=flext,dc=local",
+                    "cn=bob.johnson,ou=people,dc=flext,dc=local",
                 ],
                 "objectClass": ["groupOfNames"],
             },
@@ -489,13 +510,13 @@ def mock_ldap_dbt_adapter() -> object:
             _search_filter: str,
         ) -> list[FlextTypes.Core.Dict]:
             """Extract LDAP data for dbt processing."""
-            # Mock LDAP extraction
+            # Mock LDAP extraction using shared container domain
             return [
                 {
-                    "dn": "cn=john.doe,ou=users,dc=test,dc=com",
+                    "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
                     "attributes": {
                         "cn": "john.doe",
-                        "mail": "john.doe@test.com",
+                        "mail": "john.doe@internal.invalid",
                         "objectClass": "inetOrgPerson",
                     },
                     "extracted_at": "2023-01-01T12:00:00Z",
@@ -568,14 +589,14 @@ def mock_ldap_connection() -> object:
             _attributes: FlextTypes.Core.StringList | None = None,
         ) -> list[FlextTypes.Core.Dict]:
             """Search LDAP directory."""
-            # Mock search results
-            if "users" in base_dn:
+            # Mock search results using shared container domain
+            if "people" in base_dn or "users" in base_dn:
                 return [
                     {
-                        "dn": "cn=john.doe,ou=users,dc=test,dc=com",
+                        "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
                         "attributes": {
                             "cn": ["john.doe"],
-                            "mail": ["john.doe@test.com"],
+                            "mail": ["john.doe@internal.invalid"],
                             "objectClass": ["inetOrgPerson"],
                         },
                     },
@@ -583,10 +604,10 @@ def mock_ldap_connection() -> object:
             if "groups" in base_dn:
                 return [
                     {
-                        "dn": "cn=developers,ou=groups,dc=test,dc=com",
+                        "dn": "cn=developers,ou=groups,dc=flext,dc=local",
                         "attributes": {
                             "cn": ["developers"],
-                            "member": ["cn=john.doe,ou=users,dc=test,dc=com"],
+                            "member": ["cn=john.doe,ou=people,dc=flext,dc=local"],
                             "objectClass": ["groupOfNames"],
                         },
                     },
