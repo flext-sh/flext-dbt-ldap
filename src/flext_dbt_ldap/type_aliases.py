@@ -17,7 +17,7 @@ FlextDbtLdap: type | None = None  # Will be set to platform when available
 FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
 
 # Legacy compatibility - use FlextModels directly
-DomainBaseModel = FlextModels.Config  # Domain base model
+DomainBaseModel = FlextModels.ArbitraryTypesModel  # Domain base model
 
 __all__ = [
     "DomainBaseModel",
