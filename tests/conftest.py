@@ -467,7 +467,7 @@ def ldap_validation_rules() -> FlextTypes.Core.Dict:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
-            "pattern": r"^(cn|uid)=.+,(ou|dc)=.+",
+            "pattern": r"^(Union[cn, uid])=.+,(Union[ou, dc])=.+",
             "description": "Valid Distinguished Name format",
         },
         "email_format": {
@@ -546,7 +546,7 @@ def mock_ldap_dbt_adapter() -> object:
 
         def validate_dn_format(self, dn: str) -> bool:
             """Validate DN format."""
-            pattern = r"^(cn|uid)=.+,(ou|dc)=.+"
+            pattern = r"^(Union[cn, uid])=.+,(Union[ou, dc])=.+"
             return bool(re.match(pattern, dn))
 
         def parse_ldap_attributes(
