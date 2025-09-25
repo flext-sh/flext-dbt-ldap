@@ -12,19 +12,19 @@ from collections.abc import Generator
 from pathlib import Path
 from subprocess import CompletedProcess
 
-import docker
 import psycopg
 import pytest
 
 from flext_core import FlextLogger, FlextTypes
+from flext_tests import FlextTestDocker
 
 logger = FlextLogger(__name__)
 
 
 @pytest.fixture(scope="session")
-def docker_client() -> docker.DockerClient:
-    """Get Docker client."""
-    return docker.from_env()
+def flext_docker() -> FlextTestDocker:
+    """Get FlextTestDocker unified management instance."""
+    return FlextTestDocker()
 
 
 @pytest.fixture(scope="session")
@@ -35,46 +35,23 @@ def project_root() -> Path:
 
 @pytest.fixture(scope="session")
 def postgres_container(
-    _docker_client: docker.DockerClient,
+    flext_docker: FlextTestDocker,
     project_root: Path,
 ) -> Generator[None]:
-    """Start PostgreSQL container for testing."""
+    """Start PostgreSQL container for testing using FlextTestDocker."""
     compose_file = project_root / "docker-compose.yml"
     # Start containers
-    logger.info("Starting PostgreSQL container...")
+    logger.info("Starting PostgreSQL container using FlextTestDocker...")
 
-    async def _run(
-        cmd_list: FlextTypes.Core.StringList,
-        cwd: str | None = None,
-        timeout_seconds: int = 120,
-    ) -> int:
-        process = await asyncio.create_subprocess_exec(
-            *cmd_list,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            cwd=cwd,
-        )
-        try:
-            await asyncio.wait_for(process.communicate(), timeout=timeout_seconds)
-        except TimeoutError:
-            process.kill()
-            await process.communicate()
-            raise
-        return process.returncode
-
-    asyncio.run(
-        _run(
-            [
-                "/usr/bin/docker-compose",
-                "-f",
-                str(compose_file),
-                "up",
-                "-d",
-                "postgres",
-            ],
-            cwd=str(project_root),
-        ),
+    # Use FlextTestDocker compose management instead of direct subprocess calls
+    start_result = flext_docker.start_compose_service(
+        str(compose_file),
+        "postgres",
+        wait_for_health=False,  # We'll handle readiness check manually below
     )
+
+    if start_result.is_failure:
+        pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
     # Wait for PostgreSQL to be ready
     max_retries = 30
     for i in range(max_retries):
@@ -95,14 +72,15 @@ def postgres_container(
             logger.info("Waiting for PostgreSQL... (%s/%s)", i + 1, max_retries)
             time.sleep(2)
     yield
-    # Stop containers
-    logger.info("Stopping PostgreSQL container...")
-    asyncio.run(
-        _run(
-            ["/usr/bin/docker-compose", "-f", str(compose_file), "down", "-v"],
-            cwd=str(project_root),
-        ),
+    # Stop containers using FlextTestDocker
+    logger.info("Stopping PostgreSQL container using FlextTestDocker...")
+    stop_result = flext_docker.stop_compose_service(
+        str(compose_file), "postgres", remove_volumes=True
     )
+    if stop_result.is_failure:
+        logger.warning(
+            f"PostgreSQL container stop reported failure: {stop_result.error}"
+        )
 
 
 @pytest.fixture
