@@ -8,7 +8,7 @@ Simple API for FLEXT DBT LDAP operations.
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextTypes
+from flext_core import FlextLogger
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
@@ -17,6 +17,7 @@ from flext_dbt_ldap.models import (
     FlextDbtLdapTransformer,
     FlextDbtLdapUserDimension,
 )
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 logger = FlextLogger(__name__)
 
@@ -244,7 +245,7 @@ create_flext_ldap_transformer = FlextDbtLdapSimpleApi.create_flext_ldap_transfor
 create_simple_dbt_ldap_pipeline = FlextDbtLdapSimpleApi.create_simple_dbt_ldap_pipeline
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapSimpleApi",
     "create_flext_dbt_ldap_client",
     "create_flext_dbt_ldap_config",

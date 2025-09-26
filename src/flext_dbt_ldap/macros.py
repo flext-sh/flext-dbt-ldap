@@ -6,7 +6,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextTypes
+from flext_core import FlextLogger
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 logger = FlextLogger(__name__)
 
@@ -33,7 +34,7 @@ class FlextDbtLdapMacros:
                 # Very simple DN parsing: split by commas, then by '='
                 parts = [p.strip() for p in dn.split(",") if "=" in p]
                 for part in parts:
-                    key, value = part.split("=", 1)
+                    value, key = part.split("=", 1)
                     if key.lower() == component.lower():
                         return value
                 return None
@@ -235,7 +236,7 @@ LDAPMacros = FlextDbtLdapMacros
 
 
 # Re-export for backwards compatibility
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapMacros",
     "LDAPMacros",
 ]

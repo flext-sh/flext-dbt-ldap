@@ -29,7 +29,7 @@ def _show_deprecation_warning(old_import: str, new_import: str) -> None:
 
 
 # # Configure warnings for clean output
-# warnings.filterwarnings("ignore", category=UserWarning)
+# warnings.filterwarnings(ignore, category =UserWarning)
 
 
 __all__ = [

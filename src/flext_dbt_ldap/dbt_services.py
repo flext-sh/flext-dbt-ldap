@@ -8,10 +8,13 @@ High-level service classes for DBT LDAP operations.
 
 from __future__ import annotations
 
+from typing import override
+
 from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.models import FlextDbtLdapTransformer
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
@@ -24,6 +27,7 @@ class FlextDbtLdapService:
     using modern FlextMeltano APIs and FlextDbt wrapper for type-safe operations.
     """
 
+    @override
     def __init__(
         self,
         config: FlextDbtLdapConfig | None = None,
@@ -261,7 +265,7 @@ class FlextDbtLdapService:
 
     def validate_warehouse_data_quality(
         self,
-        model_names: FlextTypes.Core.StringList | None = None,
+        model_names: FlextDbtLdapTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Validate data quality in the warehouse using modern FlextDbt API.
 
@@ -299,7 +303,7 @@ class FlextDbtLdapService:
 
     def run_dbt_models(
         self,
-        model_names: FlextTypes.Core.StringList | None = None,
+        model_names: FlextDbtLdapTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Run dBT models using modern FlextDbt API.
 
@@ -354,7 +358,7 @@ class FlextDbtLdapService:
             # This would typically run specific DBT models or queries
             # For now, return a placeholder structure
             report_data: FlextTypes.Core.Dict = {
-                "report_type": report_type,
+                "report_type": "report_type",
                 "generated_at": "2025-01-01T00:00:00Z",  # Would use actual timestamp
                 "summary": {
                     "total_users": 0,  # Would query from warehouse
@@ -377,6 +381,6 @@ class FlextDbtLdapService:
             )
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapService",
 ]

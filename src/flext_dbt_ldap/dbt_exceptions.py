@@ -16,7 +16,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextExceptions, FlextTypes
+from typing import override
+
+from flext_core import FlextExceptions
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 # Use FlextExceptions directly (current signature)
 _exceptions = FlextExceptions
@@ -40,6 +43,9 @@ FlextDbtLdapTimeoutError = FlextDbtLdapError
 class FlextDbtLdapModelError(FlextExceptions.BaseError):
     """LDAP DBT model-specific errors using DRY foundation."""
 
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDAP DBT model error",
@@ -60,6 +66,9 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
 class FlextDbtLdapMacroError(FlextExceptions.BaseError):
     """LDAP DBT macro errors using DRY foundation."""
 
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDAP DBT macro error",
@@ -77,6 +86,9 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
 class FlextDbtLdapTestError(FlextExceptions.BaseError):
     """LDAP DBT test errors using DRY foundation."""
 
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDAP DBT test failed",
@@ -94,7 +106,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         super().__init__(f"LDAP DBT test: {message}", context=context)
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",

@@ -6,7 +6,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from typing import override
+
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_ldap import FlextLdapEntities, FlextLdapModels
 
 logger = FlextLogger(__name__)
@@ -39,9 +42,9 @@ class FlextDbtLdapModels:
             entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
-            # Normalize attributes to dict[str, FlextTypes.Core.StringList]
+            # Normalize attributes to dict[str, FlextDbtLdapTypes.Core.StringList]
             raw = entry.attributes
-            attrs: dict[str, FlextTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -124,7 +127,7 @@ class FlextDbtLdapModels:
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
-            attrs: dict[str, FlextTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -215,6 +218,7 @@ class FlextDbtLdapModels:
         Transforms LDAP entries into DBT-compatible data models.
         """
 
+        @override
         def __init__(self: object) -> None:
             """Initialize LDAP transformer."""
             logger.info("Initialized LDAP DBT transformer")
@@ -334,7 +338,7 @@ class FlextDbtLdapModels:
         def _is_user_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
-            object_classes: FlextTypes.Core.StringList = []
+            object_classes: FlextDbtLdapTypes.Core.StringList = []
             if isinstance(raw, dict):
                 oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
@@ -347,7 +351,7 @@ class FlextDbtLdapModels:
         def _is_group_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
-            object_classes: FlextTypes.Core.StringList = []
+            object_classes: FlextDbtLdapTypes.Core.StringList = []
             if isinstance(raw, dict):
                 oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
@@ -369,7 +373,7 @@ class FlextDbtLdapModels:
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = group_entry.attributes
-            attrs: dict[str, FlextTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -399,7 +403,7 @@ class FlextDbtLdapModels:
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = user_entry.attributes
-            attrs: dict[str, FlextTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -420,6 +424,17 @@ class FlextDbtLdapModels:
             return memberships
 
 
+# Unified class pattern - all access through FlextDbtLdapModels
+
+
+__all__: FlextDbtLdapTypes.Core.StringList = [
+    "FlextDbtLdapModels",
+    # Re-exports from flext-ldap for convenience - unified class pattern
+    "FlextLdapEntities",
+    "FlextLdapModels",
+]
+
+
 # Backward compatibility aliases
 UserDimension = FlextDbtLdapModels.UserDimension
 GroupDimension = FlextDbtLdapModels.GroupDimension
@@ -427,7 +442,7 @@ MembershipFact = FlextDbtLdapModels.MembershipFact
 LDAPTransformer = FlextDbtLdapModels.Transformer
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapModels",
     # Re-exports from flext-ldap for convenience - use unified class pattern
     "FlextLdapEntities",

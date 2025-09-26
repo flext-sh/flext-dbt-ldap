@@ -13,7 +13,7 @@ TESTS_DIR := tests
 COV_DIR := flext_dbt_ldap
 
 # Quality Standards
-MIN_COVERAGE := 90
+MIN_COVERAGE := 100
 
 # DBT Configuration
 DBT_PROFILES_DIR := profiles
@@ -39,7 +39,7 @@ info: ## Show project information
 	@echo "Project: $(PROJECT_NAME)"
 	@echo "Python: $(PYTHON_VERSION)+"
 	@echo "Poetry: $(POETRY)"
-	@echo "Coverage: $(MIN_COVERAGE)% minimum"
+	@echo "Coverage: $(MIN_COVERAGE)% minimum (MANDATORY)"
 	@echo "DBT Profiles Dir: $(DBT_PROFILES_DIR)"
 	@echo "DBT Target: $(DBT_TARGET)"
 	@echo "DBT Threads: $(DBT_THREADS)"
@@ -63,7 +63,7 @@ setup: install-dev ## Complete development setup
 	$(POETRY) run pre-commit install
 
 # =============================================================================
-# QUALITY GATES (MANDATORY)
+# QUALITY GATES (MANDATORY - ZERO TOLERANCE)
 # =============================================================================
 
 .PHONY: validate
@@ -73,16 +73,16 @@ validate: lint type-check security test dbt-test ## Run all quality gates
 check: lint type-check dbt-compile ## Quick health check
 
 .PHONY: lint
-lint: ## Run linting
-	$(POETRY) run ruff check $(SRC_DIR) $(TESTS_DIR)
+lint: ## Run linting (ZERO TOLERANCE)
+	$(POETRY) run ruff check .
 
 .PHONY: format
 format: ## Format code
-	$(POETRY) run ruff format $(SRC_DIR) $(TESTS_DIR)
+	$(POETRY) run ruff format .
 
 .PHONY: type-check
-type-check: ## Run type checking
-	$(POETRY) run mypy $(SRC_DIR) --strict
+type-check: ## Run type checking with Pyrefly (ZERO TOLERANCE)
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run pyrefly check .
 
 .PHONY: security
 security: ## Run security scanning
@@ -91,24 +91,24 @@ security: ## Run security scanning
 
 .PHONY: fix
 fix: ## Auto-fix code issues
-	$(POETRY) run ruff check $(SRC_DIR) $(TESTS_DIR) --fix
-	$(POETRY) run ruff format $(SRC_DIR) $(TESTS_DIR)
+	$(POETRY) run ruff check . --fix
+	$(POETRY) run ruff format .
 
 # =============================================================================
-# TESTING
+# TESTING (MANDATORY - 100% COVERAGE)
 # =============================================================================
 
 .PHONY: test
-test: ## Run tests with coverage
-	$(POETRY) run pytest $(TESTS_DIR) --cov=$(COV_DIR) --cov-report=term-missing --cov-fail-under=$(MIN_COVERAGE)
+test: ## Run tests with 100% coverage (MANDATORY)
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run pytest -q --maxfail=10000 --cov=$(COV_DIR) --cov-report=term-missing:skip-covered --cov-fail-under=$(MIN_COVERAGE)
 
 .PHONY: test-unit
 test-unit: ## Run unit tests only
-	$(POETRY) run pytest $(TESTS_DIR) -m "not integration" -v
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run pytest -m "not integration" -v
 
 .PHONY: test-integration
-test-integration: ## Run integration tests only
-	$(POETRY) run pytest $(TESTS_DIR) -m integration -v
+test-integration: ## Run integration tests with Docker only
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run pytest -m integration -v
 
 .PHONY: test-dbt
 test-dbt: ## Run dbt-specific tests
@@ -124,11 +124,11 @@ test-e2e: ## Run end-to-end tests
 
 .PHONY: test-fast
 test-fast: ## Run tests without coverage
-	$(POETRY) run pytest $(TESTS_DIR) -v
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run pytest -v
 
 .PHONY: coverage-html
 coverage-html: ## Generate HTML coverage report
-	$(POETRY) run pytest $(TESTS_DIR) --cov=$(COV_DIR) --cov-report=html
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run pytest --cov=$(COV_DIR) --cov-report=html
 
 # =============================================================================
 # BUILD & DISTRIBUTION
@@ -233,7 +233,7 @@ deps-audit: ## Security audit dependencies
 
 .PHONY: shell
 shell: ## Open Python shell
-	$(POETRY) run python
+	PYTHONPATH=$(SRC_DIR) $(POETRY) run python
 
 .PHONY: pre-commit
 pre-commit: ## Run pre-commit hooks
@@ -245,7 +245,7 @@ pre-commit: ## Run pre-commit hooks
 
 .PHONY: clean
 clean: ## Clean build artifacts
-	rm -rf build/ dist/ *.egg-info/ .pytest_cache/ htmlcov/ .coverage .mypy_cache/ .ruff_cache/
+	rm -rf build/ dist/ *.egg-info/ .pytest_cache/ htmlcov/ .coverage .mypy_cache/ .pyrefly_cache/ .ruff_cache/
 	rm -rf target/ dbt_packages/ logs/
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 
@@ -265,7 +265,7 @@ diagnose: ## Show environment diagnostics
 	@echo "Python: $$(python --version)"
 	@echo "Poetry: $$($(POETRY) --version)"
 	@echo "DBT: $$($(POETRY) run dbt --version)"
-	@echo "LDAP Processor: $$($(POETRY) run python -c 'import flext_dbt_ldap; print(getattr(flext_dbt_ldap, \"__version__\", \"dev\"))' 2>/dev/null || echo 'Not available')"
+	@echo "LDAP Processor: $$(PYTHONPATH=$(SRC_DIR) $(POETRY) run python -c 'import flext_dbt_ldap; print(getattr(flext_dbt_ldap, \"__version__\", \"dev\"))' 2>/dev/null || echo 'Not available')"
 	@$(POETRY) env info
 
 .PHONY: doctor
