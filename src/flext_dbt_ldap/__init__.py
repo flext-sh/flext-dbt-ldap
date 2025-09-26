@@ -38,9 +38,10 @@ from flext_dbt_ldap.type_aliases import (
     FlextDbtLdap,
     FlextDbtLdapResult,
 )
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.version_info import __version__, __version_info__
 
-__all__ = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "DomainBaseModel",
     "FlextConfig",
     "FlextDbtLdap",

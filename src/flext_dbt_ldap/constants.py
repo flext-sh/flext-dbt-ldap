@@ -12,23 +12,35 @@ from flext_core import FlextConstants
 
 
 class FlextDbtLdapConstants(FlextConstants):
-    """LDAP DBT transformation-specific constants following flext-core patterns."""
+    """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
 
-    # LDAP Configuration
-    DEFAULT_LDAP_HOST = "localhost"
-    DEFAULT_LDAP_PORT = 389
-    DEFAULT_LDAPS_PORT = 636
-    DEFAULT_LDAP_TIMEOUT = 30
+    class Connection:
+        """LDAP connection configuration constants."""
 
-    # DBT Configuration
-    DEFAULT_DBT_PROFILES_DIR = "./profiles"
-    DEFAULT_DBT_TARGET = "dev"
-    DBT_ALLOWED_TARGETS: ClassVar[list[str]] = ["dev", "staging", "prod"]
+        class Ldap:
+            """Standard LDAP connection settings."""
 
-    # LDAP DBT Model Configuration
-    DEFAULT_BATCH_SIZE = 1000
-    MAX_BATCH_SIZE = 10000
-    DEFAULT_SCHEMA = "ldap_analytics"
+            DEFAULT_HOST = FlextConstants.Platform.DEFAULT_HOST
+            DEFAULT_PORT = FlextConstants.Platform.LDAP_DEFAULT_PORT
+            DEFAULT_TIMEOUT = FlextConstants.Network.DEFAULT_TIMEOUT
+
+        class Ldaps:
+            """Secure LDAP connection settings."""
+
+            DEFAULT_PORT = FlextConstants.Platform.LDAPS_DEFAULT_PORT
+
+    class Dbt:
+        """DBT-specific configuration constants."""
+
+        DEFAULT_PROFILES_DIR = "./profiles"
+        DEFAULT_TARGET = "dev"
+        ALLOWED_TARGETS: ClassVar[list[str]] = ["dev", "staging", "prod"]
+
+    class Processing:
+        """DBT LDAP transformation configuration."""
+
+        DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
+        MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
 
 
 __all__ = ["FlextDbtLdapConstants"]

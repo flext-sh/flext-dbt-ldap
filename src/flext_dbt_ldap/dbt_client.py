@@ -11,9 +11,11 @@ from __future__ import annotations
 
 import asyncio
 from pathlib import Path
+from typing import override
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_ldap import FlextLdapClient, FlextLdapModels
 from flext_meltano import FlextMeltanoService
 
@@ -27,6 +29,7 @@ class FlextDbtLdapClient:
     and DBT transformation operations.
     """
 
+    @override
     def __init__(
         self,
         config: FlextDbtLdapConfig | None = None,
@@ -55,7 +58,7 @@ class FlextDbtLdapClient:
         self,
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
-        attributes: FlextTypes.Core.StringList | None = None,
+        attributes: FlextDbtLdapTypes.Core.StringList | None = None,
     ) -> FlextResult[list[FlextLdapModels.Entry]]:
         """Extract LDAP entries for DBT processing.
 
@@ -118,7 +121,7 @@ class FlextDbtLdapClient:
             for entry in entries:
                 if getattr(entry, "dn", ""):
                     valid_dns += 1
-                attrs: dict[str, FlextTypes.Core.StringList] = getattr(
+                attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = getattr(
                     entry,
                     "attributes",
                     {},
@@ -129,9 +132,9 @@ class FlextDbtLdapClient:
                 (valid_entries / total_entries) if total_entries > 0 else 0.0
             )
             metrics: FlextTypes.Core.Dict = {
-                "total_entries": total_entries,
-                "valid_dns": valid_dns,
-                "valid_entries": valid_entries,
+                "total_entries": "total_entries",
+                "valid_dns": "valid_dns",
+                "valid_entries": "valid_entries",
                 "quality_score": round(quality_score, 3),
                 "validation_passed": quality_score >= self.config.min_quality_threshold,
             }
@@ -153,7 +156,7 @@ class FlextDbtLdapClient:
     def transform_with_dbt(
         self,
         entries: list[FlextLdapModels.Entry],
-        model_names: FlextTypes.Core.StringList | None = None,
+        model_names: FlextDbtLdapTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Transform LDAP data using DBT models.
 
@@ -194,8 +197,8 @@ class FlextDbtLdapClient:
         self,
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
-        attributes: FlextTypes.Core.StringList | None = None,
-        model_names: FlextTypes.Core.StringList | None = None,
+        attributes: FlextDbtLdapTypes.Core.StringList | None = None,
+        model_names: FlextDbtLdapTypes.Core.StringList | None = None,
     ) -> FlextResult[FlextTypes.Core.Dict]:
         """Run complete LDAP to DBT transformation pipeline.
 
@@ -323,7 +326,7 @@ class FlextDbtLdapClient:
         *,
         base_dn: str,
         search_filter: str,
-        attributes: FlextTypes.Core.StringList | None,
+        attributes: FlextDbtLdapTypes.Core.StringList | None,
     ) -> FlextResult[list[FlextLdapModels.Entry]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
@@ -362,6 +365,6 @@ class FlextDbtLdapClient:
             )
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapClient",
 ]

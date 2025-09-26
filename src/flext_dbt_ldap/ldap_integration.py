@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import FlextLogger, FlextTypes
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 logger = FlextLogger(__name__)
 
@@ -76,8 +77,8 @@ class FlextDbtLdapIntegration:
                 )
                 # Minimal quality metrics without external API dependency
                 return {
-                    "total_entries": entry_count,
-                    "valid_dns": entry_count,
+                    "total_entries": "entry_count",
+                    "valid_dns": "entry_count",
                     "quality_score": 1.0,
                 }
 
@@ -95,7 +96,7 @@ process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_
 validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapIntegration",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",

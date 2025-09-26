@@ -6,13 +6,15 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import threading
 from pathlib import Path
 from typing import ClassVar, Final
 
 from flext_meltano.config import FlextMeltanoConfig
-from pydantic import Field
+from pydantic import Field, SecretStr, field_validator, model_validator
 
 from flext_core import FlextConfig, FlextConstants, FlextLogger, FlextTypes
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_ldap import FlextLdapModels
 
 logger = FlextLogger(__name__)
@@ -132,57 +134,78 @@ class FlextDbtLdapLoggingConstants(FlextConstants):
         """Environment-specific DBT LDAP logging configuration."""
 
         DEVELOPMENT: ClassVar[FlextTypes.Core.Dict] = {
-            "log_dbt_sql": True,  # Log SQL in dev
-            "log_ldap_queries": True,  # Log LDAP queries in dev
-            "log_transformation_sql": True,  # Log transformation SQL in dev
+            "log_dbt_sql": "True",  # Log SQL in dev
+            "log_ldap_queries": "True",  # Log LDAP queries in dev
+            "log_transformation_sql": "True",  # Log transformation SQL in dev
             "audit_log_level": FlextConstants.Config.LogLevel.DEBUG,
         }
 
         STAGING: ClassVar[FlextTypes.Core.Dict] = {
-            "log_dbt_sql": False,
-            "log_ldap_queries": False,
-            "log_transformation_sql": False,
+            "log_dbt_sql": "False",
+            "log_ldap_queries": "False",
+            "log_transformation_sql": "False",
             "audit_log_level": FlextConstants.Config.LogLevel.INFO,
         }
 
         PRODUCTION: ClassVar[FlextTypes.Core.Dict] = {
-            "log_dbt_sql": False,
-            "log_ldap_queries": False,
-            "log_transformation_sql": False,
+            "log_dbt_sql": "False",
+            "log_ldap_queries": "False",
+            "log_transformation_sql": "False",
             "audit_log_level": FlextConstants.Config.LogLevel.WARNING,
         }
 
         TESTING: ClassVar[FlextTypes.Core.Dict] = {
-            "log_dbt_sql": True,  # Log SQL in testing
-            "log_ldap_queries": True,  # Log LDAP queries in testing
-            "log_transformation_sql": True,  # Log transformation SQL in testing
+            "log_dbt_sql": "True",  # Log SQL in testing
+            "log_ldap_queries": "True",  # Log LDAP queries in testing
+            "log_transformation_sql": "True",  # Log transformation SQL in testing
             "audit_log_level": FlextConstants.Config.LogLevel.DEBUG,
         }
 
 
 class FlextDbtLdapConfig(FlextConfig):
-    """Configuration for DBT LDAP transformations.
+    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextConfig.
 
-    Combines LDAP connection settings with DBT execution configuration.
-    Uses composition to integrate flext-ldap and flext-meltano configurations.
+    Follows standardized pattern:
+    - Extends FlextConfig from flext-core
+    - No nested classes within Config
+    - All defaults from FlextDbtLdapConstants
+    - Dependency injection integration with flext-core container
+    - Uses Pydantic 2.11+ features (SecretStr for secrets)
     """
 
-    # LDAP Connection Settings (from flext-ldap)
-    ldap_host: str = "localhost"
-    ldap_port: int = 389
-    ldap_use_tls: bool = False
-    ldap_bind_dn: str = ""
-    ldap_bind_password: str = ""
-    ldap_base_dn: str = ""
+    # Singleton pattern attributes
+    _global_instance: ClassVar[FlextDbtLdapConfig | None] = None
+    _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    # DBT Execution Settings (from flext-meltano)
-    dbt_project_dir: str = "."
-    dbt_profiles_dir: str = "."
-    dbt_target: str = "dev"
-    dbt_threads: int = 1
-    dbt_log_level: str = "info"
+    # LDAP Connection Settings (from flext-ldap) using Field and proper defaults
+    ldap_host: str = Field(default="localhost", description="LDAP server hostname")
+    ldap_port: int = Field(default=389, ge=1, le=65535, description="LDAP server port")
+    ldap_use_tls: bool = Field(
+        default=False, description="Use TLS for LDAP connections"
+    )
+    ldap_bind_dn: SecretStr | None = Field(
+        default=None,
+        description="LDAP bind distinguished name for authentication (sensitive)",
+    )
+    ldap_bind_password: SecretStr | None = Field(
+        default=None, description="LDAP bind password for authentication (sensitive)"
+    )
+    ldap_base_dn: str = Field(
+        default="", description="LDAP base distinguished name for searches"
+    )
 
-    # LDAP-specific DBT Settings
+    # DBT Execution Settings (from flext-meltano) using Field
+    dbt_project_dir: str = Field(default=".", description="DBT project directory path")
+    dbt_profiles_dir: str = Field(
+        default=".", description="DBT profiles directory path"
+    )
+    dbt_target: str = Field(default="dev", description="DBT target environment")
+    dbt_threads: int = Field(
+        default=1, ge=1, le=16, description="Number of DBT threads"
+    )
+    dbt_log_level: str = Field(default="info", description="DBT log level")
+
+    # LDAP-specific DBT Settings - using constants
     ldap_schema_mapping: ClassVar[FlextTypes.Core.Headers] = {
         "users": "stg_users",
         "groups": "stg_groups",
@@ -197,9 +220,16 @@ class FlextDbtLdapConfig(FlextConfig):
     }
 
     # Data Quality Settings
-    min_quality_threshold: float = 0.8
-    required_attributes: ClassVar[FlextTypes.Core.StringList] = ["cn", "objectClass"]
-    validate_dns: bool = True
+    min_quality_threshold: float = Field(
+        default=0.8, ge=0.0, le=1.0, description="Minimum data quality threshold"
+    )
+    required_attributes: ClassVar[FlextDbtLdapTypes.Core.StringList] = [
+        "cn",
+        "objectClass",
+    ]
+    validate_dns: bool = Field(
+        default=True, description="Validate LDAP distinguished names"
+    )
 
     # DBT LDAP-specific logging configuration using FlextDbtLdapLoggingConstants
     log_dbt_operations: bool = Field(
@@ -485,11 +515,13 @@ class FlextDbtLdapConfig(FlextConfig):
 
     dbt_ldap_performance_threshold_warning: float = Field(
         default=FlextDbtLdapLoggingConstants.DBT_LDAP_PERFORMANCE_THRESHOLD_WARNING,
+        ge=0.0,
         description="DBT LDAP performance warning threshold in milliseconds",
     )
 
     dbt_ldap_performance_threshold_critical: float = Field(
         default=FlextDbtLdapLoggingConstants.DBT_LDAP_PERFORMANCE_THRESHOLD_CRITICAL,
+        ge=0.0,
         description="DBT LDAP performance critical threshold in milliseconds",
     )
 
@@ -587,19 +619,91 @@ class FlextDbtLdapConfig(FlextConfig):
         description="Audit log file path",
     )
 
-    def get_ldap_config(self: object) -> FlextLdapModels.ConnectionConfig:
+    # Pydantic 2.11 field validators
+    @field_validator("dbt_target")
+    @classmethod
+    def validate_dbt_target(cls, v: str) -> str:
+        """Validate DBT target environment."""
+        valid_targets = {
+            "dev",
+            "development",
+            "staging",
+            "prod",
+            "production",
+            "test",
+            "local",
+        }
+        if v not in valid_targets:
+            valid_targets_str = ", ".join(sorted(valid_targets))
+            msg = f"Invalid DBT target: {v}. Must be one of: {valid_targets_str}"
+            raise ValueError(msg)
+        return v
+
+    @field_validator("dbt_log_level")
+    @classmethod
+    def validate_dbt_log_level(cls, v: str) -> str:
+        """Validate DBT log level."""
+        valid_levels = {"debug", "info", "warn", "error", "none"}
+        if v.lower() not in valid_levels:
+            valid_levels_str = ", ".join(sorted(valid_levels))
+            msg = f"Invalid DBT log level: {v}. Must be one of: {valid_levels_str}"
+            raise ValueError(msg)
+        return v.lower()
+
+    @field_validator("ldap_bind_dn")
+    @classmethod
+    def validate_ldap_bind_dn(cls, v: SecretStr | None) -> SecretStr | None:
+        """Validate LDAP bind DN format."""
+        if v is None:
+            return v
+
+        dn_value = v.get_secret_value()
+        if not dn_value or not dn_value.strip():
+            return None
+
+        if "=" not in dn_value:
+            msg = "Invalid LDAP bind DN format: must contain attribute=value pairs"
+            raise ValueError(msg)
+
+        return v
+
+    @model_validator(mode="after")
+    def validate_ldap_configuration_consistency(self) -> FlextDbtLdapConfig:
+        """Validate LDAP configuration consistency."""
+        # Validate authentication configuration
+        if self.ldap_bind_dn is not None and self.ldap_bind_password is None:
+            msg = "Bind password is required when bind DN is specified"
+            raise ValueError(msg)
+
+        # Validate performance thresholds
+        if (
+            self.dbt_ldap_performance_threshold_warning
+            > self.dbt_ldap_performance_threshold_critical
+        ):
+            msg = "Warning threshold cannot be greater than critical threshold"
+            raise ValueError(msg)
+
+        return self
+
+    def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
+        bind_dn = self.ldap_bind_dn.get_secret_value() if self.ldap_bind_dn else ""
+        bind_password = (
+            self.ldap_bind_password.get_secret_value()
+            if self.ldap_bind_password
+            else ""
+        )
+
         return FlextLdapModels.ConnectionConfig(
             server=self.ldap_host,
             port=self.ldap_port,
-            bind_dn=self.ldap_bind_dn,
-            bind_password=self.ldap_bind_password,
+            bind_dn=bind_dn,
+            bind_password=bind_password,
         )
 
-    def get_meltano_config(self: object) -> FlextMeltanoConfig:
+    def get_meltano_config(self) -> FlextMeltanoConfig:
         """Get Meltano configuration for flext-meltano integration."""
         # Convert string to proper Environment string value
-        # Map dbt_target values to FlextMeltanoConfig environment literal strings
         environment_mapping: dict[str, FlextTypes.Config.Environment] = {
             "dev": "development",
             "development": "development",
@@ -620,7 +724,7 @@ class FlextDbtLdapConfig(FlextConfig):
             environment=environment_value,
         )
 
-    def get_ldap_quality_config(self: object) -> FlextTypes.Core.Dict:
+    def get_ldap_quality_config(self) -> FlextTypes.Core.Dict:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": self.min_quality_threshold,
@@ -628,7 +732,7 @@ class FlextDbtLdapConfig(FlextConfig):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self: object) -> FlextTypes.Core.Dict:
+    def get_dbt_ldap_logging_config(self) -> FlextTypes.Core.Dict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,
@@ -708,7 +812,34 @@ class FlextDbtLdapConfig(FlextConfig):
             "audit_log_file": self.audit_log_file,
         }
 
+    @classmethod
+    def create_for_environment(
+        cls, environment: str, **overrides: object
+    ) -> FlextDbtLdapConfig:
+        """Create configuration for specific environment."""
+        return cls(environment=environment, **overrides)
 
-__all__: FlextTypes.Core.StringList = [
+    @classmethod
+    def create_default(cls) -> FlextDbtLdapConfig:
+        """Create default configuration instance."""
+        return cls()
+
+    # Singleton pattern override for proper typing
+    @classmethod
+    def get_global_instance(cls) -> FlextDbtLdapConfig:
+        """Get the global singleton instance of FlextDbtLdapConfig."""
+        if cls._global_instance is None:
+            with cls._lock:
+                if cls._global_instance is None:
+                    cls._global_instance = cls()
+        return cls._global_instance
+
+    @classmethod
+    def reset_global_instance(cls) -> None:
+        """Reset the global FlextDbtLdapConfig instance (mainly for testing)."""
+        cls._global_instance = None
+
+
+__all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapConfig",
 ]
