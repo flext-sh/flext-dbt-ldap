@@ -39,6 +39,7 @@ from flext_dbt_ldap.type_aliases import (
     FlextDbtLdapResult,
 )
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 from flext_dbt_ldap.version_info import __version__, __version_info__
 
 __all__: FlextDbtLdapTypes.Core.StringList = [
@@ -58,6 +59,7 @@ __all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapResult",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
+    "FlextDbtLdapUtilities",
     "FlextDbtLdapValidationError",
     "FlextModels",
     "FlextResult",

@@ -6,14 +6,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import threading
 from pathlib import Path
-from typing import ClassVar, Final
+from typing import ClassVar, Final, Self
 
 from flext_meltano.config import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
+from pydantic_settings import SettingsConfigDict
 
-from flext_core import FlextConfig, FlextConstants, FlextLogger, FlextTypes
+from flext_core import FlextConfig, FlextConstants, FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_ldap import FlextLdapModels
 
@@ -169,13 +169,21 @@ class FlextDbtLdapConfig(FlextConfig):
     - Extends FlextConfig from flext-core
     - No nested classes within Config
     - All defaults from FlextDbtLdapConstants
-    - Dependency injection integration with flext-core container
-    - Uses Pydantic 2.11+ features (SecretStr for secrets)
+    - Uses enhanced singleton pattern with inverse dependency injection
+    - Uses Pydantic 2.11+ features (field_validator, model_validator)
     """
 
-    # Singleton pattern attributes
-    _global_instance: ClassVar[FlextDbtLdapConfig | None] = None
-    _lock: ClassVar[threading.Lock] = threading.Lock()
+    model_config = SettingsConfigDict(
+        env_prefix="FLEXT_DBT_LDAP_",
+        case_sensitive=False,
+        extra="allow",
+        validate_assignment=True,
+        str_strip_whitespace=True,
+        json_schema_extra={
+            "title": "FLEXT DBT LDAP Configuration",
+            "description": "DBT LDAP configuration extending FlextConfig",
+        },
+    )
 
     # LDAP Connection Settings (from flext-ldap) using Field and proper defaults
     ldap_host: str = Field(default="localhost", description="LDAP server hostname")
@@ -619,6 +627,17 @@ class FlextDbtLdapConfig(FlextConfig):
         description="Audit log file path",
     )
 
+    # Project Identification
+    project_name: str = Field(
+        default="flext-dbt-ldap",
+        description="Project name",
+    )
+
+    project_version: str = Field(
+        default="0.9.0",
+        description="Project version",
+    )
+
     # Pydantic 2.11 field validators
     @field_validator("dbt_target")
     @classmethod
@@ -668,7 +687,7 @@ class FlextDbtLdapConfig(FlextConfig):
         return v
 
     @model_validator(mode="after")
-    def validate_ldap_configuration_consistency(self) -> FlextDbtLdapConfig:
+    def validate_ldap_configuration_consistency(self) -> Self:
         """Validate LDAP configuration consistency."""
         # Validate authentication configuration
         if self.ldap_bind_dn is not None and self.ldap_bind_password is None:
@@ -684,6 +703,32 @@ class FlextDbtLdapConfig(FlextConfig):
             raise ValueError(msg)
 
         return self
+
+    def validate_business_rules(self) -> FlextResult[None]:
+        """Validate DBT LDAP specific business rules."""
+        try:
+            # Validate LDAP configuration
+            if not self.ldap_host:
+                return FlextResult[None].fail("LDAP host is required")
+
+            # Validate DBT configuration
+            if not self.dbt_project_dir:
+                return FlextResult[None].fail("DBT project directory is required")
+
+            # Validate performance thresholds
+            if self.dbt_ldap_performance_threshold_warning < 0:
+                return FlextResult[None].fail(
+                    "Performance warning threshold must be non-negative"
+                )
+
+            if self.dbt_ldap_performance_threshold_critical < 0:
+                return FlextResult[None].fail(
+                    "Performance critical threshold must be non-negative"
+                )
+
+            return FlextResult[None].ok(None)
+        except Exception as e:
+            return FlextResult[None].fail(f"Business rules validation failed: {e}")
 
     def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
@@ -816,28 +861,66 @@ class FlextDbtLdapConfig(FlextConfig):
     def create_for_environment(
         cls, environment: str, **overrides: object
     ) -> FlextDbtLdapConfig:
-        """Create configuration for specific environment."""
-        return cls(environment=environment, **overrides)
+        """Create configuration for specific environment using enhanced singleton pattern."""
+        return cls.get_or_create_shared_instance(
+            project_name="flext-dbt-ldap", environment=environment, **overrides
+        )
 
     @classmethod
     def create_default(cls) -> FlextDbtLdapConfig:
-        """Create default configuration instance."""
-        return cls()
+        """Create default configuration instance using enhanced singleton pattern."""
+        return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
 
-    # Singleton pattern override for proper typing
+    @classmethod
+    def create_for_development(cls) -> FlextDbtLdapConfig:
+        """Create configuration optimized for development using enhanced singleton pattern."""
+        return cls.get_or_create_shared_instance(
+            project_name="flext-dbt-ldap",
+            ldap_use_tls=False,
+            dbt_target="dev",
+            dbt_threads=1,
+            dbt_log_level="debug",
+            enable_audit_logging=False,
+        )
+
+    @classmethod
+    def create_for_production(cls) -> FlextDbtLdapConfig:
+        """Create configuration optimized for production using enhanced singleton pattern."""
+        return cls.get_or_create_shared_instance(
+            project_name="flext-dbt-ldap",
+            ldap_use_tls=True,
+            dbt_target="production",
+            dbt_threads=8,
+            dbt_log_level="info",
+            enable_audit_logging=True,
+            track_dbt_ldap_performance=True,
+        )
+
+    @classmethod
+    def create_for_testing(cls) -> FlextDbtLdapConfig:
+        """Create configuration optimized for testing using enhanced singleton pattern."""
+        return cls.get_or_create_shared_instance(
+            project_name="flext-dbt-ldap",
+            ldap_host="test.example.com",
+            ldap_port=389,
+            ldap_use_tls=False,
+            dbt_target="test",
+            dbt_threads=1,
+            dbt_log_level="debug",
+            enable_audit_logging=False,
+            min_quality_threshold=0.5,
+        )
+
     @classmethod
     def get_global_instance(cls) -> FlextDbtLdapConfig:
-        """Get the global singleton instance of FlextDbtLdapConfig."""
-        if cls._global_instance is None:
-            with cls._lock:
-                if cls._global_instance is None:
-                    cls._global_instance = cls()
-        return cls._global_instance
+        """Get the global singleton instance using enhanced FlextConfig pattern."""
+        return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
 
     @classmethod
     def reset_global_instance(cls) -> None:
         """Reset the global FlextDbtLdapConfig instance (mainly for testing)."""
-        cls._global_instance = None
+        # Use the enhanced FlextConfig reset mechanism
+        cls.reset_shared_instance()
 
 
 __all__: FlextDbtLdapTypes.Core.StringList = [
