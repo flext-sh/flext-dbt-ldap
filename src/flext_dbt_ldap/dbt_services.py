@@ -10,11 +10,11 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextLogger, FlextResult, FlextTypes
+from flext_core import FlextLogger, FlextResult
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.models import FlextDbtLdapTransformer
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextTypes
 from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
@@ -42,7 +42,9 @@ class FlextDbtLdapService:
             transformer: Data transformer (created if None)
 
         """
-        self.config: dict[str, object] = config or FlextDbtLdapConfig()
+        self.config: FlextDbtLdapTypes.Core.DbtConfigDict = (
+            config or FlextDbtLdapConfig.get_global_instance()
+        )
         self.client = client or FlextDbtLdapClient(self.config)
         self.transformer = transformer or FlextDbtLdapTransformer()
 

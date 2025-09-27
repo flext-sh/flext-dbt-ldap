@@ -13,9 +13,9 @@ import asyncio
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger, FlextResult, FlextTypes
+from flext_core import FlextLogger, FlextResult
 from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextTypes
 from flext_ldap import FlextLdapClient, FlextLdapModels
 from flext_meltano import FlextMeltanoService
 
@@ -40,7 +40,9 @@ class FlextDbtLdapClient:
             config: Configuration for LDAP and DBT operations
 
         """
-        self.config: dict[str, object] = config or FlextDbtLdapConfig()
+        self.config: FlextDbtLdapTypes.Core.DbtConfigDict = (
+            config or FlextDbtLdapConfig.get_global_instance()
+        )
         # Precisely type the LDAP API to enable method access
         self._ldap_api: FlextLdapClient = FlextLdapClient()
         self._dbt_manager: FlextMeltanoService | None = None

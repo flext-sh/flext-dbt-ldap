@@ -32,6 +32,41 @@ class FlextDbtLdapTypes(FlextTypes):
     """
 
     # =========================================================================
+    # CORE DBT LDAP TYPES - Commonly used type aliases extending FlextTypes.Core
+    # =========================================================================
+
+    class Core(FlextTypes.Core):
+        """Core DBT LDAP types extending FlextTypes.Core.
+
+        Replaces generic dict[str, object] with semantic DBT LDAP types.
+        """
+
+        # Configuration and settings types
+        type ConfigDict = dict[str, FlextTypes.Core.ConfigValue | dict[str, object]]
+        type ConnectionDict = dict[str, object]
+        type LdapConfigDict = dict[str, object]
+        type DbtConfigDict = dict[str, object]
+        type ProjectDict = dict[str, object]
+
+        # Data processing types
+        type DataDict = dict[str, object]
+        type ModelDict = dict[str, object]
+        type SourceDict = dict[str, object]
+        type TransformDict = dict[str, object]
+        type ValidationDict = dict[str, object]
+
+        # Template and structured response types
+        type TemplateDict = dict[str, str | dict[str, object]]
+        type ResponseDict = dict[str, object]
+        type ResultDict = dict[str, object]
+        type MetricsDict = dict[str, object]
+
+        # Operation and context types
+        type OperationDict = dict[str, object]
+        type ContextDict = dict[str, object]
+        type SettingsDict = dict[str, object]
+
+    # =========================================================================
     # DBT PROJECT TYPES - DBT project configuration types
     # =========================================================================
 
