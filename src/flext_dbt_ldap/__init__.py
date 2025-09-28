@@ -11,8 +11,8 @@ from flext_core import (
     FlextModels,
     FlextResult,
 )
+from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
-from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_exceptions import (
     FlextDbtLdapAuthenticationError,
     FlextDbtLdapConfigurationError,

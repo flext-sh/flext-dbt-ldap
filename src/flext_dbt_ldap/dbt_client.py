@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import override
 
 from flext_core import FlextLogger, FlextResult
-from flext_dbt_ldap.dbt_config import FlextDbtLdapConfig
+from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextTypes
 from flext_ldap import FlextLdapClient, FlextLdapModels
 from flext_meltano import FlextMeltanoService
