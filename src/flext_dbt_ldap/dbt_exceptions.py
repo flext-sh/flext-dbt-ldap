@@ -44,8 +44,6 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
     """LDAP DBT model-specific errors using DRY foundation."""
 
     @override
-    @override
-    @override
     def __init__(
         self,
         message: str = "LDAP DBT model error",
@@ -67,8 +65,6 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
     """LDAP DBT macro errors using DRY foundation."""
 
     @override
-    @override
-    @override
     def __init__(
         self,
         message: str = "LDAP DBT macro error",
@@ -86,8 +82,6 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
 class FlextDbtLdapTestError(FlextExceptions.BaseError):
     """LDAP DBT test errors using DRY foundation."""
 
-    @override
-    @override
     @override
     def __init__(
         self,

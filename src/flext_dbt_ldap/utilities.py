@@ -291,7 +291,7 @@ class FlextDbtLdapUtilities(FlextUtilities):
                         select_clauses.append(f"    {transformation} as {column}")
 
                 # DBT template generation - safe string formatting
-                model_sql = f"""{{{{  # noqa: S608
+                model_sql = f"""{{{{
     config(
         materialized='table',
         tags=['ldap', 'transformation'],
@@ -414,7 +414,7 @@ where 1=1
             """
             try:
                 # DBT macro template generation - safe string formatting
-                macro_sql = f"""-- Macro to extract specific values from LDAP multi-valued attributes  # noqa: S608
+                macro_sql = f"""-- Macro to extract specific values from LDAP multi-valued attributes
 {{% macro {macro_name}(attribute_array, filter_pattern='') %}}
     case
         when {{{{{{attribute_array}}}}}} is null then null
