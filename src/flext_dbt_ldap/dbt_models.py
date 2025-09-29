@@ -15,7 +15,7 @@ from flext_ldap import FlextLdapEntities, FlextLdapModels
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapModels:
+class FlextDbtLdapModels(FlextModels):
     """Unified DBT LDAP models collection with nested model classes."""
 
     class UserDimension(FlextModels.Entity):
@@ -435,21 +435,9 @@ __all__: FlextDbtLdapTypes.Core.StringList = [
 ]
 
 
-# Backward compatibility aliases
-UserDimension = FlextDbtLdapModels.UserDimension
-GroupDimension = FlextDbtLdapModels.GroupDimension
-MembershipFact = FlextDbtLdapModels.MembershipFact
-LDAPTransformer = FlextDbtLdapModels.Transformer
-
-
 __all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapModels",
     # Re-exports from flext-ldap for convenience - use unified class pattern
     "FlextLdapEntities",
     "FlextLdapModels",
-    # Backward compatibility
-    "GroupDimension",
-    "LDAPTransformer",
-    "MembershipFact",
-    "UserDimension",
 ]

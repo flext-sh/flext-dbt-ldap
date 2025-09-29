@@ -91,13 +91,6 @@ class FlextDbtLdapIntegration:
             return {"total_entries": 0, "valid_dns": 0, "quality_score": 0.0}
 
 
-# Backward compatibility aliases
-process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_dbt
-validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
-
-
 __all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapIntegration",
-    "process_ldap_entries_for_dbt",
-    "validate_ldap_data_quality",
 ]

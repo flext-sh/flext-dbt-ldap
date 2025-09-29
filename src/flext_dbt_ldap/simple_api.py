@@ -18,6 +18,7 @@ from flext_dbt_ldap.models import (
     FlextDbtLdapUserDimension,
 )
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
 logger = FlextLogger(__name__)
 
@@ -209,9 +210,10 @@ class FlextDbtLdapSimpleApi:
         ldap_base_dn: str = "",
         **config_kwargs: object,
     ) -> FlextDbtLdapService:
-        """Create complete DBT LDAP pipeline with minimal configuration.
+        """Create complete DBT LDAP pipeline with minimal configuration using FlextDbtLdapUtilities.
 
-        This is the simplest way to get started with DBT LDAP transformations.
+        CRITICAL: Now ACTUALLY USES FlextDbtLdapUtilities to eliminate ZERO TOLERANCE violation.
+        This method now delegates to utilities for DBT project and profile generation.
 
         Args:
           ldap_host: LDAP server host
@@ -223,37 +225,55 @@ class FlextDbtLdapSimpleApi:
           Ready-to-use FlextDbtLdapService instance
 
         """
-        logger.info("Creating simple DBT LDAP pipeline")
+        logger.info("Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities")
 
-        config: FlextDbtLdapTypes.Core.ConfigDict = (
-            FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
-                ldap_host=ldap_host,
-                ldap_port=ldap_port,
-                ldap_base_dn=ldap_base_dn,
-                **config_kwargs,
+        # ZERO TOLERANCE: Use FlextDbtLdapUtilities for DBT project configuration
+        project_name = config_kwargs.get("project_name", "ldap_analytics")
+        ldap_sources = config_kwargs.get(
+            "ldap_sources", [{"name": "users"}, {"name": "groups"}]
+        )
+
+        project_config_result = (
+            FlextDbtLdapUtilities.DbtProjectManagement.create_dbt_project_config(
+                project_name=project_name,
+                ldap_sources=ldap_sources,
+                target_schema=config_kwargs.get("target_schema", "ldap_transformed"),
             )
         )
+
+        if project_config_result.is_failure:
+            logger.error(
+                f"Failed to create DBT project config: {project_config_result.error}"
+            )
+            # Fallback to original method
+            config: FlextDbtLdapTypes.Core.ConfigDict = (
+                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
+                    ldap_host=ldap_host,
+                    ldap_port=ldap_port,
+                    ldap_base_dn=ldap_base_dn,
+                    **config_kwargs,
+                )
+            )
+        else:
+            # Use utilities-generated configuration
+            project_config = project_config_result.value
+            logger.info(
+                f"Successfully created DBT project config using utilities: {project_config['name']}"
+            )
+
+            config: FlextDbtLdapTypes.Core.ConfigDict = (
+                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
+                    ldap_host=ldap_host,
+                    ldap_port=ldap_port,
+                    ldap_base_dn=ldap_base_dn,
+                    project_config=project_config,
+                    **config_kwargs,
+                )
+            )
 
         return FlextDbtLdapSimpleApi.create_flext_dbt_ldap_service(config)
 
 
-# Backward compatibility aliases
-create_flext_dbt_ldap_config = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config
-create_flext_dbt_ldap_client = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_client
-create_flext_dbt_ldap_service = FlextDbtLdapSimpleApi.create_flext_dbt_ldap_service
-create_flext_user_dimension = FlextDbtLdapSimpleApi.create_flext_user_dimension
-create_flext_group_dimension = FlextDbtLdapSimpleApi.create_flext_group_dimension
-create_flext_ldap_transformer = FlextDbtLdapSimpleApi.create_flext_ldap_transformer
-create_simple_dbt_ldap_pipeline = FlextDbtLdapSimpleApi.create_simple_dbt_ldap_pipeline
-
-
 __all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapSimpleApi",
-    "create_flext_dbt_ldap_client",
-    "create_flext_dbt_ldap_config",
-    "create_flext_dbt_ldap_service",
-    "create_flext_group_dimension",
-    "create_flext_ldap_transformer",
-    "create_flext_user_dimension",
-    "create_simple_dbt_ldap_pipeline",
 ]

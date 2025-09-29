@@ -305,7 +305,7 @@ from {{{{ source('ldap', '{source_table}') }}}}
 where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
-"""
+"""  # noqa: S608
 
                 return FlextResult[str].ok(model_sql)
             except Exception as e:
@@ -429,7 +429,7 @@ where 1=1
         else {{{{{{attribute_array}}}}}}[1]
         {{% endif %}}
     end
-{{% endmacro %}}"""
+{{% endmacro %}}"""  # noqa: S608
 
                 return FlextResult[str].ok(macro_sql)
             except Exception as e:
@@ -606,6 +606,11 @@ where 1=1
 
     class TransformationOptimization:
         """Transformation optimization utilities."""
+
+        # Performance threshold constants
+        PERFORMANCE_EXECUTION_TIME_THRESHOLD: float = 30.0  # seconds
+        PERFORMANCE_MEMORY_USAGE_THRESHOLD: float = 1024.0  # MB
+        PERFORMANCE_ROWS_PROCESSED_THRESHOLD: int = 100000  # rows
 
         @staticmethod
         def optimize_ldap_query(
