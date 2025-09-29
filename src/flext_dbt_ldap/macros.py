@@ -231,12 +231,6 @@ class FlextDbtLdapMacros:
         )
 
 
-# Backward compatibility aliases
-LDAPMacros = FlextDbtLdapMacros
-
-
-# Re-export for backwards compatibility
 __all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapMacros",
-    "LDAPMacros",
 ]
