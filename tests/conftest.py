@@ -10,36 +10,48 @@ import os
 import re
 import tempfile
 from collections.abc import Generator
+from typing import TYPE_CHECKING
 
 import pytest
 
 from flext_core import FlextTypes
-from flext_tests import FlextTestDocker
 
+# Import centralized Docker fixtures
 
-@pytest.fixture(scope="session")
-def docker_control() -> FlextTestDocker:
-    """Provide FlextTestDocker instance for container management."""
-    return FlextTestDocker()
-
-
-@pytest.fixture(scope="session")
-def shared_ldap_container(docker_control: FlextTestDocker) -> FlextTestDocker:
-    """Start and maintain flext-openldap-test container.
-
-    Container auto-starts if not running and remains running after tests.
-    """
-    result = docker_control.start_container("flext-openldap-test")
-    if result.is_failure:
-        pytest.skip(f"Failed to start LDAP container: {result.error}")
-
-    yield "flext-openldap-test"
-
-    # Keep container running after tests
-    docker_control.stop_container("flext-openldap-test", remove=False)
-
+if TYPE_CHECKING:
+    from flext_tests import FlextTestDocker
 
 # Import shared fixtures from docker directory
+
+
+@pytest.fixture(scope="session")
+def shared_ldap_container(flext_docker: FlextTestDocker) -> Generator[str]:
+    """Managed LDAP container using centralized FlextTestDocker with docker-compose."""
+    import os
+
+    # Use centralized docker-compose file for OpenLDAP
+    compose_file = os.path.expanduser("~/flext/docker/docker-compose.openldap.yml")
+
+    # Start OpenLDAP stack using docker-compose
+    start_result = flext_docker.start_compose_stack(compose_file)
+    if start_result.is_failure:
+        pytest.skip(f"OpenLDAP container failed to start: {start_result.error}")
+
+    container_name = "flext-openldap-test"
+    return container_name
+
+    # Cleanup handled by FlextTestDocker automatically
+
+
+@pytest.fixture(scope="session")
+def shared_ldap_config() -> dict:
+    """Shared LDAP configuration for tests."""
+    return {
+        "server_url": "ldap://localhost:3390",
+        "bind_dn": "cn=admin,dc=flext,dc=local",
+        "password": "admin123",
+        "base_dn": "dc=flext,dc=local",
+    }
 
 
 # Test environment setup
@@ -57,20 +69,6 @@ def set_test_environment() -> Generator[None]:
     os.environ.pop("FLEXT_LOG_LEVEL", None)
     os.environ.pop("DBT_PROFILES_DIR", None)
     os.environ.pop("LDAP_TEST_MODE", None)
-
-
-# Shared LDAP container fixture
-@pytest.fixture(scope="session", autouse=True)
-def ensure_shared_docker_container(shared_ldap_container: object) -> None:
-    """Ensure shared Docker container is started for the test session.
-
-    This fixture automatically starts the shared LDAP container if not running,
-    and ensures it's available for all tests in the session.
-    """
-    # Suppress unused parameter warning - fixture is used for side effects
-    _ = shared_ldap_container
-    # The shared_ldap_container fixture will be invoked automatically
-    # and will start/stop the container for the entire test session
 
 
 # dbt LDAP configuration fixtures
