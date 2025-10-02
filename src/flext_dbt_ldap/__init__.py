@@ -6,11 +6,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from typing import Final
+
 from flext_core import (
     FlextConfig,
     FlextModels,
     FlextResult,
 )
+
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_exceptions import (
@@ -40,9 +43,16 @@ from flext_dbt_ldap.type_aliases import (
 )
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
-from flext_dbt_ldap.version_info import __version__, __version_info__
+from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
+PROJECT_VERSION: Final[FlextDbtLdapVersion] = VERSION
+
+__version__: str = VERSION.version
+__version_info__: tuple[int | str, ...] = VERSION.version_info
+
+__all__ = [
+    "PROJECT_VERSION",
+    "VERSION",
     "DomainBaseModel",
     "FlextConfig",
     "FlextDbtLdap",
@@ -59,8 +69,10 @@ __all__: FlextDbtLdapTypes.Core.StringList = [
     "FlextDbtLdapResult",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
+    "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapValidationError",
+    "FlextDbtLdapVersion",
     "FlextModels",
     "FlextResult",
     "__version__",

@@ -341,8 +341,8 @@ class FlextDbtLdapClient:
                 scope="subtree",
             )
 
-            # Use run to handle API in sync context (flext-ldap pattern)
-            result: FlextResult[object] = run(api.search(search_request))
+            # Use API directly (synchronous operation)
+            result: FlextResult[object] = api.search(search_request)
 
             # Convert FlextLdapModels.Entry to FlextLdapModels.Entry
             if result.is_success and result.value:
