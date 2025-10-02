@@ -11,10 +11,8 @@ import pathlib
 import re
 import tempfile
 from collections.abc import Generator
-from typing import TYPE_CHECKING
 
 import pytest
-
 from flext_core import FlextTypes
 
 # Import centralized Docker fixtures
