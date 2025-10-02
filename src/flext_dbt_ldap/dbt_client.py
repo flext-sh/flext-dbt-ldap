@@ -9,7 +9,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
 from typing import override
 
@@ -40,7 +39,7 @@ class FlextDbtLdapClient:
             config: Configuration for LDAP and DBT operations
 
         """
-        self.config: FlextDbtLdapTypes.Core.DbtConfigDict = (
+        self.config: FlextDbtLdapConfig = (
             config or FlextDbtLdapConfig.get_global_instance()
         )
         # Precisely type the LDAP API to enable method access
@@ -78,7 +77,7 @@ class FlextDbtLdapClient:
                 search_base or self.config.ldap_base_dn,
                 search_filter,
             )
-            # Use flext-ldap async API for extraction via a sync wrapper
+            # Use flext-ldap API for extraction via a sync wrapper
             result = self._search_entries_sync(
                 base_dn=search_base or self.config.ldap_base_dn,
                 search_filter=search_filter,
@@ -342,8 +341,8 @@ class FlextDbtLdapClient:
                 scope="subtree",
             )
 
-            # Use asyncio.run to handle async API in sync context (flext-ldap pattern)
-            result: FlextResult[object] = asyncio.run(api.search(search_request))
+            # Use run to handle API in sync context (flext-ldap pattern)
+            result: FlextResult[object] = run(api.search(search_request))
 
             # Convert FlextLdapModels.Entry to FlextLdapModels.Entry
             if result.is_success and result.value:

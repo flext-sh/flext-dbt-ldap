@@ -704,8 +704,8 @@ where 1=1
                     f"Performance analysis failed: {e}"
                 )
 
-    async def execute_async(self) -> FlextResult[dict[str, Any]]:
-        """Execute DBT LDAP utilities service operation asynchronously."""
+    def execute(self) -> FlextResult[dict[str, Any]]:
+        """Execute DBT LDAP utilities service operation hronously."""
         return FlextResult[dict[str, Any]].ok({
             "status": "operational",
             "service": "flext-dbt-ldap-utilities",

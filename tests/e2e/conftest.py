@@ -6,7 +6,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import asyncio
 import time
 from collections.abc import Generator
 from pathlib import Path
@@ -126,22 +125,22 @@ def run_dbt_command(
         var_string = " ".join(f"{k}:{v}" for k, v in dbt_vars.items())
         cmd.extend(["--vars", var_string])
 
-    async def _run_db(
+    def _run_db(
         cmd_list: FlextTypes.Core.StringList,
         cwd: str,
         env: FlextTypes.Core.Headers,
     ) -> tuple[int, str, str]:
-        process = await asyncio.create_subprocess_exec(
+        process = create_subprocess_exec(
             *cmd_list,
             cwd=cwd,
             env=env,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
-        stdout, stderr = await process.communicate()
+        stdout, stderr = process.communicate()
         return process.returncode, stdout.decode(), stderr.decode()
 
-    rc, out, err = asyncio.run(_run_db(cmd, str(project_dir), env))
+    rc, out, err = _run_db(cmd, str(project_dir, env))
 
     class CompletedProcess:
         def __init__(self, returncode: int, stdout: str, stderr: str) -> None:
