@@ -12,11 +12,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
+from flext_ldap import FlextLdapClient, FlextLdapModels
+from flext_meltano import FlextMeltanoService
+
 from flext_core import FlextLogger, FlextResult
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextTypes
-from flext_ldap import FlextLdapClient, FlextLdapModels
-from flext_meltano import FlextMeltanoService
 
 logger = FlextLogger(__name__)
 
@@ -103,7 +104,7 @@ class FlextDbtLdapClient:
     def validate_ldap_data(
         self,
         entries: list[FlextLdapModels.Entry],
-    ) -> FlextResult[FlextTypes.Core.Dict]:
+    ) -> FlextResult[FlextTypes.Dict]:
         """Validate LDAP data quality for DBT processing.
 
         Args:
@@ -132,7 +133,7 @@ class FlextDbtLdapClient:
             quality_score = (
                 (valid_entries / total_entries) if total_entries > 0 else 0.0
             )
-            metrics: FlextTypes.Core.Dict = {
+            metrics: FlextTypes.Dict = {
                 "total_entries": "total_entries",
                 "valid_dns": "valid_dns",
                 "valid_entries": "valid_entries",
@@ -144,13 +145,13 @@ class FlextDbtLdapClient:
                 metrics["quality_score"],
             )
             if not metrics["validation_passed"]:
-                return FlextResult[FlextTypes.Core.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
-            return FlextResult[FlextTypes.Core.Dict].ok(metrics)
+            return FlextResult[FlextTypes.Dict].ok(metrics)
         except Exception as e:
             logger.exception("Unexpected error during LDAP validation")
-            return FlextResult[FlextTypes.Core.Dict].fail(
+            return FlextResult[FlextTypes.Dict].fail(
                 f"LDAP validation error: {e}",
             )
 
@@ -158,7 +159,7 @@ class FlextDbtLdapClient:
         self,
         entries: list[FlextLdapModels.Entry],
         model_names: FlextDbtLdapTypes.Core.StringList | None = None,
-    ) -> FlextResult[FlextTypes.Core.Dict]:
+    ) -> FlextResult[FlextTypes.Dict]:
         """Transform LDAP data using DBT models.
 
         Args:
@@ -184,13 +185,13 @@ class FlextDbtLdapClient:
                 logger.info("DBT transformation completed successfully")
             else:
                 logger.error("DBT transformation failed: %s", result.error)
-                return FlextResult[FlextTypes.Core.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"DBT transformation failed: {result.error}",
                 )
             return result
         except Exception as e:
             logger.exception("Unexpected error during DBT transformation")
-            return FlextResult[FlextTypes.Core.Dict].fail(
+            return FlextResult[FlextTypes.Dict].fail(
                 f"DBT transformation error: {e}",
             )
 
@@ -200,7 +201,7 @@ class FlextDbtLdapClient:
         search_filter: str = "(objectClass=*)",
         attributes: FlextDbtLdapTypes.Core.StringList | None = None,
         model_names: FlextDbtLdapTypes.Core.StringList | None = None,
-    ) -> FlextResult[FlextTypes.Core.Dict]:
+    ) -> FlextResult[FlextTypes.Dict]:
         """Run complete LDAP to DBT transformation pipeline.
 
         Args:
@@ -220,14 +221,14 @@ class FlextDbtLdapClient:
             attributes,
         )
         if extract_result.is_failure:
-            return FlextResult[FlextTypes.Core.Dict].fail(
+            return FlextResult[FlextTypes.Dict].fail(
                 extract_result.error or "LDAP extraction failed",
             )
         entries = extract_result.value or []
         # Step 2: Validate data quality
         validate_result: FlextResult[object] = self.validate_ldap_data(entries)
         if validate_result.is_failure:
-            return FlextResult[FlextTypes.Core.Dict].fail(
+            return FlextResult[FlextTypes.Dict].fail(
                 validate_result.error or "LDAP validation failed",
             )
         # Step 3: Transform with DBT
@@ -235,22 +236,22 @@ class FlextDbtLdapClient:
             entries, model_names
         )
         if transform_result.is_failure:
-            return FlextResult[FlextTypes.Core.Dict].fail(
+            return FlextResult[FlextTypes.Dict].fail(
                 transform_result.error or "DBT transformation failed",
             )
         # Combine results
-        pipeline_results: FlextTypes.Core.Dict = {
+        pipeline_results: FlextTypes.Dict = {
             "extracted_entries": len(entries),
             "validation_metrics": validate_result.value,
             "transformation_results": transform_result.value,
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
-        return FlextResult[FlextTypes.Core.Dict].ok(pipeline_results)
+        return FlextResult[FlextTypes.Dict].ok(pipeline_results)
 
     def _prepare_ldap_data_for_dbt(
         self,
         entries: list[FlextLdapModels.Entry],
-    ) -> dict[str, list[FlextTypes.Core.Dict]]:
+    ) -> dict[str, list[FlextTypes.Dict]]:
         """Prepare LDAP entries for DBT processing.
 
         Converts LDAP entries to format suitable for DBT models.
@@ -262,14 +263,14 @@ class FlextDbtLdapClient:
 
         """
         # Apply schema and attribute mapping from config
-        prepared_data: dict[str, list[FlextTypes.Core.Dict]] = {}
+        prepared_data: dict[str, list[FlextTypes.Dict]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             # Filter entries by schema type and prepare for DBT
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
             # Convert to tabular format with attribute mapping
-            table_data: list[FlextTypes.Core.Dict] = [
+            table_data: list[FlextTypes.Dict] = [
                 self._map_entry_attributes(entry) for entry in schema_entries
             ]
             prepared_data[table_name] = table_data
@@ -287,15 +288,15 @@ class FlextDbtLdapClient:
             "groups": ["group", "groupOfNames", "groupOfUniqueNames"],
             "org_units": ["organizationalUnit", "organization"],
         }
-        expected_classes: list[object] = schema_mapping.get(schema_name, [])
+        expected_classes: FlextTypes.List = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
 
     def _map_entry_attributes(
         self,
         entry: FlextLdapModels.Entry,
-    ) -> FlextTypes.Core.Dict:
+    ) -> FlextTypes.Dict:
         """Map LDAP entry attributes using configuration mapping."""
-        mapped_attrs: FlextTypes.Core.Dict = {"dn": entry.dn}
+        mapped_attrs: FlextTypes.Dict = {"dn": entry.dn}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry.attributes:
                 values_obj = entry.attributes[ldap_attr]

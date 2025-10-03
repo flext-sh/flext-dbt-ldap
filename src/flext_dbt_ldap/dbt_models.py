@@ -8,9 +8,10 @@ from __future__ import annotations
 
 from typing import override
 
+from flext_ldap import FlextLdapEntities, FlextLdapModels
+
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
-from flext_ldap import FlextLdapEntities, FlextLdapModels
 
 logger = FlextLogger(__name__)
 
@@ -89,7 +90,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("User ID and common name are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextTypes.Core.Dict:
+        def to_dbt_dict(self: object) -> FlextTypes.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -169,7 +170,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("Member count cannot be negative")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextTypes.Core.Dict:
+        def to_dbt_dict(self: object) -> FlextTypes.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -201,7 +202,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("User DN and Group DN are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextTypes.Core.Dict:
+        def to_dbt_dict(self: object) -> FlextTypes.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -340,7 +341,7 @@ class FlextDbtLdapModels(FlextModels):
             raw = entry.attributes
             object_classes: FlextDbtLdapTypes.Core.StringList = []
             if isinstance(raw, dict):
-                oc_val: list[object] = raw.get("objectClass", [])
+                oc_val: FlextTypes.List = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
@@ -353,7 +354,7 @@ class FlextDbtLdapModels(FlextModels):
             raw = entry.attributes
             object_classes: FlextDbtLdapTypes.Core.StringList = []
             if isinstance(raw, dict):
-                oc_val: list[object] = raw.get("objectClass", [])
+                oc_val: FlextTypes.List = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:

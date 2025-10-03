@@ -32,39 +32,39 @@ class FlextDbtLdapTypes(FlextTypes):
     """
 
     # =========================================================================
-    # CORE DBT LDAP TYPES - Commonly used type aliases extending FlextTypes.Core
+    # CORE DBT LDAP TYPES - Commonly used type aliases extending FlextTypes
     # =========================================================================
 
-    class Core(FlextTypes.Core):
-        """Core DBT LDAP types extending FlextTypes.Core.
+    class Core(FlextTypes):
+        """Core DBT LDAP types extending FlextTypes.
 
-        Replaces generic dict[str, object] with semantic DBT LDAP types.
+        Replaces generic FlextTypes.Dict with semantic DBT LDAP types.
         """
 
         # Configuration and settings types
-        type ConfigDict = dict[str, FlextTypes.Core.ConfigValue | dict[str, object]]
-        type ConnectionDict = dict[str, object]
-        type LdapConfigDict = dict[str, object]
-        type DbtConfigDict = dict[str, object]
-        type ProjectDict = dict[str, object]
+        type ConfigDict = dict[str, FlextTypes.ConfigValue | FlextTypes.Dict]
+        type ConnectionDict = FlextTypes.Dict
+        type LdapConfigDict = FlextTypes.Dict
+        type DbtConfigDict = FlextTypes.Dict
+        type ProjectDict = FlextTypes.Dict
 
         # Data processing types
-        type DataDict = dict[str, object]
-        type ModelDict = dict[str, object]
-        type SourceDict = dict[str, object]
-        type TransformDict = dict[str, object]
-        type ValidationDict = dict[str, object]
+        type DataDict = FlextTypes.Dict
+        type ModelDict = FlextTypes.Dict
+        type SourceDict = FlextTypes.Dict
+        type TransformDict = FlextTypes.Dict
+        type ValidationDict = FlextTypes.Dict
 
         # Template and structured response types
-        type TemplateDict = dict[str, str | dict[str, object]]
-        type ResponseDict = dict[str, object]
-        type ResultDict = dict[str, object]
-        type MetricsDict = dict[str, object]
+        type TemplateDict = dict[str, str | FlextTypes.Dict]
+        type ResponseDict = FlextTypes.Dict
+        type ResultDict = FlextTypes.Dict
+        type MetricsDict = FlextTypes.Dict
 
         # Operation and context types
-        type OperationDict = dict[str, object]
-        type ContextDict = dict[str, object]
-        type SettingsDict = dict[str, object]
+        type OperationDict = FlextTypes.Dict
+        type ContextDict = FlextTypes.Dict
+        type SettingsDict = FlextTypes.Dict
 
     # =========================================================================
     # DBT PROJECT TYPES - DBT project configuration types
@@ -73,14 +73,12 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtProject:
         """DBT LDAP project complex types."""
 
-        type ProjectConfiguration = dict[
-            str, FlextTypes.Core.ConfigValue | dict[str, object]
-        ]
-        type ModelConfiguration = dict[str, str | dict[str, FlextTypes.Core.JsonValue]]
-        type SourceConfiguration = dict[str, str | list[dict[str, object]]]
-        type ProfileConfiguration = dict[str, FlextTypes.Core.ConfigValue]
-        type MacroConfiguration = dict[str, str | dict[str, object]]
-        type TestConfiguration = dict[str, str | bool | list[str]]
+        type ProjectConfiguration = dict[str, FlextTypes.ConfigValue | FlextTypes.Dict]
+        type ModelConfiguration = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type SourceConfiguration = dict[str, str | list[FlextTypes.Dict]]
+        type ProfileConfiguration = dict[str, FlextTypes.ConfigValue]
+        type MacroConfiguration = dict[str, str | FlextTypes.Dict]
+        type TestConfiguration = dict[str, str | bool | FlextTypes.StringList]
 
     # =========================================================================
     # LDAP CONNECTION TYPES - LDAP server connection configuration
@@ -89,13 +87,11 @@ class FlextDbtLdapTypes(FlextTypes):
     class LdapConnection:
         """LDAP connection complex types."""
 
-        type ConnectionConfig = dict[str, str | int | bool | dict[str, object]]
-        type AuthenticationConfig = dict[
-            str, str | dict[str, FlextTypes.Core.JsonValue]
-        ]
-        type ServerConfig = dict[str, str | int | bool | list[str]]
-        type TlsConfig = dict[str, bool | str | dict[str, object]]
-        type PoolingConfig = dict[str, int | bool | dict[str, object]]
+        type ConnectionConfig = dict[str, str | int | bool | FlextTypes.Dict]
+        type AuthenticationConfig = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type ServerConfig = dict[str, str | int | bool | FlextTypes.StringList]
+        type TlsConfig = dict[str, bool | str | FlextTypes.Dict]
+        type PoolingConfig = dict[str, int | bool | FlextTypes.Dict]
         type TimeoutConfig = dict[str, int | float]
 
     # =========================================================================
@@ -106,13 +102,13 @@ class FlextDbtLdapTypes(FlextTypes):
         """LDAP data complex types."""
 
         type LdapEntry = dict[
-            str, str | list[str] | dict[str, FlextTypes.Core.JsonValue]
+            str, str | FlextTypes.StringList | dict[str, FlextTypes.JsonValue]
         ]
-        type LdapAttributes = dict[str, str | list[str] | bytes]
+        type LdapAttributes = dict[str, str | FlextTypes.StringList | bytes]
         type LdapFilter = str
-        type LdapQuery = dict[str, str | list[str] | int | dict[str, object]]
-        type LdapSchema = dict[str, str | list[dict[str, FlextTypes.Core.JsonValue]]]
-        type LdapOperationResult = dict[str, bool | str | int | dict[str, object]]
+        type LdapQuery = dict[str, str | FlextTypes.StringList | int | FlextTypes.Dict]
+        type LdapSchema = dict[str, str | list[dict[str, FlextTypes.JsonValue]]]
+        type LdapOperationResult = dict[str, bool | str | int | FlextTypes.Dict]
 
     # =========================================================================
     # DBT TRANSFORMATION TYPES - Data transformation configuration
@@ -121,16 +117,14 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtTransformation:
         """DBT LDAP transformation complex types."""
 
-        type TransformationConfig = dict[
-            str, FlextTypes.Core.JsonValue | dict[str, object]
+        type TransformationConfig = dict[str, FlextTypes.JsonValue | FlextTypes.Dict]
+        type FieldMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type DataValidation = dict[
+            str, bool | str | FlextTypes.StringList | FlextTypes.Dict
         ]
-        type FieldMapping = dict[str, str | dict[str, FlextTypes.Core.JsonValue]]
-        type DataValidation = dict[str, bool | str | list[str] | dict[str, object]]
-        type TransformationRule = dict[str, str | dict[str, FlextTypes.Core.JsonValue]]
-        type OutputFormat = dict[str, str | dict[str, object]]
-        type ProcessingStep = dict[
-            str, str | int | dict[str, FlextTypes.Core.JsonValue]
-        ]
+        type TransformationRule = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type OutputFormat = dict[str, str | FlextTypes.Dict]
+        type ProcessingStep = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
 
     # =========================================================================
     # DBT MODEL TYPES - DBT model definition and execution types
@@ -139,14 +133,12 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtModel:
         """DBT LDAP model complex types."""
 
-        type ModelDefinition = dict[str, str | dict[str, FlextTypes.Core.JsonValue]]
-        type ModelExecution = dict[str, str | bool | int | dict[str, object]]
-        type ModelDependency = dict[str, str | list[str] | dict[str, object]]
-        type ModelTest = dict[str, str | bool | dict[str, FlextTypes.Core.JsonValue]]
-        type ModelDocumentation = dict[str, str | dict[str, object]]
-        type ModelMaterialization = dict[
-            str, str | dict[str, FlextTypes.Core.ConfigValue]
-        ]
+        type ModelDefinition = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type ModelExecution = dict[str, str | bool | int | FlextTypes.Dict]
+        type ModelDependency = dict[str, str | FlextTypes.StringList | FlextTypes.Dict]
+        type ModelTest = dict[str, str | bool | dict[str, FlextTypes.JsonValue]]
+        type ModelDocumentation = dict[str, str | FlextTypes.Dict]
+        type ModelMaterialization = dict[str, str | dict[str, FlextTypes.ConfigValue]]
 
     # =========================================================================
     # DBT SOURCE TYPES - DBT source configuration types
@@ -155,14 +147,12 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtSource:
         """DBT LDAP source complex types."""
 
-        type SourceDefinition = dict[str, str | dict[str, FlextTypes.Core.JsonValue]]
-        type SourceConnection = dict[
-            str, FlextTypes.Core.ConfigValue | dict[str, object]
-        ]
-        type SourceTable = dict[str, str | list[dict[str, FlextTypes.Core.JsonValue]]]
-        type SourceFreshness = dict[str, str | int | dict[str, object]]
-        type SourceTest = dict[str, str | bool | list[str]]
-        type SourceSchema = dict[str, str | dict[str, FlextTypes.Core.JsonValue]]
+        type SourceDefinition = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type SourceConnection = dict[str, FlextTypes.ConfigValue | FlextTypes.Dict]
+        type SourceTable = dict[str, str | list[dict[str, FlextTypes.JsonValue]]]
+        type SourceFreshness = dict[str, str | int | FlextTypes.Dict]
+        type SourceTest = dict[str, str | bool | FlextTypes.StringList]
+        type SourceSchema = dict[str, str | dict[str, FlextTypes.JsonValue]]
 
     # =========================================================================
     # DBT LDAP PROJECT TYPES - Domain-specific project types extending FlextTypes
@@ -198,16 +188,16 @@ class FlextDbtLdapTypes(FlextTypes):
         ]
 
         # DBT LDAP-specific project configurations
-        type DbtLdapProjectConfig = dict[str, FlextTypes.Core.ConfigValue | object]
-        type LdapTransformConfig = dict[str, str | int | bool | list[str]]
-        type DirectoryAnalyticsConfig = dict[str, bool | str | dict[str, object]]
-        type DbtLdapPipelineConfig = dict[str, FlextTypes.Core.ConfigValue | object]
+        type DbtLdapProjectConfig = dict[str, FlextTypes.ConfigValue | object]
+        type LdapTransformConfig = dict[str, str | int | bool | FlextTypes.StringList]
+        type DirectoryAnalyticsConfig = dict[str, bool | str | FlextTypes.Dict]
+        type DbtLdapPipelineConfig = dict[str, FlextTypes.ConfigValue | object]
 
 
 # =============================================================================
 # PUBLIC API EXPORTS - DBT LDAP TypeVars and types
 # =============================================================================
 
-__all__: list[str] = [
+__all__: FlextTypes.StringList = [
     "FlextDbtLdapTypes",
 ]

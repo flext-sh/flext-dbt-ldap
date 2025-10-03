@@ -47,18 +47,33 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
     def __init__(
         self,
         message: str = "LDAP DBT model error",
+        *,
         model_name: str | None = None,
         model_type: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDAP DBT model error with context."""
-        context = kwargs.copy()
-        if model_name is not None:
-            context["model_name"] = model_name
-        if model_type is not None:
-            context["model_type"] = model_type
+        # Store model attributes before extracting common kwargs
+        self.model_name = model_name
+        self.model_type = model_type
 
-        super().__init__(f"LDAP DBT model: {message}", context=context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with model-specific fields
+        context = self._build_context(
+            base_context,
+            model_name=model_name,
+            model_type=model_type,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDAP DBT model: {message}",
+            code=error_code or "DBT_LDAP_MODEL_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 class FlextDbtLdapMacroError(FlextExceptions.BaseError):
@@ -68,15 +83,30 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
     def __init__(
         self,
         message: str = "LDAP DBT macro error",
+        *,
         macro_name: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDAP DBT macro error with context."""
-        context = kwargs.copy()
-        if macro_name is not None:
-            context["macro_name"] = macro_name
+        # Store macro name before extracting common kwargs
+        self.macro_name = macro_name
 
-        super().__init__(f"LDAP DBT macro: {message}", context=context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with macro-specific fields
+        context = self._build_context(
+            base_context,
+            macro_name=macro_name,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDAP DBT macro: {message}",
+            code=error_code or "DBT_LDAP_MACRO_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 class FlextDbtLdapTestError(FlextExceptions.BaseError):
@@ -86,18 +116,33 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
     def __init__(
         self,
         message: str = "LDAP DBT test failed",
+        *,
         test_name: str | None = None,
         model_name: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDAP DBT test error with context."""
-        context = kwargs.copy()
-        if test_name is not None:
-            context["test_name"] = test_name
-        if model_name is not None:
-            context["model_name"] = model_name
+        # Store test attributes before extracting common kwargs
+        self.test_name = test_name
+        self.model_name = model_name
 
-        super().__init__(f"LDAP DBT test: {message}", context=context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with test-specific fields
+        context = self._build_context(
+            base_context,
+            test_name=test_name,
+            model_name=model_name,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDAP DBT test: {message}",
+            code=error_code or "DBT_LDAP_TEST_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 __all__: FlextDbtLdapTypes.Core.StringList = [

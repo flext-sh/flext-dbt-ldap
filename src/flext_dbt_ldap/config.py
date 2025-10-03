@@ -9,6 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import ClassVar, Self
 
+from flext_ldap import FlextLdapModels
 from flext_meltano.config import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
@@ -16,7 +17,6 @@ from pydantic_settings import SettingsConfigDict
 from flext_core import FlextConfig, FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.constants import FlextDbtLdapConstants
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
-from flext_ldap import FlextLdapModels
 
 logger = FlextLogger(__name__)
 
@@ -84,13 +84,13 @@ class FlextDbtLdapConfig(FlextConfig):
     dbt_log_level: str = Field(default="info", description="DBT log level")
 
     # LDAP-specific DBT Settings - using constants
-    ldap_schema_mapping: ClassVar[FlextTypes.Core.Headers] = {
+    ldap_schema_mapping: ClassVar[FlextTypes.StringDict] = {
         "users": "stg_users",
         "groups": "stg_groups",
         "org_units": "stg_org_units",
     }
 
-    ldap_attribute_mapping: ClassVar[FlextTypes.Core.Headers] = {
+    ldap_attribute_mapping: ClassVar[FlextTypes.StringDict] = {
         "cn": "common_name",
         "uid": "user_id",
         "mail": "email",
@@ -639,7 +639,7 @@ class FlextDbtLdapConfig(FlextConfig):
             environment=environment_value,
         )
 
-    def get_ldap_quality_config(self) -> FlextTypes.Core.Dict:
+    def get_ldap_quality_config(self) -> FlextTypes.Dict:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": self.min_quality_threshold,
@@ -647,7 +647,7 @@ class FlextDbtLdapConfig(FlextConfig):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> FlextTypes.Core.Dict:
+    def get_dbt_ldap_logging_config(self) -> FlextTypes.Dict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,

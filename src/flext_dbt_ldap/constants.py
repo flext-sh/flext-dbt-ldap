@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
-from flext_core import FlextConstants
+from flext_core import FlextConstants, FlextTypes
 
 
 class FlextDbtLdapConstants(FlextConstants):
@@ -34,7 +34,7 @@ class FlextDbtLdapConstants(FlextConstants):
 
         DEFAULT_PROFILES_DIR = "./profiles"
         DEFAULT_TARGET = "dev"
-        ALLOWED_TARGETS: ClassVar[list[str]] = ["dev", "staging", "prod"]
+        ALLOWED_TARGETS: ClassVar[FlextTypes.StringList] = ["dev", "staging", "prod"]
 
     class Processing:
         """DBT LDAP transformation configuration."""
