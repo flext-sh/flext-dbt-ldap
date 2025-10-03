@@ -13,6 +13,7 @@ import tempfile
 from collections.abc import Generator
 
 import pytest
+
 from flext_core import FlextTypes
 
 # Import centralized Docker fixtures
@@ -71,7 +72,7 @@ def set_test_environment() -> Generator[None]:
 
 # dbt LDAP configuration fixtures
 @pytest.fixture
-def dbt_ldap_profile() -> FlextTypes.Core.Dict:
+def dbt_ldap_profile() -> FlextTypes.Dict:
     """Dbt LDAP profile configuration for testing."""
     return {
         "config": {
@@ -102,7 +103,7 @@ def dbt_ldap_profile() -> FlextTypes.Core.Dict:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> FlextTypes.Core.Dict:
+def dbt_ldap_project_config() -> FlextTypes.Dict:
     """Dbt LDAP project configuration for testing."""
     return {
         "name": "flext_dbt_ldap_test",
@@ -138,7 +139,7 @@ def dbt_ldap_project_config() -> FlextTypes.Core.Dict:
 
 # LDAP source fixtures
 @pytest.fixture
-def ldap_source_config(shared_ldap_config: dict) -> FlextTypes.Core.Dict:
+def ldap_source_config(shared_ldap_config: dict) -> FlextTypes.Dict:
     """LDAP source configuration for testing using shared container."""
     # Suppress unused parameter warning - fixture is used for side effects
     _ = shared_ldap_config
@@ -156,7 +157,7 @@ def ldap_source_config(shared_ldap_config: dict) -> FlextTypes.Core.Dict:
 
 
 @pytest.fixture
-def sample_ldap_entries() -> list[FlextTypes.Core.Dict]:
+def sample_ldap_entries() -> list[FlextTypes.Dict]:
     """Sample LDAP entries for testing using shared container domain."""
     return [
         {
@@ -206,7 +207,7 @@ def sample_ldap_entries() -> list[FlextTypes.Core.Dict]:
 
 # dbt LDAP model definitions
 @pytest.fixture
-def dbt_ldap_models() -> FlextTypes.Core.Headers:
+def dbt_ldap_models() -> FlextTypes.StringDict:
     """Dbt LDAP model SQL definitions for testing."""
     return {
         "staging_ldap_users": """
@@ -303,7 +304,7 @@ def dbt_ldap_models() -> FlextTypes.Core.Headers:
 
 # dbt LDAP macro definitions
 @pytest.fixture
-def dbt_ldap_macros() -> FlextTypes.Core.Headers:
+def dbt_ldap_macros() -> FlextTypes.StringDict:
     """Dbt LDAP macro definitions for testing."""
     return {
         "ldap_extract_attribute": """
@@ -362,7 +363,7 @@ def dbt_ldap_macros() -> FlextTypes.Core.Headers:
 
 # dbt LDAP source definitions
 @pytest.fixture
-def dbt_ldap_sources() -> FlextTypes.Core.Dict:
+def dbt_ldap_sources() -> FlextTypes.Dict:
     """Dbt LDAP source definitions for testing."""
     return {
         "version": 2,
@@ -422,7 +423,7 @@ def dbt_ldap_sources() -> FlextTypes.Core.Dict:
 
 # LDAP test fixtures
 @pytest.fixture
-def dbt_ldap_tests() -> FlextTypes.Core.Headers:
+def dbt_ldap_tests() -> FlextTypes.StringDict:
     """Dbt LDAP test definitions for testing."""
     return {
         "test_ldap_valid_user_dn": """
@@ -459,7 +460,7 @@ def dbt_ldap_tests() -> FlextTypes.Core.Headers:
 
 # LDAP validation fixtures
 @pytest.fixture
-def ldap_validation_rules() -> FlextTypes.Core.Dict:
+def ldap_validation_rules() -> FlextTypes.Dict:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
@@ -483,7 +484,7 @@ def ldap_validation_rules() -> FlextTypes.Core.Dict:
 
 # Performance test fixtures
 @pytest.fixture
-def ldap_performance_config() -> FlextTypes.Core.Dict:
+def ldap_performance_config() -> FlextTypes.Dict:
     """LDAP performance test configuration."""
     return {
         "large_directory_entries": 10000,
@@ -515,17 +516,17 @@ def mock_ldap_dbt_adapter() -> object:
     """Mock LDAP dbt adapter for testing."""
 
     class MockLdapDbtAdapter:
-        def __init__(self, config: FlextTypes.Core.Dict) -> None:
+        def __init__(self, config: FlextTypes.Dict) -> None:
             """Initialize the instance."""
             self.config = config
-            self.ldap_entries: FlextTypes.Core.Dict = {}
-            self.compiled_models: FlextTypes.Core.Dict = {}
+            self.ldap_entries: FlextTypes.Dict = {}
+            self.compiled_models: FlextTypes.Dict = {}
 
         def extract_ldap_data(
             self,
             _base_dn: str,
             _search_filter: str,
-        ) -> list[FlextTypes.Core.Dict]:
+        ) -> list[FlextTypes.Dict]:
             """Extract LDAP data for dbt processing."""
             # Mock LDAP extraction using shared container domain
             return [
@@ -547,7 +548,7 @@ def mock_ldap_dbt_adapter() -> object:
 
         def parse_ldap_attributes(
             self,
-            attributes: FlextTypes.Core.Dict,
+            attributes: FlextTypes.Dict,
         ) -> dict[str, str | None]:
             """Parse LDAP attributes for dbt models."""
             parsed: dict[str, str | None] = {}
@@ -560,10 +561,10 @@ def mock_ldap_dbt_adapter() -> object:
 
         def transform_ldap_to_relational(
             self,
-            ldap_data: list[FlextTypes.Core.Dict],
-        ) -> list[FlextTypes.Core.Dict]:
+            ldap_data: list[FlextTypes.Dict],
+        ) -> list[FlextTypes.Dict]:
             """Transform LDAP data to relational format."""
-            transformed: list[dict[str, object]] = []
+            transformed: list[FlextTypes.Dict] = []
             for entry in ldap_data:
                 flat_entry = {
                     "dn": entry["dn"],
@@ -583,11 +584,11 @@ def mock_ldap_connection() -> object:
     """Mock LDAP connection for testing."""
 
     class MockLdapConnection:
-        def __init__(self, config: FlextTypes.Core.Dict) -> None:
+        def __init__(self, config: FlextTypes.Dict) -> None:
             """Initialize the instance."""
             self.config = config
             self.connected = False
-            self.entries: list[FlextTypes.Core.Dict] = []
+            self.entries: list[FlextTypes.Dict] = []
 
         def connect(self) -> bool:
             """Connect to LDAP server."""
@@ -603,8 +604,8 @@ def mock_ldap_connection() -> object:
             self,
             base_dn: str,
             _search_filter: str,
-            _attributes: FlextTypes.Core.StringList | None = None,
-        ) -> list[FlextTypes.Core.Dict]:
+            _attributes: FlextTypes.StringList | None = None,
+        ) -> list[FlextTypes.Dict]:
             """Search LDAP directory."""
             # Mock search results using shared container domain
             if "people" in base_dn or "users" in base_dn:
