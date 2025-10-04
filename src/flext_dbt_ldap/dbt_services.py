@@ -10,9 +10,9 @@ from __future__ import annotations
 
 from typing import override
 
+from flext_core import FlextLogger, FlextResult
 from flext_meltano import FlextMeltanoService
 
-from flext_core import FlextLogger, FlextResult
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.models import FlextDbtLdapTransformer

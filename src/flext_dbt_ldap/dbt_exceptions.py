@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import override
 
 from flext_core import FlextExceptions
+
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 # Use FlextExceptions directly (current signature)

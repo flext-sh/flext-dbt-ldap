@@ -9,12 +9,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import ClassVar, Self
 
+from flext_core import FlextConfig, FlextLogger, FlextResult, FlextTypes
 from flext_ldap import FlextLdapModels
 from flext_meltano.config import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
 
-from flext_core import FlextConfig, FlextLogger, FlextResult, FlextTypes
 from flext_dbt_ldap.constants import FlextDbtLdapConstants
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 

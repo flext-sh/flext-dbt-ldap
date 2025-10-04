@@ -12,10 +12,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
+from flext_core import FlextLogger, FlextResult
 from flext_ldap import FlextLdapClient, FlextLdapModels
 from flext_meltano import FlextMeltanoService
 
-from flext_core import FlextLogger, FlextResult
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextTypes
 

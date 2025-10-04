@@ -1,14 +1,21 @@
-"""FLEXT DBT LDAP Simple API.
+"""FLEXT DBT LDAP API - Unified facade for DBT LDAP operations.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
-Simple API for FLEXT DBT LDAP operations.
+Unified facade for FLEXT DBT LDAP operations with complete FLEXT integration.
 """
 
 from __future__ import annotations
 
-from flext_core import FlextLogger
+from flext_core import (
+    FlextContainer,
+    FlextContext,
+    FlextLogger,
+    FlextResult,
+    FlextService,
+)
+
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
@@ -17,263 +24,337 @@ from flext_dbt_ldap.models import (
     FlextDbtLdapTransformer,
     FlextDbtLdapUserDimension,
 )
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
-logger = FlextLogger(__name__)
 
+class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
+    """Unified DBT LDAP facade with complete FLEXT ecosystem integration.
 
-class FlextDbtLdapSimpleApi:
-    """Unified DBT LDAP simple API with factory methods."""
+    This is the single unified class for the flext-dbt-ldap domain providing
+    access to all DBT LDAP domain functionality with centralized patterns.
 
-    @staticmethod
-    def create_flext_dbt_ldap_config(
+    **UNIFIED CLASS PATTERN**: One class per module with nested helpers only.
+    **CENTRALIZED APPROACH**: All operations follow centralized patterns:
+    - FlextDbtLdap.* for DBT LDAP-specific operations
+    - Centralized validation through FlextDbtLdapUtilities
+    - No wrappers, aliases, or fallbacks
+    - Direct use of flext-core centralized services
+
+    **FLEXT INTEGRATION**: Complete integration with flext-core patterns:
+    - FlextContainer for dependency injection
+    - FlextContext for operation context
+    - FlextLogger for structured logging
+    - FlextResult for railway-oriented error handling
+
+    **PYTHON 3.13+ COMPATIBILITY**: Uses modern patterns and latest type features.
+    """
+
+    def __init__(self, config: FlextDbtLdapConfig | None = None) -> None:
+        """Initialize the unified DBT LDAP service."""
+        super().__init__()
+        self._config = config or FlextDbtLdapConfig()
+        self._client: FlextDbtLdapClient | None = None
+        self._service: FlextDbtLdapService | None = None
+
+        # Complete FLEXT ecosystem integration
+        self._container = FlextContainer.ensure_global_manager().get_or_create()
+        self._context = FlextContext()
+        self._logger = FlextLogger(__name__)
+
+    @classmethod
+    def create(cls) -> FlextDbtLdap:
+        """Create a new FlextDbtLdap instance (factory method)."""
+        return cls()
+
+    # =============================================================================
+    # CONFIGURATION METHODS - Enhanced with proper error handling
+    # =============================================================================
+
+    def create_config(
+        self,
         ldap_host: str = "localhost",
         ldap_port: int = 389,
         ldap_base_dn: str = "",
         **kwargs: object,
-    ) -> FlextDbtLdapConfig:
+    ) -> FlextResult[FlextDbtLdapConfig]:
         """Create DBT LDAP configuration with sensible defaults.
 
         Args:
-          ldap_host: LDAP server host
-          ldap_port: LDAP server port
-          ldap_base_dn: LDAP base DN for searches
-          **kwargs: Additional configuration fields accepted by `FlextDbtLdapConfig`
-          ldap_use_tls: Use LDAPS
-          ldap_bind_dn: Bind DN for authentication
-          ldap_bind_password: Bind password
-          dbt_project_dir: DBT project directory
-          dbt_profiles_dir: DBT profiles directory
-          dbt_target: DBT target profile
-          dbt_threads: DBT threads
-          dbt_log_level: DBT log level
+            ldap_host: LDAP server host
+            ldap_port: LDAP server port
+            ldap_base_dn: LDAP base DN for searches
+            **kwargs: Additional configuration fields
 
         Returns:
-          Configured FlextDbtLdapConfig instance
+            FlextResult containing configured FlextDbtLdapConfig
 
         """
-        logger.info("Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port)
-
-        # Support only known fields to satisfy strict typing
-        config: FlextDbtLdapTypes.Core.ConfigDict = FlextDbtLdapConfig(
-            ldap_host=ldap_host,
-            ldap_port=ldap_port,
-            ldap_base_dn=ldap_base_dn,
-        )
-        # Apply optional kwargs if they match model attributes
-        for key, value in kwargs.items():
-            if hasattr(config, key):
-                setattr(config, key, value)
-        return config
-
-    @staticmethod
-    def create_flext_dbt_ldap_client(
-        config: FlextDbtLdapConfig | None = None,
-    ) -> FlextDbtLdapClient:
-        """Create DBT LDAP client with configuration.
-
-        Args:
-          config: Configuration (created with defaults if None)
-
-        Returns:
-          Configured FlextDbtLdapClient instance
-
-        """
-        if config is None:
-            config: FlextDbtLdapTypes.Core.ConfigDict = (
-                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config()
+        try:
+            self._logger.info(
+                "Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port
             )
 
-        logger.info("Creating DBT LDAP client")
-        return FlextDbtLdapClient(config)
-
-    @staticmethod
-    def create_flext_dbt_ldap_service(
-        config: FlextDbtLdapConfig | None = None,
-    ) -> FlextDbtLdapService:
-        """Create DBT LDAP service with configuration.
-
-        Args:
-          config: Configuration (created with defaults if None)
-
-        Returns:
-          Configured FlextDbtLdapService instance
-
-        """
-        if config is None:
-            config: FlextDbtLdapTypes.Core.ConfigDict = (
-                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config()
+            # Create base config
+            config = FlextDbtLdapConfig(
+                ldap_host=ldap_host,
+                ldap_port=ldap_port,
+                ldap_base_dn=ldap_base_dn,
             )
 
-        logger.info("Creating DBT LDAP service")
-        return FlextDbtLdapService(config)
+            # Apply optional kwargs if they match model attributes
+            for key, value in kwargs.items():
+                if hasattr(config, key):
+                    setattr(config, key, value)
 
-    @staticmethod
-    def create_flext_user_dimension(
+            return FlextResult[FlextDbtLdapConfig].ok(config)
+        except Exception as e:
+            return FlextResult[FlextDbtLdapConfig].fail(f"Config creation failed: {e}")
+
+    # =============================================================================
+    # CLIENT AND SERVICE MANAGEMENT - Enhanced with proper error handling
+    # =============================================================================
+
+    @property
+    def client(self) -> FlextDbtLdapClient:
+        """Get the DBT LDAP client instance."""
+        if self._client is None:
+            self._client = FlextDbtLdapClient(self._config)
+        return self._client
+
+    @property
+    def service(self) -> FlextDbtLdapService:
+        """Get the DBT LDAP service instance."""
+        if self._service is None:
+            self._service = FlextDbtLdapService(self._config)
+        return self._service
+
+    @property
+    def config(self) -> FlextDbtLdapConfig:
+        """Get the current configuration."""
+        return self._config
+
+    # =============================================================================
+    # FACTORY METHODS - Enhanced with FlextResult error handling
+    # =============================================================================
+
+    def create_client(self) -> FlextResult[FlextDbtLdapClient]:
+        """Create DBT LDAP client with current configuration.
+
+        Returns:
+            FlextResult containing configured FlextDbtLdapClient
+
+        """
+        try:
+            self._logger.info("Creating DBT LDAP client")
+            client = FlextDbtLdapClient(self._config)
+            return FlextResult[FlextDbtLdapClient].ok(client)
+        except Exception as e:
+            return FlextResult[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
+
+    def create_service(self) -> FlextResult[FlextDbtLdapService]:
+        """Create DBT LDAP service with current configuration.
+
+        Returns:
+            FlextResult containing configured FlextDbtLdapService
+
+        """
+        try:
+            self._logger.info("Creating DBT LDAP service")
+            service = FlextDbtLdapService(self._config)
+            return FlextResult[FlextDbtLdapService].ok(service)
+        except Exception as e:
+            return FlextResult[FlextDbtLdapService].fail(
+                f"Service creation failed: {e}"
+            )
+
+    # =============================================================================
+    # MODEL FACTORY METHODS - Enhanced with FlextResult error handling
+    # =============================================================================
+
+    def create_user_dimension(
+        self,
         user_id: str,
         common_name: str,
         email: str | None = None,
         **kwargs: object,
-    ) -> FlextDbtLdapUserDimension:
+    ) -> FlextResult[FlextDbtLdapUserDimension]:
         """Create user dimension with required fields.
 
         Args:
-          user_id: Unique user identifier
-          common_name: User's common name
-          email: User's email address
-          **kwargs: Additional fields for `FlextDbtLdapUserDimension`
-          display_name: Display name
-          department: Department name
-          manager_dn: Manager DN
-          employee_number: Employee number
-          phone: Phone number
-          is_active: Active flag
-          created_date: Created timestamp
-          modified_date: Modified timestamp
+            user_id: Unique user identifier
+            common_name: User's common name
+            email: User's email address
+            **kwargs: Additional fields for FlextDbtLdapUserDimension
 
         Returns:
-          FlextDbtLdapUserDimension instance
+            FlextResult containing FlextDbtLdapUserDimension instance
 
         """
-        logger.debug(
-            "Creating user dimension: user_id=%s, name=%s",
-            user_id,
-            common_name,
-        )
+        try:
+            self._logger.debug(
+                "Creating user dimension: user_id=%s, name=%s",
+                user_id,
+                common_name,
+            )
 
-        user = FlextDbtLdapUserDimension(
-            user_id=user_id,
-            common_name=common_name,
-            email=email,
-        )
-        for key, value in kwargs.items():
-            if hasattr(user, key):
-                setattr(user, key, value)
-        return user
+            user = FlextDbtLdapUserDimension(
+                user_id=user_id,
+                common_name=common_name,
+                email=email,
+            )
+            for key, value in kwargs.items():
+                if hasattr(user, key):
+                    setattr(user, key, value)
+            return FlextResult[FlextDbtLdapUserDimension].ok(user)
+        except Exception as e:
+            return FlextResult[FlextDbtLdapUserDimension].fail(
+                f"User dimension creation failed: {e}"
+            )
 
-    @staticmethod
-    def create_flext_group_dimension(
+    def create_group_dimension(
+        self,
         group_id: str,
         common_name: str,
         description: str | None = None,
         **kwargs: object,
-    ) -> FlextDbtLdapGroupDimension:
+    ) -> FlextResult[FlextDbtLdapGroupDimension]:
         """Create group dimension with required fields.
 
         Args:
-          group_id: Unique group identifier
-          common_name: Group's common name
-          description: Group description
-          **kwargs: Additional fields for `FlextDbtLdapGroupDimension`
-          group_type: Group type
-          member_count: Number of members
-          is_active: Active flag
-          created_date: Created timestamp
-          modified_date: Modified timestamp
+            group_id: Unique group identifier
+            common_name: Group's common name
+            description: Group description
+            **kwargs: Additional fields for FlextDbtLdapGroupDimension
 
         Returns:
-          FlextDbtLdapGroupDimension instance
+            FlextResult containing FlextDbtLdapGroupDimension instance
 
         """
-        logger.debug(
-            "Creating group dimension: group_id=%s, name=%s",
-            group_id,
-            common_name,
-        )
+        try:
+            self._logger.debug(
+                "Creating group dimension: group_id=%s, name=%s",
+                group_id,
+                common_name,
+            )
 
-        group = FlextDbtLdapGroupDimension(
-            group_id=group_id,
-            common_name=common_name,
-            description=description,
-        )
-        for key, value in kwargs.items():
-            if hasattr(group, key):
-                setattr(group, key, value)
-        return group
+            group = FlextDbtLdapGroupDimension(
+                group_id=group_id,
+                common_name=common_name,
+                description=description,
+            )
+            for key, value in kwargs.items():
+                if hasattr(group, key):
+                    setattr(group, key, value)
+            return FlextResult[FlextDbtLdapGroupDimension].ok(group)
+        except Exception as e:
+            return FlextResult[FlextDbtLdapGroupDimension].fail(
+                f"Group dimension creation failed: {e}"
+            )
 
-    @staticmethod
-    def create_flext_ldap_transformer() -> FlextDbtLdapTransformer:
+    def create_transformer(self) -> FlextResult[FlextDbtLdapTransformer]:
         """Create LDAP data transformer.
 
         Returns:
-          FlextDbtLdapTransformer instance
+            FlextResult containing FlextDbtLdapTransformer instance
 
         """
-        logger.debug("Creating LDAP transformer")
-        return FlextDbtLdapTransformer()
+        try:
+            self._logger.debug("Creating LDAP transformer")
+            transformer = FlextDbtLdapTransformer()
+            return FlextResult[FlextDbtLdapTransformer].ok(transformer)
+        except Exception as e:
+            return FlextResult[FlextDbtLdapTransformer].fail(
+                f"Transformer creation failed: {e}"
+            )
 
-    @staticmethod
-    def create_simple_dbt_ldap_pipeline(
+    # =============================================================================
+    # PIPELINE METHODS - Enhanced with FlextResult and proper validation
+    # =============================================================================
+
+    def create_simple_pipeline(
+        self,
         ldap_host: str = "localhost",
         ldap_port: int = 389,
         ldap_base_dn: str = "",
         **config_kwargs: object,
-    ) -> FlextDbtLdapService:
+    ) -> FlextResult[FlextDbtLdapService]:
         """Create complete DBT LDAP pipeline with minimal configuration using FlextDbtLdapUtilities.
 
         CRITICAL: Now ACTUALLY USES FlextDbtLdapUtilities to eliminate ZERO TOLERANCE violation.
         This method now delegates to utilities for DBT project and profile generation.
 
         Args:
-          ldap_host: LDAP server host
-          ldap_port: LDAP server port
-          ldap_base_dn: LDAP base DN
-          **config_kwargs: Additional configuration
+            ldap_host: LDAP server host
+            ldap_port: LDAP server port
+            ldap_base_dn: LDAP base DN
+            **config_kwargs: Additional configuration
 
         Returns:
-          Ready-to-use FlextDbtLdapService instance
+            FlextResult containing ready-to-use FlextDbtLdapService instance
 
         """
-        logger.info("Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities")
-
-        # ZERO TOLERANCE: Use FlextDbtLdapUtilities for DBT project configuration
-        project_name = config_kwargs.get("project_name", "ldap_analytics")
-        ldap_sources = config_kwargs.get(
-            "ldap_sources", [{"name": "users"}, {"name": "groups"}]
-        )
-
-        project_config_result = (
-            FlextDbtLdapUtilities.DbtProjectManagement.create_dbt_project_config(
-                project_name=project_name,
-                ldap_sources=ldap_sources,
-                target_schema=config_kwargs.get("target_schema", "ldap_transformed"),
+        try:
+            self._logger.info(
+                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities"
             )
-        )
 
-        if project_config_result.is_failure:
-            logger.error(
-                f"Failed to create DBT project config: {project_config_result.error}"
+            # Create base configuration
+            config_result = self.create_config(
+                ldap_host=ldap_host,
+                ldap_port=ldap_port,
+                ldap_base_dn=ldap_base_dn,
+                **config_kwargs,
             )
-            # Fallback to original method
-            config: FlextDbtLdapTypes.Core.ConfigDict = (
-                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
-                    ldap_host=ldap_host,
-                    ldap_port=ldap_port,
-                    ldap_base_dn=ldap_base_dn,
-                    **config_kwargs,
+            if config_result.is_failure:
+                return FlextResult[FlextDbtLdapService].fail(
+                    f"Config creation failed: {config_result.error}"
                 )
-            )
-        else:
-            # Use utilities-generated configuration
-            project_config = project_config_result.value
-            logger.info(
-                f"Successfully created DBT project config using utilities: {project_config['name']}"
+
+            config = config_result.unwrap()
+
+            # Use FlextDbtLdapUtilities for DBT project configuration if available
+            project_name = config_kwargs.get("project_name", "ldap_analytics")
+            ldap_sources = config_kwargs.get(
+                "ldap_sources", [{"name": "users"}, {"name": "groups"}]
             )
 
-            config: FlextDbtLdapTypes.Core.ConfigDict = (
-                FlextDbtLdapSimpleApi.create_flext_dbt_ldap_config(
-                    ldap_host=ldap_host,
-                    ldap_port=ldap_port,
-                    ldap_base_dn=ldap_base_dn,
-                    project_config=project_config,
-                    **config_kwargs,
+            project_config_result = (
+                FlextDbtLdapUtilities.DbtProjectManagement.create_dbt_project_config(
+                    project_name=project_name,
+                    ldap_sources=ldap_sources,
+                    target_schema=config_kwargs.get(
+                        "target_schema", "ldap_transformed"
+                    ),
                 )
             )
 
-        return FlextDbtLdapSimpleApi.create_flext_dbt_ldap_service(config)
+            if project_config_result.is_success:
+                project_config = project_config_result.unwrap()
+                self._logger.info(
+                    f"Successfully created DBT project config using utilities: {project_config['name']}"
+                )
+                # Apply project config to main config
+                if hasattr(config, "project_config"):
+                    config.project_config = project_config
+
+            # Create and return service
+            service_result = self.create_service()
+            if service_result.is_failure:
+                return FlextResult[FlextDbtLdapService].fail(
+                    f"Service creation failed: {service_result.error}"
+                )
+
+            return service_result
+        except Exception as e:
+            return FlextResult[FlextDbtLdapService].fail(
+                f"Pipeline creation failed: {e}"
+            )
 
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
-    "FlextDbtLdapSimpleApi",
+# Alias for backward compatibility
+FlextDbtLdapAPI = FlextDbtLdap
+
+__all__ = [
+    "FlextDbtLdap",
+    "FlextDbtLdapAPI",
 ]

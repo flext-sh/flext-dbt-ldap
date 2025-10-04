@@ -13,9 +13,8 @@ from subprocess import CompletedProcess
 
 import psycopg
 import pytest
-from flext_tests import FlextTestDocker
-
 from flext_core import FlextLogger, FlextTypes
+from flext_tests import FlextTestDocker
 
 logger = FlextLogger(__name__)
 
