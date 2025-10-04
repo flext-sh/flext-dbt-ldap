@@ -10,9 +10,9 @@ from __future__ import annotations
 import logging
 from typing import override
 
+from flext_core import FlextModels, FlextResult, FlextTypes
 from flext_ldap import FlextLdapEntities
 
-from flext_core import FlextModels, FlextResult, FlextTypes
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 # Set up logger
@@ -428,7 +428,18 @@ class FlextDbtLdapModels(FlextModels):
             return memberships
 
 
-# Direct export of unified models class - no aliases
+# Type aliases for backward compatibility with nested class access
+FlextDbtLdapTransformer = FlextDbtLdapModels.Transformer
+FlextDbtLdapUserDimension = FlextDbtLdapModels.UserDimension
+FlextDbtLdapGroupDimension = FlextDbtLdapModels.GroupDimension
+FlextDbtLdapMembershipFact = FlextDbtLdapModels.MembershipFact
+
+
+# Direct export of unified models class with backward-compatible aliases
 __all__: FlextDbtLdapTypes.Core.StringList = [
+    "FlextDbtLdapGroupDimension",
+    "FlextDbtLdapMembershipFact",
     "FlextDbtLdapModels",
+    "FlextDbtLdapTransformer",
+    "FlextDbtLdapUserDimension",
 ]

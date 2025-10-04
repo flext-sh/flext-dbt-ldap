@@ -13,6 +13,7 @@ from flext_core import (
     FlextModels,
     FlextResult,
 )
+
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_exceptions import (
@@ -35,9 +36,9 @@ from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
     validate_ldap_data_quality,
 )
+from flext_dbt_ldap.simple_api import FlextDbtLdap, FlextDbtLdapAPI
 from flext_dbt_ldap.type_aliases import (
     DomainBaseModel,
-    FlextDbtLdap,
     FlextDbtLdapResult,
 )
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
@@ -55,6 +56,8 @@ __all__ = [
     "DomainBaseModel",
     "FlextConfig",
     "FlextDbtLdap",
+    "FlextDbtLdap",
+    "FlextDbtLdapAPI",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
     "FlextDbtLdapConfig",
