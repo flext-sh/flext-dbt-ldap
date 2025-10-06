@@ -59,7 +59,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         # Complete FLEXT ecosystem integration
         self._container = FlextContainer.ensure_global_manager().get_or_create()
         self._context = FlextContext()
-        self._logger = FlextLogger(__name__)
+        self.logger = FlextLogger(__name__)
 
     @classmethod
     def create(cls) -> FlextDbtLdap:
@@ -90,7 +90,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.info(
+            self.logger.info(
                 "Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port
             )
 
@@ -145,7 +145,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.info("Creating DBT LDAP client")
+            self.logger.info("Creating DBT LDAP client")
             client = FlextDbtLdapClient(self._config)
             return FlextResult[FlextDbtLdapClient].ok(client)
         except Exception as e:
@@ -159,7 +159,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.info("Creating DBT LDAP service")
+            self.logger.info("Creating DBT LDAP service")
             service = FlextDbtLdapService(self._config)
             return FlextResult[FlextDbtLdapService].ok(service)
         except Exception as e:
@@ -191,7 +191,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.debug(
+            self.logger.debug(
                 "Creating user dimension: user_id=%s, name=%s",
                 user_id,
                 common_name,
@@ -231,7 +231,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.debug(
+            self.logger.debug(
                 "Creating group dimension: group_id=%s, name=%s",
                 group_id,
                 common_name,
@@ -259,7 +259,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.debug("Creating LDAP transformer")
+            self.logger.debug("Creating LDAP transformer")
             transformer = FlextDbtLdapTransformer()
             return FlextResult[FlextDbtLdapTransformer].ok(transformer)
         except Exception as e:
@@ -294,7 +294,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
         """
         try:
-            self._logger.info(
+            self.logger.info(
                 "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities"
             )
 
@@ -330,7 +330,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
             if project_config_result.is_success:
                 project_config = project_config_result.unwrap()
-                self._logger.info(
+                self.logger.info(
                     f"Successfully created DBT project config using utilities: {project_config['name']}"
                 )
                 # Apply project config to main config
