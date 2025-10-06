@@ -56,9 +56,6 @@
     [project.scripts]
         flext-dbt-ldap = "flext_dbt_ldap.cli:main"
 
-[tool.ruff]
-    extend = "../ruff-shared.toml"
-
 [tool.bandit]
     exclude_dirs = [
         "build",
@@ -203,3 +200,7 @@
         "src",
         "tests",
     ]
+
+
+[tool.ruff]
+    extend = "../ruff-shared.toml"
