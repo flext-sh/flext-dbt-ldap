@@ -18,6 +18,7 @@ class FlextDbtLdapVersion:
     """Version information container for flext-dbt-ldap."""
 
     def __init__(self) -> None:
+        """Initialize version information."""
         self.major = MAJOR
         self.minor = MINOR
         self.patch = PATCH

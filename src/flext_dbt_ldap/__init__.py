@@ -30,7 +30,6 @@ from flext_dbt_ldap.dbt_exceptions import (
 )
 from flext_dbt_ldap.deprecation_warnings import (
     FlextDbtLdapDeprecationWarning,
-    _show_deprecation_warning,
 )
 from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
