@@ -11,7 +11,7 @@ import logging
 from typing import override
 
 from flext_core import FlextModels, FlextResult, FlextTypes
-from flext_ldap import FlextLDAPEntities
+from flext_ldap import FlextLdapEntities
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
@@ -43,7 +43,7 @@ class FlextDbtLdapModels(FlextModels):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: FlextLDAPEntities.Entry,
+            entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, FlextDbtLdapTypes.Core.StringList]
@@ -127,7 +127,7 @@ class FlextDbtLdapModels(FlextModels):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: FlextLDAPEntities.Entry,
+            entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
@@ -229,7 +229,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def transform_users(
             self,
-            entries: list[FlextLDAPEntities.Entry],
+            entries: list[FlextLdapEntities.Entry],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions.
 
@@ -261,7 +261,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def transform_groups(
             self,
-            entries: list[FlextLDAPEntities.Entry],
+            entries: list[FlextLdapEntities.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions.
 
@@ -299,7 +299,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def transform_memberships(
             self,
-            entries: list[FlextLDAPEntities.Entry],
+            entries: list[FlextLdapEntities.Entry],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts.
 
@@ -339,7 +339,7 @@ class FlextDbtLdapModels(FlextModels):
             logger.info("Transformed %d membership facts", len(membership_facts))
             return membership_facts
 
-        def _is_user_entry(self, entry: FlextLDAPEntities.Entry) -> bool:
+        def _is_user_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
             object_classes: FlextDbtLdapTypes.Core.StringList = []
@@ -352,7 +352,7 @@ class FlextDbtLdapModels(FlextModels):
             user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
             return any(cls in object_classes for cls in user_classes)
 
-        def _is_group_entry(self, entry: FlextLDAPEntities.Entry) -> bool:
+        def _is_group_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
             object_classes: FlextDbtLdapTypes.Core.StringList = []
@@ -372,7 +372,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def _extract_group_memberships(
             self,
-            group_entry: FlextLDAPEntities.Entry,
+            group_entry: FlextLdapEntities.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
@@ -402,7 +402,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def _extract_user_memberships(
             self,
-            user_entry: FlextLDAPEntities.Entry,
+            user_entry: FlextLdapEntities.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
