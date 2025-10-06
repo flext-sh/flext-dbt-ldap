@@ -34,7 +34,7 @@ class FlextDbtLdapUtilities(FlextUtilities):
         """Initialize FlextDbtLdapUtilities service."""
         super().__init__()
         self._container = FlextContainer.get_global()
-        self._logger = FlextLogger(__name__)
+        self.logger = FlextLogger(__name__)
 
     def execute(self) -> FlextResult[FlextTypes.Dict]:
         """Execute the main DBT LDAP service operation.
@@ -60,7 +60,7 @@ class FlextDbtLdapUtilities(FlextUtilities):
     @property
     def logger(self) -> FlextLogger:
         """Get logger instance."""
-        return self._logger
+        return self.logger
 
     @property
     def container(self) -> FlextContainer:
