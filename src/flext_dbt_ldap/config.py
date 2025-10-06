@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import ClassVar, Self
 
 from flext_core import FlextConfig, FlextLogger, FlextResult, FlextTypes
-from flext_ldap import FlextLDAPModels
+from flext_ldap import FlextLdapModels
 from flext_meltano.config import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
@@ -600,7 +600,7 @@ class FlextDbtLdapConfig(FlextConfig):
         except Exception as e:
             return FlextResult[None].fail(f"Business rules validation failed: {e}")
 
-    def get_ldap_config(self) -> FlextLDAPModels.ConnectionConfig:
+    def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
         bind_dn = self.ldap_bind_dn.get_secret_value() if self.ldap_bind_dn else ""
         bind_password = (
@@ -609,7 +609,7 @@ class FlextDbtLdapConfig(FlextConfig):
             else ""
         )
 
-        return FlextLDAPModels.ConnectionConfig(
+        return FlextLdapModels.ConnectionConfig(
             server=self.ldap_host,
             port=self.ldap_port,
             bind_dn=bind_dn,
