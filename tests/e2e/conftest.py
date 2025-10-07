@@ -6,7 +6,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import subprocess
 import time
+from asyncio.subprocess import create_subprocess_exec
 from collections.abc import Generator
 from pathlib import Path
 from subprocess import CompletedProcess
