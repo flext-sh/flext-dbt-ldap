@@ -57,7 +57,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         self._service: FlextDbtLdapService | None = None
 
         # Complete FLEXT ecosystem integration
-        self._container = FlextContainer.ensure_global_manager().get_or_create()
+        self._container = FlextContainer.get_global().clear()().get_or_create()
         self._context = FlextContext()
         self.logger = FlextLogger(__name__)
 
