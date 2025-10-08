@@ -2,7 +2,7 @@
 
 **Enterprise-Grade LDAP Data Transformations Quality Assurance & Refactoring Guidelines**
 **Version**: 2.1.0 | **Authority**: WORKSPACE | **Updated**: 2025-01-08
-**Environment**: `/home/marlonsc/flext/.venv/bin/python` (No PYTHONPATH required)
+**Environment**: `../.venv/bin/python` (No PYTHONPATH required)
 **Based on**: flext-core 0.9.9 with 75%+ test coverage (PROVEN FOUNDATION)
 **Project Context**: dbt project for LDAP directory data transformations using dbt Core with PostgreSQL/DuckDB backends
 
@@ -857,7 +857,7 @@ class LdapDimensionalModelGenerator:
 ### Before Starting object LDAP Work
 
 - [ ] Read all documentation: `CLAUDE.md`, `FLEXT_REFACTORING_PROMPT.md`, project `README.md`
-- [ ] Verify virtual environment: `/home/marlonsc/flext/.venv/bin/python` (VERIFIED WORKING)
+- [ ] Verify virtual environment: `../.venv/bin/python` (VERIFIED WORKING)
 - [ ] Run baseline LDAP quality assessment using exact commands provided
 - [ ] Plan incremental LDAP improvements (never wholesale rewrites)
 - [ ] Establish measurable success criteria from current LDAP baseline
