@@ -17,15 +17,14 @@
         "Typing :: Typed",
     ]
     dependencies = [
-        "flext-core @ file:///home/marlonsc/flext/flext-core",
-        "flext-ldap @ file:///home/marlonsc/flext/flext-ldap",
-        "flext-meltano @ file:///home/marlonsc/flext/flext-meltano",
-        "flext-observability @ file:///home/marlonsc/flext/flext-observability",
+        "flext-core @ file:../flext-core",
+        "flext-ldap @ file:../flext-ldap",
+        "flext-meltano @ file:../flext-meltano",
+        "flext-observability @ file:../flext-observability",
         "pydantic>=2.11.7",
     ]
     description = "FLEXT dbt LDAP - dbt Models for LDAP Data Transformation"
     keywords = [
-        "",
         "data-transformation",
         "dbt",
         "enterprise",
