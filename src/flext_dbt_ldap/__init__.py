@@ -6,8 +6,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap.__version__ import __version__, __version_info__
-
 from typing import Final
 
 from flext_core import (
@@ -16,6 +14,7 @@ from flext_core import (
     FlextResult,
 )
 
+from flext_dbt_ldap.__version__ import __version__, __version_info__
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_exceptions import (
