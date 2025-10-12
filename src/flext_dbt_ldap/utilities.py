@@ -338,9 +338,9 @@ where 1=1
                 columns_config = cast(
                     "FlextCore.Types.Dict", test_config.get("columns", {})
                 )
-                models_list = cast(list[FlextCore.Types.Dict], tests["models"])
+                models_list = cast("list[FlextCore.Types.Dict]", tests["models"])
                 model_dict = models_list[0]
-                columns_list = cast(list[FlextCore.Types.Dict], model_dict["columns"])
+                columns_list = cast("list[FlextCore.Types.Dict]", model_dict["columns"])
 
                 for column, column_tests in columns_config.items():
                     column_config = {
