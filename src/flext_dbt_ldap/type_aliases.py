@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextModels, FlextResult
+from flext_core import FlextCore
 
 # ================================
 # TYPE ALIASES AND COMPATIBILITY
@@ -14,10 +14,10 @@ from flext_core import FlextModels, FlextResult
 
 # FlextDbtLdap-specific aliases (following FlextXxx pattern)
 FlextDbtLdap: type | None = None  # Will be set to platform when available
-FlextDbtLdapResult = FlextResult  # FlextDbtLdap result pattern
+FlextDbtLdapResult = FlextCore.Result  # FlextDbtLdap result pattern
 
-# Legacy compatibility - use FlextModels directly
-DomainBaseModel = FlextModels.ArbitraryTypesModel  # Domain base model
+# Legacy compatibility - use FlextCore.Models directly
+DomainBaseModel = FlextCore.Models.ArbitraryTypesModel  # Domain base model
 
 __all__ = [
     "DomainBaseModel",

@@ -7,9 +7,9 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import ClassVar, Self
+from typing import ClassVar, Self, cast
 
-from flext_core import FlextConfig, FlextLogger, FlextResult, FlextTypes
+from flext_core import FlextCore
 from flext_ldap import FlextLdapModels
 from flext_meltano.config import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
@@ -18,14 +18,14 @@ from pydantic_settings import SettingsConfigDict
 from flext_dbt_ldap.constants import FlextDbtLdapConstants
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
-logger = FlextLogger(__name__)
+logger = FlextCore.Logger(__name__)
 
 
-class FlextDbtLdapConfig(FlextConfig):
-    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextConfig.
+class FlextDbtLdapConfig(FlextCore.Config):
+    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextCore.Config.
 
     Follows standardized pattern:
-    - Extends FlextConfig from flext-core
+    - Extends FlextCore.Config from flext-core
     - No nested classes within Config
     - All defaults from FlextDbtLdapConstants
     - Uses enhanced singleton pattern with inverse dependency injection
@@ -40,7 +40,7 @@ class FlextDbtLdapConfig(FlextConfig):
         str_strip_whitespace=True,
         json_schema_extra={
             "title": "FLEXT DBT LDAP Configuration",
-            "description": "DBT LDAP configuration extending FlextConfig",
+            "description": "DBT LDAP configuration extending FlextCore.Config",
         },
     )
 
@@ -76,7 +76,7 @@ class FlextDbtLdapConfig(FlextConfig):
     )
     dbt_target: str = Field(default="dev", description="DBT target environment")
     dbt_threads: int = Field(
-        default=FlextDbtLdapConstants.Processing.DEFAULT_BATCH_SIZE // 1000,
+        default=FlextDbtLdapConstants.DbtProcessing.DEFAULT_BATCH_SIZE // 1000,
         ge=1,
         le=16,
         description="Number of DBT threads",
@@ -84,13 +84,13 @@ class FlextDbtLdapConfig(FlextConfig):
     dbt_log_level: str = Field(default="info", description="DBT log level")
 
     # LDAP-specific DBT Settings - using constants
-    ldap_schema_mapping: ClassVar[FlextTypes.StringDict] = {
+    ldap_schema_mapping: ClassVar[FlextCore.Types.StringDict] = {
         "users": "stg_users",
         "groups": "stg_groups",
         "org_units": "stg_org_units",
     }
 
-    ldap_attribute_mapping: ClassVar[FlextTypes.StringDict] = {
+    ldap_attribute_mapping: ClassVar[FlextCore.Types.StringDict] = {
         "cn": "common_name",
         "uid": "user_id",
         "mail": "email",
@@ -111,389 +111,389 @@ class FlextDbtLdapConfig(FlextConfig):
 
     # DBT LDAP-specific logging configuration using FlextDbtLdapLoggingConstants
     log_dbt_operations: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_OPERATIONS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_OPERATIONS,
         description="Log DBT operations",
     )
 
     log_dbt_models: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_MODELS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_MODELS,
         description="Log DBT model execution",
     )
 
     log_dbt_tests: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_TESTS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_TESTS,
         description="Log DBT test execution",
     )
 
     log_dbt_snapshots: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_SNAPSHOTS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_SNAPSHOTS,
         description="Log DBT snapshot operations",
     )
 
     log_dbt_seeds: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_SEEDS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_SEEDS,
         description="Log DBT seed operations",
     )
 
     log_dbt_macros: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_MACROS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_MACROS,
         description="Log DBT macro execution",
     )
 
     log_dbt_hooks: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_HOOKS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_HOOKS,
         description="Log DBT hook execution",
     )
 
     log_dbt_sources: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_SOURCES,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_SOURCES,
         description="Log DBT source operations",
     )
 
     log_dbt_exposures: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_EXPOSURES,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_EXPOSURES,
         description="Log DBT exposure operations",
     )
 
     log_dbt_metrics: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_METRICS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_METRICS,
         description="Log DBT metric operations",
     )
 
     # DBT Execution Logging
     log_dbt_execution: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_EXECUTION,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_EXECUTION,
         description="Log DBT execution details",
     )
 
     log_dbt_sql: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_SQL,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_SQL,
         description="Log DBT SQL queries",
     )
 
     log_dbt_results: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_RESULTS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_RESULTS,
         description="Log DBT execution results",
     )
 
     log_dbt_errors: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_ERRORS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_ERRORS,
         description="Log DBT errors",
     )
 
     log_dbt_warnings: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_WARNINGS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_WARNINGS,
         description="Log DBT warnings",
     )
 
     log_dbt_performance: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_PERFORMANCE,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_PERFORMANCE,
         description="Log DBT performance metrics",
     )
 
     log_dbt_timing: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_TIMING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_TIMING,
         description="Log DBT timing information",
     )
 
     log_dbt_memory: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_MEMORY,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_MEMORY,
         description="Log DBT memory usage",
     )
 
     log_dbt_throughput: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DBT_THROUGHPUT,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DBT_THROUGHPUT,
         description="Log DBT throughput metrics",
     )
 
     # LDAP Integration Logging
     log_ldap_integration: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_INTEGRATION,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_INTEGRATION,
         description="Log LDAP integration operations",
     )
 
     log_ldap_connections: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_CONNECTIONS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_CONNECTIONS,
         description="Log LDAP connection events",
     )
 
     log_ldap_queries: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_QUERIES,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_QUERIES,
         description="Log LDAP queries",
     )
 
     log_ldap_results: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_RESULTS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_RESULTS,
         description="Log LDAP query results",
     )
 
     log_ldap_errors: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_ERRORS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_ERRORS,
         description="Log LDAP errors",
     )
 
     log_ldap_performance: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_PERFORMANCE,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_PERFORMANCE,
         description="Log LDAP performance metrics",
     )
 
     log_ldap_timing: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_TIMING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_TIMING,
         description="Log LDAP timing information",
     )
 
     log_ldap_memory: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_MEMORY,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_MEMORY,
         description="Log LDAP memory usage",
     )
 
     log_ldap_throughput: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_LDAP_THROUGHPUT,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_LDAP_THROUGHPUT,
         description="Log LDAP throughput metrics",
     )
 
     # Data Transformation Logging
     log_transformation_operations: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_OPERATIONS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_OPERATIONS,
         description="Log data transformation operations",
     )
 
     log_transformation_sql: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_SQL,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_SQL,
         description="Log transformation SQL queries",
     )
 
     log_transformation_results: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_RESULTS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_RESULTS,
         description="Log transformation results",
     )
 
     log_transformation_errors: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_ERRORS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_ERRORS,
         description="Log transformation errors",
     )
 
     log_transformation_warnings: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_WARNINGS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_WARNINGS,
         description="Log transformation warnings",
     )
 
     log_transformation_performance: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_PERFORMANCE,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_PERFORMANCE,
         description="Log transformation performance metrics",
     )
 
     log_transformation_timing: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_TIMING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_TIMING,
         description="Log transformation timing information",
     )
 
     log_transformation_memory: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_MEMORY,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_MEMORY,
         description="Log transformation memory usage",
     )
 
     log_transformation_throughput: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_TRANSFORMATION_THROUGHPUT,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_TRANSFORMATION_THROUGHPUT,
         description="Log transformation throughput metrics",
     )
 
     # Data Quality Logging
     log_data_quality: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY,
         description="Log data quality checks",
     )
 
     log_data_quality_checks: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_CHECKS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_CHECKS,
         description="Log data quality check results",
     )
 
     log_data_quality_errors: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_ERRORS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_ERRORS,
         description="Log data quality errors",
     )
 
     log_data_quality_warnings: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_WARNINGS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_WARNINGS,
         description="Log data quality warnings",
     )
 
     log_data_quality_metrics: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_METRICS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_METRICS,
         description="Log data quality metrics",
     )
 
     log_data_quality_timing: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_TIMING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_TIMING,
         description="Log data quality timing information",
     )
 
     log_data_quality_memory: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_MEMORY,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_MEMORY,
         description="Log data quality memory usage",
     )
 
     log_data_quality_throughput: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_DATA_QUALITY_THROUGHPUT,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_DATA_QUALITY_THROUGHPUT,
         description="Log data quality throughput metrics",
     )
 
     # Schema and Mapping Logging
     log_schema_mapping: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_MAPPING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_MAPPING,
         description="Log schema mapping operations",
     )
 
     log_attribute_mapping: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_ATTRIBUTE_MAPPING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_ATTRIBUTE_MAPPING,
         description="Log attribute mapping operations",
     )
 
     log_schema_validation: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_VALIDATION,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_VALIDATION,
         description="Log schema validation operations",
     )
 
     log_schema_errors: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_ERRORS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_ERRORS,
         description="Log schema errors",
     )
 
     log_schema_warnings: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_WARNINGS,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_WARNINGS,
         description="Log schema warnings",
     )
 
     log_schema_performance: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_PERFORMANCE,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_PERFORMANCE,
         description="Log schema performance metrics",
     )
 
     log_schema_timing: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_TIMING,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_TIMING,
         description="Log schema timing information",
     )
 
     log_schema_memory: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_MEMORY,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_MEMORY,
         description="Log schema memory usage",
     )
 
     log_schema_throughput: bool = Field(
-        default=FlextDbtLdapConstants.Logging.LOG_SCHEMA_THROUGHPUT,
+        default=FlextDbtLdapConstants.DbtLogging.LOG_SCHEMA_THROUGHPUT,
         description="Log schema throughput metrics",
     )
 
     # Performance Tracking for DBT LDAP Operations
     track_dbt_ldap_performance: bool = Field(
-        default=FlextDbtLdapConstants.Logging.TRACK_DBT_LDAP_PERFORMANCE,
+        default=FlextDbtLdapConstants.DbtLogging.TRACK_DBT_LDAP_PERFORMANCE,
         description="Track DBT LDAP performance metrics",
     )
 
     dbt_ldap_performance_threshold_warning: float = Field(
-        default=FlextDbtLdapConstants.Logging.DBT_LDAP_PERFORMANCE_THRESHOLD_WARNING,
+        default=FlextDbtLdapConstants.DbtLogging.DBT_LDAP_PERFORMANCE_THRESHOLD_WARNING,
         ge=0.0,
         description="DBT LDAP performance warning threshold in milliseconds",
     )
 
     dbt_ldap_performance_threshold_critical: float = Field(
-        default=FlextDbtLdapConstants.Logging.DBT_LDAP_PERFORMANCE_THRESHOLD_CRITICAL,
+        default=FlextDbtLdapConstants.DbtLogging.DBT_LDAP_PERFORMANCE_THRESHOLD_CRITICAL,
         ge=0.0,
         description="DBT LDAP performance critical threshold in milliseconds",
     )
 
     # Context Information to Include in Logs
     include_dbt_info_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_DBT_INFO_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_DBT_INFO_IN_LOGS,
         description="Include DBT information in log messages",
     )
 
     include_ldap_info_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_LDAP_INFO_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_LDAP_INFO_IN_LOGS,
         description="Include LDAP information in log messages",
     )
 
     include_transformation_info_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_TRANSFORMATION_INFO_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_TRANSFORMATION_INFO_IN_LOGS,
         description="Include transformation information in log messages",
     )
 
     include_data_quality_info_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_DATA_QUALITY_INFO_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_DATA_QUALITY_INFO_IN_LOGS,
         description="Include data quality information in log messages",
     )
 
     include_schema_info_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_SCHEMA_INFO_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_SCHEMA_INFO_IN_LOGS,
         description="Include schema information in log messages",
     )
 
     include_timing_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_TIMING_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_TIMING_IN_LOGS,
         description="Include timing information in log messages",
     )
 
     include_memory_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_MEMORY_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_MEMORY_IN_LOGS,
         description="Include memory information in log messages",
     )
 
     include_throughput_in_logs: bool = Field(
-        default=FlextDbtLdapConstants.Logging.INCLUDE_THROUGHPUT_IN_LOGS,
+        default=FlextDbtLdapConstants.DbtLogging.INCLUDE_THROUGHPUT_IN_LOGS,
         description="Include throughput information in log messages",
     )
 
     # Security and Privacy Settings
     mask_sensitive_data: bool = Field(
-        default=FlextDbtLdapConstants.Logging.MASK_SENSITIVE_DATA,
+        default=FlextDbtLdapConstants.DbtLogging.MASK_SENSITIVE_DATA,
         description="Mask sensitive data in logs",
     )
 
     mask_credentials: bool = Field(
-        default=FlextDbtLdapConstants.Logging.MASK_CREDENTIALS,
+        default=FlextDbtLdapConstants.DbtLogging.MASK_CREDENTIALS,
         description="Mask credentials in logs",
     )
 
     mask_connection_strings: bool = Field(
-        default=FlextDbtLdapConstants.Logging.MASK_CONNECTION_STRINGS,
+        default=FlextDbtLdapConstants.DbtLogging.MASK_CONNECTION_STRINGS,
         description="Mask connection strings in logs",
     )
 
     mask_api_keys: bool = Field(
-        default=FlextDbtLdapConstants.Logging.MASK_API_KEYS,
+        default=FlextDbtLdapConstants.DbtLogging.MASK_API_KEYS,
         description="Mask API keys in logs",
     )
 
     mask_ldap_passwords: bool = Field(
-        default=FlextDbtLdapConstants.Logging.MASK_LDAP_PASSWORDS,
+        default=FlextDbtLdapConstants.DbtLogging.MASK_LDAP_PASSWORDS,
         description="Mask LDAP passwords in logs",
     )
 
     mask_ldap_dns: bool = Field(
-        default=FlextDbtLdapConstants.Logging.MASK_LDAP_DNS,
+        default=FlextDbtLdapConstants.DbtLogging.MASK_LDAP_DNS,
         description="Mask LDAP DNs in logs",
     )
 
     # Log Message Templates
     use_standard_templates: bool = Field(
-        default=FlextDbtLdapConstants.Logging.USE_STANDARD_TEMPLATES,
+        default=FlextDbtLdapConstants.DbtLogging.USE_STANDARD_TEMPLATES,
         description="Use standard log message templates",
     )
 
     custom_log_format: str | None = Field(
-        default=FlextDbtLdapConstants.Logging.CUSTOM_LOG_FORMAT,
+        default=FlextDbtLdapConstants.DbtLogging.CUSTOM_LOG_FORMAT,
         description="Custom log message format",
     )
 
     # Audit Logging
     enable_audit_logging: bool = Field(
-        default=FlextDbtLdapConstants.Logging.ENABLE_AUDIT_LOGGING,
+        default=FlextDbtLdapConstants.DbtLogging.ENABLE_AUDIT_LOGGING,
         description="Enable audit logging",
     )
 
     audit_log_file: str = Field(
-        default=FlextDbtLdapConstants.Logging.AUDIT_LOG_FILE,
+        default=FlextDbtLdapConstants.DbtLogging.AUDIT_LOG_FILE,
         description="Audit log file path",
     )
 
@@ -574,31 +574,31 @@ class FlextDbtLdapConfig(FlextConfig):
 
         return self
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Validate DBT LDAP specific business rules."""
         try:
             # Validate LDAP configuration
             if not self.ldap_host:
-                return FlextResult[None].fail("LDAP host is required")
+                return FlextCore.Result[None].fail("LDAP host is required")
 
             # Validate DBT configuration
             if not self.dbt_project_dir:
-                return FlextResult[None].fail("DBT project directory is required")
+                return FlextCore.Result[None].fail("DBT project directory is required")
 
             # Validate performance thresholds
             if self.dbt_ldap_performance_threshold_warning < 0:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     "Performance warning threshold must be non-negative"
                 )
 
             if self.dbt_ldap_performance_threshold_critical < 0:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     "Performance critical threshold must be non-negative"
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"Business rules validation failed: {e}")
+            return FlextCore.Result[None].fail(f"Business rules validation failed: {e}")
 
     def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
@@ -619,7 +619,7 @@ class FlextDbtLdapConfig(FlextConfig):
     def get_meltano_config(self) -> FlextMeltanoConfig:
         """Get Meltano configuration for flext-meltano integration."""
         # Convert string to proper Environment string value
-        environment_mapping: dict[str, FlextTypes.Config.Environment] = {
+        environment_mapping: dict[str, str] = {
             "dev": "development",
             "development": "development",
             "staging": "staging",
@@ -639,7 +639,7 @@ class FlextDbtLdapConfig(FlextConfig):
             environment=environment_value,
         )
 
-    def get_ldap_quality_config(self) -> FlextTypes.Dict:
+    def get_ldap_quality_config(self) -> FlextCore.Types.Dict:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": self.min_quality_threshold,
@@ -647,7 +647,7 @@ class FlextDbtLdapConfig(FlextConfig):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> FlextTypes.Dict:
+    def get_dbt_ldap_logging_config(self) -> FlextCore.Types.Dict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,
@@ -729,7 +729,7 @@ class FlextDbtLdapConfig(FlextConfig):
 
     @classmethod
     def create_for_environment(
-        cls, environment: str, **overrides: object
+        cls, environment: str, **overrides
     ) -> FlextDbtLdapConfig:
         """Create configuration for specific environment using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
@@ -783,13 +783,34 @@ class FlextDbtLdapConfig(FlextConfig):
 
     @classmethod
     def get_global_instance(cls) -> FlextDbtLdapConfig:
-        """Get the global singleton instance using enhanced FlextConfig pattern."""
+        """Get the global singleton instance using enhanced FlextCore.Config pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
+
+    @classmethod
+    def get_or_create_shared_instance(
+        cls,
+        _project_name: str | None = None,
+        **kwargs: object,
+    ) -> Self:
+        """Get or create shared singleton instance with optional configuration."""
+        if cls not in cls._instances:
+            with cls._lock:
+                if cls not in cls._instances:
+                    # Create instance with provided kwargs
+                    instance = cls(**kwargs)
+                    cls._instances[cls] = instance
+        return cast("Self", cls._instances[cls])
+
+    @classmethod
+    def reset_shared_instance(cls) -> None:
+        """Reset the shared singleton instance."""
+        with cls._lock:
+            cls._instances.pop(cls, None)
 
     @classmethod
     def reset_global_instance(cls) -> None:
         """Reset the global FlextDbtLdapConfig instance (mainly for testing)."""
-        # Use the enhanced FlextConfig reset mechanism
+        # Use the enhanced FlextCore.Config reset mechanism
         cls.reset_shared_instance()
 
 
