@@ -18,18 +18,18 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextExceptions
+from flext_core import FlextCore
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
-# Use FlextExceptions directly (current signature)
-_exceptions = FlextExceptions
+# Use FlextCore.Exceptions directly (current signature)
+_exceptions = FlextCore.Exceptions
 
 # Extract exception classes with precise typing for MyPy
 # Only create aliases for exceptions that actually exist in the factory
-FlextDbtLdapError = FlextExceptions.BaseError
-FlextDbtLdapValidationError = FlextExceptions.ValidationError
-FlextDbtLdapConfigurationError = FlextExceptions.ConfigurationError
+FlextDbtLdapError = FlextCore.Exceptions.BaseError
+FlextDbtLdapValidationError = FlextCore.Exceptions.ValidationError
+FlextDbtLdapConfigurationError = FlextCore.Exceptions.ConfigurationError
 
 # Create aliases for additional exception types using existing base classes
 FlextDbtLdapConnectionError = FlextDbtLdapError
@@ -41,8 +41,23 @@ FlextDbtLdapTimeoutError = FlextDbtLdapError
 # Domain-specific DBT LDAP errors using composition over duplication
 
 
-class FlextDbtLdapModelError(FlextExceptions.BaseError):
+class FlextDbtLdapModelError(FlextCore.Exceptions.BaseError):
     """LDAP DBT model-specific errors using DRY foundation."""
+
+    def _extract_common_kwargs(
+        self, kwargs: dict
+    ) -> tuple[dict, str | None, str | None]:
+        """Extract common parameters from kwargs."""
+        base_context = kwargs.get("context", {})
+        correlation_id = kwargs.get("correlation_id")
+        error_code = kwargs.get("error_code")
+        return base_context, correlation_id, error_code
+
+    def _build_context(self, base_context: dict, **extra_fields) -> dict:
+        """Build context dictionary with additional fields."""
+        context = dict(base_context)
+        context.update(extra_fields)
+        return context
 
     @override
     def __init__(
@@ -77,8 +92,23 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
         )
 
 
-class FlextDbtLdapMacroError(FlextExceptions.BaseError):
+class FlextDbtLdapMacroError(FlextCore.Exceptions.BaseError):
     """LDAP DBT macro errors using DRY foundation."""
+
+    def _extract_common_kwargs(
+        self, kwargs: dict
+    ) -> tuple[dict, str | None, str | None]:
+        """Extract common parameters from kwargs."""
+        base_context = kwargs.get("context", {})
+        correlation_id = kwargs.get("correlation_id")
+        error_code = kwargs.get("error_code")
+        return base_context, correlation_id, error_code
+
+    def _build_context(self, base_context: dict, **extra_fields) -> dict:
+        """Build context dictionary with additional fields."""
+        context = dict(base_context)
+        context.update(extra_fields)
+        return context
 
     @override
     def __init__(
@@ -110,8 +140,23 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
         )
 
 
-class FlextDbtLdapTestError(FlextExceptions.BaseError):
+class FlextDbtLdapTestError(FlextCore.Exceptions.BaseError):
     """LDAP DBT test errors using DRY foundation."""
+
+    def _extract_common_kwargs(
+        self, kwargs: dict
+    ) -> tuple[dict, str | None, str | None]:
+        """Extract common parameters from kwargs."""
+        base_context = kwargs.get("context", {})
+        correlation_id = kwargs.get("correlation_id")
+        error_code = kwargs.get("error_code")
+        return base_context, correlation_id, error_code
+
+    def _build_context(self, base_context: dict, **extra_fields) -> dict:
+        """Build context dictionary with additional fields."""
+        context = dict(base_context)
+        context.update(extra_fields)
+        return context
 
     @override
     def __init__(

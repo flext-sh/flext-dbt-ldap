@@ -8,10 +8,10 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
-from flext_core import FlextConstants, FlextTypes
+from flext_core import FlextCore
 
 
-class FlextDbtLdapConstants(FlextConstants):
+class FlextDbtLdapConstants(FlextCore.Constants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
 
     class Connection:
@@ -20,34 +20,40 @@ class FlextDbtLdapConstants(FlextConstants):
         class Ldap:
             """Standard LDAP connection settings."""
 
-            DEFAULT_HOST = FlextConstants.Platform.DEFAULT_HOST
-            DEFAULT_PORT = FlextConstants.Platform.LDAP_DEFAULT_PORT
-            DEFAULT_TIMEOUT = FlextConstants.Network.DEFAULT_TIMEOUT
+            DEFAULT_HOST = FlextCore.Constants.Platform.DEFAULT_HOST
+            DEFAULT_PORT = FlextCore.Constants.Platform.LDAP_DEFAULT_PORT
+            DEFAULT_TIMEOUT = FlextCore.Constants.Network.DEFAULT_TIMEOUT
 
         class Ldaps:
             """Secure LDAP connection settings."""
 
-            DEFAULT_PORT = FlextConstants.Platform.LDAPS_DEFAULT_PORT
+            DEFAULT_PORT = FlextCore.Constants.Platform.LDAPS_DEFAULT_PORT
 
     class Dbt:
         """DBT-specific configuration constants."""
 
         DEFAULT_PROFILES_DIR = "./profiles"
         DEFAULT_TARGET = "dev"
-        ALLOWED_TARGETS: ClassVar[FlextTypes.StringList] = ["dev", "staging", "prod"]
+        ALLOWED_TARGETS: ClassVar[FlextCore.Types.StringList] = [
+            "dev",
+            "staging",
+            "prod",
+        ]
 
-    class Processing:
+    class DbtProcessing:
         """DBT LDAP transformation configuration."""
 
-        DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
-        MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+        DEFAULT_BATCH_SIZE = (
+            FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE
+        )
+        MAX_BATCH_SIZE = FlextCore.Constants.Performance.BatchProcessing.MAX_ITEMS
 
-    class Logging:
+    class DbtLogging:
         """DBT LDAP-specific logging constants."""
 
         # Default Logging Levels for DBT LDAP
-        DEFAULT_LEVEL: Final[str] = FlextConstants.Logging.DEFAULT_LEVEL
-        AUDIT_LOG_LEVEL: Final[str] = FlextConstants.Logging.INFO
+        DEFAULT_LEVEL: Final[str] = FlextCore.Constants.Logging.DEFAULT_LEVEL
+        AUDIT_LOG_LEVEL: Final[str] = FlextCore.Constants.Logging.INFO
 
         # DBT Operation Logging
         LOG_DBT_OPERATIONS: Final[bool] = True
