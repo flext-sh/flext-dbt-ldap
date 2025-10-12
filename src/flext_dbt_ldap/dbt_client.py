@@ -14,7 +14,6 @@ from typing import override
 
 from flext_core import FlextCore
 from flext_ldap import FlextLdapClients, FlextLdapModels
-from flext_meltano import FlextMeltanoService
 
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
@@ -45,15 +44,15 @@ class FlextDbtLdapClient:
         )
         # Precisely type the LDAP API to enable method access
         self._ldap_api: FlextLdapClients = FlextLdapClients()
-        self._dbt_manager: FlextMeltanoService | None = None
+        self._dbt_manager: FlextMeltanoDbtService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
     @property
-    def dbt_manager(self) -> FlextMeltanoService:
+    def dbt_manager(self) -> FlextMeltanoDbtService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
             (Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None)
-            self._dbt_manager = FlextMeltanoService()
+            self._dbt_manager = FlextMeltanoDbtService()
         return self._dbt_manager
 
     def extract_ldap_entries(
@@ -179,7 +178,7 @@ class FlextDbtLdapClient:
             # Prepare LDAP data for DBT (convert to DataFrames/tables)
             _ = self._prepare_ldap_data_for_dbt(entries)
             # Use flext-meltano DBT manager for execution
-            # TODO: Implement proper DBT model execution in FlextMeltanoService
+            # TODO: Implement proper DBT model execution in FlextMeltanoDbtService
             # For now, return success as placeholder
             result: FlextCore.Result[FlextCore.Types.Dict] = FlextCore.Result[
                 FlextCore.Types.Dict
