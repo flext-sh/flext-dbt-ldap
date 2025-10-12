@@ -295,7 +295,7 @@ from {{{{ source('ldap', '{source_table}') }}}}
 where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
-"""
+"""  # noqa: S608
 
                 return FlextCore.Result[str].ok(model_sql)
             except Exception as e:

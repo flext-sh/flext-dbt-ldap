@@ -87,7 +87,7 @@ class FlextDbtLdapModels(FlextCore.Models):
                 else None,
             )
 
-        def validate_business_rules(self: object) -> FlextCore.Result[None]:
+        def validate_business_rules(self) -> FlextCore.Result[None]:
             """Validate user dimension business rules."""
             if not self.user_id or not self.common_name:
                 return FlextCore.Result[None].fail(
@@ -95,7 +95,7 @@ class FlextDbtLdapModels(FlextCore.Models):
                 )
             return FlextCore.Result[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextCore.Types.Dict:
+        def to_dbt_dict(self) -> FlextCore.Types.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -167,7 +167,7 @@ class FlextDbtLdapModels(FlextCore.Models):
                 else None,
             )
 
-        def validate_business_rules(self: object) -> FlextCore.Result[None]:
+        def validate_business_rules(self) -> FlextCore.Result[None]:
             """Validate group dimension business rules."""
             if not self.group_id or not self.common_name:
                 return FlextCore.Result[None].fail(
@@ -177,7 +177,7 @@ class FlextDbtLdapModels(FlextCore.Models):
                 return FlextCore.Result[None].fail("Member count cannot be negative")
             return FlextCore.Result[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextCore.Types.Dict:
+        def to_dbt_dict(self) -> FlextCore.Types.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -203,13 +203,13 @@ class FlextDbtLdapModels(FlextCore.Models):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def validate_business_rules(self: object) -> FlextCore.Result[None]:
+        def validate_business_rules(self) -> FlextCore.Result[None]:
             """Validate membership fact business rules."""
             if not self.user_dn or not self.group_dn:
                 return FlextCore.Result[None].fail("User DN and Group DN are required")
             return FlextCore.Result[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextCore.Types.Dict:
+        def to_dbt_dict(self) -> FlextCore.Types.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -227,7 +227,7 @@ class FlextDbtLdapModels(FlextCore.Models):
         """
 
         @override
-        def __init__(self: object) -> None:
+        def __init__(self) -> None:
             """Initialize LDAP transformer."""
             logger.info("Initialized LDAP DBT transformer")
 

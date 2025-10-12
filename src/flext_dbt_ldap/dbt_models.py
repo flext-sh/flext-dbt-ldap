@@ -87,7 +87,7 @@ class FlextDbtLdapModels(FlextCore.Models):
                 else None,
             )
 
-        def validate_business_rules(self: object) -> FlextCore.Result[None]:
+        def validate_business_rules(self) -> FlextCore.Result[None]:
             """Validate user dimension business rules."""
             if not self.user_id or not self.common_name:
                 return FlextCore.Result[None].fail(
@@ -95,7 +95,7 @@ class FlextDbtLdapModels(FlextCore.Models):
                 )
             return FlextCore.Result[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextCore.Types.Dict:
+        def to_dbt_dict(self) -> FlextCore.Types.Dict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
