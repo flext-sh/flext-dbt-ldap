@@ -26,7 +26,7 @@
 **CRITICAL INTEGRATION DEPENDENCIES**:
 - **flext-meltano**: MANDATORY for ALL DBT operations (ZERO TOLERANCE for direct dbt imports)
 - **flext-ldap**: MANDATORY for ALL LDAP operations (ZERO TOLERANCE for direct ldap3 imports)
-- **flext-core**: Foundation patterns (FlextResult, FlextService, FlextContainer)
+- **flext-core**: Foundation patterns (FlextResult, FlextContainer)
 - **flext-cli**: MANDATORY for ALL CLI operations (ZERO TOLERANCE for direct click/rich imports)
 
 ## 🔗 MCP SERVER INTEGRATION (MANDATORY)
