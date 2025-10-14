@@ -53,9 +53,9 @@ class FlextDbtLdapModelError(FlextCore.Exceptions.BaseError):
         error_code = kwargs.get("error_code")
         return base_context, correlation_id, error_code
 
-    def _build_context(self, base_context: dict, **extra_fields) -> dict:
+    def _build_context(self, base_context: dict, **extra_fields) -> dict[str, object]:
         """Build context dictionary with additional fields."""
-        context = dict(base_context)
+        context = dict[str, object](base_context)
         context.update(extra_fields)
         return context
 
@@ -104,9 +104,9 @@ class FlextDbtLdapMacroError(FlextCore.Exceptions.BaseError):
         error_code = kwargs.get("error_code")
         return base_context, correlation_id, error_code
 
-    def _build_context(self, base_context: dict, **extra_fields) -> dict:
+    def _build_context(self, base_context: dict, **extra_fields) -> dict[str, object]:
         """Build context dictionary with additional fields."""
-        context = dict(base_context)
+        context = dict[str, object](base_context)
         context.update(extra_fields)
         return context
 
@@ -152,9 +152,9 @@ class FlextDbtLdapTestError(FlextCore.Exceptions.BaseError):
         error_code = kwargs.get("error_code")
         return base_context, correlation_id, error_code
 
-    def _build_context(self, base_context: dict, **extra_fields) -> dict:
+    def _build_context(self, base_context: dict, **extra_fields) -> dict[str, object]:
         """Build context dictionary with additional fields."""
-        context = dict(base_context)
+        context = dict[str, object](base_context)
         context.update(extra_fields)
         return context
 
