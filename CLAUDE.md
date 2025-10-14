@@ -26,7 +26,7 @@
 **CRITICAL INTEGRATION DEPENDENCIES**:
 - **flext-meltano**: MANDATORY for ALL DBT operations (ZERO TOLERANCE for direct dbt imports)
 - **flext-ldap**: MANDATORY for ALL LDAP operations (ZERO TOLERANCE for direct ldap3 imports)
-- **flext-core**: Foundation patterns (FlextResult, FlextContainer)
+- **flext-core**: Foundation patterns (FlextCore.Result, FlextContainer)
 - **flext-cli**: MANDATORY for ALL CLI operations (ZERO TOLERANCE for direct click/rich imports)
 
 ## 🔗 MCP SERVER INTEGRATION (MANDATORY)
@@ -139,7 +139,7 @@
 ```python
 # ✅ CORRECT - Direct usage of flext-core foundation for LDAP dbt (VERIFIED API)
 from flext_core import (
-    FlextResult,           # Railway pattern for LDAP operations - has .data, .value, .unwrap()
+    FlextCore.Result,           # Railway pattern for LDAP operations - has .data, .value, .unwrap()
     FlextModels,           # Pydantic models for LDAP entities
     FlextDomainService,    # Base service for LDAP dbt operations
     FlextContainer,        # Dependency injection for LDAP services
@@ -189,27 +189,27 @@ class UnifiedFlextDbtLdapService(FlextDomainService):
         self._container = FlextContainer.get_global()
         self._logger = FlextLogger(__name__)
 
-    def extract_ldap_data(self, ldap_config: dict) -> FlextResult[LdapDataFrame]:
+    def extract_ldap_data(self, ldap_config: dict) -> FlextCore.Result[LdapDataFrame]:
         """Extract LDAP directory data with proper error handling."""
         if not ldap_config:
-            return FlextResult[LdapDataFrame].fail("LDAP configuration cannot be empty")
+            return FlextCore.Result[LdapDataFrame].fail("LDAP configuration cannot be empty")
 
         # Validate LDAP configuration
         validation_result = self._validate_ldap_config(ldap_config)
         if validation_result.is_failure:
-            return FlextResult[LdapDataFrame].fail(f"LDAP config validation failed: {validation_result.error}")
+            return FlextCore.Result[LdapDataFrame].fail(f"LDAP config validation failed: {validation_result.error}")
 
         # Extract LDAP data through flext-ldap integration (NO direct ldap3)
         extraction_result = self._extract_ldap_entries(ldap_config)
         if extraction_result.is_failure:
-            return FlextResult[LdapDataFrame].fail(f"LDAP extraction failed: {extraction_result.error}")
+            return FlextCore.Result[LdapDataFrame].fail(f"LDAP extraction failed: {extraction_result.error}")
 
-        return FlextResult[LdapDataFrame].ok(extraction_result.unwrap())
+        return FlextCore.Result[LdapDataFrame].ok(extraction_result.unwrap())
 
-    def generate_ldap_dbt_models(self, ldap_data: LdapDataFrame) -> FlextResult[DbtModelCollection]:
+    def generate_ldap_dbt_models(self, ldap_data: LdapDataFrame) -> FlextCore.Result[DbtModelCollection]:
         """Generate dbt models for LDAP data with dimensional modeling patterns."""
         if not ldap_data or ldap_data.empty:
-            return FlextResult[DbtModelCollection].fail("LDAP data cannot be empty")
+            return FlextCore.Result[DbtModelCollection].fail("LDAP data cannot be empty")
 
         # Generate dimensional models for LDAP analytics
         models_result = (
@@ -220,11 +220,11 @@ class UnifiedFlextDbtLdapService(FlextDomainService):
         )
 
         if models_result.is_failure:
-            return FlextResult[DbtModelCollection].fail(f"LDAP dbt model generation failed: {models_result.error}")
+            return FlextCore.Result[DbtModelCollection].fail(f"LDAP dbt model generation failed: {models_result.error}")
 
-        return FlextResult[DbtModelCollection].ok(models_result.unwrap())
+        return FlextCore.Result[DbtModelCollection].ok(models_result.unwrap())
 
-    def execute_ldap_dbt_pipeline(self, pipeline_config: LdapDbtPipelineConfig) -> FlextResult[LdapPipelineResult]:
+    def execute_ldap_dbt_pipeline(self, pipeline_config: LdapDbtPipelineConfig) -> FlextCore.Result[LdapPipelineResult]:
         """Execute complete LDAP dbt pipeline with error handling."""
         return (
             self._validate_ldap_pipeline_config(pipeline_config)
@@ -237,43 +237,43 @@ class UnifiedFlextDbtLdapService(FlextDomainService):
             .map_error(lambda e: f"LDAP dbt pipeline failed: {e}")
         )
 
-    def _validate_ldap_config(self, config: dict) -> FlextResult[dict]:
+    def _validate_ldap_config(self, config: dict) -> FlextCore.Result[dict]:
         """Validate LDAP configuration structure."""
         required_fields = ["host", "port", "base_dn", "bind_dn", "bind_password"]
         for field in required_fields:
             if field not in config:
-                return FlextResult[dict].fail(f"Missing required LDAP field: {field}")
-        return FlextResult[dict].ok(config)
+                return FlextCore.Result[dict].fail(f"Missing required LDAP field: {field}")
+        return FlextCore.Result[dict].ok(config)
 
-    def _extract_ldap_entries(self, config: dict) -> FlextResult[LdapDataFrame]:
+    def _extract_ldap_entries(self, config: dict) -> FlextCore.Result[LdapDataFrame]:
         """Extract LDAP entries through flext-ldap integration."""
         # Implementation using flext-ldap API (NO direct ldap3)
         ldap_api_result = self._container.get("ldap_api")
         if ldap_api_result.is_failure:
-            return FlextResult[LdapDataFrame].fail("LDAP API service unavailable")
+            return FlextCore.Result[LdapDataFrame].fail("LDAP API service unavailable")
 
         ldap_api = ldap_api_result.unwrap()
         return ldap_api.extract_directory_data(config)
 
-    def _create_ldap_staging_models(self, data: LdapDataFrame) -> FlextResult[DbtModelCollection]:
+    def _create_ldap_staging_models(self, data: LdapDataFrame) -> FlextCore.Result[DbtModelCollection]:
         """Create staging models for raw LDAP data."""
         # Implementation for LDAP staging models
-        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+        return FlextCore.Result[DbtModelCollection].ok(DbtModelCollection())
 
-    def _create_ldap_dimension_models(self, staging_models: DbtModelCollection) -> FlextResult[DbtModelCollection]:
+    def _create_ldap_dimension_models(self, staging_models: DbtModelCollection) -> FlextCore.Result[DbtModelCollection]:
         """Create dimension models for LDAP analytics (users, groups, organizational units)."""
         # Implementation for LDAP dimensional modeling
-        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+        return FlextCore.Result[DbtModelCollection].ok(DbtModelCollection())
 
-    def _create_ldap_fact_models(self, dimension_models: DbtModelCollection) -> FlextResult[DbtModelCollection]:
+    def _create_ldap_fact_models(self, dimension_models: DbtModelCollection) -> FlextCore.Result[DbtModelCollection]:
         """Create fact models for LDAP events and relationships."""
         # Implementation for LDAP fact models
-        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+        return FlextCore.Result[DbtModelCollection].ok(DbtModelCollection())
 
-    def _create_ldap_analytics_models(self, fact_models: DbtModelCollection) -> FlextResult[DbtModelCollection]:
+    def _create_ldap_analytics_models(self, fact_models: DbtModelCollection) -> FlextCore.Result[DbtModelCollection]:
         """Create analytics models for LDAP insights and reporting."""
         # Implementation for LDAP analytics models
-        return FlextResult[DbtModelCollection].ok(DbtModelCollection())
+        return FlextCore.Result[DbtModelCollection].ok(DbtModelCollection())
 
 # ✅ CORRECT - LDAP domain models using VERIFIED flext-core API patterns
 from flext_core import FlextModels
@@ -285,13 +285,13 @@ class LdapDirectoryEntry(FlextModels.Entity):
     attributes: dict
     object_classes: list[str]
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Required abstract method implementation for LDAP entries."""
         if not self.dn.strip():
-            return FlextResult[None].fail("LDAP DN cannot be empty")
+            return FlextCore.Result[None].fail("LDAP DN cannot be empty")
         if not self.object_classes:
-            return FlextResult[None].fail("LDAP entry must have object classes")
-        return FlextResult[None].ok(None)
+            return FlextCore.Result[None].fail("LDAP entry must have object classes")
+        return FlextCore.Result[None].ok(None)
 
 class LdapDbtPipelineConfig(FlextModels.Value):
     """LDAP dbt pipeline configuration value object."""
@@ -300,13 +300,13 @@ class LdapDbtPipelineConfig(FlextModels.Value):
     dbt_config: dict
     output_config: dict
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Required abstract method implementation for pipeline config."""
         if not self.ldap_config:
-            return FlextResult[None].fail("LDAP configuration is required")
+            return FlextCore.Result[None].fail("LDAP configuration is required")
         if not self.dbt_config:
-            return FlextResult[None].fail("dbt configuration is required")
-        return FlextResult[None].ok(None)
+            return FlextCore.Result[None].fail("dbt configuration is required")
+        return FlextCore.Result[None].ok(None)
 
 # ✅ CORRECT - Module exports for LDAP dbt
 __all__ = ["UnifiedFlextDbtLdapService", "LdapDirectoryEntry", "LdapDbtPipelineConfig"]
@@ -335,7 +335,7 @@ class LdapCliService:
         self._cli_api = FlextCliApi()
         self._config = FlextCliConfigs()  # Automatically includes .env + defaults + CLI params for LDAP
 
-    def define_ldap_configuration_schema(self) -> FlextResult[dict]:
+    def define_ldap_configuration_schema(self) -> FlextCore.Result[dict]:
         """Define LDAP-specific configuration schema.
 
         Project ONLY describes LDAP configuration needs - flext-cli handles:
@@ -415,11 +415,11 @@ class LdapCliService:
         # Register LDAP schema with flext-cli - handles ALL formats automatically
         schema_result = self._config.register_universal_schema(ldap_config_schema)
         if schema_result.is_failure:
-            return FlextResult[dict].fail(f"LDAP schema registration failed: {schema_result.error}")
+            return FlextCore.Result[dict].fail(f"LDAP schema registration failed: {schema_result.error}")
 
-        return FlextResult[dict].ok(ldap_config_schema)
+        return FlextCore.Result[dict].ok(ldap_config_schema)
 
-    def create_ldap_cli_interface(self) -> FlextResult[FlextCliMain]:
+    def create_ldap_cli_interface(self) -> FlextCore.Result[FlextCliMain]:
         """Create LDAP CLI interface using flext-cli patterns."""
         # Initialize main CLI handler for LDAP operations
         main_cli = FlextCliMain(
@@ -430,15 +430,15 @@ class LdapCliService:
         # Register LDAP command groups through flext-cli
         extract_result = main_cli.register_command_group("extract", self._create_ldap_extract_commands)
         if extract_result.is_failure:
-            return FlextResult[FlextCliMain].fail(f"LDAP extract commands registration failed: {extract_result.error}")
+            return FlextCore.Result[FlextCliMain].fail(f"LDAP extract commands registration failed: {extract_result.error}")
 
         transform_result = main_cli.register_command_group("transform", self._create_ldap_transform_commands)
         if transform_result.is_failure:
-            return FlextResult[FlextCliMain].fail(f"LDAP transform commands registration failed: {transform_result.error}")
+            return FlextCore.Result[FlextCliMain].fail(f"LDAP transform commands registration failed: {transform_result.error}")
 
-        return FlextResult[FlextCliMain].ok(main_cli)
+        return FlextCore.Result[FlextCliMain].ok(main_cli)
 
-    def _create_ldap_extract_commands(self) -> FlextResult[dict]:
+    def _create_ldap_extract_commands(self) -> FlextCore.Result[dict]:
         """Create LDAP extraction commands using flext-cli patterns."""
         # Use flext-cli command builders, NEVER Click decorators OR Rich output for LDAP
         commands = {
@@ -456,19 +456,19 @@ class LdapCliService:
                 output_format="json"   # Use flext-cli output formatting
             )
         }
-        return FlextResult[dict].ok(commands)
+        return FlextCore.Result[dict].ok(commands)
 
-    def _handle_ldap_directory_extraction(self, args: dict) -> FlextResult[str]:
+    def _handle_ldap_directory_extraction(self, args: dict) -> FlextCore.Result[str]:
         """Handle LDAP directory extraction command."""
         # Validate required arguments
         if not args.get("base_dn"):
-            return FlextResult[str].fail("Base DN is required for LDAP extraction")
+            return FlextCore.Result[str].fail("Base DN is required for LDAP extraction")
 
         # Get LDAP service from container
         container = FlextContainer.get_global()
         ldap_service_result = container.get("ldap_dbt_service")
         if ldap_service_result.is_failure:
-            return FlextResult[str].fail("LDAP dbt service unavailable")
+            return FlextCore.Result[str].fail("LDAP dbt service unavailable")
 
         # Extract LDAP data - NO try/except fallbacks
         ldap_service = ldap_service_result.unwrap()
@@ -480,7 +480,7 @@ class LdapCliService:
 
         extraction_result = ldap_service.extract_ldap_data(ldap_config)
         if extraction_result.is_failure:
-            return FlextResult[str].fail(f"LDAP extraction failed: {extraction_result.error}")
+            return FlextCore.Result[str].fail(f"LDAP extraction failed: {extraction_result.error}")
 
         # Display results using flext-cli output wrappers
         ldap_data = extraction_result.unwrap()
@@ -491,7 +491,7 @@ class LdapCliService:
             style="ldap_directory"
         )
 
-        return FlextResult[str].ok(f"LDAP extraction successful: {len(ldap_data)} entries processed")
+        return FlextCore.Result[str].ok(f"LDAP extraction successful: {len(ldap_data)} entries processed")
 
 # ✅ CORRECT - LDAP CLI entry point using flext-cli
 def main() -> None:
@@ -566,19 +566,19 @@ def parse_ldap_dn(): pass
 class UnifiedFlextDbtLdapService:
     """Consolidated LDAP dbt service following single responsibility principle."""
 
-    def extract_ldap_data(self, config: dict) -> FlextResult[LdapDataFrame]:
+    def extract_ldap_data(self, config: dict) -> FlextCore.Result[LdapDataFrame]:
         """Former LdapExtractor.extract with proper error handling."""
         # Implementation using flext-core patterns for LDAP
 
-    def transform_ldap_data(self, data: LdapDataFrame) -> FlextResult[TransformedLdapData]:
+    def transform_ldap_data(self, data: LdapDataFrame) -> FlextCore.Result[TransformedLdapData]:
         """Former LdapTransformer.transform with proper error handling."""
         # Implementation using flext-core patterns for LDAP
 
-    def generate_dbt_models(self, data: TransformedLdapData) -> FlextResult[DbtModelCollection]:
+    def generate_dbt_models(self, data: TransformedLdapData) -> FlextCore.Result[DbtModelCollection]:
         """Former DbtModelGenerator.generate with proper error handling."""
         # Implementation using flext-core patterns for LDAP dbt
 
-    def _parse_ldap_dn(self, dn: str) -> FlextResult[ParsedDn]:
+    def _parse_ldap_dn(self, dn: str) -> FlextCore.Result[ParsedDn]:
         """Former parse_ldap_dn now as private method."""
         # Implementation as part of unified LDAP class
 ```
@@ -641,7 +641,7 @@ python -m flext_dbt_ldap test-component --component=ldap-extractor \
 ### LDAP CLI Testing Service
 
 ```python
-from flext_core import FlextResult, get_logger
+from flext_core import FlextCore.Result, get_logger
 from flext_cli import FlextCliApi, FlextCliConfigs
 from flext_ldap import get_flext_ldap_api  # If available
 
@@ -656,14 +656,14 @@ class LdapDbtCliTestingService:
         self._config = FlextCliConfigs()  # Automatically loads .env + defaults + CLI params
         self._ldap_api = get_flext_ldap_api() if 'flext_ldap' in globals() else None
 
-    def debug_ldap_configuration(self) -> FlextResult[dict]:
+    def debug_ldap_configuration(self) -> FlextCore.Result[dict]:
         """Debug LDAP CLI configuration using FLEXT patterns - .env as source of truth."""
         self._logger.debug("Starting LDAP CLI configuration debugging")
 
         # ✅ CORRECT: Access LDAP configuration through FLEXT API (includes .env automatically)
         config_result = self._config.get_all_configuration()
         if config_result.is_failure:
-            return FlextResult[dict].fail(f"LDAP configuration access failed: {config_result.error}")
+            return FlextCore.Result[dict].fail(f"LDAP configuration access failed: {config_result.error}")
 
         config_data = config_result.unwrap()
 
@@ -678,18 +678,18 @@ class LdapDbtCliTestingService:
         )
 
         if debug_display_result.is_failure:
-            return FlextResult[dict].fail(f"LDAP debug display failed: {debug_display_result.error}")
+            return FlextCore.Result[dict].fail(f"LDAP debug display failed: {debug_display_result.error}")
 
-        return FlextResult[dict].ok(ldap_config)
+        return FlextCore.Result[dict].ok(ldap_config)
 
-    def test_ldap_connectivity_debug(self) -> FlextResult[dict]:
+    def test_ldap_connectivity_debug(self) -> FlextCore.Result[dict]:
         """Test LDAP connectivity with debug logging - FLEXT-LDAP exclusively."""
         self._logger.debug("Starting LDAP connectivity testing")
 
         # ✅ CORRECT: Get LDAP configuration from .env through FLEXT config
         ldap_config_result = self._config.get_ldap_configuration()
         if ldap_config_result.is_failure:
-            return FlextResult[dict].fail(f"LDAP config access failed: {ldap_config_result.error}")
+            return FlextCore.Result[dict].fail(f"LDAP config access failed: {ldap_config_result.error}")
 
         ldap_config = ldap_config_result.unwrap()
 
@@ -719,7 +719,7 @@ class LdapDbtCliTestingService:
                     "Check LDAP bind credentials"
                 ]
             )
-            return FlextResult[dict].fail(connection_result.error)
+            return FlextCore.Result[dict].fail(connection_result.error)
 
         # Display success with debug information
         connection_info = connection_result.unwrap()
@@ -729,7 +729,7 @@ class LdapDbtCliTestingService:
             format_type="table"
         )
 
-        return FlextResult[dict].ok(connection_info)
+        return FlextCore.Result[dict].ok(connection_info)
 ```
 
 ---
@@ -743,7 +743,7 @@ class LdapDbtCliTestingService:
 class LdapDimensionalModelGenerator:
     """Generate dimensional models for LDAP directory data."""
 
-    def generate_user_dimension(self, ldap_users: LdapDataFrame) -> FlextResult[DbtModel]:
+    def generate_user_dimension(self, ldap_users: LdapDataFrame) -> FlextCore.Result[DbtModel]:
         """Generate user dimension model from LDAP user data."""
         user_dimension_sql = """
         {{ config(materialized='table') }}
@@ -764,13 +764,13 @@ class LdapDimensionalModelGenerator:
         from {{ ref('stg_ldap_users') }}
         """
 
-        return FlextResult[DbtModel].ok(DbtModel(
+        return FlextCore.Result[DbtModel].ok(DbtModel(
             name="dim_users",
             sql=user_dimension_sql,
             materialization="table"
         ))
 
-    def generate_group_dimension(self, ldap_groups: LdapDataFrame) -> FlextResult[DbtModel]:
+    def generate_group_dimension(self, ldap_groups: LdapDataFrame) -> FlextCore.Result[DbtModel]:
         """Generate group dimension model from LDAP group data."""
         group_dimension_sql = """
         {{ config(materialized='table') }}
@@ -786,13 +786,13 @@ class LdapDimensionalModelGenerator:
         from {{ ref('stg_ldap_groups') }}
         """
 
-        return FlextResult[DbtModel].ok(DbtModel(
+        return FlextCore.Result[DbtModel].ok(DbtModel(
             name="dim_groups",
             sql=group_dimension_sql,
             materialization="table"
         ))
 
-    def generate_membership_fact(self, ldap_memberships: LdapDataFrame) -> FlextResult[DbtModel]:
+    def generate_membership_fact(self, ldap_memberships: LdapDataFrame) -> FlextCore.Result[DbtModel]:
         """Generate membership fact table from LDAP group membership data."""
         membership_fact_sql = """
         {{ config(materialized='incremental', unique_key='membership_sk') }}
@@ -814,7 +814,7 @@ class LdapDimensionalModelGenerator:
         {% endif %}
         """
 
-        return FlextResult[DbtModel].ok(DbtModel(
+        return FlextCore.Result[DbtModel].ok(DbtModel(
             name="fact_ldap_memberships",
             sql=membership_fact_sql,
             materialization="incremental"
@@ -911,7 +911,7 @@ sys.path.insert(0, 'src')
 
 try:
     # Test all major LDAP imports
-    from flext_core import FlextResult, FlextContainer, FlextModels
+    from flext_core import FlextCore.Result, FlextContainer, FlextModels
     print('✅ flext-core integration: SUCCESS')
 
     # Test LDAP dbt functionality
