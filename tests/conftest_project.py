@@ -43,7 +43,7 @@ def shared_ldap_container(flext_docker: FlextTestDocker) -> Generator[str]:
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_config() -> dict:
+def shared_ldap_config() -> dict[str, object]:
     """Shared LDAP configuration for tests."""
     return {
         "server_url": "ldap://localhost:3390",
