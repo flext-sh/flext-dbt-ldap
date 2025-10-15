@@ -26,7 +26,7 @@
 **CRITICAL INTEGRATION DEPENDENCIES**:
 - **flext-meltano**: MANDATORY for ALL DBT operations (ZERO TOLERANCE for direct dbt imports)
 - **flext-ldap**: MANDATORY for ALL LDAP operations (ZERO TOLERANCE for direct ldap3 imports)
-- **flext-core**: Foundation patterns (FlextCore.Result, FlextContainer)
+- **flext-core**: Foundation patterns (FlextCore.Result, FlextCore.Container)
 - **flext-cli**: MANDATORY for ALL CLI operations (ZERO TOLERANCE for direct click/rich imports)
 
 ## 🔗 MCP SERVER INTEGRATION (MANDATORY)
@@ -140,10 +140,10 @@
 # ✅ CORRECT - Direct usage of flext-core foundation for LDAP dbt (VERIFIED API)
 from flext_core import (
     FlextCore.Result,           # Railway pattern for LDAP operations - has .data, .value, .unwrap()
-    FlextModels,           # Pydantic models for LDAP entities
+    FlextCore.Models,           # Pydantic models for LDAP entities
     FlextDomainService,    # Base service for LDAP dbt operations
-    FlextContainer,        # Dependency injection for LDAP services
-    FlextLogger,           # Structured logging for LDAP operations
+    FlextCore.Container,        # Dependency injection for LDAP services
+    FlextCore.Logger,           # Structured logging for LDAP operations
     FlextConstants,        # LDAP system constants
     FlextExceptions        # LDAP exception hierarchy
 )
@@ -186,8 +186,8 @@ class UnifiedFlextDbtLdapService(FlextDomainService):
         """Initialize LDAP dbt service with proper dependency injection."""
         super().__init__(**data)
         # Use direct class access - NO wrapper functions (per updated flext-core)
-        self._container = FlextContainer.get_global()
-        self._logger = FlextLogger(__name__)
+        self._container = FlextCore.Container.get_global()
+        self._logger = FlextCore.Logger(__name__)
 
     def extract_ldap_data(self, ldap_config: dict) -> FlextCore.Result[LdapDataFrame]:
         """Extract LDAP directory data with proper error handling."""
@@ -276,9 +276,9 @@ class UnifiedFlextDbtLdapService(FlextDomainService):
         return FlextCore.Result[DbtModelCollection].ok(DbtModelCollection())
 
 # ✅ CORRECT - LDAP domain models using VERIFIED flext-core API patterns
-from flext_core import FlextModels
+from flext_core import FlextCore.Models
 
-class LdapDirectoryEntry(FlextModels.Entity):
+class LdapDirectoryEntry(FlextCore.Models.Entity):
     """LDAP directory entry entity with business rules validation."""
 
     dn: str
@@ -293,7 +293,7 @@ class LdapDirectoryEntry(FlextModels.Entity):
             return FlextCore.Result[None].fail("LDAP entry must have object classes")
         return FlextCore.Result[None].ok(None)
 
-class LdapDbtPipelineConfig(FlextModels.Value):
+class LdapDbtPipelineConfig(FlextCore.Models.Value):
     """LDAP dbt pipeline configuration value object."""
 
     ldap_config: dict
@@ -465,7 +465,7 @@ class LdapCliService:
             return FlextCore.Result[str].fail("Base DN is required for LDAP extraction")
 
         # Get LDAP service from container
-        container = FlextContainer.get_global()
+        container = FlextCore.Container.get_global()
         ldap_service_result = container.get("ldap_dbt_service")
         if ldap_service_result.is_failure:
             return FlextCore.Result[str].fail("LDAP dbt service unavailable")
@@ -911,7 +911,7 @@ sys.path.insert(0, 'src')
 
 try:
     # Test all major LDAP imports
-    from flext_core import FlextCore.Result, FlextContainer, FlextModels
+    from flext_core import FlextCore.Result, FlextCore.Container, FlextCore.Models
     print('✅ flext-core integration: SUCCESS')
 
     # Test LDAP dbt functionality
