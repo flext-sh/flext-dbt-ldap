@@ -144,8 +144,8 @@ from flext_core import (
     FlextDomainService,    # Base service for LDAP dbt operations
     FlextCore.Container,        # Dependency injection for LDAP services
     FlextCore.Logger,           # Structured logging for LDAP operations
-    FlextConstants,        # LDAP system constants
-    FlextExceptions        # LDAP exception hierarchy
+    FlextCore.Constants,        # LDAP system constants
+    FlextCore.Exceptions        # LDAP exception hierarchy
 )
 
 # ✅ MANDATORY - For ALL LDAP CLI projects use flext-cli exclusively
