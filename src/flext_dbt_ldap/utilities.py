@@ -37,21 +37,19 @@ class FlextDbtLdapUtilities(FlextUtilities):
             FlextResult[FlextTypes.Dict]: Service status and capabilities.
 
         """
-        return FlextResult[FlextTypes.Dict].ok(
-            {
-                "status": "operational",
-                "service": "flext-dbt-ldap-utilities",
-                "capabilities": [
-                    "dbt_project_management",
-                    "ldap_data_transformation",
-                    "schema_generation",
-                    "macro_management",
-                    "dbt_model_validation",
-                    "ldap_source_configuration",
-                    "transformation_optimization",
-                ],
-            }
-        )
+        return FlextResult[FlextTypes.Dict].ok({
+            "status": "operational",
+            "service": "flext-dbt-ldap-utilities",
+            "capabilities": [
+                "dbt_project_management",
+                "ldap_data_transformation",
+                "schema_generation",
+                "macro_management",
+                "dbt_model_validation",
+                "ldap_source_configuration",
+                "transformation_optimization",
+            ],
+        })
 
     class DbtProjectManagement:
         """DBT project management utilities."""
@@ -225,13 +223,11 @@ class FlextDbtLdapUtilities(FlextUtilities):
                     else:
                         data_type = "text"  # Default for string attributes
 
-                    columns.append(
-                        {
-                            "name": attr.lower().replace("-", "_"),
-                            "description": f"LDAP {attr} attribute",
-                            "data_type": data_type,
-                        }
-                    )
+                    columns.append({
+                        "name": attr.lower().replace("-", "_"),
+                        "description": f"LDAP {attr} attribute",
+                        "data_type": data_type,
+                    })
 
                 source_schema = {
                     "version": 2,
@@ -299,7 +295,7 @@ from {{{{ source('ldap', '{source_table}') }}}}
 where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
-"""  # noqa: S608
+"""
 
                 return FlextResult[str].ok(model_sql)
             except Exception as e:
@@ -428,7 +424,7 @@ where 1=1
         else {{{{{{attribute_array}}}}}}[1]
         {{% endif %}}
     end
-{{% endmacro %}}"""  # noqa: S608
+{{% endmacro %}}"""
 
                 return FlextResult[str].ok(macro_sql)
             except Exception as e:

@@ -36,7 +36,7 @@ class FlextDbtLdapTypes(FlextTypes):
     # CORE DBT LDAP TYPES - Commonly used type aliases extending FlextTypes
     # =========================================================================
 
-    class Core(FlextTypes):
+    class Core(FlextTypes.Dict):
         """Core DBT LDAP types extending FlextTypes.
 
         Replaces generic FlextTypes.Dict with semantic DBT LDAP types.
