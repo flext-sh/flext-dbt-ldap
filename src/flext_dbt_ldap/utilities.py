@@ -9,11 +9,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import cast
 
-from flext_core import FlextCore
+from flext_core import FlextContainer, FlextResult, FlextTypes, FlextUtilities
 
 
-class FlextDbtLdapUtilities(FlextCore.Utilities):
-    """Unified DBT LDAP utilities service extending FlextCore.Utilities.
+class FlextDbtLdapUtilities(FlextUtilities):
+    """Unified DBT LDAP utilities service extending FlextUtilities.
 
     Provides comprehensive DBT LDAP utilities for data transformation, LDAP integration,
     and DBT project management without duplicating functionality.
@@ -28,28 +28,30 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
     def __init__(self) -> None:
         """Initialize FlextDbtLdapUtilities service."""
         super().__init__()
-        self._container = FlextCore.Container.get_global()
+        self._container = FlextContainer.get_global()
 
-    def execute(self) -> FlextCore.Result[FlextCore.Types.Dict]:
+    def execute(self) -> FlextResult[FlextTypes.Dict]:
         """Execute the main DBT LDAP service operation.
 
         Returns:
-            FlextCore.Result[FlextCore.Types.Dict]: Service status and capabilities.
+            FlextResult[FlextTypes.Dict]: Service status and capabilities.
 
         """
-        return FlextCore.Result[FlextCore.Types.Dict].ok({
-            "status": "operational",
-            "service": "flext-dbt-ldap-utilities",
-            "capabilities": [
-                "dbt_project_management",
-                "ldap_data_transformation",
-                "schema_generation",
-                "macro_management",
-                "dbt_model_validation",
-                "ldap_source_configuration",
-                "transformation_optimization",
-            ],
-        })
+        return FlextResult[FlextTypes.Dict].ok(
+            {
+                "status": "operational",
+                "service": "flext-dbt-ldap-utilities",
+                "capabilities": [
+                    "dbt_project_management",
+                    "ldap_data_transformation",
+                    "schema_generation",
+                    "macro_management",
+                    "dbt_model_validation",
+                    "ldap_source_configuration",
+                    "transformation_optimization",
+                ],
+            }
+        )
 
     class DbtProjectManagement:
         """DBT project management utilities."""
@@ -57,9 +59,9 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
         @staticmethod
         def create_dbt_project_config(
             project_name: str,
-            ldap_sources: list[FlextCore.Types.Dict],
+            ldap_sources: list[FlextTypes.Dict],
             target_schema: str = "ldap_transformed",
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+        ) -> FlextResult[FlextTypes.Dict]:
             """Create DBT project configuration for LDAP data transformation.
 
             Args:
@@ -68,7 +70,7 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                 target_schema: Target schema for transformed data
 
             Returns:
-                FlextCore.Result containing DBT project configuration or error
+                FlextResult containing DBT project configuration or error
 
             """
             try:
@@ -94,19 +96,19 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                     "sources": {"ldap_sources": {"tables": ldap_sources}},
                 }
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(
-                    cast("FlextCore.Types.Dict", project_config)
+                return FlextResult[FlextTypes.Dict].ok(
+                    cast("FlextTypes.Dict", project_config)
                 )
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"DBT project config creation failed: {e}"
                 )
 
         @staticmethod
         def generate_dbt_profiles(
             profile_name: str,
-            connection_config: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            connection_config: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Generate DBT profiles configuration for LDAP data sources.
 
             Args:
@@ -114,7 +116,7 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                 connection_config: Database connection configuration
 
             Returns:
-                FlextCore.Result containing DBT profiles configuration or error
+                FlextResult containing DBT profiles configuration or error
 
             """
             try:
@@ -152,25 +154,25 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                     }
                 }
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(
-                    cast("FlextCore.Types.Dict", profiles_config)
+                return FlextResult[FlextTypes.Dict].ok(
+                    cast("FlextTypes.Dict", profiles_config)
                 )
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"DBT profiles generation failed: {e}"
                 )
 
         @staticmethod
         def validate_dbt_project_structure(
             project_path: Path,
-        ) -> FlextCore.Result[FlextCore.Types.BoolDict]:
+        ) -> FlextResult[FlextTypes.BoolDict]:
             """Validate DBT project structure for LDAP transformation project.
 
             Args:
                 project_path: Path to the DBT project
 
             Returns:
-                FlextCore.Result containing validation results or error
+                FlextResult containing validation results or error
 
             """
             try:
@@ -186,9 +188,9 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                 for name, path in required_files.items():
                     validation_results[name] = path.exists()
 
-                return FlextCore.Result[FlextCore.Types.BoolDict].ok(validation_results)
+                return FlextResult[FlextTypes.BoolDict].ok(validation_results)
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.BoolDict].fail(
+                return FlextResult[FlextTypes.BoolDict].fail(
                     f"DBT project structure validation failed: {e}"
                 )
 
@@ -197,9 +199,9 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
 
         @staticmethod
         def generate_ldap_source_schema(
-            ldap_attributes: FlextCore.Types.StringList,
+            ldap_attributes: FlextTypes.StringList,
             source_name: str = "ldap_users",
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+        ) -> FlextResult[FlextTypes.Dict]:
             """Generate DBT source schema for LDAP attributes.
 
             Args:
@@ -207,7 +209,7 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                 source_name: Name for the LDAP source
 
             Returns:
-                FlextCore.Result containing DBT source schema or error
+                FlextResult containing DBT source schema or error
 
             """
             try:
@@ -223,11 +225,13 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                     else:
                         data_type = "text"  # Default for string attributes
 
-                    columns.append({
-                        "name": attr.lower().replace("-", "_"),
-                        "description": f"LDAP {attr} attribute",
-                        "data_type": data_type,
-                    })
+                    columns.append(
+                        {
+                            "name": attr.lower().replace("-", "_"),
+                            "description": f"LDAP {attr} attribute",
+                            "data_type": data_type,
+                        }
+                    )
 
                 source_schema = {
                     "version": 2,
@@ -246,11 +250,11 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                     ],
                 }
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(
-                    cast("FlextCore.Types.Dict", source_schema)
+                return FlextResult[FlextTypes.Dict].ok(
+                    cast("FlextTypes.Dict", source_schema)
                 )
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"LDAP source schema generation failed: {e}"
                 )
 
@@ -258,8 +262,8 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
         def create_ldap_transformation_model(
             model_name: str,
             source_table: str,
-            transformations: FlextCore.Types.StringDict,
-        ) -> FlextCore.Result[str]:
+            transformations: FlextTypes.StringDict,
+        ) -> FlextResult[str]:
             """Create DBT model SQL for LDAP data transformation.
 
             Args:
@@ -268,7 +272,7 @@ class FlextDbtLdapUtilities(FlextCore.Utilities):
                 transformations: Dictionary of column transformations
 
             Returns:
-                FlextCore.Result containing DBT model SQL or error
+                FlextResult containing DBT model SQL or error
 
             """
             try:
@@ -295,19 +299,19 @@ from {{{{ source('ldap', '{source_table}') }}}}
 where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
-"""
+"""  # noqa: S608
 
-                return FlextCore.Result[str].ok(model_sql)
+                return FlextResult[str].ok(model_sql)
             except Exception as e:
-                return FlextCore.Result[str].fail(
+                return FlextResult[str].fail(
                     f"LDAP transformation model creation failed: {e}"
                 )
 
         @staticmethod
         def generate_ldap_data_tests(
             model_name: str,
-            test_config: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            test_config: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Generate DBT data tests for LDAP transformation models.
 
             Args:
@@ -315,11 +319,11 @@ where 1=1
                 test_config: Test configuration parameters
 
             Returns:
-                FlextCore.Result containing DBT test configuration or error
+                FlextResult containing DBT test configuration or error
 
             """
             try:
-                tests: FlextCore.Types.Dict = {
+                tests: FlextTypes.Dict = {
                     "version": 2,
                     "models": [
                         {
@@ -329,18 +333,16 @@ where 1=1
                                 "unique",
                                 "not_null",
                             ],
-                            "columns": cast("list[FlextCore.Types.Dict]", []),
+                            "columns": cast("list[FlextTypes.Dict]", []),
                         }
                     ],
                 }
 
                 # Add column-specific tests
-                columns_config = cast(
-                    "FlextCore.Types.Dict", test_config.get("columns", {})
-                )
-                models_list = cast("list[FlextCore.Types.Dict]", tests["models"])
+                columns_config = cast("FlextTypes.Dict", test_config.get("columns", {}))
+                models_list = cast("list[FlextTypes.Dict]", tests["models"])
                 model_dict = models_list[0]
-                columns_list = cast("list[FlextCore.Types.Dict]", model_dict["columns"])
+                columns_list = cast("list[FlextTypes.Dict]", model_dict["columns"])
 
                 for column, column_tests in columns_config.items():
                     column_config = {
@@ -350,9 +352,9 @@ where 1=1
                     }
                     columns_list.append(column_config)
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(tests)
+                return FlextResult[FlextTypes.Dict].ok(tests)
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"LDAP data tests generation failed: {e}"
                 )
 
@@ -362,14 +364,14 @@ where 1=1
         @staticmethod
         def create_ldap_parsing_macro(
             macro_name: str = "parse_ldap_dn",
-        ) -> FlextCore.Result[str]:
+        ) -> FlextResult[str]:
             """Create DBT macro for parsing LDAP distinguished names.
 
             Args:
                 macro_name: Name of the macro
 
             Returns:
-                FlextCore.Result containing macro SQL or error
+                FlextResult containing macro SQL or error
 
             """
             try:
@@ -392,23 +394,21 @@ where 1=1
     end
 {{% endmacro %}}"""
 
-                return FlextCore.Result[str].ok(macro_sql)
+                return FlextResult[str].ok(macro_sql)
             except Exception as e:
-                return FlextCore.Result[str].fail(
-                    f"LDAP parsing macro creation failed: {e}"
-                )
+                return FlextResult[str].fail(f"LDAP parsing macro creation failed: {e}")
 
         @staticmethod
         def create_ldap_attribute_macro(
             macro_name: str = "extract_ldap_attribute",
-        ) -> FlextCore.Result[str]:
+        ) -> FlextResult[str]:
             """Create DBT macro for extracting LDAP attributes from arrays.
 
             Args:
                 macro_name: Name of the macro
 
             Returns:
-                FlextCore.Result containing macro SQL or error
+                FlextResult containing macro SQL or error
 
             """
             try:
@@ -428,25 +428,25 @@ where 1=1
         else {{{{{{attribute_array}}}}}}[1]
         {{% endif %}}
     end
-{{% endmacro %}}"""
+{{% endmacro %}}"""  # noqa: S608
 
-                return FlextCore.Result[str].ok(macro_sql)
+                return FlextResult[str].ok(macro_sql)
             except Exception as e:
-                return FlextCore.Result[str].fail(
+                return FlextResult[str].fail(
                     f"LDAP attribute macro creation failed: {e}"
                 )
 
         @staticmethod
         def create_ldap_normalization_macro(
             macro_name: str = "normalize_ldap_timestamp",
-        ) -> FlextCore.Result[str]:
+        ) -> FlextResult[str]:
             """Create DBT macro for normalizing LDAP timestamps.
 
             Args:
                 macro_name: Name of the macro
 
             Returns:
-                FlextCore.Result containing macro SQL or error
+                FlextResult containing macro SQL or error
 
             """
             try:
@@ -466,9 +466,9 @@ where 1=1
     end
 {{% endmacro %}}"""
 
-                return FlextCore.Result[str].ok(macro_sql)
+                return FlextResult[str].ok(macro_sql)
             except Exception as e:
-                return FlextCore.Result[str].fail(
+                return FlextResult[str].fail(
                     f"LDAP normalization macro creation failed: {e}"
                 )
 
@@ -476,11 +476,11 @@ where 1=1
         """Schema generation utilities for LDAP data structures."""
 
         @staticmethod
-        def generate_user_schema() -> FlextCore.Result[FlextCore.Types.Dict]:
+        def generate_user_schema() -> FlextResult[FlextTypes.Dict]:
             """Generate standard schema for LDAP user data.
 
             Returns:
-                FlextCore.Result containing user schema configuration or error
+                FlextResult containing user schema configuration or error
 
             """
             try:
@@ -540,20 +540,20 @@ where 1=1
                     ],
                 }
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(
-                    cast("FlextCore.Types.Dict", user_schema)
+                return FlextResult[FlextTypes.Dict].ok(
+                    cast("FlextTypes.Dict", user_schema)
                 )
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"User schema generation failed: {e}"
                 )
 
         @staticmethod
-        def generate_group_schema() -> FlextCore.Result[FlextCore.Types.Dict]:
+        def generate_group_schema() -> FlextResult[FlextTypes.Dict]:
             """Generate standard schema for LDAP group data.
 
             Returns:
-                FlextCore.Result containing group schema configuration or error
+                FlextResult containing group schema configuration or error
 
             """
             try:
@@ -599,11 +599,11 @@ where 1=1
                     ],
                 }
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(
-                    cast("FlextCore.Types.Dict", group_schema)
+                return FlextResult[FlextTypes.Dict].ok(
+                    cast("FlextTypes.Dict", group_schema)
                 )
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Group schema generation failed: {e}"
                 )
 
@@ -618,8 +618,8 @@ where 1=1
         @staticmethod
         def optimize_ldap_query(
             base_query: str,
-            optimization_hints: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[str]:
+            optimization_hints: FlextTypes.Dict,
+        ) -> FlextResult[str]:
             """Optimize DBT SQL query for LDAP data processing.
 
             Args:
@@ -627,7 +627,7 @@ where 1=1
                 optimization_hints: Optimization configuration
 
             Returns:
-                FlextCore.Result containing optimized query or error
+                FlextResult containing optimized query or error
 
             """
             try:
@@ -655,26 +655,26 @@ where 1=1
                         "where 1=1\n    -- Apply filters early for performance",
                     )
 
-                return FlextCore.Result[str].ok(optimized_query)
+                return FlextResult[str].ok(optimized_query)
             except Exception as e:
-                return FlextCore.Result[str].fail(f"Query optimization failed: {e}")
+                return FlextResult[str].fail(f"Query optimization failed: {e}")
 
         @classmethod
         def analyze_transformation_performance(
             cls,
-            model_stats: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            model_stats: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Analyze performance of LDAP transformation models.
 
             Args:
                 model_stats: Model execution statistics
 
             Returns:
-                FlextCore.Result containing performance analysis or error
+                FlextResult containing performance analysis or error
 
             """
             try:
-                analysis: FlextCore.Types.Dict = {
+                analysis: FlextTypes.Dict = {
                     "execution_time": cast(
                         "float", model_stats.get("execution_time", 0)
                     ),
@@ -704,9 +704,9 @@ where 1=1
                         "Consider incremental processing for large datasets"
                     )
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(analysis)
+                return FlextResult[FlextTypes.Dict].ok(analysis)
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Performance analysis failed: {e}"
                 )
 

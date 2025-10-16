@@ -8,7 +8,13 @@ Unified facade for FLEXT DBT LDAP operations with complete FLEXT integration.
 
 from __future__ import annotations
 
-from flext_core import FlextCore
+from flext_core import (
+    FlextContainer,
+    FlextContext,
+    FlextLogger,
+    FlextResult,
+    FlextService,
+)
 
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
@@ -21,7 +27,7 @@ from flext_dbt_ldap.models import (
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
 
-class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
+class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
     """Unified DBT LDAP facade with complete FLEXT ecosystem integration.
 
     This is the single unified class for the flext-dbt-ldap domain providing
@@ -35,10 +41,10 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
     - Direct use of flext-core centralized services
 
     **FLEXT INTEGRATION**: Complete integration with flext-core patterns:
-    - FlextCore.Container for dependency injection
-    - FlextCore.Context for operation context
-    - FlextCore.Logger for structured logging
-    - FlextCore.Result for railway-oriented error handling
+    - FlextContainer for dependency injection
+    - FlextContext for operation context
+    - FlextLogger for structured logging
+    - FlextResult for railway-oriented error handling
 
     **PYTHON 3.13+ COMPATIBILITY**: Uses modern patterns and latest type features.
     """
@@ -51,9 +57,9 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
         self._service: FlextDbtLdapService | None = None
 
         # Complete FLEXT ecosystem integration
-        self._container = FlextCore.Container.get_global().clear()().get_or_create()
-        self._context = FlextCore.Context()
-        self.logger = FlextCore.Logger(__name__)
+        self._container = FlextContainer.get_global().clear()().get_or_create()
+        self._context = FlextContext()
+        self.logger = FlextLogger(__name__)
 
     @classmethod
     def create(cls) -> FlextDbtLdap:
@@ -70,7 +76,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
         ldap_port: int = 389,
         ldap_base_dn: str = "",
         **kwargs: object,
-    ) -> FlextCore.Result[FlextDbtLdapConfig]:
+    ) -> FlextResult[FlextDbtLdapConfig]:
         """Create DBT LDAP configuration with sensible defaults.
 
         Args:
@@ -80,7 +86,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             **kwargs: Additional configuration fields
 
         Returns:
-            FlextCore.Result containing configured FlextDbtLdapConfig
+            FlextResult containing configured FlextDbtLdapConfig
 
         """
         try:
@@ -100,11 +106,9 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
                 if hasattr(config, key):
                     setattr(config, key, value)
 
-            return FlextCore.Result[FlextDbtLdapConfig].ok(config)
+            return FlextResult[FlextDbtLdapConfig].ok(config)
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapConfig].fail(
-                f"Config creation failed: {e}"
-            )
+            return FlextResult[FlextDbtLdapConfig].fail(f"Config creation failed: {e}")
 
     # =============================================================================
     # CLIENT AND SERVICE MANAGEMENT - Enhanced with proper error handling
@@ -130,43 +134,41 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
         return self._config
 
     # =============================================================================
-    # FACTORY METHODS - Enhanced with FlextCore.Result error handling
+    # FACTORY METHODS - Enhanced with FlextResult error handling
     # =============================================================================
 
-    def create_client(self) -> FlextCore.Result[FlextDbtLdapClient]:
+    def create_client(self) -> FlextResult[FlextDbtLdapClient]:
         """Create DBT LDAP client with current configuration.
 
         Returns:
-            FlextCore.Result containing configured FlextDbtLdapClient
+            FlextResult containing configured FlextDbtLdapClient
 
         """
         try:
             self.logger.info("Creating DBT LDAP client")
             client = FlextDbtLdapClient(self._config)
-            return FlextCore.Result[FlextDbtLdapClient].ok(client)
+            return FlextResult[FlextDbtLdapClient].ok(client)
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapClient].fail(
-                f"Client creation failed: {e}"
-            )
+            return FlextResult[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
 
-    def create_service(self) -> FlextCore.Result[FlextDbtLdapService]:
+    def create_service(self) -> FlextResult[FlextDbtLdapService]:
         """Create DBT LDAP service with current configuration.
 
         Returns:
-            FlextCore.Result containing configured FlextDbtLdapService
+            FlextResult containing configured FlextDbtLdapService
 
         """
         try:
             self.logger.info("Creating DBT LDAP service")
             service = FlextDbtLdapService(self._config)
-            return FlextCore.Result[FlextDbtLdapService].ok(service)
+            return FlextResult[FlextDbtLdapService].ok(service)
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapService].fail(
+            return FlextResult[FlextDbtLdapService].fail(
                 f"Service creation failed: {e}"
             )
 
     # =============================================================================
-    # MODEL FACTORY METHODS - Enhanced with FlextCore.Result error handling
+    # MODEL FACTORY METHODS - Enhanced with FlextResult error handling
     # =============================================================================
 
     def create_user_dimension(
@@ -175,7 +177,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
         common_name: str,
         email: str | None = None,
         **kwargs: object,
-    ) -> FlextCore.Result[FlextDbtLdapUserDimension]:
+    ) -> FlextResult[FlextDbtLdapUserDimension]:
         """Create user dimension with required fields.
 
         Args:
@@ -185,7 +187,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             **kwargs: Additional fields for FlextDbtLdapUserDimension
 
         Returns:
-            FlextCore.Result containing FlextDbtLdapUserDimension instance
+            FlextResult containing FlextDbtLdapUserDimension instance
 
         """
         try:
@@ -203,9 +205,9 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             for key, value in kwargs.items():
                 if hasattr(user, key):
                     setattr(user, key, value)
-            return FlextCore.Result[FlextDbtLdapUserDimension].ok(user)
+            return FlextResult[FlextDbtLdapUserDimension].ok(user)
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapUserDimension].fail(
+            return FlextResult[FlextDbtLdapUserDimension].fail(
                 f"User dimension creation failed: {e}"
             )
 
@@ -215,7 +217,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
         common_name: str,
         description: str | None = None,
         **kwargs: object,
-    ) -> FlextCore.Result[FlextDbtLdapGroupDimension]:
+    ) -> FlextResult[FlextDbtLdapGroupDimension]:
         """Create group dimension with required fields.
 
         Args:
@@ -225,7 +227,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             **kwargs: Additional fields for FlextDbtLdapGroupDimension
 
         Returns:
-            FlextCore.Result containing FlextDbtLdapGroupDimension instance
+            FlextResult containing FlextDbtLdapGroupDimension instance
 
         """
         try:
@@ -243,30 +245,30 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             for key, value in kwargs.items():
                 if hasattr(group, key):
                     setattr(group, key, value)
-            return FlextCore.Result[FlextDbtLdapGroupDimension].ok(group)
+            return FlextResult[FlextDbtLdapGroupDimension].ok(group)
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapGroupDimension].fail(
+            return FlextResult[FlextDbtLdapGroupDimension].fail(
                 f"Group dimension creation failed: {e}"
             )
 
-    def create_transformer(self) -> FlextCore.Result[FlextDbtLdapTransformer]:
+    def create_transformer(self) -> FlextResult[FlextDbtLdapTransformer]:
         """Create LDAP data transformer.
 
         Returns:
-            FlextCore.Result containing FlextDbtLdapTransformer instance
+            FlextResult containing FlextDbtLdapTransformer instance
 
         """
         try:
             self.logger.debug("Creating LDAP transformer")
             transformer = FlextDbtLdapTransformer()
-            return FlextCore.Result[FlextDbtLdapTransformer].ok(transformer)
+            return FlextResult[FlextDbtLdapTransformer].ok(transformer)
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapTransformer].fail(
+            return FlextResult[FlextDbtLdapTransformer].fail(
                 f"Transformer creation failed: {e}"
             )
 
     # =============================================================================
-    # PIPELINE METHODS - Enhanced with FlextCore.Result and proper validation
+    # PIPELINE METHODS - Enhanced with FlextResult and proper validation
     # =============================================================================
 
     def create_simple_pipeline(
@@ -275,7 +277,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
         ldap_port: int = 389,
         ldap_base_dn: str = "",
         **config_kwargs: object,
-    ) -> FlextCore.Result[FlextDbtLdapService]:
+    ) -> FlextResult[FlextDbtLdapService]:
         """Create complete DBT LDAP pipeline with minimal configuration using FlextDbtLdapUtilities.
 
         CRITICAL: Now ACTUALLY USES FlextDbtLdapUtilities to eliminate ZERO TOLERANCE violation.
@@ -288,7 +290,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             **config_kwargs: Additional configuration
 
         Returns:
-            FlextCore.Result containing ready-to-use FlextDbtLdapService instance
+            FlextResult containing ready-to-use FlextDbtLdapService instance
 
         """
         try:
@@ -304,7 +306,7 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
                 **config_kwargs,
             )
             if config_result.is_failure:
-                return FlextCore.Result[FlextDbtLdapService].fail(
+                return FlextResult[FlextDbtLdapService].fail(
                     f"Config creation failed: {config_result.error}"
                 )
 
@@ -338,13 +340,13 @@ class FlextDbtLdap(FlextCore.Service[FlextDbtLdapConfig]):
             # Create and return service
             service_result = self.create_service()
             if service_result.is_failure:
-                return FlextCore.Result[FlextDbtLdapService].fail(
+                return FlextResult[FlextDbtLdapService].fail(
                     f"Service creation failed: {service_result.error}"
                 )
 
             return service_result
         except Exception as e:
-            return FlextCore.Result[FlextDbtLdapService].fail(
+            return FlextResult[FlextDbtLdapService].fail(
                 f"Pipeline creation failed: {e}"
             )
 

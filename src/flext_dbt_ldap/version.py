@@ -1,4 +1,4 @@
-"""FLEXT DBT LDAP - Version information with FlextCore patterns.
+"""FLEXT DBT LDAP - Version information with Flextpatterns.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -10,7 +10,7 @@ from __future__ import annotations
 from importlib.metadata import metadata
 from typing import Final
 
-from flext_core import FlextCore
+from flext_core import FlextResult
 
 
 class FlextDbtLdapVersion:
@@ -76,20 +76,18 @@ class FlextDbtLdapVersion:
         return self._metadata.get("Home-Page")
 
 
-def _create_version() -> FlextCore.Result[FlextDbtLdapVersion]:
+def _create_version() -> FlextResult[FlextDbtLdapVersion]:
     """Create version instance from package metadata.
 
     Returns:
-        FlextCore.Result[FlextDbtLdapVersion]: Version instance or error
+        FlextResult[FlextDbtLdapVersion]: Version instance or error
 
     """
     try:
         version = FlextDbtLdapVersion()
-        return FlextCore.Result[FlextDbtLdapVersion].ok(version)
+        return FlextResult[FlextDbtLdapVersion].ok(version)
     except Exception as e:
-        return FlextCore.Result[FlextDbtLdapVersion].fail(
-            f"Version creation failed: {e}"
-        )
+        return FlextResult[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
 
 
 # Global version instance

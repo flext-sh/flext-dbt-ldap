@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from typing import Final
 
+from flext_core import FlextConfig, FlextModels, FlextResult
+
 from flext_dbt_ldap.__version__ import __version__, __version_info__
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
@@ -47,9 +49,7 @@ __all__ = [
     "PROJECT_VERSION",
     "VERSION",
     "DomainBaseModel",
-    "FlextCore.Config",
-    "FlextCore.Models",
-    "FlextCore.Result",
+    "FlextConfig",
     "FlextDbtLdap",
     "FlextDbtLdap",
     "FlextDbtLdapAPI",
@@ -70,6 +70,8 @@ __all__ = [
     "FlextDbtLdapUtilities",
     "FlextDbtLdapValidationError",
     "FlextDbtLdapVersion",
+    "FlextModels",
+    "FlextResult",
     "__version__",
     "__version_info__",
     "_show_deprecation_warning",

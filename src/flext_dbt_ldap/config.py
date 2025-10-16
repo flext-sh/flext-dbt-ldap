@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import ClassVar, Self, cast
 
-from flext_core import FlextCore
+from flext_core import FlextConfig, FlextLogger, FlextResult, FlextTypes
 from flext_ldap import FlextLdapModels
 from flext_meltano.config import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
@@ -19,14 +19,14 @@ from pydantic_settings import SettingsConfigDict
 from flext_dbt_ldap.constants import FlextDbtLdapConstants
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
-logger = FlextCore.Logger(__name__)
+logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapConfig(FlextCore.Config):
-    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextCore.Config.
+class FlextDbtLdapConfig(FlextConfig):
+    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextConfig.
 
     Follows standardized pattern:
-    - Extends FlextCore.Config from flext-core
+    - Extends FlextConfig from flext-core
     - No nested classes within Config
     - All defaults from FlextDbtLdapConstants
     - Uses enhanced singleton pattern with inverse dependency injection
@@ -41,7 +41,7 @@ class FlextDbtLdapConfig(FlextCore.Config):
         str_strip_whitespace=True,
         json_schema_extra={
             "title": "FLEXT DBT LDAP Configuration",
-            "description": "DBT LDAP configuration extending FlextCore.Config",
+            "description": "DBT LDAP configuration extending FlextConfig",
         },
     )
 
@@ -85,13 +85,13 @@ class FlextDbtLdapConfig(FlextCore.Config):
     dbt_log_level: str = Field(default="info", description="DBT log level")
 
     # LDAP-specific DBT Settings - using constants
-    ldap_schema_mapping: ClassVar[FlextCore.Types.StringDict] = {
+    ldap_schema_mapping: ClassVar[FlextTypes.StringDict] = {
         "users": "stg_users",
         "groups": "stg_groups",
         "org_units": "stg_org_units",
     }
 
-    ldap_attribute_mapping: ClassVar[FlextCore.Types.StringDict] = {
+    ldap_attribute_mapping: ClassVar[FlextTypes.StringDict] = {
         "cn": "common_name",
         "uid": "user_id",
         "mail": "email",
@@ -575,31 +575,31 @@ class FlextDbtLdapConfig(FlextCore.Config):
 
         return self
 
-    def validate_business_rules(self) -> FlextCore.Result[None]:
+    def validate_business_rules(self) -> FlextResult[None]:
         """Validate DBT LDAP specific business rules."""
         try:
             # Validate LDAP configuration
             if not self.ldap_host:
-                return FlextCore.Result[None].fail("LDAP host is required")
+                return FlextResult[None].fail("LDAP host is required")
 
             # Validate DBT configuration
             if not self.dbt_project_dir:
-                return FlextCore.Result[None].fail("DBT project directory is required")
+                return FlextResult[None].fail("DBT project directory is required")
 
             # Validate performance thresholds
             if self.dbt_ldap_performance_threshold_warning < 0:
-                return FlextCore.Result[None].fail(
+                return FlextResult[None].fail(
                     "Performance warning threshold must be non-negative"
                 )
 
             if self.dbt_ldap_performance_threshold_critical < 0:
-                return FlextCore.Result[None].fail(
+                return FlextResult[None].fail(
                     "Performance critical threshold must be non-negative"
                 )
 
-            return FlextCore.Result[None].ok(None)
+            return FlextResult[None].ok(None)
         except Exception as e:
-            return FlextCore.Result[None].fail(f"Business rules validation failed: {e}")
+            return FlextResult[None].fail(f"Business rules validation failed: {e}")
 
     def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
@@ -640,7 +640,7 @@ class FlextDbtLdapConfig(FlextCore.Config):
             environment=environment_value,
         )
 
-    def get_ldap_quality_config(self) -> FlextCore.Types.Dict:
+    def get_ldap_quality_config(self) -> FlextTypes.Dict:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": self.min_quality_threshold,
@@ -648,7 +648,7 @@ class FlextDbtLdapConfig(FlextCore.Config):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> FlextCore.Types.Dict:
+    def get_dbt_ldap_logging_config(self) -> FlextTypes.Dict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,
@@ -730,7 +730,7 @@ class FlextDbtLdapConfig(FlextCore.Config):
 
     @classmethod
     def create_for_environment(
-        cls, environment: str, **overrides
+        cls, environment: str, **overrides: object
     ) -> FlextDbtLdapConfig:
         """Create configuration for specific environment using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
@@ -784,7 +784,7 @@ class FlextDbtLdapConfig(FlextCore.Config):
 
     @classmethod
     def get_global_instance(cls) -> FlextDbtLdapConfig:
-        """Get the global singleton instance using enhanced FlextCore.Config pattern."""
+        """Get the global singleton instance using enhanced FlextConfig pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
 
     @classmethod
@@ -811,7 +811,7 @@ class FlextDbtLdapConfig(FlextCore.Config):
     @classmethod
     def reset_global_instance(cls) -> None:
         """Reset the global FlextDbtLdapConfig instance (mainly for testing)."""
-        # Use the enhanced FlextCore.Config reset mechanism
+        # Use the enhanced FlextConfig reset mechanism
         cls.reset_shared_instance()
 
 
