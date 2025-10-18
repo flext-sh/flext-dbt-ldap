@@ -16,7 +16,7 @@ from subprocess import CompletedProcess
 
 import psycopg
 import pytest
-from flext_core import FlextLogger, FlextTypes
+from flext_core import FlextLogger
 from flext_tests import FlextTestDocker
 
 logger = FlextLogger(__name__)
@@ -112,10 +112,10 @@ def dbt_profiles_dir(project_root: Path) -> Path:
 
 
 def run_dbt_command(
-    command: FlextTypes.StringList,
+    command: list[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: FlextTypes.Dict | None = None,
+    dbt_vars: dict[str, object] | None = None,
 ) -> CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
@@ -128,9 +128,9 @@ def run_dbt_command(
         cmd.extend(["--vars", var_string])
 
     def _run_db(
-        cmd_list: FlextTypes.StringList,
+        cmd_list: list[str],
         cwd: str,
-        env: FlextTypes.StringDict,
+        env: dict[str, str],
     ) -> tuple[int, str, str]:
         process = create_subprocess_exec(
             *cmd_list,
@@ -191,7 +191,7 @@ def get_column_names(
     conn: object,
     schema: str,
     table: str,
-) -> FlextTypes.StringList:
+) -> list[str]:
     """Get column names for table."""
     with conn.cursor() as cur:
         cur.execute(

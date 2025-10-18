@@ -233,6 +233,6 @@ class FlextDbtLdapMacros:
         )
 
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
     "FlextDbtLdapMacros",
 ]

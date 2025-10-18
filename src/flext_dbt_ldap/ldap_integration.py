@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextTypes
+from flext_core import FlextLogger
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
@@ -52,7 +52,7 @@ class FlextDbtLdapIntegration:
             return df
 
     @staticmethod
-    def validate_ldap_data_quality(df: object) -> FlextTypes.Dict:
+    def validate_ldap_data_quality(df: object) -> dict[str, object]:
         """Validate LDAP data quality using flext-ldap generic validation.
 
         ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
@@ -98,7 +98,7 @@ process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_
 validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
 
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
     "FlextDbtLdapIntegration",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",

@@ -198,7 +198,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         )
 
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
