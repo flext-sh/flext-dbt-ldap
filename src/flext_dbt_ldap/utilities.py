@@ -30,14 +30,14 @@ class FlextDbtLdapUtilities(FlextUtilities):
         super().__init__()
         self._container = FlextContainer.get_global()
 
-    def execute(self) -> FlextResult[FlextTypes.Dict]:
+    def execute(self) -> FlextResult[dict[str, object]]:
         """Execute the main DBT LDAP service operation.
 
         Returns:
-            FlextResult[FlextTypes.Dict]: Service status and capabilities.
+            FlextResult[dict[str, object]]: Service status and capabilities.
 
         """
-        return FlextResult[FlextTypes.Dict].ok({
+        return FlextResult[dict[str, object]].ok({
             "status": "operational",
             "service": "flext-dbt-ldap-utilities",
             "capabilities": [
@@ -57,9 +57,9 @@ class FlextDbtLdapUtilities(FlextUtilities):
         @staticmethod
         def create_dbt_project_config(
             project_name: str,
-            ldap_sources: list[FlextTypes.Dict],
+            ldap_sources: list[dict[str, object]],
             target_schema: str = "ldap_transformed",
-        ) -> FlextResult[FlextTypes.Dict]:
+        ) -> FlextResult[dict[str, object]]:
             """Create DBT project configuration for LDAP data transformation.
 
             Args:
@@ -94,19 +94,19 @@ class FlextDbtLdapUtilities(FlextUtilities):
                     "sources": {"ldap_sources": {"tables": ldap_sources}},
                 }
 
-                return FlextResult[FlextTypes.Dict].ok(
-                    cast("FlextTypes.Dict", project_config)
+                return FlextResult[dict[str, object]].ok(
+                    cast("dict[str, object]", project_config)
                 )
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"DBT project config creation failed: {e}"
                 )
 
         @staticmethod
         def generate_dbt_profiles(
             profile_name: str,
-            connection_config: FlextTypes.Dict,
-        ) -> FlextResult[FlextTypes.Dict]:
+            connection_config: dict[str, object],
+        ) -> FlextResult[dict[str, object]]:
             """Generate DBT profiles configuration for LDAP data sources.
 
             Args:
@@ -152,11 +152,11 @@ class FlextDbtLdapUtilities(FlextUtilities):
                     }
                 }
 
-                return FlextResult[FlextTypes.Dict].ok(
-                    cast("FlextTypes.Dict", profiles_config)
+                return FlextResult[dict[str, object]].ok(
+                    cast("dict[str, object]", profiles_config)
                 )
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"DBT profiles generation failed: {e}"
                 )
 
@@ -197,9 +197,9 @@ class FlextDbtLdapUtilities(FlextUtilities):
 
         @staticmethod
         def generate_ldap_source_schema(
-            ldap_attributes: FlextTypes.StringList,
+            ldap_attributes: list[str],
             source_name: str = "ldap_users",
-        ) -> FlextResult[FlextTypes.Dict]:
+        ) -> FlextResult[dict[str, object]]:
             """Generate DBT source schema for LDAP attributes.
 
             Args:
@@ -246,11 +246,11 @@ class FlextDbtLdapUtilities(FlextUtilities):
                     ],
                 }
 
-                return FlextResult[FlextTypes.Dict].ok(
-                    cast("FlextTypes.Dict", source_schema)
+                return FlextResult[dict[str, object]].ok(
+                    cast("dict[str, object]", source_schema)
                 )
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"LDAP source schema generation failed: {e}"
                 )
 
@@ -258,7 +258,7 @@ class FlextDbtLdapUtilities(FlextUtilities):
         def create_ldap_transformation_model(
             model_name: str,
             source_table: str,
-            transformations: FlextTypes.StringDict,
+            transformations: dict[str, str],
         ) -> FlextResult[str]:
             """Create DBT model SQL for LDAP data transformation.
 
@@ -295,7 +295,7 @@ from {{{{ source('ldap', '{source_table}') }}}}
 where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
-"""
+"""  # noqa: S608
 
                 return FlextResult[str].ok(model_sql)
             except Exception as e:
@@ -306,8 +306,8 @@ where 1=1
         @staticmethod
         def generate_ldap_data_tests(
             model_name: str,
-            test_config: FlextTypes.Dict,
-        ) -> FlextResult[FlextTypes.Dict]:
+            test_config: dict[str, object],
+        ) -> FlextResult[dict[str, object]]:
             """Generate DBT data tests for LDAP transformation models.
 
             Args:
@@ -319,7 +319,7 @@ where 1=1
 
             """
             try:
-                tests: FlextTypes.Dict = {
+                tests: dict[str, object] = {
                     "version": 2,
                     "models": [
                         {
@@ -329,16 +329,18 @@ where 1=1
                                 "unique",
                                 "not_null",
                             ],
-                            "columns": cast("list[FlextTypes.Dict]", []),
+                            "columns": cast("list[dict[str, object]]", []),
                         }
                     ],
                 }
 
                 # Add column-specific tests
-                columns_config = cast("FlextTypes.Dict", test_config.get("columns", {}))
-                models_list = cast("list[FlextTypes.Dict]", tests["models"])
+                columns_config = cast(
+                    "dict[str, object]", test_config.get("columns", {})
+                )
+                models_list = cast("list[dict[str, object]]", tests["models"])
                 model_dict = models_list[0]
-                columns_list = cast("list[FlextTypes.Dict]", model_dict["columns"])
+                columns_list = cast("list[dict[str, object]]", model_dict["columns"])
 
                 for column, column_tests in columns_config.items():
                     column_config = {
@@ -348,9 +350,9 @@ where 1=1
                     }
                     columns_list.append(column_config)
 
-                return FlextResult[FlextTypes.Dict].ok(tests)
+                return FlextResult[dict[str, object]].ok(tests)
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"LDAP data tests generation failed: {e}"
                 )
 
@@ -424,7 +426,7 @@ where 1=1
         else {{{{{{attribute_array}}}}}}[1]
         {{% endif %}}
     end
-{{% endmacro %}}"""
+{{% endmacro %}}"""  # noqa: S608
 
                 return FlextResult[str].ok(macro_sql)
             except Exception as e:
@@ -472,7 +474,7 @@ where 1=1
         """Schema generation utilities for LDAP data structures."""
 
         @staticmethod
-        def generate_user_schema() -> FlextResult[FlextTypes.Dict]:
+        def generate_user_schema() -> FlextResult[dict[str, object]]:
             """Generate standard schema for LDAP user data.
 
             Returns:
@@ -536,16 +538,16 @@ where 1=1
                     ],
                 }
 
-                return FlextResult[FlextTypes.Dict].ok(
-                    cast("FlextTypes.Dict", user_schema)
+                return FlextResult[dict[str, object]].ok(
+                    cast("dict[str, object]", user_schema)
                 )
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"User schema generation failed: {e}"
                 )
 
         @staticmethod
-        def generate_group_schema() -> FlextResult[FlextTypes.Dict]:
+        def generate_group_schema() -> FlextResult[dict[str, object]]:
             """Generate standard schema for LDAP group data.
 
             Returns:
@@ -595,11 +597,11 @@ where 1=1
                     ],
                 }
 
-                return FlextResult[FlextTypes.Dict].ok(
-                    cast("FlextTypes.Dict", group_schema)
+                return FlextResult[dict[str, object]].ok(
+                    cast("dict[str, object]", group_schema)
                 )
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"Group schema generation failed: {e}"
                 )
 
@@ -614,7 +616,7 @@ where 1=1
         @staticmethod
         def optimize_ldap_query(
             base_query: str,
-            optimization_hints: FlextTypes.Dict,
+            optimization_hints: dict[str, object],
         ) -> FlextResult[str]:
             """Optimize DBT SQL query for LDAP data processing.
 
@@ -658,8 +660,8 @@ where 1=1
         @classmethod
         def analyze_transformation_performance(
             cls,
-            model_stats: FlextTypes.Dict,
-        ) -> FlextResult[FlextTypes.Dict]:
+            model_stats: dict[str, object],
+        ) -> FlextResult[dict[str, object]]:
             """Analyze performance of LDAP transformation models.
 
             Args:
@@ -670,7 +672,7 @@ where 1=1
 
             """
             try:
-                analysis: FlextTypes.Dict = {
+                analysis: dict[str, object] = {
                     "execution_time": cast(
                         "float", model_stats.get("execution_time", 0)
                     ),
@@ -700,9 +702,9 @@ where 1=1
                         "Consider incremental processing for large datasets"
                     )
 
-                return FlextResult[FlextTypes.Dict].ok(analysis)
+                return FlextResult[dict[str, object]].ok(analysis)
             except Exception as e:
-                return FlextResult[FlextTypes.Dict].fail(
+                return FlextResult[dict[str, object]].fail(
                     f"Performance analysis failed: {e}"
                 )
 

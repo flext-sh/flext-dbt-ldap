@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
+from flext_core import FlextLogger, FlextModels, FlextResult
 from flext_ldap import FlextLdapModels
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
@@ -47,9 +47,9 @@ class FlextDbtLdapModels(FlextModels):
             entry: FlextLdapEntities.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
-            # Normalize attributes to dict[str, FlextDbtLdapTypes.Core.StringList]
+            # Normalize attributes to dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList]
             raw = entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -94,7 +94,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("User ID and common name are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextTypes.Dict:
+        def to_dbt_dict(self) -> dict[str, object]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -132,7 +132,7 @@ class FlextDbtLdapModels(FlextModels):
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -174,7 +174,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("Member count cannot be negative")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextTypes.Dict:
+        def to_dbt_dict(self: object) -> dict[str, object]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -206,7 +206,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("User DN and Group DN are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self: object) -> FlextTypes.Dict:
+        def to_dbt_dict(self: object) -> dict[str, object]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -343,9 +343,9 @@ class FlextDbtLdapModels(FlextModels):
         def _is_user_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
-            object_classes: FlextDbtLdapTypes.Core.StringList = []
+            object_classes: FlextDbtLdapTypes.DbtLdapCore.StringList = []
             if isinstance(raw, dict):
-                oc_val: FlextTypes.List = raw.get("objectClass", [])
+                oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
@@ -356,9 +356,9 @@ class FlextDbtLdapModels(FlextModels):
         def _is_group_entry(self, entry: FlextLdapEntities.Entry) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
-            object_classes: FlextDbtLdapTypes.Core.StringList = []
+            object_classes: FlextDbtLdapTypes.DbtLdapCore.StringList = []
             if isinstance(raw, dict):
-                oc_val: FlextTypes.List = raw.get("objectClass", [])
+                oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
@@ -378,7 +378,7 @@ class FlextDbtLdapModels(FlextModels):
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = group_entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -408,7 +408,7 @@ class FlextDbtLdapModels(FlextModels):
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = user_entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.Core.StringList] = {}
+            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -432,7 +432,7 @@ class FlextDbtLdapModels(FlextModels):
 # Unified class pattern - all access through FlextDbtLdapModels
 
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
     "FlextDbtLdapModels",
     # Re-exports from flext-ldap for convenience - unified class pattern
     "FlextLdapEntities",
@@ -440,7 +440,7 @@ __all__: FlextDbtLdapTypes.Core.StringList = [
 ]
 
 
-__all__: FlextDbtLdapTypes.Core.StringList = [
+__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
     "FlextDbtLdapModels",
     # Re-exports from flext-ldap for convenience - use unified class pattern
     "FlextLdapEntities",
