@@ -285,7 +285,7 @@ class FlextDbtLdapUtilities(FlextUtilities):
     config(
         materialized='table',
         tags=['ldap', 'transformation'],
-        description='Transformed LDAP data for {model_name}'
+        description=f'Transformed LDAP data for {model_name}'
     )
 }}}}
 
@@ -295,7 +295,7 @@ from {{{{ source('ldap', '{source_table}') }}}}
 where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
-"""  # noqa: S608
+"""
 
                 return FlextResult[str].ok(model_sql)
             except Exception as e:
@@ -426,7 +426,7 @@ where 1=1
         else {{{{{{attribute_array}}}}}}[1]
         {{% endif %}}
     end
-{{% endmacro %}}"""  # noqa: S608
+{{% endmacro %}}"""
 
                 return FlextResult[str].ok(macro_sql)
             except Exception as e:
