@@ -235,10 +235,10 @@ class FlextDbtLdapModels(FlextModels):
             """Transform LDAP entries to user dimensions.
 
             Args:
-                entries: List of LDAP entries
+            entries: List of LDAP entries
 
             Returns:
-                List of user dimension models
+            List of user dimension models
 
             """
             logger.info("Transforming %d LDAP entries to user dimensions", len(entries))
@@ -267,10 +267,10 @@ class FlextDbtLdapModels(FlextModels):
             """Transform LDAP entries to group dimensions.
 
             Args:
-                entries: List of LDAP entries
+            entries: List of LDAP entries
 
             Returns:
-                List of group dimension models
+            List of group dimension models
 
             """
             logger.info(
@@ -305,10 +305,10 @@ class FlextDbtLdapModels(FlextModels):
             """Transform LDAP entries to membership facts.
 
             Args:
-                entries: List of LDAP entries
+            entries: List of LDAP entries
 
             Returns:
-                List of membership fact models
+            List of membership fact models
 
             """
             logger.info(

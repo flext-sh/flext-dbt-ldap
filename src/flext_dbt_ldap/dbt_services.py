@@ -38,9 +38,9 @@ class FlextDbtLdapService:
         """Initialize DBT LDAP service.
 
         Args:
-            config: Configuration for operations
-            client: DBT LDAP client (created if None)
-            transformer: Data transformer (created if None)
+        config: Configuration for operations
+        client: DBT LDAP client (created if None)
+        transformer: Data transformer (created if None)
 
         """
         self.config: FlextDbtLdapTypes.DbtLdapCore.DbtConfigDict = (
@@ -63,11 +63,11 @@ class FlextDbtLdapService:
         """Synchronize LDAP users to data warehouse.
 
         Args:
-            search_base: LDAP search base for users
-            incremental: Whether to do incremental sync
+        search_base: LDAP search base for users
+        incremental: Whether to do incremental sync
 
         Returns:
-            FlextResult with sync statistics
+        FlextResult with sync statistics
 
         """
         try:
@@ -115,11 +115,11 @@ class FlextDbtLdapService:
         """Synchronize LDAP groups to data warehouse.
 
         Args:
-            search_base: LDAP search base for groups
-            incremental: Whether to do incremental sync
+        search_base: LDAP search base for groups
+        incremental: Whether to do incremental sync
 
         Returns:
-            FlextResult with sync statistics
+        FlextResult with sync statistics
 
         """
         try:
@@ -156,10 +156,10 @@ class FlextDbtLdapService:
         """Synchronize LDAP memberships to data warehouse.
 
         Args:
-            search_base: LDAP search base
+        search_base: LDAP search base
 
         Returns:
-            FlextResult with sync statistics
+        FlextResult with sync statistics
 
         """
         try:
@@ -196,11 +196,11 @@ class FlextDbtLdapService:
         """Run complete LDAP to data warehouse synchronization.
 
         Args:
-            search_base: LDAP search base
-            incremental: Whether to do incremental sync
+        search_base: LDAP search base
+        incremental: Whether to do incremental sync
 
         Returns:
-            FlextResult with complete sync statistics
+        FlextResult with complete sync statistics
 
         """
         logger.info(
@@ -273,10 +273,10 @@ class FlextDbtLdapService:
         """Validate data quality in the warehouse using modern FlextDbt API.
 
         Args:
-            model_names: Specific models to validate (None = all)
+        model_names: Specific models to validate (None = all)
 
         Returns:
-            FlextResult with validation results
+        FlextResult with validation results
 
         """
         try:
@@ -311,10 +311,10 @@ class FlextDbtLdapService:
         """Run dBT models using modern FlextDbt API.
 
         Args:
-            model_names: Specific models to run (None = all)
+        model_names: Specific models to run (None = all)
 
         Returns:
-            FlextResult with execution results
+        FlextResult with execution results
 
         """
         try:
@@ -349,10 +349,10 @@ class FlextDbtLdapService:
         """Generate analytics report from warehouse data.
 
         Args:
-            report_type: Type of report to generate
+        report_type: Type of report to generate
 
         Returns:
-            FlextResult with report data
+        FlextResult with report data
 
         """
         try:

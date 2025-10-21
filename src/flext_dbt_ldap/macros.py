@@ -25,11 +25,11 @@ class FlextDbtLdapMacros:
             """Parse specific component from DN.
 
             Args:
-                dn: Distinguished name to parse
-                component: Component to extract (cn, ou, dc, etc.)
+            dn: Distinguished name to parse
+            component: Component to extract (cn, ou, dc, etc.)
 
             Returns:
-                Component value or None if not found
+            Component value or None if not found
 
             """
             try:
@@ -49,10 +49,10 @@ class FlextDbtLdapMacros:
             """Get parent DN from a distinguished name.
 
             Args:
-                dn: Distinguished name
+            dn: Distinguished name
 
             Returns:
-                Parent DN or None if error
+            Parent DN or None if error
 
             """
             try:
@@ -72,10 +72,10 @@ class FlextDbtLdapMacros:
             """Convert LDAP timestamp to standard format.
 
             Args:
-                timestamp: LDAP timestamp string
+            timestamp: LDAP timestamp string
 
             Returns:
-                ISO format timestamp or None if conversion fails
+            ISO format timestamp or None if conversion fails
 
             """
             try:
@@ -90,10 +90,10 @@ class FlextDbtLdapMacros:
             """Extract date part from LDAP timestamp.
 
             Args:
-                timestamp: LDAP timestamp string
+            timestamp: LDAP timestamp string
 
             Returns:
-                Date string (YYYY-MM-DD) or None if extraction fails
+            Date string (YYYY-MM-DD) or None if extraction fails
 
             """
             converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(
@@ -111,10 +111,10 @@ class FlextDbtLdapMacros:
         Looks for uid, cn, or sam attributes in the DN.
 
         Args:
-            dn: Distinguished name
+        dn: Distinguished name
 
         Returns:
-            User ID or None if not found
+        User ID or None if not found
 
         """
         # Try different common user ID attributes
@@ -132,10 +132,10 @@ class FlextDbtLdapMacros:
         Looks for cn attribute in the DN.
 
         Args:
-            dn: Distinguished name
+        dn: Distinguished name
 
         Returns:
-            Group name or None if not found
+        Group name or None if not found
 
         """
         return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, "cn")
@@ -145,10 +145,10 @@ class FlextDbtLdapMacros:
         """Normalize LDAP attribute value for DBT processing.
 
         Args:
-            value: LDAP attribute value (can be list or single value)
+        value: LDAP attribute value (can be list or single value)
 
         Returns:
-            Normalized string value
+        Normalized string value
 
         """
         if value is None:
@@ -165,10 +165,10 @@ class FlextDbtLdapMacros:
         """Check if user account is active based on userAccountControl.
 
         Args:
-            user_account_control: AD userAccountControl value
+        user_account_control: AD userAccountControl value
 
         Returns:
-            True if user is active, False otherwise
+        True if user is active, False otherwise
 
         """
         if user_account_control is None:
@@ -182,11 +182,11 @@ class FlextDbtLdapMacros:
         """Parse specific component from DN.
 
         Args:
-            dn: Distinguished name to parse
-            component: Component to extract (cn, ou, dc, etc.)
+        dn: Distinguished name to parse
+        component: Component to extract (cn, ou, dc, etc.)
 
         Returns:
-            Component value or None if not found
+        Component value or None if not found
 
         """
         return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, component)
@@ -196,10 +196,10 @@ class FlextDbtLdapMacros:
         """Get parent DN from a distinguished name.
 
         Args:
-            dn: Distinguished name
+        dn: Distinguished name
 
         Returns:
-            Parent DN or None if error
+        Parent DN or None if error
 
         """
         return FlextDbtLdapMacros._DNParser.get_parent_dn(dn)
@@ -209,10 +209,10 @@ class FlextDbtLdapMacros:
         """Convert LDAP timestamp to standard format.
 
         Args:
-            timestamp: LDAP timestamp string
+        timestamp: LDAP timestamp string
 
         Returns:
-            ISO format timestamp or None if conversion fails
+        ISO format timestamp or None if conversion fails
 
         """
         return FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(timestamp)
@@ -222,10 +222,10 @@ class FlextDbtLdapMacros:
         """Extract date part from LDAP timestamp.
 
         Args:
-            timestamp: LDAP timestamp string
+        timestamp: LDAP timestamp string
 
         Returns:
-            Date string (YYYY-MM-DD) or None if extraction fails
+        Date string (YYYY-MM-DD) or None if extraction fails
 
         """
         return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(

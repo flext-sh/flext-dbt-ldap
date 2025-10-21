@@ -33,20 +33,20 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
     This is the single unified class for the flext-dbt-ldap domain providing
     access to all DBT LDAP domain functionality with centralized patterns.
 
-    **UNIFIED CLASS PATTERN**: One class per module with nested helpers only.
-    **CENTRALIZED APPROACH**: All operations follow centralized patterns:
+    UNIFIED CLASS PATTERN: One class per module with nested helpers only.
+    CENTRALIZED APPROACH: All operations follow centralized patterns:
     - FlextDbtLdap.* for DBT LDAP-specific operations
     - Centralized validation through FlextDbtLdapUtilities
     - No wrappers, aliases, or fallbacks
     - Direct use of flext-core centralized services
 
-    **FLEXT INTEGRATION**: Complete integration with flext-core patterns:
+    FLEXT INTEGRATION: Complete integration with flext-core patterns:
     - FlextContainer for dependency injection
     - FlextContext for operation context
     - FlextLogger for structured logging
     - FlextResult for railway-oriented error handling
 
-    **PYTHON 3.13+ COMPATIBILITY**: Uses modern patterns and latest type features.
+    PYTHON 3.13+ COMPATIBILITY: Uses modern patterns and latest type features.
     """
 
     def __init__(self, config: FlextDbtLdapConfig | None = None) -> None:
@@ -80,13 +80,13 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """Create DBT LDAP configuration with sensible defaults.
 
         Args:
-            ldap_host: LDAP server host
-            ldap_port: LDAP server port
-            ldap_base_dn: LDAP base DN for searches
-            **kwargs: Additional configuration fields
+        ldap_host: LDAP server host
+        ldap_port: LDAP server port
+        ldap_base_dn: LDAP base DN for searches
+        **kwargs: Additional configuration fields
 
         Returns:
-            FlextResult containing configured FlextDbtLdapConfig
+        FlextResult containing configured FlextDbtLdapConfig
 
         """
         try:
@@ -141,7 +141,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """Create DBT LDAP client with current configuration.
 
         Returns:
-            FlextResult containing configured FlextDbtLdapClient
+        FlextResult containing configured FlextDbtLdapClient
 
         """
         try:
@@ -155,7 +155,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """Create DBT LDAP service with current configuration.
 
         Returns:
-            FlextResult containing configured FlextDbtLdapService
+        FlextResult containing configured FlextDbtLdapService
 
         """
         try:
@@ -181,13 +181,13 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """Create user dimension with required fields.
 
         Args:
-            user_id: Unique user identifier
-            common_name: User's common name
-            email: User's email address
-            **kwargs: Additional fields for FlextDbtLdapUserDimension
+        user_id: Unique user identifier
+        common_name: User's common name
+        email: User's email address
+        **kwargs: Additional fields for FlextDbtLdapUserDimension
 
         Returns:
-            FlextResult containing FlextDbtLdapUserDimension instance
+        FlextResult containing FlextDbtLdapUserDimension instance
 
         """
         try:
@@ -221,13 +221,13 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """Create group dimension with required fields.
 
         Args:
-            group_id: Unique group identifier
-            common_name: Group's common name
-            description: Group description
-            **kwargs: Additional fields for FlextDbtLdapGroupDimension
+        group_id: Unique group identifier
+        common_name: Group's common name
+        description: Group description
+        **kwargs: Additional fields for FlextDbtLdapGroupDimension
 
         Returns:
-            FlextResult containing FlextDbtLdapGroupDimension instance
+        FlextResult containing FlextDbtLdapGroupDimension instance
 
         """
         try:
@@ -255,7 +255,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """Create LDAP data transformer.
 
         Returns:
-            FlextResult containing FlextDbtLdapTransformer instance
+        FlextResult containing FlextDbtLdapTransformer instance
 
         """
         try:
@@ -280,17 +280,17 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
     ) -> FlextResult[FlextDbtLdapService]:
         """Create complete DBT LDAP pipeline with minimal configuration using FlextDbtLdapUtilities.
 
-        CRITICAL: Now ACTUALLY USES FlextDbtLdapUtilities to eliminate ZERO TOLERANCE violation.
+        CRITICAL: Now ACTUALLY USES FlextDbtLdapUtilities to eliminate Zero Tolerance violation.
         This method now delegates to utilities for DBT project and profile generation.
 
         Args:
-            ldap_host: LDAP server host
-            ldap_port: LDAP server port
-            ldap_base_dn: LDAP base DN
-            **config_kwargs: Additional configuration
+        ldap_host: LDAP server host
+        ldap_port: LDAP server port
+        ldap_base_dn: LDAP base DN
+        **config_kwargs: Additional configuration
 
         Returns:
-            FlextResult containing ready-to-use FlextDbtLdapService instance
+        FlextResult containing ready-to-use FlextDbtLdapService instance
 
         """
         try:

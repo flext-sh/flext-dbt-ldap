@@ -25,10 +25,10 @@ class FlextDbtLdapIntegration:
         instead of implementing local processing logic.
 
         Args:
-          df: DataFrame-like object with LDAP entries (DBT Python model compatible)
+        df: DataFrame-like object with LDAP entries (DBT Python model compatible)
 
         Returns:
-          Processed DataFrame with flext-ldap enhancements
+        Processed DataFrame with flext-ldap enhancements
 
         """
         try:
@@ -59,10 +59,10 @@ class FlextDbtLdapIntegration:
         instead of implementing local validation logic.
 
         Args:
-          df: DataFrame-like object to validate
+        df: DataFrame-like object to validate
 
         Returns:
-          Quality metrics dictionary from flext-ldap validation
+        Quality metrics dictionary from flext-ldap validation
 
         """
         try:

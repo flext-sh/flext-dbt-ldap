@@ -43,11 +43,11 @@ class FlextDbtLdapProtocols:
                 """Run DBT models with LDAP data sources.
 
                 Args:
-                    models: Specific models to run, or None for all models
-                    config: DBT configuration parameters
+                models: Specific models to run, or None for all models
+                config: DBT configuration parameters
 
                 Returns:
-                    FlextResult[dict[str, object]]: DBT run results or error
+                FlextResult[dict[str, object]]: DBT run results or error
 
                 """
                 ...
@@ -60,11 +60,11 @@ class FlextDbtLdapProtocols:
                 """Test DBT models with LDAP data validation.
 
                 Args:
-                    models: Specific models to test, or None for all models
-                    config: DBT test configuration
+                models: Specific models to test, or None for all models
+                config: DBT test configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: DBT test results or error
+                FlextResult[dict[str, object]]: DBT test results or error
 
                 """
 
@@ -76,11 +76,11 @@ class FlextDbtLdapProtocols:
                 """Compile DBT models for LDAP data processing.
 
                 Args:
-                    models: Specific models to compile, or None for all models
-                    config: DBT compilation configuration
+                models: Specific models to compile, or None for all models
+                config: DBT compilation configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: DBT compilation results or error
+                FlextResult[dict[str, object]]: DBT compilation results or error
 
                 """
 
@@ -88,7 +88,7 @@ class FlextDbtLdapProtocols:
                 """Get DBT manifest with LDAP model definitions.
 
                 Returns:
-                    FlextResult[dict[str, object]]: DBT manifest or error
+                FlextResult[dict[str, object]]: DBT manifest or error
 
                 """
 
@@ -96,10 +96,10 @@ class FlextDbtLdapProtocols:
                 """Validate DBT project configuration for LDAP integration.
 
                 Args:
-                    project_path: Path to DBT project directory
+                project_path: Path to DBT project directory
 
                 Returns:
-                    FlextResult[bool]: Validation status or error
+                FlextResult[bool]: Validation status or error
 
                 """
 
@@ -115,11 +115,11 @@ class FlextDbtLdapProtocols:
                 """Extract data from LDAP directory for DBT processing.
 
                 Args:
-                    ldap_config: LDAP connection configuration
-                    extraction_config: Data extraction parameters
+                ldap_config: LDAP connection configuration
+                extraction_config: Data extraction parameters
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Extracted LDAP data or error
+                FlextResult[list[dict[str, object]]]: Extracted LDAP data or error
 
                 """
 
@@ -131,11 +131,11 @@ class FlextDbtLdapProtocols:
                 """Transform LDAP data to DBT-compatible format.
 
                 Args:
-                    ldap_data: Raw LDAP data
-                    transformation_config: Transformation parameters
+                ldap_data: Raw LDAP data
+                transformation_config: Transformation parameters
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Transformed data or error
+                FlextResult[list[dict[str, object]]]: Transformed data or error
 
                 """
 
@@ -147,11 +147,11 @@ class FlextDbtLdapProtocols:
                 """Validate LDAP data quality for DBT processing.
 
                 Args:
-                    data: LDAP data to validate
-                    quality_rules: Data quality validation rules
+                data: LDAP data to validate
+                quality_rules: Data quality validation rules
 
                 Returns:
-                    FlextResult[dict[str, object]]: Quality validation results or error
+                FlextResult[dict[str, object]]: Quality validation results or error
 
                 """
 
@@ -163,11 +163,11 @@ class FlextDbtLdapProtocols:
                 """Sync LDAP data to data warehouse for DBT processing.
 
                 Args:
-                    ldap_data: LDAP data to sync
-                    warehouse_config: Data warehouse configuration
+                ldap_data: LDAP data to sync
+                warehouse_config: Data warehouse configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Sync operation results or error
+                FlextResult[dict[str, object]]: Sync operation results or error
 
                 """
 
@@ -183,11 +183,11 @@ class FlextDbtLdapProtocols:
                 """Create user dimension model from LDAP user data.
 
                 Args:
-                    ldap_users: LDAP user data
-                    dimension_config: Dimension modeling configuration
+                ldap_users: LDAP user data
+                dimension_config: Dimension modeling configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: User dimension model or error
+                FlextResult[dict[str, object]]: User dimension model or error
 
                 """
 
@@ -199,11 +199,11 @@ class FlextDbtLdapProtocols:
                 """Create group dimension model from LDAP group data.
 
                 Args:
-                    ldap_groups: LDAP group data
-                    dimension_config: Dimension modeling configuration
+                ldap_groups: LDAP group data
+                dimension_config: Dimension modeling configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Group dimension model or error
+                FlextResult[dict[str, object]]: Group dimension model or error
 
                 """
 
@@ -215,11 +215,11 @@ class FlextDbtLdapProtocols:
                 """Create organizational hierarchy from LDAP organizational units.
 
                 Args:
-                    ldap_data: LDAP organizational data
-                    hierarchy_config: Hierarchy modeling configuration
+                ldap_data: LDAP organizational data
+                hierarchy_config: Hierarchy modeling configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Organizational hierarchy or error
+                FlextResult[dict[str, object]]: Organizational hierarchy or error
 
                 """
 
@@ -231,11 +231,11 @@ class FlextDbtLdapProtocols:
                 """Generate fact tables from LDAP dimensions.
 
                 Args:
-                    dimensions: LDAP dimension models
-                    fact_config: Fact table configuration
+                dimensions: LDAP dimension models
+                fact_config: Fact table configuration
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Generated fact tables or error
+                FlextResult[list[dict[str, object]]]: Generated fact tables or error
 
                 """
 
@@ -251,11 +251,11 @@ class FlextDbtLdapProtocols:
                 """Normalize LDAP attributes for consistent data processing.
 
                 Args:
-                    ldap_entries: Raw LDAP entries
-                    normalization_rules: Attribute normalization rules
+                ldap_entries: Raw LDAP entries
+                normalization_rules: Attribute normalization rules
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Normalized LDAP data or error
+                FlextResult[list[dict[str, object]]]: Normalized LDAP data or error
 
                 """
 
@@ -267,11 +267,11 @@ class FlextDbtLdapProtocols:
                 """Enrich LDAP data with additional data sources.
 
                 Args:
-                    ldap_data: Base LDAP data
-                    enrichment_sources: Additional data sources for enrichment
+                ldap_data: Base LDAP data
+                enrichment_sources: Additional data sources for enrichment
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Enriched LDAP data or error
+                FlextResult[list[dict[str, object]]]: Enriched LDAP data or error
 
                 """
 
@@ -283,11 +283,11 @@ class FlextDbtLdapProtocols:
                 """Apply business rules to LDAP data transformations.
 
                 Args:
-                    data: LDAP data to transform
-                    business_rules: Business transformation rules
+                data: LDAP data to transform
+                business_rules: Business transformation rules
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Transformed data or error
+                FlextResult[list[dict[str, object]]]: Transformed data or error
 
                 """
 
@@ -299,11 +299,11 @@ class FlextDbtLdapProtocols:
                 """Generate derived attributes from LDAP base attributes.
 
                 Args:
-                    ldap_data: Base LDAP data
-                    derivation_config: Attribute derivation configuration
+                ldap_data: Base LDAP data
+                derivation_config: Attribute derivation configuration
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Data with derived attributes or error
+                FlextResult[list[dict[str, object]]]: Data with derived attributes or error
 
                 """
 
@@ -317,10 +317,10 @@ class FlextDbtLdapProtocols:
                 """Generate DBT macro for LDAP data sources.
 
                 Args:
-                    source_config: LDAP source configuration
+                source_config: LDAP source configuration
 
                 Returns:
-                    FlextResult[str]: Generated DBT macro or error
+                FlextResult[str]: Generated DBT macro or error
 
                 """
 
@@ -330,10 +330,10 @@ class FlextDbtLdapProtocols:
                 """Create DBT test macro for LDAP data validation.
 
                 Args:
-                    test_config: LDAP test configuration
+                test_config: LDAP test configuration
 
                 Returns:
-                    FlextResult[str]: Generated test macro or error
+                FlextResult[str]: Generated test macro or error
 
                 """
 
@@ -343,10 +343,10 @@ class FlextDbtLdapProtocols:
                 """Generate DBT transformation macro for LDAP data.
 
                 Args:
-                    transformation_config: Transformation configuration
+                transformation_config: Transformation configuration
 
                 Returns:
-                    FlextResult[str]: Generated transformation macro or error
+                FlextResult[str]: Generated transformation macro or error
 
                 """
 
@@ -356,10 +356,10 @@ class FlextDbtLdapProtocols:
                 """Create DBT snapshot macro for LDAP data versioning.
 
                 Args:
-                    snapshot_config: Snapshot configuration
+                snapshot_config: Snapshot configuration
 
                 Returns:
-                    FlextResult[str]: Generated snapshot macro or error
+                FlextResult[str]: Generated snapshot macro or error
 
                 """
 
@@ -375,11 +375,11 @@ class FlextDbtLdapProtocols:
                 """Validate LDAP data against schema compliance rules.
 
                 Args:
-                    ldap_data: LDAP data to validate
-                    schema_rules: Schema compliance rules
+                ldap_data: LDAP data to validate
+                schema_rules: Schema compliance rules
 
                 Returns:
-                    FlextResult[dict[str, object]]: Schema validation results or error
+                FlextResult[dict[str, object]]: Schema validation results or error
 
                 """
 
@@ -391,11 +391,11 @@ class FlextDbtLdapProtocols:
                 """Check LDAP data completeness for DBT processing.
 
                 Args:
-                    data: LDAP data to check
-                    completeness_config: Completeness validation configuration
+                data: LDAP data to check
+                completeness_config: Completeness validation configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Completeness check results or error
+                FlextResult[dict[str, object]]: Completeness check results or error
 
                 """
 
@@ -407,11 +407,11 @@ class FlextDbtLdapProtocols:
                 """Detect anomalies in LDAP data for quality assurance.
 
                 Args:
-                    data: LDAP data to analyze
-                    anomaly_config: Anomaly detection configuration
+                data: LDAP data to analyze
+                anomaly_config: Anomaly detection configuration
 
                 Returns:
-                    FlextResult[list[dict[str, object]]]: Detected anomalies or error
+                FlextResult[list[dict[str, object]]]: Detected anomalies or error
 
                 """
 
@@ -423,11 +423,11 @@ class FlextDbtLdapProtocols:
                 """Generate data quality report for LDAP DBT processing.
 
                 Args:
-                    quality_results: Quality validation results
-                    report_config: Report generation configuration
+                quality_results: Quality validation results
+                report_config: Report generation configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Quality report or error
+                FlextResult[dict[str, object]]: Quality report or error
 
                 """
 
@@ -443,11 +443,11 @@ class FlextDbtLdapProtocols:
                 """Optimize DBT models for LDAP data processing performance.
 
                 Args:
-                    model_config: DBT model configuration
-                    performance_metrics: Current performance metrics
+                model_config: DBT model configuration
+                performance_metrics: Current performance metrics
 
                 Returns:
-                    FlextResult[dict[str, object]]: Optimization recommendations or error
+                FlextResult[dict[str, object]]: Optimization recommendations or error
 
                 """
 
@@ -459,11 +459,11 @@ class FlextDbtLdapProtocols:
                 """Cache LDAP data extractions for improved performance.
 
                 Args:
-                    extraction_config: LDAP extraction configuration
-                    cache_config: Caching configuration
+                extraction_config: LDAP extraction configuration
+                cache_config: Caching configuration
 
                 Returns:
-                    FlextResult[bool]: Caching setup success status
+                FlextResult[bool]: Caching setup success status
 
                 """
 
@@ -473,10 +473,10 @@ class FlextDbtLdapProtocols:
                 """Monitor DBT performance with LDAP data processing.
 
                 Args:
-                    run_results: DBT run results
+                run_results: DBT run results
 
                 Returns:
-                    FlextResult[dict[str, object]]: Performance metrics or error
+                FlextResult[dict[str, object]]: Performance metrics or error
 
                 """
 
@@ -486,10 +486,10 @@ class FlextDbtLdapProtocols:
                 """Optimize LDAP queries for DBT data extraction.
 
                 Args:
-                    query_config: LDAP query configuration
+                query_config: LDAP query configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Query optimization results or error
+                FlextResult[dict[str, object]]: Query optimization results or error
 
                 """
 
@@ -503,11 +503,11 @@ class FlextDbtLdapProtocols:
                 """Track DBT run metrics for LDAP data processing.
 
                 Args:
-                    run_id: DBT run identifier
-                    metrics: Run metrics data
+                run_id: DBT run identifier
+                metrics: Run metrics data
 
                 Returns:
-                    FlextResult[bool]: Metric tracking success status
+                FlextResult[bool]: Metric tracking success status
 
                 """
 
@@ -517,10 +517,10 @@ class FlextDbtLdapProtocols:
                 """Monitor LDAP data freshness for DBT processing.
 
                 Args:
-                    freshness_config: Data freshness monitoring configuration
+                freshness_config: Data freshness monitoring configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Data freshness status or error
+                FlextResult[dict[str, object]]: Data freshness status or error
 
                 """
 
@@ -528,7 +528,7 @@ class FlextDbtLdapProtocols:
                 """Get DBT LDAP integration health status.
 
                 Returns:
-                    FlextResult[dict[str, object]]: Health status or error
+                FlextResult[dict[str, object]]: Health status or error
 
                 """
 
@@ -538,10 +538,10 @@ class FlextDbtLdapProtocols:
                 """Create monitoring dashboard for DBT LDAP operations.
 
                 Args:
-                    dashboard_config: Dashboard configuration
+                dashboard_config: Dashboard configuration
 
                 Returns:
-                    FlextResult[dict[str, object]]: Dashboard creation result or error
+                FlextResult[dict[str, object]]: Dashboard creation result or error
 
                 """
 
