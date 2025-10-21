@@ -80,7 +80,7 @@ def _create_version() -> FlextResult[FlextDbtLdapVersion]:
     """Create version instance from package metadata.
 
     Returns:
-        FlextResult[FlextDbtLdapVersion]: Version instance or error
+    FlextResult[FlextDbtLdapVersion]: Version instance or error
 
     """
     try:

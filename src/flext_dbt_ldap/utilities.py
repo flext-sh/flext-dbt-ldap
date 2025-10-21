@@ -1,4 +1,4 @@
-"""FLEXT DBT LDAP Utilities - Comprehensive DBT LDAP Integration Utilities.
+"""FLEXT DBT LDAP Utilities - Complete DBT LDAP Integration Utilities.
 
 Copyright (c) 2025 FLEXT Contributors
 SPDX-License-Identifier: MIT
@@ -15,7 +15,7 @@ from flext_core import FlextContainer, FlextResult, FlextTypes, FlextUtilities
 class FlextDbtLdapUtilities(FlextUtilities):
     """Unified DBT LDAP utilities service extending FlextUtilities.
 
-    Provides comprehensive DBT LDAP utilities for data transformation, LDAP integration,
+    Provides complete DBT LDAP utilities for data transformation, LDAP integration,
     and DBT project management without duplicating functionality.
     Uses FlextDbtLdapModels for all domain-specific data structures.
     """
@@ -34,7 +34,7 @@ class FlextDbtLdapUtilities(FlextUtilities):
         """Execute the main DBT LDAP service operation.
 
         Returns:
-            FlextResult[dict[str, object]]: Service status and capabilities.
+        FlextResult[dict[str, object]]: Service status and capabilities.
 
         """
         return FlextResult[dict[str, object]].ok({
@@ -63,12 +63,12 @@ class FlextDbtLdapUtilities(FlextUtilities):
             """Create DBT project configuration for LDAP data transformation.
 
             Args:
-                project_name: Name of the DBT project
-                ldap_sources: List of LDAP source configurations
-                target_schema: Target schema for transformed data
+            project_name: Name of the DBT project
+            ldap_sources: List of LDAP source configurations
+            target_schema: Target schema for transformed data
 
             Returns:
-                FlextResult containing DBT project configuration or error
+            FlextResult containing DBT project configuration or error
 
             """
             try:
@@ -110,11 +110,11 @@ class FlextDbtLdapUtilities(FlextUtilities):
             """Generate DBT profiles configuration for LDAP data sources.
 
             Args:
-                profile_name: Name of the DBT profile
-                connection_config: Database connection configuration
+            profile_name: Name of the DBT profile
+            connection_config: Database connection configuration
 
             Returns:
-                FlextResult containing DBT profiles configuration or error
+            FlextResult containing DBT profiles configuration or error
 
             """
             try:
@@ -167,10 +167,10 @@ class FlextDbtLdapUtilities(FlextUtilities):
             """Validate DBT project structure for LDAP transformation project.
 
             Args:
-                project_path: Path to the DBT project
+            project_path: Path to the DBT project
 
             Returns:
-                FlextResult containing validation results or error
+            FlextResult containing validation results or error
 
             """
             try:
@@ -203,11 +203,11 @@ class FlextDbtLdapUtilities(FlextUtilities):
             """Generate DBT source schema for LDAP attributes.
 
             Args:
-                ldap_attributes: List of LDAP attribute names
-                source_name: Name for the LDAP source
+            ldap_attributes: List of LDAP attribute names
+            source_name: Name for the LDAP source
 
             Returns:
-                FlextResult containing DBT source schema or error
+            FlextResult containing DBT source schema or error
 
             """
             try:
@@ -263,12 +263,12 @@ class FlextDbtLdapUtilities(FlextUtilities):
             """Create DBT model SQL for LDAP data transformation.
 
             Args:
-                model_name: Name of the DBT model
-                source_table: Source table name
-                transformations: Dictionary of column transformations
+            model_name: Name of the DBT model
+            source_table: Source table name
+            transformations: Dictionary of column transformations
 
             Returns:
-                FlextResult containing DBT model SQL or error
+            FlextResult containing DBT model SQL or error
 
             """
             try:
@@ -311,11 +311,11 @@ where 1=1
             """Generate DBT data tests for LDAP transformation models.
 
             Args:
-                model_name: Name of the model to test
-                test_config: Test configuration parameters
+            model_name: Name of the model to test
+            test_config: Test configuration parameters
 
             Returns:
-                FlextResult containing DBT test configuration or error
+            FlextResult containing DBT test configuration or error
 
             """
             try:
@@ -366,10 +366,10 @@ where 1=1
             """Create DBT macro for parsing LDAP distinguished names.
 
             Args:
-                macro_name: Name of the macro
+            macro_name: Name of the macro
 
             Returns:
-                FlextResult containing macro SQL or error
+            FlextResult containing macro SQL or error
 
             """
             try:
@@ -403,29 +403,29 @@ where 1=1
             """Create DBT macro for extracting LDAP attributes from arrays.
 
             Args:
-                macro_name: Name of the macro
+            macro_name: Name of the macro
 
             Returns:
-                FlextResult containing macro SQL or error
+            FlextResult containing macro SQL or error
 
             """
             try:
                 # DBT macro template generation - safe string formatting
                 macro_sql = f"""-- Macro to extract specific values from LDAP multi-valued attributes
 {{% macro {macro_name}(attribute_array, filter_pattern='') %}}
-    case
-        when {{{{{{attribute_array}}}}}} is null then null
-        when array_length({{{{{{attribute_array}}}}}}, 1) = 0 then null
-        {{% if filter_pattern %}}
-        else (
-            select array_agg(attr)
-            from unnest({{{{{{attribute_array}}}}}}) as attr
-            where attr ilike '%{{{{{{filter_pattern}}}}}}%'
-        )[1]
-        {{% else %}}
-        else {{{{{{attribute_array}}}}}}[1]
-        {{% endif %}}
-    end
+ case
+ when {{{{{{attribute_array}}}}}} is null then null
+ when array_length({{{{{{attribute_array}}}}}}, 1) = 0 then null
+ {{% if filter_pattern %}}
+ else (
+ select array_agg(attr)
+ from unnest({{{{{{attribute_array}}}}}}) as attr
+ where attr ilike '%{{{{{{filter_pattern}}}}}}%'
+ )[1]
+ {{% else %}}
+ else {{{{{{attribute_array}}}}}}[1]
+ {{% endif %}}
+ end
 {{% endmacro %}}"""
 
                 return FlextResult[str].ok(macro_sql)
@@ -441,27 +441,27 @@ where 1=1
             """Create DBT macro for normalizing LDAP timestamps.
 
             Args:
-                macro_name: Name of the macro
+            macro_name: Name of the macro
 
             Returns:
-                FlextResult containing macro SQL or error
+            FlextResult containing macro SQL or error
 
             """
             try:
                 macro_sql = f"""-- Macro to normalize LDAP timestamps to standard format
 {{% macro {macro_name}(timestamp_column) %}}
-    case
-        when {{{{{{timestamp_column}}}}}} is null then null
-        when length({{{{{{timestamp_column}}}}}}) = 14 then
-            -- LDAP GeneralizedTime format: YYYYMMDDHHMMSSZ
-            to_timestamp(
-                substring({{{{{{timestamp_column}}}}}} from 1 for 14),
-                'YYYYMMDDHH24MISS'
-            )
-        else
-            -- Try to parse as standard timestamp
-            try_cast({{{{{{timestamp_column}}}}}} as timestamp)
-    end
+ case
+ when {{{{{{timestamp_column}}}}}} is null then null
+ when length({{{{{{timestamp_column}}}}}}) = 14 then
+ -- LDAP GeneralizedTime format: YYYYMMDDHHMMSSZ
+ to_timestamp(
+ substring({{{{{{timestamp_column}}}}}} from 1 for 14),
+ 'YYYYMMDDHH24MISS'
+ )
+ else
+ -- Try to parse as standard timestamp
+ try_cast({{{{{{timestamp_column}}}}}} as timestamp)
+ end
 {{% endmacro %}}"""
 
                 return FlextResult[str].ok(macro_sql)
@@ -478,7 +478,7 @@ where 1=1
             """Generate standard schema for LDAP user data.
 
             Returns:
-                FlextResult containing user schema configuration or error
+            FlextResult containing user schema configuration or error
 
             """
             try:
@@ -551,7 +551,7 @@ where 1=1
             """Generate standard schema for LDAP group data.
 
             Returns:
-                FlextResult containing group schema configuration or error
+            FlextResult containing group schema configuration or error
 
             """
             try:
@@ -621,11 +621,11 @@ where 1=1
             """Optimize DBT SQL query for LDAP data processing.
 
             Args:
-                base_query: Base SQL query to optimize
-                optimization_hints: Optimization configuration
+            base_query: Base SQL query to optimize
+            optimization_hints: Optimization configuration
 
             Returns:
-                FlextResult containing optimized query or error
+            FlextResult containing optimized query or error
 
             """
             try:
@@ -665,10 +665,10 @@ where 1=1
             """Analyze performance of LDAP transformation models.
 
             Args:
-                model_stats: Model execution statistics
+            model_stats: Model execution statistics
 
             Returns:
-                FlextResult containing performance analysis or error
+            FlextResult containing performance analysis or error
 
             """
             try:

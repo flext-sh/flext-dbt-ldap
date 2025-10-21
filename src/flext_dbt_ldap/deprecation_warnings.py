@@ -18,7 +18,7 @@ def _show_deprecation_warning(old_import: str, new_import: str) -> None:
     """Show deprecation warning for import paths."""
     message_parts = [
         f"⚠️  DEPRECATED IMPORT: {old_import}",
-        f"✅ USE INSTEAD: {new_import}",
+        f"USE INSTEAD: {new_import}",
         "🔗 This will be removed in version 1.0.0",
         "📖 See FLEXT DBT LDAP docs for migration guide",
     ]
