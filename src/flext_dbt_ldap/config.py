@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import ClassVar, Self, cast
+from typing import ClassVar, Literal, Self, cast
 
 from flext_core import FlextConfig, FlextLogger, FlextResult
 from flext_ldap import FlextLdapModels
@@ -82,7 +82,9 @@ class FlextDbtLdapConfig(FlextConfig):
         le=16,
         description="Number of DBT threads",
     )
-    dbt_log_level: str = Field(default="info", description="DBT log level")
+    dbt_log_level: Literal["debug", "info", "warn", "error", "none"] = Field(
+        default="info", description="DBT log level"
+    )
 
     # LDAP-specific DBT Settings - using constants
     ldap_schema_mapping: ClassVar[dict[str, str]] = {
@@ -528,17 +530,6 @@ class FlextDbtLdapConfig(FlextConfig):
             msg = f"Invalid DBT target: {v}. Must be one of: {valid_targets_str}"
             raise ValueError(msg)
         return v
-
-    @field_validator("dbt_log_level")
-    @classmethod
-    def validate_dbt_log_level(cls, v: str) -> str:
-        """Validate DBT log level."""
-        valid_levels = {"debug", "info", "warn", "error", "none"}
-        if v.lower() not in valid_levels:
-            valid_levels_str = ", ".join(sorted(valid_levels))
-            msg = f"Invalid DBT log level: {v}. Must be one of: {valid_levels_str}"
-            raise ValueError(msg)
-        return v.lower()
 
     @field_validator("ldap_bind_dn")
     @classmethod
