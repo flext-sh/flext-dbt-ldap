@@ -541,10 +541,9 @@ def mock_ldap_dbt_adapter() -> object:
                 },
             ]
 
-        def FlextLdifUtilities.DN.split(self, dn: str) -> bool:
+        def split(self, dn: str) -> bool:
             """Validate DN format."""
-            pattern = r"^(Union[cn, uid])=.+,(Union[ou, dc])=.+"
-            return bool(re.match(pattern, dn))
+            return bool(re.match(FlextUtilities.DN.Constants.DN_FORMAT_PATTERN, dn))
 
         def parse_ldap_attributes(
             self,
