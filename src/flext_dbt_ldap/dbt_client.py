@@ -66,11 +66,12 @@ class FlextDbtLdapClient:
         """Extract LDAP entries for DBT processing.
 
         Args:
-        search_base: LDAP search base (defaults to config base_dn)
-        search_filter: LDAP search filter
-        attributes: Attributes to retrieve
+            search_base: LDAP search base (defaults to config base_dn)
+            search_filter: LDAP search filter
+            attributes: Attributes to retrieve
+
         Returns:
-        FlextResult containing list of LDAP entries
+            FlextResult containing list of LDAP entries
 
         """
         try:
@@ -109,9 +110,10 @@ class FlextDbtLdapClient:
         """Validate LDAP data quality for DBT processing.
 
         Args:
-        entries: List of LDAP entries to validate
+            entries: List of LDAP entries to validate
+
         Returns:
-        FlextResult containing validation metrics
+            FlextResult containing validation metrics
 
         """
         try:
@@ -211,12 +213,13 @@ class FlextDbtLdapClient:
         """Run complete LDAP to DBT transformation pipeline.
 
         Args:
-        search_base: LDAP search base
-        search_filter: LDAP search filter
-        attributes: Attributes to retrieve
-        model_names: DBT models to run
+            search_base: LDAP search base
+            search_filter: LDAP search filter
+            attributes: Attributes to retrieve
+            model_names: DBT models to run
+
         Returns:
-        FlextResult containing complete pipeline results
+            FlextResult containing complete pipeline results
 
         """
         logger.info("Starting full LDAP-to-DBT pipeline")
@@ -265,9 +268,10 @@ class FlextDbtLdapClient:
         Converts LDAP entries to format suitable for DBT models.
 
         Args:
-        entries: List of LDAP entries
+            entries: List of LDAP entries
+
         Returns:
-        Dictionary of prepared data for DBT
+            Dictionary of prepared data for DBT
 
         """
         # Apply schema and attribute mapping from config

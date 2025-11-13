@@ -12,18 +12,13 @@ import pathlib
 import re
 import tempfile
 from collections.abc import Generator
-from typing import TYPE_CHECKING
 
 import pytest
+from flext_core import FlextUtilities
+from flext_tests import FlextTestDocker
 
-# Import centralized Docker fixtures
-
-if TYPE_CHECKING:
-    from flext_tests import FlextTestDocker
 
 # Import shared fixtures from docker directory
-
-
 @pytest.fixture(scope="session")
 def shared_ldap_container(flext_docker: FlextTestDocker) -> Generator[str]:
     """Managed LDAP container using centralized FlextTestDocker with docker-compose."""
