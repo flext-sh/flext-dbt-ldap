@@ -12,7 +12,7 @@ from typing import ClassVar, Literal, Self, cast
 
 from flext_core import FlextConfig, FlextLogger, FlextResult
 from flext_ldap import FlextLdapModels
-from flext_meltano.config import FlextMeltanoConfig
+from flext_meltano import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
 
