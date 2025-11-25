@@ -182,7 +182,7 @@ class FlextDbtLdapClient:
             # Prepare LDAP data for DBT (convert to DataFrames/tables)
             _ = self._prepare_ldap_data_for_dbt(entries)
             # Use flext-meltano DBT manager for execution
-            # TODO(flext-dbt-ldap): Implement proper DBT model execution in FlextMeltanoDbtService (#1)
+            # TODO(flext-dbt-ldap): Implement proper DBT model execution in FlextMeltanoDbtService (#1)  # noqa: FIX002
             # For now, return success as placeholder
             result: FlextResult[dict[str, object]] = FlextResult[dict[str, object]].ok({
                 "status": "completed",
