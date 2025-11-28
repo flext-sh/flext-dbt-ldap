@@ -7,7 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar, Final
+from enum import StrEnum
+from typing import ClassVar, Final, Literal
 
 from flext_core import FlextConstants
 
@@ -150,6 +151,52 @@ class FlextDbtLdapConstants(FlextConstants):
         # Audit Logging
         ENABLE_AUDIT_LOGGING: Final[bool] = True
         AUDIT_LOG_FILE: Final[str] = "flext_dbt_ldap_audit.log"
+
+    class LdapOperations(StrEnum):
+        """LDAP operation types."""
+
+        SEARCH = "search"
+        BIND = "bind"
+        UNBIND = "unbind"
+        ADD = "add"
+        MODIFY = "modify"
+        DELETE = "delete"
+
+    class DbtCommands(StrEnum):
+        """DBT command types."""
+
+        RUN = "run"
+        TEST = "test"
+        BUILD = "build"
+        SEED = "seed"
+        SNAPSHOT = "snapshot"
+        DOCS = "docs"
+
+    class Literals:
+        """Type-safe string literals for DBT LDAP operations.
+
+        Python 3.13+ best practice: Use type keyword for type aliases (PEP 695).
+        """
+
+        # DBT log level literal - matches DBT log levels
+        type DbtLogLevelLiteral = Literal["debug", "info", "warn", "error", "none"]
+        """DBT log level literal."""
+
+        # DBT target literal - matches Dbt.ALLOWED_TARGETS
+        type DbtTargetLiteral = Literal["dev", "staging", "prod"]
+        """DBT target literal."""
+
+        # LDAP operation literal - matches LdapOperations StrEnum
+        type LdapOperationLiteral = Literal[
+            "search", "bind", "unbind", "add", "modify", "delete"
+        ]
+        """LDAP operation literal."""
+
+        # DBT command literal - matches DbtCommands StrEnum
+        type DbtCommandLiteral = Literal[
+            "run", "test", "build", "seed", "snapshot", "docs"
+        ]
+        """DBT command literal."""
 
 
 __all__ = ["FlextDbtLdapConstants"]
