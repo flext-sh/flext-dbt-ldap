@@ -13,11 +13,23 @@ from typing import override
 
 from flext_core import FlextModels, FlextResult
 from flext_ldap import FlextLdapEntities
+from pydantic import BaseModel, ConfigDict
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 # Set up logger
 logger = logging.getLogger(__name__)
+
+
+class FlextDbtLdapBaseModel(BaseModel):
+    """Base model for FlextDbtLdap with standard Pydantic v2 configuration."""
+
+    model_config = ConfigDict(
+        use_enum_values=True,
+        validate_default=True,
+        str_strip_whitespace=True,
+        extra="forbid",
+    )
 
 
 class FlextDbtLdapModels(FlextModels):
@@ -438,6 +450,7 @@ FlextDbtLdapMembershipFact = FlextDbtLdapModels.MembershipFact
 
 # Direct export of unified models class with backward-compatible aliases
 __all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
+    "FlextDbtLdapBaseModel",
     "FlextDbtLdapGroupDimension",
     "FlextDbtLdapMembershipFact",
     "FlextDbtLdapModels",
