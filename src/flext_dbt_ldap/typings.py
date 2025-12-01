@@ -4,8 +4,9 @@ This module provides DBT LDAP-specific type definitions extending FlextTypes.
 Follows FLEXT standards:
 - Domain-specific complex types only
 - No simple aliases to primitive types
-- Python 3.13+ syntax
+- Python 3.13+ PEP 695 type syntax strict
 - Extends FlextTypes properly
+- Uses FlextTypes.JsonValue and other FlextTypes directly
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -14,13 +15,16 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from typing import Literal
 
 from flext_core import FlextTypes
+from flext_ldap import FlextLdapTypes
 
 # =============================================================================
 # DBT LDAP-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for DBT LDAP operations
 # =============================================================================
+# Only TypeVars allowed outside class - following FLEXT standards
 
 
 # DBT LDAP domain TypeVars
@@ -29,130 +33,145 @@ class FlextDbtLdapTypes(FlextTypes):
 
     Domain-specific type system for DBT LDAP data transformation operations.
     Contains ONLY complex DBT LDAP-specific types, no simple aliases.
-    Uses Python 3.13+ type syntax and patterns.
+    Uses Python 3.13+ PEP 695 type syntax strict.
+    Composes with FlextTypes.JsonValue, FlextTypes.GeneralValueType, etc.
     """
 
     # =========================================================================
-    # CORE DBT LDAP TYPES - Commonly used type aliases extending FlextTypes
+    # CORE DBT LDAP TYPES - Complex types using FlextTypes composition
     # =========================================================================
 
     class DbtLdapCore:
         """Core DBT LDAP types extending FlextTypes.
 
-        Replaces generic dict[str, object] with semantic DBT LDAP types.
-
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
+        Uses FlextTypes.JsonValue and FlextTypes.GeneralValueType for composition.
+        No simple aliases - all types are complex and domain-specific.
         """
 
-        # Configuration and settings types
-        type ConfigDict = dict[str, object | dict[str, object]]
+        # String list type - used for LDAP attributes (multi-valued)
+        type StringList = Sequence[str]
+        """Sequence of strings - used for LDAP multi-valued attributes."""
+
+        # Boolean dictionary type - used for validation results
+        type BoolDict = Mapping[str, bool]
+        """Mapping of string keys to boolean values - used for validation results."""
+
+        # Configuration and settings types - using FlextTypes.JsonValue
+        type ConfigDict = Mapping[
+            str, FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT LDAP configuration dictionary type."""
-        type ConnectionDict = dict[str, object]
+        type ConnectionDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP connection dictionary type."""
-        type LdapConfigDict = dict[str, object]
+        type LdapConfigDict = Mapping[str, FlextTypes.JsonValue]
         """LDAP configuration dictionary type."""
-        type DbtConfigDict = dict[str, object]
+        type DbtConfigDict = Mapping[str, FlextTypes.JsonValue]
         """DBT configuration dictionary type."""
-        type ProjectDict = dict[str, object]
+        type ProjectDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP project dictionary type."""
 
-        # Data processing types
-        type DataDict = dict[str, object]
+        # Data processing types - using FlextTypes.JsonValue
+        type DataDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP data dictionary type."""
-        type ModelDict = dict[str, object]
+        type ModelDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP model dictionary type."""
-        type SourceDict = dict[str, object]
+        type SourceDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP source dictionary type."""
-        type TransformDict = dict[str, object]
+        type TransformDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP transformation dictionary type."""
-        type ValidationDict = dict[str, object]
+        type ValidationDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP validation dictionary type."""
 
         # Template and structured response types
-        type TemplateDict = dict[str, str | dict[str, object]]
+        type TemplateDict = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT LDAP template dictionary type."""
-        type ResponseDict = dict[str, object]
+        type ResponseDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP response dictionary type."""
-        type ResultDict = dict[str, object]
+        type ResultDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP result dictionary type."""
-        type MetricsDict = dict[str, object]
+        type MetricsDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP metrics dictionary type."""
 
-        # Operation and context types
-        OperationDict: type = dict[str, object]
+        # Operation and context types - PEP 695 strict syntax
+        type OperationDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP operation dictionary type."""
-        ContextDict: type = dict[str, object]
+        type ContextDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP context dictionary type."""
-        SettingsDict: type = dict[str, object]
+        type SettingsDict = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP settings dictionary type."""
 
     # =========================================================================
-    # DBT PROJECT TYPES - DBT project configuration types
+    # DBT PROJECT TYPES - DBT project configuration types using FlextTypes
     # =========================================================================
 
     class DbtProject:
-        """DBT LDAP project complex types.
+        """DBT LDAP project complex types using FlextTypes composition."""
 
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
-        """
-
-        ProjectConfiguration: type = dict[str, object | dict[str, object]]
+        type ProjectConfiguration = Mapping[
+            str, FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT project configuration type."""
-        ModelConfiguration: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type ModelConfiguration = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT model configuration type."""
-        SourceConfiguration: type = dict[str, str | list[dict[str, object]]]
+        type SourceConfiguration = Mapping[
+            str, str | Sequence[Mapping[str, FlextTypes.JsonValue]]
+        ]
         """DBT source configuration type."""
-        ProfileConfiguration: type = dict[str, object]
+        type ProfileConfiguration = Mapping[str, FlextTypes.JsonValue]
         """DBT profile configuration type."""
-        MacroConfiguration: type = dict[str, str | dict[str, object]]
+        type MacroConfiguration = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT macro configuration type."""
-        TestConfiguration: type = dict[str, str | bool | list[str]]
+        type TestConfiguration = Mapping[str, str | bool | Sequence[str]]
         """DBT test configuration type."""
 
     # =========================================================================
-    # LDAP CONNECTION TYPES - LDAP server connection configuration
+    # LDAP CONNECTION TYPES - Using FlextLdapTypes for LDAP-specific types
     # =========================================================================
 
     class LdapConnection:
-        """LDAP connection complex types.
+        """LDAP connection complex types using FlextLdapTypes composition."""
 
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
-        """
-
-        ConnectionConfig: type = dict[str, str | int | bool | dict[str, object]]
-        """LDAP connection configuration type."""
-        AuthenticationConfig: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        # Use FlextLdapTypes.Protocol.ConnectionConfig for LDAP connection
+        type ConnectionConfig = FlextLdapTypes.Protocol.ConnectionConfig
+        """LDAP connection configuration type - uses FlextLdapTypes."""
+        type AuthenticationConfig = Mapping[
+            str, str | Mapping[str, FlextTypes.JsonValue]
+        ]
         """LDAP authentication configuration type."""
-        ServerConfig: type = dict[str, str | int | bool | list[str]]
+        type ServerConfig = Mapping[str, str | int | bool | Sequence[str]]
         """LDAP server configuration type."""
-        TlsConfig: type = dict[str, bool | str | dict[str, object]]
+        type TlsConfig = Mapping[str, bool | str | Mapping[str, FlextTypes.JsonValue]]
         """LDAP TLS configuration type."""
-        PoolingConfig: type = dict[str, int | bool | dict[str, object]]
+        type PoolingConfig = Mapping[
+            str, int | bool | Mapping[str, FlextTypes.JsonValue]
+        ]
         """LDAP pooling configuration type."""
-        TimeoutConfig: type = dict[str, int | float]
+        type TimeoutConfig = Mapping[str, int | float]
         """LDAP timeout configuration type."""
 
     # =========================================================================
-    # LDAP DATA TYPES - LDAP entry and attribute types
+    # LDAP DATA TYPES - Using FlextLdapTypes for Entry types
     # =========================================================================
 
     class LdapData:
-        """LDAP data complex types.
+        """LDAP data complex types using FlextLdapTypes composition."""
 
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
-        """
-
-        LdapEntry: type = dict[str, str | list[str] | dict[str, FlextTypes.JsonValue]]
-        """LDAP entry type."""
-        LdapAttributes: type = dict[str, str | list[str] | bytes]
+        # Use FlextLdapTypes.Protocol.Entry for LDAP entries
+        type LdapEntry = FlextLdapTypes.Protocol.Entry
+        """LDAP entry type - uses FlextLdapTypes.Protocol.Entry."""
+        type LdapAttributes = Mapping[str, str | Sequence[str] | bytes]
         """LDAP attributes type."""
-        LdapFilter: type = str
-        """LDAP filter type."""
-        LdapQuery: type = dict[str, str | list[str] | int | dict[str, object]]
+        type LdapQuery = Mapping[
+            str, str | Sequence[str] | int | Mapping[str, FlextTypes.JsonValue]
+        ]
         """LDAP query type."""
-        LdapSchema: type = dict[str, str | list[dict[str, FlextTypes.JsonValue]]]
+        type LdapSchema = Mapping[
+            str, str | Sequence[Mapping[str, FlextTypes.JsonValue]]
+        ]
         """LDAP schema type."""
-        LdapOperationResult: type = dict[str, bool | str | int | dict[str, object]]
+        type LdapOperationResult = Mapping[
+            str, bool | str | int | Mapping[str, FlextTypes.JsonValue]
+        ]
         """LDAP operation result type."""
 
     # =========================================================================
@@ -160,22 +179,25 @@ class FlextDbtLdapTypes(FlextTypes):
     # =========================================================================
 
     class DbtTransformation:
-        """DBT LDAP transformation complex types.
+        """DBT LDAP transformation complex types."""
 
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
-        """
-
-        TransformationConfig: type = dict[str, FlextTypes.JsonValue | dict[str, object]]
+        type TransformationConfig = Mapping[
+            str, FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT transformation configuration type."""
-        FieldMapping: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type FieldMapping = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT field mapping type."""
-        DataValidation: type = dict[str, bool | str | list[str] | dict[str, object]]
+        type DataValidation = Mapping[
+            str, bool | str | Sequence[str] | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT data validation type."""
-        TransformationRule: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type TransformationRule = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT transformation rule type."""
-        OutputFormat: type = dict[str, str | dict[str, object]]
+        type OutputFormat = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT output format type."""
-        ProcessingStep: type = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
+        type ProcessingStep = Mapping[
+            str, str | int | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT processing step type."""
 
     # =========================================================================
@@ -183,22 +205,25 @@ class FlextDbtLdapTypes(FlextTypes):
     # =========================================================================
 
     class DbtModel:
-        """DBT LDAP model complex types.
+        """DBT LDAP model complex types."""
 
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
-        """
-
-        ModelDefinition: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type ModelDefinition = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT model definition type."""
-        ModelExecution: type = dict[str, str | bool | int | dict[str, object]]
+        type ModelExecution = Mapping[
+            str, str | bool | int | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT model execution type."""
-        ModelDependency: type = dict[str, str | list[str] | dict[str, object]]
+        type ModelDependency = Mapping[
+            str, str | Sequence[str] | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT model dependency type."""
-        ModelTest: type = dict[str, str | bool | dict[str, FlextTypes.JsonValue]]
+        type ModelTest = Mapping[str, str | bool | Mapping[str, FlextTypes.JsonValue]]
         """DBT model test type."""
-        ModelDocumentation: type = dict[str, str | dict[str, object]]
+        type ModelDocumentation = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT model documentation type."""
-        ModelMaterialization: type = dict[str, str | dict[str, object]]
+        type ModelMaterialization = Mapping[
+            str, str | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT model materialization type."""
 
     # =========================================================================
@@ -206,39 +231,36 @@ class FlextDbtLdapTypes(FlextTypes):
     # =========================================================================
 
     class DbtSource:
-        """DBT LDAP source complex types.
+        """DBT LDAP source complex types."""
 
-        Python 3.13+ best practice: Use TypeAlias for better type checking.
-        """
-
-        SourceDefinition: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type SourceDefinition = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT source definition type."""
-        SourceConnection: type = dict[str, object | dict[str, object]]
+        type SourceConnection = Mapping[
+            str, FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT source connection type."""
-        SourceTable: type = dict[str, str | list[dict[str, FlextTypes.JsonValue]]]
+        type SourceTable = Mapping[
+            str, str | Sequence[Mapping[str, FlextTypes.JsonValue]]
+        ]
         """DBT source table type."""
-        SourceFreshness: type = dict[str, str | int | dict[str, object]]
+        type SourceFreshness = Mapping[
+            str, str | int | Mapping[str, FlextTypes.JsonValue]
+        ]
         """DBT source freshness type."""
-        SourceTest: type = dict[str, str | bool | list[str]]
+        type SourceTest = Mapping[str, str | bool | Sequence[str]]
         """DBT source test type."""
-        SourceSchema: type = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type SourceSchema = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT source schema type."""
 
     # =========================================================================
-    # DBT LDAP PROJECT TYPES - Domain-specific project types extending FlextTypes
+    # DBT LDAP PROJECT TYPES - Domain-specific project types
     # =========================================================================
 
-    class Project(FlextTypes):
-        """DBT LDAP-specific project types extending FlextTypes.
+    class Project:
+        """DBT LDAP-specific project types."""
 
-        Adds DBT LDAP transformation-specific project types while inheriting
-        generic types from FlextTypes. Follows domain separation principle:
-        DBT LDAP domain owns LDAP data transformation-specific types.
-        """
-
-        # DBT LDAP-specific project types extending the generic ones
-        # Python 3.13+ best practice: Use TypeAlias for better type checking
-        DbtLdapProjectType: type = Literal[
+        # DBT LDAP-specific project types - PEP 695 strict syntax
+        type DbtLdapProjectType = Literal[
             # Generic types inherited from FlextTypes
             "library",
             "application",
@@ -259,14 +281,16 @@ class FlextDbtLdapTypes(FlextTypes):
         ]
         """DBT LDAP project type literal."""
 
-        # DBT LDAP-specific project configurations
-        DbtLdapProjectConfig: type = dict[str, object]
+        # DBT LDAP-specific project configurations - using FlextTypes.JsonValue
+        type DbtLdapProjectConfig = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP project configuration type."""
-        LdapTransformConfig: type = dict[str, str | int | bool | list[str]]
+        type LdapTransformConfig = Mapping[str, str | int | bool | Sequence[str]]
         """LDAP transformation configuration type."""
-        DirectoryAnalyticsConfig: type = dict[str, bool | str | dict[str, object]]
+        type DirectoryAnalyticsConfig = Mapping[
+            str, bool | str | Mapping[str, FlextTypes.JsonValue]
+        ]
         """Directory analytics configuration type."""
-        DbtLdapPipelineConfig: type = dict[str, object]
+        type DbtLdapPipelineConfig = Mapping[str, FlextTypes.JsonValue]
         """DBT LDAP pipeline configuration type."""
 
 

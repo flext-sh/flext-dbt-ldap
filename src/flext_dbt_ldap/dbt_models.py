@@ -14,8 +14,7 @@ from flext_ldap import FlextLdapModels
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
-# Type alias for backward compatibility
-FlextLdapEntities = FlextLdapModels
+# No aliases per FLEXT standards - use FlextLdapModels directly
 
 logger = FlextLogger(__name__)
 
@@ -44,12 +43,12 @@ class FlextDbtLdapModels(FlextModels):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: FlextLdapEntities.Entry,
+            entry: FlextLdapModels.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
-            # Normalize attributes to dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList]
+            # Normalize attributes to dict[str, list[str]]
             raw = entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
+            attrs: dict[str, list[str]] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -94,7 +93,7 @@ class FlextDbtLdapModels(FlextModels):
                 return FlextResult[None].fail("User ID and common name are required")
             return FlextResult[None].ok(None)
 
-        def to_dbt_dict(self) -> dict[str, object]:
+        def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -128,7 +127,7 @@ class FlextDbtLdapModels(FlextModels):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: FlextLdapEntities.Entry,
+            entry: FlextLdapModels.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
@@ -230,7 +229,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def transform_users(
             self,
-            entries: list[FlextLdapEntities.Entry],
+            entries: list[FlextLdapModels.Entry],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions.
 
@@ -262,7 +261,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def transform_groups(
             self,
-            entries: list[FlextLdapEntities.Entry],
+            entries: list[FlextLdapModels.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions.
 
@@ -300,7 +299,7 @@ class FlextDbtLdapModels(FlextModels):
 
         def transform_memberships(
             self,
-            entries: list[FlextLdapEntities.Entry],
+            entries: list[FlextLdapModels.Entry],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts.
 
@@ -340,10 +339,10 @@ class FlextDbtLdapModels(FlextModels):
             logger.info("Transformed %d membership facts", len(membership_facts))
             return membership_facts
 
-        def _is_user_entry(self, entry: FlextLdapEntities.Entry) -> bool:
+        def _is_user_entry(self, entry: FlextLdapModels.Entry) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
-            object_classes: FlextDbtLdapTypes.DbtLdapCore.StringList = []
+            object_classes: list[str] = []
             if isinstance(raw, dict):
                 oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
@@ -353,10 +352,10 @@ class FlextDbtLdapModels(FlextModels):
             user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
             return any(cls in object_classes for cls in user_classes)
 
-        def _is_group_entry(self, entry: FlextLdapEntities.Entry) -> bool:
+        def _is_group_entry(self, entry: FlextLdapModels.Entry) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
-            object_classes: FlextDbtLdapTypes.DbtLdapCore.StringList = []
+            object_classes: list[str] = []
             if isinstance(raw, dict):
                 oc_val: list[object] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
@@ -373,12 +372,12 @@ class FlextDbtLdapModels(FlextModels):
 
         def _extract_group_memberships(
             self,
-            group_entry: FlextLdapEntities.Entry,
+            group_entry: FlextLdapModels.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = group_entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
+            attrs: dict[str, list[str]] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -403,12 +402,12 @@ class FlextDbtLdapModels(FlextModels):
 
         def _extract_user_memberships(
             self,
-            user_entry: FlextLdapEntities.Entry,
+            user_entry: FlextLdapModels.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
             raw = user_entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
+            attrs: dict[str, list[str]] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -430,19 +429,8 @@ class FlextDbtLdapModels(FlextModels):
 
 
 # Unified class pattern - all access through FlextDbtLdapModels
+# No aliases per FLEXT standards - use FlextLdapModels directly
 
-
-__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
+__all__: list[str] = [
     "FlextDbtLdapModels",
-    # Re-exports from flext-ldap for convenience - unified class pattern
-    "FlextLdapEntities",
-    "FlextLdapModels",
-]
-
-
-__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
-    "FlextDbtLdapModels",
-    # Re-exports from flext-ldap for convenience - use unified class pattern
-    "FlextLdapEntities",
-    "FlextLdapModels",
 ]

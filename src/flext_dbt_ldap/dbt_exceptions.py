@@ -56,9 +56,9 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
 
     def _build_context(
         self, base_context: dict, **extra_fields: object
-    ) -> dict[str, object]:
+    ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
-        context = dict[str, object](base_context)
+        context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -109,9 +109,9 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
 
     def _build_context(
         self, base_context: dict, **extra_fields: object
-    ) -> dict[str, object]:
+    ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
-        context = dict[str, object](base_context)
+        context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -159,9 +159,9 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
 
     def _build_context(
         self, base_context: dict, **extra_fields: object
-    ) -> dict[str, object]:
+    ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
-        context = dict[str, object](base_context)
+        context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -198,7 +198,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         )
 
 
-__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
+__all__: list[str] = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",

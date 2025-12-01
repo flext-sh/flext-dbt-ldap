@@ -22,14 +22,14 @@ class FlextDbtLdapConstants(FlextConstants):
         class Ldap:
             """Standard LDAP connection settings."""
 
-            DEFAULT_HOST = FlextConstants.Platform.DEFAULT_HOST
-            DEFAULT_PORT = FlextConstants.Platform.LDAP_DEFAULT_PORT
-            DEFAULT_TIMEOUT = FlextConstants.Network.DEFAULT_TIMEOUT
+            DEFAULT_HOST: Final[str] = FlextConstants.Platform.DEFAULT_HOST
+            DEFAULT_PORT: Final[int] = 389  # Standard LDAP port
+            DEFAULT_TIMEOUT: Final[int] = FlextConstants.Network.DEFAULT_TIMEOUT
 
         class Ldaps:
             """Secure LDAP connection settings."""
 
-            DEFAULT_PORT = FlextConstants.Platform.LDAPS_DEFAULT_PORT
+            DEFAULT_PORT: Final[int] = 636  # Standard LDAPS port
 
     class Dbt:
         """DBT-specific configuration constants."""
