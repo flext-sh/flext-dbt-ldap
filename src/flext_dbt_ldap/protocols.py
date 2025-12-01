@@ -1,11 +1,14 @@
 """DBT LDAP protocols for FLEXT ecosystem."""
 
+from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
 from flext_core import (
     FlextProtocols,
     FlextResult,
 )
+
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
 
 class FlextDbtLdapProtocols:
@@ -37,9 +40,9 @@ class FlextDbtLdapProtocols:
 
             def run_dbt_models(
                 self,
-                models: list[str] | None = None,
-                config: dict[str, object] | None = None,
-            ) -> FlextResult[dict[str, object]]:
+                models: Sequence[str] | None = None,
+                config: FlextDbtLdapTypes.DbtLdapCore.DbtConfigDict | None = None,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Run DBT models with LDAP data sources.
 
                 Args:
@@ -47,16 +50,16 @@ class FlextDbtLdapProtocols:
                 config: DBT configuration parameters
 
                 Returns:
-                FlextResult[dict[str, object]]: DBT run results or error
+                FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict]: DBT run results or error
 
                 """
                 ...
 
             def test_dbt_models(
                 self,
-                models: list[str] | None = None,
-                config: dict[str, object] | None = None,
-            ) -> FlextResult[dict[str, object]]:
+                models: Sequence[str] | None = None,
+                config: FlextDbtLdapTypes.DbtLdapCore.DbtConfigDict | None = None,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Test DBT models with LDAP data validation.
 
                 Args:
@@ -64,15 +67,15 @@ class FlextDbtLdapProtocols:
                 config: DBT test configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: DBT test results or error
+                FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict]: DBT test results or error
 
                 """
 
             def compile_dbt_models(
                 self,
-                models: list[str] | None = None,
-                config: dict[str, object] | None = None,
-            ) -> FlextResult[dict[str, object]]:
+                models: Sequence[str] | None = None,
+                config: FlextDbtLdapTypes.DbtLdapCore.DbtConfigDict | None = None,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Compile DBT models for LDAP data processing.
 
                 Args:
@@ -80,15 +83,17 @@ class FlextDbtLdapProtocols:
                 config: DBT compilation configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: DBT compilation results or error
+                FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict]: DBT compilation results or error
 
                 """
 
-            def get_dbt_manifest(self) -> FlextResult[dict[str, object]]:
+            def get_dbt_manifest(
+                self,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtProject.ProjectConfiguration]":
                 """Get DBT manifest with LDAP model definitions.
 
                 Returns:
-                FlextResult[dict[str, object]]: DBT manifest or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]: DBT manifest or error
 
                 """
 
@@ -109,9 +114,9 @@ class FlextDbtLdapProtocols:
 
             def extract_ldap_data(
                 self,
-                ldap_config: dict[str, object],
-                extraction_config: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                ldap_config: FlextDbtLdapTypes.LdapConnection.ConnectionConfig,
+                extraction_config: FlextDbtLdapTypes.DbtTransformation.TransformationConfig,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Extract data from LDAP directory for DBT processing.
 
                 Args:
@@ -119,15 +124,15 @@ class FlextDbtLdapProtocols:
                 extraction_config: Data extraction parameters
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Extracted LDAP data or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]: Extracted LDAP data or error
 
                 """
 
             def transform_ldap_to_dbt_format(
                 self,
-                ldap_data: list[dict[str, object]],
-                transformation_config: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                ldap_data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                transformation_config: FlextDbtLdapTypes.DbtTransformation.TransformationConfig,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Transform LDAP data to DBT-compatible format.
 
                 Args:
@@ -135,15 +140,15 @@ class FlextDbtLdapProtocols:
                 transformation_config: Transformation parameters
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Transformed data or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]: Transformed data or error
 
                 """
 
             def validate_ldap_data_quality(
                 self,
-                data: list[dict[str, object]],
-                quality_rules: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                quality_rules: FlextDbtLdapTypes.DbtTransformation.DataValidation,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ValidationDict]":
                 """Validate LDAP data quality for DBT processing.
 
                 Args:
@@ -151,15 +156,15 @@ class FlextDbtLdapProtocols:
                 quality_rules: Data quality validation rules
 
                 Returns:
-                FlextResult[dict[str, object]]: Quality validation results or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ValidationDict]: Quality validation results or error
 
                 """
 
             def sync_ldap_to_warehouse(
                 self,
-                ldap_data: list[dict[str, object]],
-                warehouse_config: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                ldap_data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                warehouse_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Sync LDAP data to data warehouse for DBT processing.
 
                 Args:
@@ -167,7 +172,7 @@ class FlextDbtLdapProtocols:
                 warehouse_config: Data warehouse configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Sync operation results or error
+                FlextResult[ResultDict]: Sync operation results or error
 
                 """
 
@@ -177,9 +182,9 @@ class FlextDbtLdapProtocols:
 
             def create_user_dimension(
                 self,
-                ldap_users: list[dict[str, object]],
-                dimension_config: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                ldap_users: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                dimension_config: FlextDbtLdapTypes.DbtModel.ModelDefinition,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtModel.ModelDefinition]":
                 """Create user dimension model from LDAP user data.
 
                 Args:
@@ -187,15 +192,15 @@ class FlextDbtLdapProtocols:
                 dimension_config: Dimension modeling configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: User dimension model or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtModel.ModelDefinition]: User dimension model or error
 
                 """
 
             def create_group_dimension(
                 self,
-                ldap_groups: list[dict[str, object]],
-                dimension_config: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                ldap_groups: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                dimension_config: FlextDbtLdapTypes.DbtModel.ModelDefinition,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtModel.ModelDefinition]":
                 """Create group dimension model from LDAP group data.
 
                 Args:
@@ -203,15 +208,15 @@ class FlextDbtLdapProtocols:
                 dimension_config: Dimension modeling configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Group dimension model or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtModel.ModelDefinition]: Group dimension model or error
 
                 """
 
             def create_organizational_hierarchy(
                 self,
-                ldap_data: list[dict[str, object]],
-                hierarchy_config: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                ldap_data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                hierarchy_config: FlextDbtLdapTypes.DbtModel.ModelDefinition,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtModel.ModelDefinition]":
                 """Create organizational hierarchy from LDAP organizational units.
 
                 Args:
@@ -219,15 +224,15 @@ class FlextDbtLdapProtocols:
                 hierarchy_config: Hierarchy modeling configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Organizational hierarchy or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtModel.ModelDefinition]: Organizational hierarchy or error
 
                 """
 
             def generate_fact_tables(
                 self,
-                dimensions: list[dict[str, object]],
-                fact_config: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                dimensions: Sequence[FlextDbtLdapTypes.DbtModel.ModelDefinition],
+                fact_config: FlextDbtLdapTypes.DbtModel.ModelDefinition,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtModel.ModelDefinition]]":
                 """Generate fact tables from LDAP dimensions.
 
                 Args:
@@ -235,7 +240,7 @@ class FlextDbtLdapProtocols:
                 fact_config: Fact table configuration
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Generated fact tables or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtModel.ModelDefinition]]: Generated fact tables or error
 
                 """
 
@@ -245,9 +250,9 @@ class FlextDbtLdapProtocols:
 
             def normalize_ldap_attributes(
                 self,
-                ldap_entries: list[dict[str, object]],
-                normalization_rules: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                ldap_entries: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                normalization_rules: FlextDbtLdapTypes.DbtTransformation.TransformationRule,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Normalize LDAP attributes for consistent data processing.
 
                 Args:
@@ -255,15 +260,15 @@ class FlextDbtLdapProtocols:
                 normalization_rules: Attribute normalization rules
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Normalized LDAP data or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]: Normalized LDAP data or error
 
                 """
 
             def enrich_ldap_data(
                 self,
-                ldap_data: list[dict[str, object]],
-                enrichment_sources: list[dict[str, object]],
-            ) -> FlextResult[list[dict[str, object]]]:
+                ldap_data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                enrichment_sources: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Enrich LDAP data with additional data sources.
 
                 Args:
@@ -271,15 +276,15 @@ class FlextDbtLdapProtocols:
                 enrichment_sources: Additional data sources for enrichment
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Enriched LDAP data or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]: Enriched LDAP data or error
 
                 """
 
             def apply_business_rules(
                 self,
-                data: list[dict[str, object]],
-                business_rules: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                business_rules: FlextDbtLdapTypes.DbtTransformation.TransformationRule,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Apply business rules to LDAP data transformations.
 
                 Args:
@@ -287,15 +292,15 @@ class FlextDbtLdapProtocols:
                 business_rules: Business transformation rules
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Transformed data or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]: Transformed data or error
 
                 """
 
             def generate_derived_attributes(
                 self,
-                ldap_data: list[dict[str, object]],
-                derivation_config: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                ldap_data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                derivation_config: FlextDbtLdapTypes.DbtTransformation.TransformationConfig,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Generate derived attributes from LDAP base attributes.
 
                 Args:
@@ -303,7 +308,7 @@ class FlextDbtLdapProtocols:
                 derivation_config: Attribute derivation configuration
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Data with derived attributes or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]: Data with derived attributes or error
 
                 """
 
@@ -312,54 +317,55 @@ class FlextDbtLdapProtocols:
             """Protocol for DBT macro operations with LDAP data."""
 
             def generate_ldap_source_macro(
-                self, source_config: dict[str, object]
-            ) -> FlextResult[str]:
+                self, source_config: FlextDbtLdapTypes.DbtSource.SourceDefinition
+            ) -> "FlextProtocols.ResultProtocol[str]":
                 """Generate DBT macro for LDAP data sources.
 
                 Args:
                 source_config: LDAP source configuration
 
                 Returns:
-                FlextResult[str]: Generated DBT macro or error
+                FlextProtocols.ResultProtocol[str]: Generated DBT macro or error
 
                 """
 
             def create_ldap_test_macro(
-                self, test_config: dict[str, object]
-            ) -> FlextResult[str]:
+                self, test_config: FlextDbtLdapTypes.DbtProject.TestConfiguration
+            ) -> "FlextProtocols.ResultProtocol[str]":
                 """Create DBT test macro for LDAP data validation.
 
                 Args:
                 test_config: LDAP test configuration
 
                 Returns:
-                FlextResult[str]: Generated test macro or error
+                FlextProtocols.ResultProtocol[str]: Generated test macro or error
 
                 """
 
             def generate_ldap_transformation_macro(
-                self, transformation_config: dict[str, object]
-            ) -> FlextResult[str]:
+                self,
+                transformation_config: FlextDbtLdapTypes.DbtTransformation.TransformationConfig,
+            ) -> "FlextProtocols.ResultProtocol[str]":
                 """Generate DBT transformation macro for LDAP data.
 
                 Args:
                 transformation_config: Transformation configuration
 
                 Returns:
-                FlextResult[str]: Generated transformation macro or error
+                FlextProtocols.ResultProtocol[str]: Generated transformation macro or error
 
                 """
 
             def create_ldap_snapshot_macro(
-                self, snapshot_config: dict[str, object]
-            ) -> FlextResult[str]:
+                self, snapshot_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict
+            ) -> "FlextProtocols.ResultProtocol[str]":
                 """Create DBT snapshot macro for LDAP data versioning.
 
                 Args:
                 snapshot_config: Snapshot configuration
 
                 Returns:
-                FlextResult[str]: Generated snapshot macro or error
+                FlextProtocols.ResultProtocol[str]: Generated snapshot macro or error
 
                 """
 
@@ -369,9 +375,9 @@ class FlextDbtLdapProtocols:
 
             def validate_ldap_schema_compliance(
                 self,
-                ldap_data: list[dict[str, object]],
-                schema_rules: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                ldap_data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                schema_rules: FlextDbtLdapTypes.LdapData.LdapSchema,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ValidationDict]":
                 """Validate LDAP data against schema compliance rules.
 
                 Args:
@@ -379,15 +385,15 @@ class FlextDbtLdapProtocols:
                 schema_rules: Schema compliance rules
 
                 Returns:
-                FlextResult[dict[str, object]]: Schema validation results or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapCore.ValidationDict]: Schema validation results or error
 
                 """
 
             def check_data_completeness(
                 self,
-                data: list[dict[str, object]],
-                completeness_config: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                completeness_config: FlextDbtLdapTypes.DbtTransformation.DataValidation,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ValidationDict]":
                 """Check LDAP data completeness for DBT processing.
 
                 Args:
@@ -395,15 +401,15 @@ class FlextDbtLdapProtocols:
                 completeness_config: Completeness validation configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Completeness check results or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapCore.ValidationDict]: Completeness check results or error
 
                 """
 
             def detect_data_anomalies(
                 self,
-                data: list[dict[str, object]],
-                anomaly_config: dict[str, object],
-            ) -> FlextResult[list[dict[str, object]]]:
+                data: Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict],
+                anomaly_config: FlextDbtLdapTypes.DbtTransformation.DataValidation,
+            ) -> "FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapTypes.DbtLdapCore.DataDict]]":
                 """Detect anomalies in LDAP data for quality assurance.
 
                 Args:
@@ -411,15 +417,15 @@ class FlextDbtLdapProtocols:
                 anomaly_config: Anomaly detection configuration
 
                 Returns:
-                FlextResult[list[dict[str, object]]]: Detected anomalies or error
+                FlextProtocols.ResultProtocol[Sequence[FlextDbtLdapCore.DataDict]]: Detected anomalies or error
 
                 """
 
             def generate_quality_report(
                 self,
-                quality_results: list[dict[str, object]],
-                report_config: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                quality_results: Sequence[FlextDbtLdapTypes.DbtLdapCore.ValidationDict],
+                report_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Generate data quality report for LDAP DBT processing.
 
                 Args:
@@ -427,7 +433,7 @@ class FlextDbtLdapProtocols:
                 report_config: Report generation configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Quality report or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapCore.ResultDict]: Quality report or error
 
                 """
 
@@ -437,9 +443,9 @@ class FlextDbtLdapProtocols:
 
             def optimize_dbt_models(
                 self,
-                model_config: dict[str, object],
-                performance_metrics: dict[str, object],
-            ) -> FlextResult[dict[str, object]]:
+                model_config: FlextDbtLdapTypes.DbtProject.ModelConfiguration,
+                performance_metrics: FlextDbtLdapTypes.DbtLdapCore.MetricsDict,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtProject.ModelConfiguration]":
                 """Optimize DBT models for LDAP data processing performance.
 
                 Args:
@@ -447,15 +453,15 @@ class FlextDbtLdapProtocols:
                 performance_metrics: Current performance metrics
 
                 Returns:
-                FlextResult[dict[str, object]]: Optimization recommendations or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtProject.ModelConfiguration]: Optimization recommendations or error
 
                 """
 
             def cache_ldap_extractions(
                 self,
-                extraction_config: dict[str, object],
-                cache_config: dict[str, object],
-            ) -> FlextResult[bool]:
+                extraction_config: FlextDbtLdapTypes.DbtTransformation.TransformationConfig,
+                cache_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict,
+            ) -> "FlextProtocols.ResultProtocol[bool]":
                 """Cache LDAP data extractions for improved performance.
 
                 Args:
@@ -463,33 +469,33 @@ class FlextDbtLdapProtocols:
                 cache_config: Caching configuration
 
                 Returns:
-                FlextResult[bool]: Caching setup success status
+                FlextProtocols.ResultProtocol[bool]: Caching setup success status
 
                 """
 
             def monitor_dbt_performance(
-                self, run_results: dict[str, object]
-            ) -> FlextResult[dict[str, object]]:
+                self, run_results: FlextDbtLdapTypes.DbtLdapCore.ResultDict
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.MetricsDict]":
                 """Monitor DBT performance with LDAP data processing.
 
                 Args:
                 run_results: DBT run results
 
                 Returns:
-                FlextResult[dict[str, object]]: Performance metrics or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.MetricsDict]: Performance metrics or error
 
                 """
 
             def optimize_ldap_queries(
-                self, query_config: dict[str, object]
-            ) -> FlextResult[dict[str, object]]:
+                self, query_config: FlextDbtLdapTypes.LdapData.LdapQuery
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.LdapData.LdapQuery]":
                 """Optimize LDAP queries for DBT data extraction.
 
                 Args:
                 query_config: LDAP query configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Query optimization results or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.LdapData.LdapQuery]: Query optimization results or error
 
                 """
 
@@ -498,8 +504,8 @@ class FlextDbtLdapProtocols:
             """Protocol for DBT LDAP monitoring operations."""
 
             def track_dbt_run_metrics(
-                self, run_id: str, metrics: dict[str, object]
-            ) -> FlextResult[bool]:
+                self, run_id: str, metrics: FlextDbtLdapTypes.DbtLdapCore.MetricsDict
+            ) -> "FlextProtocols.ResultProtocol[bool]":
                 """Track DBT run metrics for LDAP data processing.
 
                 Args:
@@ -507,41 +513,43 @@ class FlextDbtLdapProtocols:
                 metrics: Run metrics data
 
                 Returns:
-                FlextResult[bool]: Metric tracking success status
+                FlextProtocols.ResultProtocol[bool]: Metric tracking success status
 
                 """
 
             def monitor_ldap_data_freshness(
-                self, freshness_config: dict[str, object]
-            ) -> FlextResult[dict[str, object]]:
+                self, freshness_config: FlextDbtLdapTypes.DbtSource.SourceFreshness
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtSource.SourceFreshness]":
                 """Monitor LDAP data freshness for DBT processing.
 
                 Args:
                 freshness_config: Data freshness monitoring configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Data freshness status or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtSource.SourceFreshness]: Data freshness status or error
 
                 """
 
-            def get_health_status(self) -> FlextResult[dict[str, object]]:
+            def get_health_status(
+                self,
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Get DBT LDAP integration health status.
 
                 Returns:
-                FlextResult[dict[str, object]]: Health status or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]: Health status or error
 
                 """
 
             def create_monitoring_dashboard(
-                self, dashboard_config: dict[str, object]
-            ) -> FlextResult[dict[str, object]]:
+                self, dashboard_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict
+            ) -> "FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Create monitoring dashboard for DBT LDAP operations.
 
                 Args:
                 dashboard_config: Dashboard configuration
 
                 Returns:
-                FlextResult[dict[str, object]]: Dashboard creation result or error
+                FlextProtocols.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]: Dashboard creation result or error
 
                 """
 

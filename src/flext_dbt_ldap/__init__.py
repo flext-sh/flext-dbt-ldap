@@ -33,11 +33,7 @@ from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
     validate_ldap_data_quality,
 )
-from flext_dbt_ldap.simple_api import FlextDbtLdap, FlextDbtLdapAPI
-from flext_dbt_ldap.type_aliases import (
-    DomainBaseModel,
-    FlextDbtLdapResult,
-)
+from flext_dbt_ldap.simple_api import FlextDbtLdap
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
@@ -48,11 +44,8 @@ PROJECT_VERSION: Final[FlextDbtLdapVersion] = VERSION
 __all__ = [
     "PROJECT_VERSION",
     "VERSION",
-    "DomainBaseModel",
     "FlextConfig",
     "FlextDbtLdap",
-    "FlextDbtLdap",
-    "FlextDbtLdapAPI",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
     "FlextDbtLdapConfig",
@@ -63,7 +56,6 @@ __all__ = [
     "FlextDbtLdapMacroError",
     "FlextDbtLdapModelError",
     "FlextDbtLdapProcessingError",
-    "FlextDbtLdapResult",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapTypes",
@@ -74,7 +66,6 @@ __all__ = [
     "FlextResult",
     "__version__",
     "__version_info__",
-    "_show_deprecation_warning",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",
 ]

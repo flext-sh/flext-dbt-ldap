@@ -19,11 +19,8 @@ from flext_core import (
 from flext_dbt_ldap.config import FlextDbtLdapConfig
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
-from flext_dbt_ldap.models import (
-    FlextDbtLdapGroupDimension,
-    FlextDbtLdapTransformer,
-    FlextDbtLdapUserDimension,
-)
+from flext_dbt_ldap.models import FlextDbtLdapModels
+from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
 
@@ -177,17 +174,17 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         common_name: str,
         email: str | None = None,
         **kwargs: object,
-    ) -> FlextResult[FlextDbtLdapUserDimension]:
+    ) -> FlextResult[FlextDbtLdapModels.UserDimension]:
         """Create user dimension with required fields.
 
         Args:
         user_id: Unique user identifier
         common_name: User's common name
         email: User's email address
-        **kwargs: Additional fields for FlextDbtLdapUserDimension
+        **kwargs: Additional fields for FlextDbtLdapModels.UserDimension
 
         Returns:
-        FlextResult containing FlextDbtLdapUserDimension instance
+        FlextResult containing FlextDbtLdapModels.UserDimension instance
 
         """
         try:
@@ -197,7 +194,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                 common_name,
             )
 
-            user = FlextDbtLdapUserDimension(
+            user = FlextDbtLdapModels.UserDimension(
                 user_id=user_id,
                 common_name=common_name,
                 email=email,
@@ -205,9 +202,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             for key, value in kwargs.items():
                 if hasattr(user, key):
                     setattr(user, key, value)
-            return FlextResult[FlextDbtLdapUserDimension].ok(user)
+            return FlextResult[FlextDbtLdapModels.UserDimension].ok(user)
         except Exception as e:
-            return FlextResult[FlextDbtLdapUserDimension].fail(
+            return FlextResult[FlextDbtLdapModels.UserDimension].fail(
                 f"User dimension creation failed: {e}"
             )
 
@@ -217,17 +214,17 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         common_name: str,
         description: str | None = None,
         **kwargs: object,
-    ) -> FlextResult[FlextDbtLdapGroupDimension]:
+    ) -> FlextResult[FlextDbtLdapModels.GroupDimension]:
         """Create group dimension with required fields.
 
         Args:
         group_id: Unique group identifier
         common_name: Group's common name
         description: Group description
-        **kwargs: Additional fields for FlextDbtLdapGroupDimension
+        **kwargs: Additional fields for FlextDbtLdapModels.GroupDimension
 
         Returns:
-        FlextResult containing FlextDbtLdapGroupDimension instance
+        FlextResult containing FlextDbtLdapModels.GroupDimension instance
 
         """
         try:
@@ -237,7 +234,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                 common_name,
             )
 
-            group = FlextDbtLdapGroupDimension(
+            group = FlextDbtLdapModels.GroupDimension(
                 group_id=group_id,
                 common_name=common_name,
                 description=description,
@@ -245,25 +242,25 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             for key, value in kwargs.items():
                 if hasattr(group, key):
                     setattr(group, key, value)
-            return FlextResult[FlextDbtLdapGroupDimension].ok(group)
+            return FlextResult[FlextDbtLdapModels.GroupDimension].ok(group)
         except Exception as e:
-            return FlextResult[FlextDbtLdapGroupDimension].fail(
+            return FlextResult[FlextDbtLdapModels.GroupDimension].fail(
                 f"Group dimension creation failed: {e}"
             )
 
-    def create_transformer(self) -> FlextResult[FlextDbtLdapTransformer]:
+    def create_transformer(self) -> FlextResult[FlextDbtLdapModels.Transformer]:
         """Create LDAP data transformer.
 
         Returns:
-        FlextResult containing FlextDbtLdapTransformer instance
+        FlextResult containing FlextDbtLdapModels.Transformer instance
 
         """
         try:
             self.logger.debug("Creating LDAP transformer")
-            transformer = FlextDbtLdapTransformer()
-            return FlextResult[FlextDbtLdapTransformer].ok(transformer)
+            transformer = FlextDbtLdapModels.Transformer()
+            return FlextResult[FlextDbtLdapModels.Transformer].ok(transformer)
         except Exception as e:
-            return FlextResult[FlextDbtLdapTransformer].fail(
+            return FlextResult[FlextDbtLdapModels.Transformer].fail(
                 f"Transformer creation failed: {e}"
             )
 
@@ -314,9 +311,16 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
             # Use FlextDbtLdapUtilities for DBT project configuration if available
             project_name = config_kwargs.get("project_name", "ldap_analytics")
-            ldap_sources = config_kwargs.get(
-                "ldap_sources", [{"name": "users"}, {"name": "groups"}]
-            )
+            ldap_sources_value = config_kwargs.get("ldap_sources")
+            if isinstance(ldap_sources_value, list):
+                ldap_sources: list[FlextDbtLdapTypes.DbtSource.SourceTable] = (
+                    ldap_sources_value
+                )
+            else:
+                ldap_sources = [
+                    {"name": "users"},
+                    {"name": "groups"},
+                ]
 
             project_config_result = (
                 FlextDbtLdapUtilities.DbtProjectManagement.create_dbt_project_config(
@@ -330,12 +334,17 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
 
             if project_config_result.is_success:
                 project_config = project_config_result.unwrap()
-                self.logger.info(
-                    f"Successfully created DBT project config using utilities: {project_config['name']}"
+                project_name_value = (
+                    project_config.get("name")
+                    if isinstance(project_config, dict)
+                    else "unknown"
                 )
-                # Apply project config to main config
+                self.logger.info(
+                    f"Successfully created DBT project config using utilities: {project_name_value}"
+                )
+                # Apply project config to main config if supported
                 if hasattr(config, "project_config"):
-                    config.project_config = project_config
+                    setattr(config, "project_config", project_config)
 
             # Create and return service
             service_result = self.create_service()
@@ -351,10 +360,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             )
 
 
-# Alias for backward compatibility
-FlextDbtLdapAPI = FlextDbtLdap
-
+# No aliases per FLEXT standards - use FlextDbtLdap directly
 __all__ = [
     "FlextDbtLdap",
-    "FlextDbtLdapAPI",
 ]

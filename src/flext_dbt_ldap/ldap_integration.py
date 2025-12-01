@@ -52,7 +52,7 @@ class FlextDbtLdapIntegration:
             return df
 
     @staticmethod
-    def validate_ldap_data_quality(df: object) -> dict[str, object]:
+    def validate_ldap_data_quality(df: object) -> FlextDbtLdapTypes.DbtLdapCore.ValidationDict:
         """Validate LDAP data quality using flext-ldap generic validation.
 
         ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
@@ -79,8 +79,8 @@ class FlextDbtLdapIntegration:
                 )
                 # Minimal quality metrics without external API dependency
                 return {
-                    "total_entries": "entry_count",
-                    "valid_dns": "entry_count",
+                    "total_entries": entry_count,
+                    "valid_dns": entry_count,
                     "quality_score": 1.0,
                 }
 
@@ -98,7 +98,7 @@ process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_
 validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
 
 
-__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
+__all__: list[str] = [
     "FlextDbtLdapIntegration",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",

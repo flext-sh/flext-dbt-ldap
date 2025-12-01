@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import ClassVar, Self, cast
+from typing import ClassVar, Self
 
 from flext_core import FlextConfig, FlextLogger, FlextResult
 from flext_ldap import FlextLdapModels
@@ -104,7 +104,7 @@ class FlextDbtLdapConfig(FlextConfig):
     min_quality_threshold: float = Field(
         default=0.8, ge=0.0, le=1.0, description="Minimum data quality threshold"
     )
-    required_attributes: ClassVar[FlextDbtLdapTypes.DbtLdapCore.StringList] = [
+    required_attributes: ClassVar[list[str]] = [
         "cn",
         "objectClass",
     ]
@@ -602,7 +602,7 @@ class FlextDbtLdapConfig(FlextConfig):
         )
 
         return FlextLdapModels.ConnectionConfig(
-            server=self.ldap_host,
+            host=self.ldap_host,
             port=self.ldap_port,
             bind_dn=bind_dn,
             bind_password=bind_password,
@@ -610,8 +610,10 @@ class FlextDbtLdapConfig(FlextConfig):
 
     def get_meltano_config(self) -> FlextMeltanoConfig:
         """Get Meltano configuration for flext-meltano integration."""
+        from collections.abc import Mapping
+
         # Convert string to proper Environment string value
-        environment_mapping: dict[str, str] = {
+        environment_mapping: Mapping[str, str] = {
             "dev": "development",
             "development": "development",
             "staging": "staging",
@@ -631,15 +633,17 @@ class FlextDbtLdapConfig(FlextConfig):
             environment=environment_value,
         )
 
-    def get_ldap_quality_config(self) -> dict[str, object]:
+    def get_ldap_quality_config(
+        self,
+    ) -> FlextDbtLdapTypes.DbtTransformation.DataValidation:
         """Get data quality configuration for LDAP validation."""
         return {
-            "min_quality_threshold": self.min_quality_threshold,
-            "required_attributes": self.required_attributes,
+            "min_quality_threshold": str(self.min_quality_threshold),
+            "required_attributes": list(self.required_attributes),
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> dict[str, object]:
+    def get_dbt_ldap_logging_config(self) -> FlextDbtLdapTypes.DbtLdapCore.SettingsDict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,
@@ -791,7 +795,7 @@ class FlextDbtLdapConfig(FlextConfig):
                     # Create instance with provided kwargs
                     instance = cls(**kwargs)
                     cls._instances[cls] = instance
-        return cast("Self", cls._instances[cls])
+        return cls._instances[cls]
 
     @classmethod
     def reset_shared_instance(cls) -> None:
@@ -806,6 +810,6 @@ class FlextDbtLdapConfig(FlextConfig):
         cls.reset_shared_instance()
 
 
-__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
+__all__: list[str] = [
     "FlextDbtLdapConfig",
 ]
