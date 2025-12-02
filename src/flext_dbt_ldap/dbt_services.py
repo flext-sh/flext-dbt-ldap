@@ -225,12 +225,8 @@ class FlextDbtLdapService:
 
         # Sync users
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
-        sync_results["users"] = (
-            user_result.value
-            if user_result.value
-            else {}
-            if user_result.is_success
-            else {"error": str(user_result.error)}
+        sync_results["users"] = user_result.value or (
+            {} if user_result.is_success else {"error": str(user_result.error)}
         )
 
         # Sync groups
@@ -238,20 +234,14 @@ class FlextDbtLdapService:
             search_base,
             incremental=incremental,
         )
-        sync_results["groups"] = (
-            group_result.value
-            if group_result.value
-            else {}
-            if group_result.is_success
-            else {"error": str(group_result.error)}
+        sync_results["groups"] = group_result.value or (
+            {} if group_result.is_success else {"error": str(group_result.error)}
         )
 
         # Sync memberships
         membership_result = self.sync_memberships_to_warehouse(search_base)
-        sync_results["memberships"] = (
-            membership_result.value
-            if membership_result.value
-            else {}
+        sync_results["memberships"] = membership_result.value or (
+            {}
             if membership_result.is_success
             else {"error": str(membership_result.error)}
         )
@@ -307,7 +297,7 @@ class FlextDbtLdapService:
             if test_result.is_success:
                 logger.info("Data quality validation completed successfully")
                 validation_result: FlextDbtLdapTypes.DbtLdapCore.ValidationDict = (
-                    test_result.value if test_result.value else {}
+                    test_result.value or {}
                 )
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ValidationDict].ok(
                     validation_result
@@ -349,7 +339,7 @@ class FlextDbtLdapService:
             if run_result.is_success:
                 logger.info("dBT models executed successfully")
                 result_data: FlextDbtLdapTypes.DbtLdapCore.ResultDict = (
-                    run_result.value if run_result.value else {}
+                    run_result.value or {}
                 )
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].ok(
                     result_data

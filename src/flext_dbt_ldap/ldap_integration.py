@@ -52,7 +52,9 @@ class FlextDbtLdapIntegration:
             return df
 
     @staticmethod
-    def validate_ldap_data_quality(df: object) -> FlextDbtLdapTypes.DbtLdapCore.ValidationDict:
+    def validate_ldap_data_quality(
+        df: object,
+    ) -> FlextDbtLdapTypes.DbtLdapCore.ValidationDict:
         """Validate LDAP data quality using flext-ldap generic validation.
 
         ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
