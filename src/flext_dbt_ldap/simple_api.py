@@ -344,7 +344,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                 )
                 # Apply project config to main config if supported
                 if hasattr(config, "project_config"):
-                    setattr(config, "project_config", project_config)
+                    config.project_config = project_config
 
             # Create and return service
             service_result = self.create_service()

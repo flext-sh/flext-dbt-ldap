@@ -128,11 +128,10 @@ class FlextDbtLdapClient:
                 if getattr(entry, "dn", ""):
                     valid_dns += 1
                 attrs = getattr(entry, "attributes", {})
-                if isinstance(attrs, dict):
-                    if all(
-                        attr in attrs and attrs[attr] for attr in required_attributes
-                    ):
-                        valid_entries += 1
+                if isinstance(attrs, dict) and all(
+                    attr in attrs and attrs[attr] for attr in required_attributes
+                ):
+                    valid_entries += 1
             quality_score = (
                 (valid_entries / total_entries) if total_entries > 0 else 0.0
             )
@@ -194,9 +193,9 @@ class FlextDbtLdapClient:
 
             result_data: FlextDbtLdapTypes.DbtLdapCore.ResultDict = {
                 "status": "completed",
-                "models_run": model_list if model_list else [],
+                "models_run": model_list or [],
                 "entries_processed": len(entries),
-                "dbt_results": dbt_result.value if dbt_result.value else {},
+                "dbt_results": dbt_result.value or {},
             }
             logger.info("DBT transformation completed successfully")
             return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].ok(result_data)
@@ -252,12 +251,8 @@ class FlextDbtLdapClient:
         # Combine results
         pipeline_results: FlextDbtLdapTypes.DbtLdapCore.ResultDict = {
             "extracted_entries": len(entries),
-            "validation_metrics": validate_result.value
-            if validate_result.value
-            else {},
-            "transformation_results": transform_result.value
-            if transform_result.value
-            else {},
+            "validation_metrics": validate_result.value or {},
+            "transformation_results": transform_result.value or {},
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
         return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].ok(
