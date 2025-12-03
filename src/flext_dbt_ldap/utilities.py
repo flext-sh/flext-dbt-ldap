@@ -945,9 +945,7 @@ where 1=1
             )
 
         @staticmethod
-        def update[M: BaseModel](
-            instance: M, **updates: t.JsonValue
-        ) -> FlextResult[M]:
+        def update[M: BaseModel](instance: M, **updates: t.JsonValue) -> FlextResult[M]:
             """Update model instance."""
             try:
                 current = instance.model_dump()
