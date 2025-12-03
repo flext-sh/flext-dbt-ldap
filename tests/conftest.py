@@ -14,7 +14,7 @@ import tempfile
 from collections.abc import Generator
 
 import pytest
-from flext_core import FlextUtilities
+from flext_core import u
 from flext_tests import FlextTestDocker
 
 
@@ -538,7 +538,7 @@ def mock_ldap_dbt_adapter() -> object:
 
         def split(self, dn: str) -> bool:
             """Validate DN format."""
-            return bool(re.match(FlextUtilities.DN.Constants.DN_FORMAT_PATTERN, dn))
+            return bool(re.match(u.DN_FORMAT_PATTERN, dn))
 
         def parse_ldap_attributes(
             self,

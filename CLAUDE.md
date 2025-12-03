@@ -13,6 +13,7 @@
 **Python**: 3.13+
 
 **CRITICAL INTEGRATION DEPENDENCIES**:
+
 - **flext-meltano**: MANDATORY for ALL DBT operations (ZERO TOLERANCE for direct dbt imports)
 - **flext-ldap**: MANDATORY for ALL LDAP operations (ZERO TOLERANCE for direct ldap3 imports)
 - **flext-core**: Foundation patterns (FlextResult, FlextService, FlextContainer)
@@ -59,12 +60,14 @@ if result.is_success:
 ### ZERO TOLERANCE Policies
 
 **ABSOLUTELY FORBIDDEN**:
+
 - ❌ Direct dbt imports (use flext-meltano)
 - ❌ Direct ldap3 imports (use flext-ldap)
 - ❌ Exception-based error handling (use FlextResult)
 - ❌ Type ignores or `Any` types
 
 **MANDATORY**:
+
 - ✅ Use `FlextResult[T]` for all operations
 - ✅ Use flext-meltano for DBT operations
 - ✅ Use flext-ldap for LDAP operations
