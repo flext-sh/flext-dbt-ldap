@@ -12,7 +12,7 @@ from functools import cache, wraps
 from pathlib import Path
 from typing import Annotated, TypeIs, TypeVar, get_type_hints
 
-from flext_core import FlextContainer, FlextResult, FlextTypes, FlextUtilities
+from flext_core import FlextContainer, FlextResult, t, u
 from pydantic import BaseModel, BeforeValidator, ConfigDict
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
@@ -20,8 +20,8 @@ from flext_dbt_ldap.typings import FlextDbtLdapTypes
 T = TypeVar("T")
 
 
-class FlextDbtLdapUtilities(FlextUtilities):
-    """Unified DBT LDAP utilities service extending FlextUtilities.
+class FlextDbtLdapUtilities(u):
+    """Unified DBT LDAP utilities service extending u.
 
     Provides complete DBT LDAP utilities for data transformation, LDAP integration,
     and DBT project management without duplicating functionality.
@@ -887,9 +887,9 @@ where 1=1
 
         @staticmethod
         def parse_kwargs[E: StrEnum](
-            kwargs: Mapping[str, FlextTypes.JsonValue],
+            kwargs: Mapping[str, t.JsonValue],
             enum_fields: Mapping[str, type[E]],
-        ) -> FlextResult[dict[str, FlextTypes.JsonValue]]:
+        ) -> FlextResult[dict[str, t.JsonValue]]:
             """Parse kwargs with enum fields."""
             parsed, errors = dict(kwargs), []
             for field, enum_cls in enum_fields.items():
@@ -923,7 +923,7 @@ where 1=1
         @staticmethod
         def from_dict[M: BaseModel](
             model_cls: type[M],
-            data: Mapping[str, FlextTypes.JsonValue],
+            data: Mapping[str, t.JsonValue],
             *,
             strict: bool = False,
         ) -> FlextResult[M]:
@@ -936,8 +936,8 @@ where 1=1
         @staticmethod
         def merge_defaults[M: BaseModel](
             model_cls: type[M],
-            defaults: Mapping[str, FlextTypes.JsonValue],
-            overrides: Mapping[str, FlextTypes.JsonValue],
+            defaults: Mapping[str, t.JsonValue],
+            overrides: Mapping[str, t.JsonValue],
         ) -> FlextResult[M]:
             """Merge defaults with overrides."""
             return FlextDbtLdapUtilities.Model.from_dict(
@@ -946,7 +946,7 @@ where 1=1
 
         @staticmethod
         def update[M: BaseModel](
-            instance: M, **updates: FlextTypes.JsonValue
+            instance: M, **updates: t.JsonValue
         ) -> FlextResult[M]:
             """Update model instance."""
             try:
