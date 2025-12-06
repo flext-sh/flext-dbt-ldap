@@ -319,7 +319,8 @@ class FlextDbtLdapProtocols:
             """Protocol for DBT macro operations with LDAP data."""
 
             def generate_ldap_source_macro(
-                self, source_config: FlextDbtLdapTypes.DbtSource.SourceDefinition
+                self,
+                source_config: FlextDbtLdapTypes.DbtSource.SourceDefinition,
             ) -> "p.ResultProtocol[str]":
                 """Generate DBT macro for LDAP data sources.
 
@@ -332,7 +333,8 @@ class FlextDbtLdapProtocols:
                 """
 
             def create_ldap_test_macro(
-                self, test_config: FlextDbtLdapTypes.DbtProject.TestConfiguration
+                self,
+                test_config: FlextDbtLdapTypes.DbtProject.TestConfiguration,
             ) -> "p.ResultProtocol[str]":
                 """Create DBT test macro for LDAP data validation.
 
@@ -359,7 +361,8 @@ class FlextDbtLdapProtocols:
                 """
 
             def create_ldap_snapshot_macro(
-                self, snapshot_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict
+                self,
+                snapshot_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict,
             ) -> "p.ResultProtocol[str]":
                 """Create DBT snapshot macro for LDAP data versioning.
 
@@ -476,7 +479,8 @@ class FlextDbtLdapProtocols:
                 """
 
             def monitor_dbt_performance(
-                self, run_results: FlextDbtLdapTypes.DbtLdapCore.ResultDict
+                self,
+                run_results: FlextDbtLdapTypes.DbtLdapCore.ResultDict,
             ) -> "p.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.MetricsDict]":
                 """Monitor DBT performance with LDAP data processing.
 
@@ -489,7 +493,8 @@ class FlextDbtLdapProtocols:
                 """
 
             def optimize_ldap_queries(
-                self, query_config: FlextDbtLdapTypes.LdapData.LdapQuery
+                self,
+                query_config: FlextDbtLdapTypes.LdapData.LdapQuery,
             ) -> "p.ResultProtocol[FlextDbtLdapTypes.LdapData.LdapQuery]":
                 """Optimize LDAP queries for DBT data extraction.
 
@@ -506,7 +511,9 @@ class FlextDbtLdapProtocols:
             """Protocol for DBT LDAP monitoring operations."""
 
             def track_dbt_run_metrics(
-                self, run_id: str, metrics: FlextDbtLdapTypes.DbtLdapCore.MetricsDict
+                self,
+                run_id: str,
+                metrics: FlextDbtLdapTypes.DbtLdapCore.MetricsDict,
             ) -> "p.ResultProtocol[bool]":
                 """Track DBT run metrics for LDAP data processing.
 
@@ -520,7 +527,8 @@ class FlextDbtLdapProtocols:
                 """
 
             def monitor_ldap_data_freshness(
-                self, freshness_config: FlextDbtLdapTypes.DbtSource.SourceFreshness
+                self,
+                freshness_config: FlextDbtLdapTypes.DbtSource.SourceFreshness,
             ) -> "p.ResultProtocol[FlextDbtLdapTypes.DbtSource.SourceFreshness]":
                 """Monitor LDAP data freshness for DBT processing.
 
@@ -543,7 +551,8 @@ class FlextDbtLdapProtocols:
                 """
 
             def create_monitoring_dashboard(
-                self, dashboard_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict
+                self,
+                dashboard_config: FlextDbtLdapTypes.DbtLdapCore.ConfigDict,
             ) -> "p.ResultProtocol[FlextDbtLdapTypes.DbtLdapCore.ResultDict]":
                 """Create monitoring dashboard for DBT LDAP operations.
 
@@ -556,32 +565,48 @@ class FlextDbtLdapProtocols:
                 """
 
     # ============================================================================
-    # BACKWARD COMPATIBILITY ALIASES (100% COMPATIBILITY)
+    # BACKWARD COMPATIBILITY - Real Inheritance Protocol Classes
     # ============================================================================
 
-    # DBT operations
-    DbtProtocol = DbtLdap.DbtProtocol
+    # DBT operations - real inheritance (DbtLdap.DbtProtocol already inherits Protocol)
+    @runtime_checkable
+    class DbtProtocol(DbtLdap.DbtProtocol):
+        """DBT Protocol - real inheritance."""
 
-    # LDAP integration
-    LdapIntegrationProtocol = DbtLdap.LdapIntegrationProtocol
+    # LDAP integration - real inheritance
+    @runtime_checkable
+    class LdapIntegrationProtocol(DbtLdap.LdapIntegrationProtocol):
+        """LDAP Integration Protocol - real inheritance."""
 
-    # Data modeling
-    ModelingProtocol = DbtLdap.ModelingProtocol
+    # Data modeling - real inheritance
+    @runtime_checkable
+    class ModelingProtocol(DbtLdap.ModelingProtocol):
+        """Modeling Protocol - real inheritance."""
 
-    # Transformations
-    TransformationProtocol = DbtLdap.TransformationProtocol
+    # Transformations - real inheritance
+    @runtime_checkable
+    class TransformationProtocol(DbtLdap.TransformationProtocol):
+        """Transformation Protocol - real inheritance."""
 
-    # DBT macros
-    MacroProtocol = DbtLdap.MacroProtocol
+    # DBT macros - real inheritance
+    @runtime_checkable
+    class MacroProtocol(DbtLdap.MacroProtocol):
+        """Macro Protocol - real inheritance."""
 
-    # Data quality
-    QualityProtocol = DbtLdap.QualityProtocol
+    # Data quality - real inheritance
+    @runtime_checkable
+    class QualityProtocol(DbtLdap.QualityProtocol):
+        """Quality Protocol - real inheritance."""
 
-    # Performance optimization
-    PerformanceProtocol = DbtLdap.PerformanceProtocol
+    # Performance optimization - real inheritance
+    @runtime_checkable
+    class PerformanceProtocol(DbtLdap.PerformanceProtocol):
+        """Performance Protocol - real inheritance."""
 
-    # Monitoring
-    MonitoringProtocol = DbtLdap.MonitoringProtocol
+    # Monitoring - real inheritance
+    @runtime_checkable
+    class MonitoringProtocol(DbtLdap.MonitoringProtocol):
+        """Monitoring Protocol - real inheritance."""
 
 
 __all__ = [

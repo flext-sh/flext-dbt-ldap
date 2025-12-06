@@ -88,7 +88,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """
         try:
             self.logger.info(
-                "Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port
+                "Creating DBT LDAP config: host=%s, port=%d",
+                ldap_host,
+                ldap_port,
             )
 
             # Create base config
@@ -161,7 +163,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             return FlextResult[FlextDbtLdapService].ok(service)
         except Exception as e:
             return FlextResult[FlextDbtLdapService].fail(
-                f"Service creation failed: {e}"
+                f"Service creation failed: {e}",
             )
 
     # =============================================================================
@@ -205,7 +207,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             return FlextResult[FlextDbtLdapModels.UserDimension].ok(user)
         except Exception as e:
             return FlextResult[FlextDbtLdapModels.UserDimension].fail(
-                f"User dimension creation failed: {e}"
+                f"User dimension creation failed: {e}",
             )
 
     def create_group_dimension(
@@ -245,7 +247,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             return FlextResult[FlextDbtLdapModels.GroupDimension].ok(group)
         except Exception as e:
             return FlextResult[FlextDbtLdapModels.GroupDimension].fail(
-                f"Group dimension creation failed: {e}"
+                f"Group dimension creation failed: {e}",
             )
 
     def create_transformer(self) -> FlextResult[FlextDbtLdapModels.Transformer]:
@@ -261,7 +263,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             return FlextResult[FlextDbtLdapModels.Transformer].ok(transformer)
         except Exception as e:
             return FlextResult[FlextDbtLdapModels.Transformer].fail(
-                f"Transformer creation failed: {e}"
+                f"Transformer creation failed: {e}",
             )
 
     # =============================================================================
@@ -292,7 +294,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         """
         try:
             self.logger.info(
-                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities"
+                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities",
             )
 
             # Create base configuration
@@ -304,7 +306,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             )
             if config_result.is_failure:
                 return FlextResult[FlextDbtLdapService].fail(
-                    f"Config creation failed: {config_result.error}"
+                    f"Config creation failed: {config_result.error}",
                 )
 
             config = config_result.unwrap()
@@ -327,7 +329,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                     project_name=project_name,
                     ldap_sources=ldap_sources,
                     target_schema=config_kwargs.get(
-                        "target_schema", "ldap_transformed"
+                        "target_schema",
+                        "ldap_transformed",
                     ),
                 )
             )
@@ -340,7 +343,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                     else "unknown"
                 )
                 self.logger.info(
-                    f"Successfully created DBT project config using utilities: {project_name_value}"
+                    "Successfully created DBT project config using utilities: %s",
+                    project_name_value,
                 )
                 # Apply project config to main config if supported
                 if hasattr(config, "project_config"):
@@ -350,13 +354,13 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             service_result = self.create_service()
             if service_result.is_failure:
                 return FlextResult[FlextDbtLdapService].fail(
-                    f"Service creation failed: {service_result.error}"
+                    f"Service creation failed: {service_result.error}",
                 )
 
             return service_result
         except Exception as e:
             return FlextResult[FlextDbtLdapService].fail(
-                f"Pipeline creation failed: {e}"
+                f"Pipeline creation failed: {e}",
             )
 
 

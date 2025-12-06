@@ -11,8 +11,10 @@ from __future__ import annotations
 
 from typing import Final
 
+from flext_dbt_ldap.constants import FlextDbtLdapConstants
 
-class TestConstants:
+
+class TestsConstants(FlextDbtLdapConstants):
     """Centralized test constants following flext-core nested class pattern."""
 
     class Paths:
@@ -49,3 +51,8 @@ class TestConstants:
             "groups": "stg_groups",
         }
         TEST_BATCH_SIZE: Final[int] = 1000
+
+
+# Standardized short name for use in tests
+c = TestsConstants
+__all__ = ["TestsConstants", "c"]
