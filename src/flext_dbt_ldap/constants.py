@@ -188,13 +188,23 @@ class FlextDbtLdapConstants(FlextConstants):
 
         # LDAP operation literal - matches LdapOperations StrEnum
         type LdapOperationLiteral = Literal[
-            "search", "bind", "unbind", "add", "modify", "delete"
+            "search",
+            "bind",
+            "unbind",
+            "add",
+            "modify",
+            "delete",
         ]
         """LDAP operation literal."""
 
         # DBT command literal - matches DbtCommands StrEnum
         type DbtCommandLiteral = Literal[
-            "run", "test", "build", "seed", "snapshot", "docs"
+            "run",
+            "test",
+            "build",
+            "seed",
+            "snapshot",
+            "docs",
         ]
         """DBT command literal."""
 

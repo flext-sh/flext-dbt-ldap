@@ -26,17 +26,35 @@ from flext_dbt_ldap.typings import FlextDbtLdapTypes
 # Use FlextExceptions directly (current signature)
 _exceptions = FlextExceptions
 
-# Extract exception classes with precise typing for MyPy
-# Only create aliases for exceptions that actually exist in the factory
-FlextDbtLdapError = FlextExceptions.BaseError
-FlextDbtLdapValidationError = FlextExceptions.ValidationError
-FlextDbtLdapConfigurationError = FlextExceptions.ConfigurationError
 
-# Create aliases for additional exception types using existing base classes
-FlextDbtLdapConnectionError = FlextDbtLdapError
-FlextDbtLdapProcessingError = FlextDbtLdapError
-FlextDbtLdapAuthenticationError = FlextDbtLdapError
-FlextDbtLdapTimeoutError = FlextDbtLdapError
+# Exception classes with real inheritance for precise typing
+class FlextDbtLdapError(FlextExceptions.BaseError):
+    """FlextDbtLdapError - real inheritance from BaseError."""
+
+
+class FlextDbtLdapValidationError(FlextExceptions.ValidationError):
+    """FlextDbtLdapValidationError - real inheritance from ValidationError."""
+
+
+class FlextDbtLdapConfigurationError(FlextExceptions.ConfigurationError):
+    """FlextDbtLdapConfigurationError - real inheritance from ConfigurationError."""
+
+
+# Additional exception classes with real inheritance using base classes
+class FlextDbtLdapConnectionError(FlextDbtLdapError):
+    """FlextDbtLdapConnectionError - real inheritance from FlextDbtLdapError."""
+
+
+class FlextDbtLdapProcessingError(FlextDbtLdapError):
+    """FlextDbtLdapProcessingError - real inheritance from FlextDbtLdapError."""
+
+
+class FlextDbtLdapAuthenticationError(FlextDbtLdapError):
+    """FlextDbtLdapAuthenticationError - real inheritance from FlextDbtLdapError."""
+
+
+class FlextDbtLdapTimeoutError(FlextDbtLdapError):
+    """FlextDbtLdapTimeoutError - real inheritance from FlextDbtLdapError."""
 
 
 # Domain-specific DBT LDAP errors using composition over duplication
@@ -46,7 +64,8 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
     """LDAP DBT model-specific errors using DRY foundation."""
 
     def _extract_common_kwargs(
-        self, kwargs: dict
+        self,
+        kwargs: dict,
     ) -> tuple[dict, str | None, str | None]:
         """Extract common parameters from kwargs."""
         base_context = kwargs.get("context", {})
@@ -55,7 +74,9 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
         return base_context, correlation_id, error_code
 
     def _build_context(
-        self, base_context: dict, **extra_fields: object
+        self,
+        base_context: dict,
+        **extra_fields: object,
     ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
@@ -99,7 +120,8 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
     """LDAP DBT macro errors using DRY foundation."""
 
     def _extract_common_kwargs(
-        self, kwargs: dict
+        self,
+        kwargs: dict,
     ) -> tuple[dict, str | None, str | None]:
         """Extract common parameters from kwargs."""
         base_context = kwargs.get("context", {})
@@ -108,7 +130,9 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
         return base_context, correlation_id, error_code
 
     def _build_context(
-        self, base_context: dict, **extra_fields: object
+        self,
+        base_context: dict,
+        **extra_fields: object,
     ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
@@ -149,7 +173,8 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
     """LDAP DBT test errors using DRY foundation."""
 
     def _extract_common_kwargs(
-        self, kwargs: dict
+        self,
+        kwargs: dict,
     ) -> tuple[dict, str | None, str | None]:
         """Extract common parameters from kwargs."""
         base_context = kwargs.get("context", {})
@@ -158,7 +183,9 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         return base_context, correlation_id, error_code
 
     def _build_context(
-        self, base_context: dict, **extra_fields: object
+        self,
+        base_context: dict,
+        **extra_fields: object,
     ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)

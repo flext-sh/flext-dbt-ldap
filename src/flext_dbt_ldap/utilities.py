@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Annotated, TypeIs, TypeVar, get_type_hints
 
 from flext_core import FlextContainer, FlextResult, t, u
-from pydantic import BaseModel, BeforeValidator, ConfigDict
+from pydantic import BaseModel, BeforeValidator, ConfigDict, validate_call
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
 
@@ -97,7 +97,7 @@ class FlextDbtLdapUtilities(u):
                             "materialized": "table",
                             "schema": target_schema,
                             "tags": ["ldap", "transformation"],
-                        }
+                        },
                     },
                     "sources": {"ldap_sources": {"tables": ldap_sources}},
                 }
@@ -148,16 +148,18 @@ class FlextDbtLdapUtilities(u):
                                 "password": connection_config.get("prod_password", ""),
                                 "port": connection_config.get("port", 5432),
                                 "dbname": connection_config.get(
-                                    "prod_dbname", "ldap_prod"
+                                    "prod_dbname",
+                                    "ldap_prod",
                                 ),
                                 "schema": connection_config.get(
-                                    "prod_schema", "public"
+                                    "prod_schema",
+                                    "public",
                                 ),
                                 "threads": connection_config.get("threads", 8),
                                 "keepalives_idle": 0,
                             },
                         },
-                    }
+                    },
                 }
 
                 return FlextResult[
@@ -195,11 +197,11 @@ class FlextDbtLdapUtilities(u):
                     validation_results[name] = path.exists()
 
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.BoolDict].ok(
-                    validation_results
+                    validation_results,
                 )
             except Exception as e:
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.BoolDict].fail(
-                    f"DBT project structure validation failed: {e}"
+                    f"DBT project structure validation failed: {e}",
                 )
 
     class LdapDataTransformation:
@@ -250,18 +252,18 @@ class FlextDbtLdapUtilities(u):
                                     "name": source_name,
                                     "description": f"LDAP {source_name} data",
                                     "columns": columns,
-                                }
+                                },
                             ],
-                        }
+                        },
                     ],
                 }
 
                 return FlextResult[FlextDbtLdapTypes.DbtSource.SourceSchema].ok(
-                    source_schema
+                    source_schema,
                 )
             except Exception as e:
                 return FlextResult[FlextDbtLdapTypes.DbtSource.SourceSchema].fail(
-                    f"LDAP source schema generation failed: {e}"
+                    f"LDAP source schema generation failed: {e}",
                 )
 
         @staticmethod
@@ -310,7 +312,7 @@ where 1=1
                 return FlextResult[str].ok(model_sql)
             except Exception as e:
                 return FlextResult[str].fail(
-                    f"LDAP transformation model creation failed: {e}"
+                    f"LDAP transformation model creation failed: {e}",
                 )
 
         @staticmethod
@@ -340,36 +342,48 @@ where 1=1
                                 "not_null",
                             ],
                             "columns": [],
-                        }
+                        },
                     ],
                 }
 
                 # Add column-specific tests
                 columns_config_value = test_config.get("columns")
-                if isinstance(columns_config_value, dict):
-                    models_list_value = tests.get("models")
-                    if isinstance(models_list_value, list) and models_list_value:
-                        model_dict = models_list_value[0]
-                        if isinstance(model_dict, dict):
-                            columns_list_value = model_dict.get("columns")
-                            if isinstance(columns_list_value, list):
-                                for (
-                                    column,
-                                    column_tests,
-                                ) in columns_config_value.items():
-                                    column_config: FlextDbtLdapTypes.DbtLdapCore.DataDict = {
-                                        "name": column,
-                                        "description": f"Tests for {column} column",
-                                        "tests": column_tests,
-                                    }
-                                    columns_list_value.append(column_config)
+                if not isinstance(columns_config_value, dict):
+                    return FlextResult[
+                        FlextDbtLdapTypes.DbtProject.TestConfiguration
+                    ].ok(tests)
+
+                models_list_value = tests.get("models")
+                if not isinstance(models_list_value, list) or not models_list_value:
+                    return FlextResult[
+                        FlextDbtLdapTypes.DbtProject.TestConfiguration
+                    ].ok(tests)
+
+                model_dict = models_list_value[0]
+                if not isinstance(model_dict, dict):
+                    return FlextResult[
+                        FlextDbtLdapTypes.DbtProject.TestConfiguration
+                    ].ok(tests)
+
+                columns_list_value = model_dict.get("columns")
+                if isinstance(columns_list_value, list):
+                    for (
+                        column,
+                        column_tests,
+                    ) in columns_config_value.items():
+                        column_config: FlextDbtLdapTypes.DbtLdapCore.DataDict = {
+                            "name": column,
+                            "description": f"Tests for {column} column",
+                            "tests": column_tests,
+                        }
+                        columns_list_value.append(column_config)
 
                 return FlextResult[FlextDbtLdapTypes.DbtProject.TestConfiguration].ok(
-                    tests
+                    tests,
                 )
             except Exception as e:
                 return FlextResult[FlextDbtLdapTypes.DbtProject.TestConfiguration].fail(
-                    f"LDAP data tests generation failed: {e}"
+                    f"LDAP data tests generation failed: {e}",
                 )
 
     class MacroManagement:
@@ -447,7 +461,7 @@ where 1=1
                 return FlextResult[str].ok(macro_sql)
             except Exception as e:
                 return FlextResult[str].fail(
-                    f"LDAP attribute macro creation failed: {e}"
+                    f"LDAP attribute macro creation failed: {e}",
                 )
 
         @staticmethod
@@ -483,7 +497,7 @@ where 1=1
                 return FlextResult[str].ok(macro_sql)
             except Exception as e:
                 return FlextResult[str].fail(
-                    f"LDAP normalization macro creation failed: {e}"
+                    f"LDAP normalization macro creation failed: {e}",
                 )
 
     class SchemaGeneration:
@@ -552,16 +566,16 @@ where 1=1
                                     "tests": ["not_null"],
                                 },
                             ],
-                        }
+                        },
                     ],
                 }
 
                 return FlextResult[FlextDbtLdapTypes.DbtModel.ModelDefinition].ok(
-                    user_schema
+                    user_schema,
                 )
             except Exception as e:
                 return FlextResult[FlextDbtLdapTypes.DbtModel.ModelDefinition].fail(
-                    f"User schema generation failed: {e}"
+                    f"User schema generation failed: {e}",
                 )
 
         @staticmethod
@@ -613,16 +627,16 @@ where 1=1
                                     "description": "Last modification timestamp",
                                 },
                             ],
-                        }
+                        },
                     ],
                 }
 
                 return FlextResult[FlextDbtLdapTypes.DbtModel.ModelDefinition].ok(
-                    group_schema
+                    group_schema,
                 )
             except Exception as e:
                 return FlextResult[FlextDbtLdapTypes.DbtModel.ModelDefinition].fail(
-                    f"Group schema generation failed: {e}"
+                    f"Group schema generation failed: {e}",
                 )
 
     class TransformationOptimization:
@@ -714,17 +728,17 @@ where 1=1
                 # Generate performance recommendations
                 if execution_time > cls.PERFORMANCE_EXECUTION_TIME_THRESHOLD:
                     recommendations.append(
-                        "Consider adding indexes or partitioning for large datasets"
+                        "Consider adding indexes or partitioning for large datasets",
                     )
 
                 if memory_usage > cls.PERFORMANCE_MEMORY_USAGE_THRESHOLD:
                     recommendations.append(
-                        "Consider processing data in smaller batches"
+                        "Consider processing data in smaller batches",
                     )
 
                 if rows_processed > cls.PERFORMANCE_ROWS_PROCESSED_THRESHOLD:
                     recommendations.append(
-                        "Consider incremental processing for large datasets"
+                        "Consider incremental processing for large datasets",
                     )
 
                 analysis: FlextDbtLdapTypes.DbtLdapCore.MetricsDict = {
@@ -735,11 +749,11 @@ where 1=1
                 }
 
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.MetricsDict].ok(
-                    analysis
+                    analysis,
                 )
             except Exception as e:
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.MetricsDict].fail(
-                    f"Performance analysis failed: {e}"
+                    f"Performance analysis failed: {e}",
                 )
 
     # ═══════════════════════════════════════════════════════════════════
@@ -758,7 +772,9 @@ where 1=1
 
         @staticmethod
         def is_subset[E: StrEnum](
-            enum_cls: type[E], valid: frozenset[E], value: object
+            enum_cls: type[E],
+            valid: frozenset[E],
+            value: object,
         ) -> TypeIs[E]:
             """Check if value is a valid subset member of the enum."""
             if isinstance(value, enum_cls):
@@ -808,7 +824,8 @@ where 1=1
 
         @staticmethod
         def parse_sequence[E: StrEnum](
-            enum_cls: type[E], values: Iterable[str | E]
+            enum_cls: type[E],
+            values: Iterable[str | E],
         ) -> FlextResult[tuple[E, ...]]:
             """Parse sequence of strings/enums to enum tuple."""
             parsed, errors = [], []
@@ -835,7 +852,7 @@ where 1=1
             def _coerce(value: Iterable[str | E]) -> list[E]:
                 if not isinstance(value, (list, tuple, set)):
                     msg = "Expected sequence"
-                    raise ValueError(msg)
+                    raise TypeError(msg)
                 result = []
                 for i, item in enumerate(value):
                     if isinstance(item, enum_cls):
@@ -843,12 +860,12 @@ where 1=1
                     elif isinstance(item, str):
                         try:
                             result.append(enum_cls(item))
-                        except ValueError:
+                        except ValueError as err:
                             msg = f"Invalid at [{i}]: {item!r}"
-                            raise ValueError(msg)
+                            raise ValueError(msg) from err
                     else:
                         msg = f"Expected str at [{i}]"
-                        raise ValueError(msg)
+                        raise TypeError(msg)
                 return result
 
             return _coerce
@@ -859,8 +876,6 @@ where 1=1
         @staticmethod
         def validated[P, R](func: Callable[P, R]) -> Callable[P, R]:
             """Decorator com validate_call - aceita str OU enum, converte auto."""
-            from pydantic import validate_call
-
             return validate_call(
                 config=ConfigDict(arbitrary_types_allowed=True, use_enum_values=False),
                 validate_return=False,
@@ -871,7 +886,6 @@ where 1=1
             func: Callable[P, FlextResult[R]],
         ) -> Callable[P, FlextResult[R]]:
             """ValidationError → FlextResult.fail()."""
-            from pydantic import validate_call
 
             @wraps(func)
             def wrapper(*args: object, **kwargs: object) -> FlextResult[R]:
@@ -909,7 +923,7 @@ where 1=1
             """Extrai parâmetros StrEnum da signature."""
             try:
                 hints = get_type_hints(func)
-            except:
+            except Exception:
                 return {}
             return {
                 n: h
@@ -941,7 +955,8 @@ where 1=1
         ) -> FlextResult[M]:
             """Merge defaults with overrides."""
             return FlextDbtLdapUtilities.Model.from_dict(
-                model_cls, {**defaults, **overrides}
+                model_cls,
+                {**defaults, **overrides},
             )
 
         @staticmethod

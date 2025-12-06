@@ -256,7 +256,7 @@ class FlextDbtLdapClient:
         }
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
         return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].ok(
-            pipeline_results
+            pipeline_results,
         )
 
     def _prepare_ldap_data_for_dbt(

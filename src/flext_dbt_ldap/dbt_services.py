@@ -106,7 +106,7 @@ class FlextDbtLdapService:
         except Exception as e:
             logger.exception("Unexpected error during user sync")
             return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].fail(
-                f"User sync error: {e}"
+                f"User sync error: {e}",
             )
 
     def sync_groups_to_warehouse(
@@ -151,7 +151,7 @@ class FlextDbtLdapService:
         except Exception as e:
             logger.exception("Unexpected error during group sync")
             return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].fail(
-                f"Group sync error: {e}"
+                f"Group sync error: {e}",
             )
 
     def sync_memberships_to_warehouse(
@@ -191,7 +191,7 @@ class FlextDbtLdapService:
         except Exception as e:
             logger.exception("Unexpected error during membership sync")
             return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].fail(
-                f"Membership sync error: {e}"
+                f"Membership sync error: {e}",
             )
 
     def run_full_data_warehouse_sync(
@@ -261,7 +261,7 @@ class FlextDbtLdapService:
         if overall_success:
             logger.info("Full data warehouse sync completed successfully")
             return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].ok(
-                sync_results
+                sync_results,
             )
         logger.warning(
             "Full data warehouse sync completed with %d/%d successful components",
@@ -300,7 +300,7 @@ class FlextDbtLdapService:
                     test_result.value or {}
                 )
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ValidationDict].ok(
-                    validation_result
+                    validation_result,
                 )
 
             logger.error("Data quality validation failed: %s", test_result.error)
@@ -342,7 +342,7 @@ class FlextDbtLdapService:
                     run_result.value or {}
                 )
                 return FlextResult[FlextDbtLdapTypes.DbtLdapCore.ResultDict].ok(
-                    result_data
+                    result_data,
                 )
 
             logger.error("dBT model execution failed: %s", run_result.error)

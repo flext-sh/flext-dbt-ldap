@@ -17,15 +17,15 @@ from subprocess import CompletedProcess
 import psycopg
 import pytest
 from flext_core import FlextLogger
-from flext_tests import FlextTestDocker
+from flext_tests import FlextTestsDocker
 
 logger = FlextLogger(__name__)
 
 
 @pytest.fixture(scope="session")
-def flext_docker() -> FlextTestDocker:
-    """Get FlextTestDocker unified management instance."""
-    return FlextTestDocker()
+def flext_docker() -> FlextTestsDocker:
+    """Get FlextTestsDocker unified management instance."""
+    return FlextTestsDocker()
 
 
 @pytest.fixture(scope="session")
@@ -36,15 +36,15 @@ def project_root() -> Path:
 
 @pytest.fixture(scope="session")
 def postgres_container(
-    flext_docker: FlextTestDocker,
+    flext_docker: FlextTestsDocker,
     project_root: Path,
 ) -> Generator[None]:
-    """Start PostgreSQL container for testing using FlextTestDocker."""
+    """Start PostgreSQL container for testing using FlextTestsDocker."""
     compose_file = project_root / "docker-compose.yml"
     # Start containers
-    logger.info("Starting PostgreSQL container using FlextTestDocker...")
+    logger.info("Starting PostgreSQL container using FlextTestsDocker...")
 
-    # Use FlextTestDocker compose management instead of direct subprocess calls
+    # Use FlextTestsDocker compose management instead of direct subprocess calls
     start_result = flext_docker.start_compose_service(
         str(compose_file),
         "postgres",
@@ -73,14 +73,16 @@ def postgres_container(
             logger.info("Waiting for PostgreSQL... (%s/%s)", i + 1, max_retries)
             time.sleep(2)
     yield
-    # Stop containers using FlextTestDocker
-    logger.info("Stopping PostgreSQL container using FlextTestDocker...")
+    # Stop containers using FlextTestsDocker
+    logger.info("Stopping PostgreSQL container using FlextTestsDocker...")
     stop_result = flext_docker.stop_compose_service(
-        str(compose_file), "postgres", remove_volumes=True
+        str(compose_file),
+        "postgres",
+        remove_volumes=True,
     )
     if stop_result.is_failure:
         logger.warning(
-            f"PostgreSQL container stop reported failure: {stop_result.error}"
+            f"PostgreSQL container stop reported failure: {stop_result.error}",
         )
 
 

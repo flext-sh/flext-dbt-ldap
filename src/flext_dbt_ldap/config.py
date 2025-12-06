@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
 from typing import ClassVar, Self
 
@@ -57,23 +58,27 @@ class FlextDbtLdapConfig(FlextConfig):
         description="LDAP server port",
     )
     ldap_use_tls: bool = Field(
-        default=False, description="Use TLS for LDAP connections"
+        default=False,
+        description="Use TLS for LDAP connections",
     )
     ldap_bind_dn: SecretStr | None = Field(
         default=None,
         description="LDAP bind distinguished name for authentication (sensitive)",
     )
     ldap_bind_password: SecretStr | None = Field(
-        default=None, description="LDAP bind password for authentication (sensitive)"
+        default=None,
+        description="LDAP bind password for authentication (sensitive)",
     )
     ldap_base_dn: str = Field(
-        default="", description="LDAP base distinguished name for searches"
+        default="",
+        description="LDAP base distinguished name for searches",
     )
 
     # DBT Execution Settings (from flext-meltano) using Field
     dbt_project_dir: str = Field(default=".", description="DBT project directory path")
     dbt_profiles_dir: str = Field(
-        default=".", description="DBT profiles directory path"
+        default=".",
+        description="DBT profiles directory path",
     )
     dbt_target: str = Field(default="dev", description="DBT target environment")
     dbt_threads: int = Field(
@@ -83,7 +88,8 @@ class FlextDbtLdapConfig(FlextConfig):
         description="Number of DBT threads",
     )
     dbt_log_level: FlextDbtLdapConstants.Literals.DbtLogLevelLiteral = Field(
-        default="info", description="DBT log level"
+        default="info",
+        description="DBT log level",
     )
 
     # LDAP-specific DBT Settings - using constants
@@ -102,14 +108,18 @@ class FlextDbtLdapConfig(FlextConfig):
 
     # Data Quality Settings
     min_quality_threshold: float = Field(
-        default=0.8, ge=0.0, le=1.0, description="Minimum data quality threshold"
+        default=0.8,
+        ge=0.0,
+        le=1.0,
+        description="Minimum data quality threshold",
     )
     required_attributes: ClassVar[list[str]] = [
         "cn",
         "objectClass",
     ]
     validate_dns: bool = Field(
-        default=True, description="Validate LDAP distinguished names"
+        default=True,
+        description="Validate LDAP distinguished names",
     )
 
     # DBT LDAP-specific logging configuration using FlextDbtLdapLoggingConstants
@@ -580,12 +590,12 @@ class FlextDbtLdapConfig(FlextConfig):
             # Validate performance thresholds
             if self.dbt_ldap_performance_threshold_warning < 0:
                 return FlextResult[None].fail(
-                    "Performance warning threshold must be non-negative"
+                    "Performance warning threshold must be non-negative",
                 )
 
             if self.dbt_ldap_performance_threshold_critical < 0:
                 return FlextResult[None].fail(
-                    "Performance critical threshold must be non-negative"
+                    "Performance critical threshold must be non-negative",
                 )
 
             return FlextResult[None].ok(None)
@@ -610,8 +620,6 @@ class FlextDbtLdapConfig(FlextConfig):
 
     def get_meltano_config(self) -> FlextMeltanoConfig:
         """Get Meltano configuration for flext-meltano integration."""
-        from collections.abc import Mapping
-
         # Convert string to proper Environment string value
         environment_mapping: Mapping[str, str] = {
             "dev": "development",
@@ -725,11 +733,15 @@ class FlextDbtLdapConfig(FlextConfig):
 
     @classmethod
     def create_for_environment(
-        cls, environment: str, **overrides: object
+        cls,
+        environment: str,
+        **overrides: object,
     ) -> FlextDbtLdapConfig:
         """Create configuration for specific environment using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
-            project_name="flext-dbt-ldap", environment=environment, **overrides
+            project_name="flext-dbt-ldap",
+            environment=environment,
+            **overrides,
         )
 
     @classmethod
