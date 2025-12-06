@@ -10,10 +10,10 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import ClassVar, Final, Literal
 
-from flext_core import FlextConstants
+from flext_core import c as c_core
 
 
-class FlextDbtLdapConstants(FlextConstants):
+class FlextDbtLdapConstants(c_core):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
 
     class Connection:
@@ -22,9 +22,9 @@ class FlextDbtLdapConstants(FlextConstants):
         class Ldap:
             """Standard LDAP connection settings."""
 
-            DEFAULT_HOST: Final[str] = FlextConstants.Platform.DEFAULT_HOST
+            DEFAULT_HOST: Final[str] = c_core.Platform.DEFAULT_HOST
             DEFAULT_PORT: Final[int] = 389  # Standard LDAP port
-            DEFAULT_TIMEOUT: Final[int] = FlextConstants.Network.DEFAULT_TIMEOUT
+            DEFAULT_TIMEOUT: Final[int] = c_core.Network.DEFAULT_TIMEOUT
 
         class Ldaps:
             """Secure LDAP connection settings."""
@@ -45,15 +45,15 @@ class FlextDbtLdapConstants(FlextConstants):
     class DbtProcessing:
         """DBT LDAP transformation configuration."""
 
-        DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
-        MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+        DEFAULT_BATCH_SIZE = c_core.Performance.BatchProcessing.DEFAULT_SIZE
+        MAX_BATCH_SIZE = c_core.Performance.BatchProcessing.MAX_ITEMS
 
     class DbtLogging:
         """DBT LDAP-specific logging constants."""
 
         # Default Logging Levels for DBT LDAP
-        DEFAULT_LEVEL: Final[str] = FlextConstants.Logging.DEFAULT_LEVEL
-        AUDIT_LOG_LEVEL: Final[str] = FlextConstants.Logging.INFO
+        DEFAULT_LEVEL: Final[str] = c_core.Logging.DEFAULT_LEVEL
+        AUDIT_LOG_LEVEL: Final[str] = c_core.Logging.INFO
 
         # DBT Operation Logging
         LOG_DBT_OPERATIONS: Final[bool] = True
