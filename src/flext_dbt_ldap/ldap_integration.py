@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from flext_core import FlextLogger
 
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -54,7 +54,7 @@ class FlextDbtLdapIntegration:
     @staticmethod
     def validate_ldap_data_quality(
         df: object,
-    ) -> FlextDbtLdapTypes.DbtLdapCore.ValidationDict:
+    ) -> t.DbtLdapCore.ValidationDict:
         """Validate LDAP data quality using flext-ldap generic validation.
 
         ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API

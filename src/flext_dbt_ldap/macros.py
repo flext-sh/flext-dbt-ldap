@@ -9,8 +9,6 @@ from __future__ import annotations
 
 from flext_core import FlextLogger
 
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
-
 logger = FlextLogger(__name__)
 
 
@@ -233,6 +231,6 @@ class FlextDbtLdapMacros:
         )
 
 
-__all__: FlextDbtLdapTypes.DbtLdapCore.StringList = [
+__all__: list[str] = [
     "FlextDbtLdapMacros",
 ]

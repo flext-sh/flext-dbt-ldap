@@ -15,7 +15,7 @@ from flext_core import m as m_core, r
 from flext_ldap import FlextLdapModels
 from pydantic import BaseModel, ConfigDict
 
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import t
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -106,7 +106,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User ID and common name are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -186,7 +186,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("Member count cannot be negative")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -218,7 +218,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User DN and Group DN are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,

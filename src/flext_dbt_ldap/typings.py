@@ -18,7 +18,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Literal
 
-from flext_core import FlextTypes, t
+from flext_core import FlextTypes
 
 # =============================================================================
 # DBT LDAP-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for DBT LDAP operations
@@ -27,7 +27,7 @@ from flext_core import FlextTypes, t
 
 
 # DBT LDAP domain TypeVars
-class FlextDbtLdapTypes(t):
+class FlextDbtLdapTypes(FlextTypes):
     """DBT LDAP-specific type definitions extending t.
 
     Domain-specific type system for DBT LDAP data transformation operations.
@@ -136,7 +136,7 @@ class FlextDbtLdapTypes(t):
     class LdapConnection:
         """LDAP connection complex types using direct type composition.
 
-        Note: For ConnectionConfig protocol, use FlextLdapProtocols.Ldap.Config.ConnectionConfigProtocol directly.
+        Note: For ConnectionConfig protocol, use p_ldap.Ldap.Config.ConnectionConfigProtocol directly.
         No aliases - use direct references.
         """
 
@@ -164,7 +164,7 @@ class FlextDbtLdapTypes(t):
     class LdapData:
         """LDAP data complex types using direct type composition.
 
-        Note: For Entry protocol, use FlextLdapProtocols.Ldap.Entry.EntryProtocol directly.
+        Note: For Entry protocol, use p_ldap.Ldap.Entry.EntryProtocol directly.
         For Entry type alias, use FlextLdapTypes.Ldap.Entry.Instance directly.
         No aliases - use direct references.
         """
