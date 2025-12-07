@@ -11,7 +11,9 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import ClassVar, Self
 
-from flext_core import FlextConfig, FlextLogger, FlextResult
+from flext_core import r
+from flext_core.config import FlextConfig
+from flext_core.loggings import FlextLogger
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoConfig
 from pydantic import Field, SecretStr, field_validator, model_validator
@@ -576,31 +578,31 @@ class FlextDbtLdapConfig(FlextConfig):
 
         return self
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> r[None]:
         """Validate DBT LDAP specific business rules."""
         try:
             # Validate LDAP configuration
             if not self.ldap_host:
-                return FlextResult[None].fail("LDAP host is required")
+                return r[None].fail("LDAP host is required")
 
             # Validate DBT configuration
             if not self.dbt_project_dir:
-                return FlextResult[None].fail("DBT project directory is required")
+                return r[None].fail("DBT project directory is required")
 
             # Validate performance thresholds
             if self.dbt_ldap_performance_threshold_warning < 0:
-                return FlextResult[None].fail(
+                return r[None].fail(
                     "Performance warning threshold must be non-negative",
                 )
 
             if self.dbt_ldap_performance_threshold_critical < 0:
-                return FlextResult[None].fail(
+                return r[None].fail(
                     "Performance critical threshold must be non-negative",
                 )
 
-            return FlextResult[None].ok(None)
+            return r[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"Business rules validation failed: {e}")
+            return r[None].fail(f"Business rules validation failed: {e}")
 
     def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
