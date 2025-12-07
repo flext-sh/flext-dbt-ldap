@@ -100,11 +100,11 @@ class FlextDbtLdapModels(m_core):
                 else None,
             )
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self) -> r[None]:
             """Validate user dimension business rules."""
             if not self.user_id or not self.common_name:
-                return FlextResult[None].fail("User ID and common name are required")
-            return FlextResult[None].ok(None)
+                return r[None].fail("User ID and common name are required")
+            return r[None].ok(None)
 
         def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
@@ -178,13 +178,13 @@ class FlextDbtLdapModels(m_core):
                 else None,
             )
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self) -> r[None]:
             """Validate group dimension business rules."""
             if not self.group_id or not self.common_name:
-                return FlextResult[None].fail("Group ID and common name are required")
+                return r[None].fail("Group ID and common name are required")
             if self.member_count < 0:
-                return FlextResult[None].fail("Member count cannot be negative")
-            return FlextResult[None].ok(None)
+                return r[None].fail("Member count cannot be negative")
+            return r[None].ok(None)
 
         def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
@@ -212,11 +212,11 @@ class FlextDbtLdapModels(m_core):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self) -> r[None]:
             """Validate membership fact business rules."""
             if not self.user_dn or not self.group_dn:
-                return FlextResult[None].fail("User DN and Group DN are required")
-            return FlextResult[None].ok(None)
+                return r[None].fail("User DN and Group DN are required")
+            return r[None].ok(None)
 
         def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""

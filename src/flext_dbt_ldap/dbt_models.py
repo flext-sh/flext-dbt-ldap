@@ -9,7 +9,8 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextLogger, FlextModels, FlextResult
+from flext_core import m as m_core, r
+from flext_core.loggings import FlextLogger
 from flext_ldap import FlextLdapModels
 
 from flext_dbt_ldap.typings import FlextDbtLdapTypes
@@ -19,10 +20,10 @@ from flext_dbt_ldap.typings import FlextDbtLdapTypes
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapModels(FlextModels):
+class FlextDbtLdapModels(m_core):
     """Unified DBT LDAP models collection with nested model classes."""
 
-    class UserDimension(FlextModels.Entity):
+    class UserDimension(m_core.Entity):
         """User dimension model for DBT LDAP transformations.
 
         Represents a user dimension table structure optimized for analytics.
@@ -87,11 +88,11 @@ class FlextDbtLdapModels(FlextModels):
                 else None,
             )
 
-        def validate_business_rules(self) -> FlextResult[None]:
+        def validate_business_rules(self) -> r[None]:
             """Validate user dimension business rules."""
             if not self.user_id or not self.common_name:
-                return FlextResult[None].fail("User ID and common name are required")
-            return FlextResult[None].ok(None)
+                return r[None].fail("User ID and common name are required")
+            return r[None].ok(None)
 
         def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
@@ -109,7 +110,7 @@ class FlextDbtLdapModels(FlextModels):
                 "modified_date": self.modified_date,
             }
 
-    class GroupDimension(FlextModels.Entity):
+    class GroupDimension(m_core.Entity):
         """Group dimension model for DBT LDAP transformations.
 
         Represents a group dimension table structure optimized for analytics.
@@ -165,13 +166,13 @@ class FlextDbtLdapModels(FlextModels):
                 else None,
             )
 
-        def validate_business_rules(self: object) -> FlextResult[None]:
+        def validate_business_rules(self: object) -> r[None]:
             """Validate group dimension business rules."""
             if not self.group_id or not self.common_name:
-                return FlextResult[None].fail("Group ID and common name are required")
+                return r[None].fail("Group ID and common name are required")
             if self.member_count < 0:
-                return FlextResult[None].fail("Member count cannot be negative")
-            return FlextResult[None].ok(None)
+                return r[None].fail("Member count cannot be negative")
+            return r[None].ok(None)
 
         def to_dbt_dict(self: object) -> dict[str, object]:
             """Convert to dictionary suitable for DBT processing."""
@@ -186,7 +187,7 @@ class FlextDbtLdapModels(FlextModels):
                 "modified_date": self.modified_date,
             }
 
-    class MembershipFact(FlextModels.Entity):
+    class MembershipFact(m_core.Entity):
         """Membership fact model for DBT LDAP transformations.
 
         Represents user-group membership relationships as fact table.
@@ -199,11 +200,11 @@ class FlextDbtLdapModels(FlextModels):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def validate_business_rules(self: object) -> FlextResult[None]:
+        def validate_business_rules(self: object) -> r[None]:
             """Validate membership fact business rules."""
             if not self.user_dn or not self.group_dn:
-                return FlextResult[None].fail("User DN and Group DN are required")
-            return FlextResult[None].ok(None)
+                return r[None].fail("User DN and Group DN are required")
+            return r[None].ok(None)
 
         def to_dbt_dict(self: object) -> dict[str, object]:
             """Convert to dictionary suitable for DBT processing."""
