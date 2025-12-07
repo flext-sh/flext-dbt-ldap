@@ -4,11 +4,11 @@ Domain-specific exceptions using factory pattern to eliminate duplication.
 
 Module documentation:
 
-- ZERO code duplication através do DRY exception factory pattern de flext-core
-- USA create_module_exception_classes() para eliminar exception boilerplate massivo
-- Elimina 185+ linhas duplicadas de código boilerplate por exception class
-- SOLID: Single source of truth para module exception patterns
-- Redução de 186+ linhas para 85 linhas (54% reduction)
+- ZERO code duplication through DRY exception factory pattern from flext-core
+- USES create_module_exception_classes() to eliminate massive exception boilerplate
+- Eliminates 185+ duplicated lines of boilerplate code per exception class
+- SOLID: Single source of truth for module exception patterns
+- Reduction from 186+ lines to 85 lines (54% reduction)
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -21,7 +21,7 @@ from typing import override
 
 from flext_core import FlextExceptions
 
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import t
 
 # Use FlextExceptions directly (current signature)
 _exceptions = FlextExceptions
@@ -77,9 +77,9 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
         self,
         base_context: dict,
         **extra_fields: object,
-    ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
+    ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
-        context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
+        context: t.DbtLdapCore.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -133,9 +133,9 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
         self,
         base_context: dict,
         **extra_fields: object,
-    ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
+    ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
-        context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
+        context: t.DbtLdapCore.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -186,9 +186,9 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         self,
         base_context: dict,
         **extra_fields: object,
-    ) -> FlextDbtLdapTypes.DbtLdapCore.ContextDict:
+    ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
-        context: FlextDbtLdapTypes.DbtLdapCore.ContextDict = dict(base_context)
+        context: t.DbtLdapCore.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 

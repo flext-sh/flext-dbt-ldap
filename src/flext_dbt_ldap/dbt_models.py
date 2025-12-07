@@ -13,7 +13,7 @@ from flext_core import m as m_core, r
 from flext_core.loggings import FlextLogger
 from flext_ldap import FlextLdapModels
 
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import t
 
 # No aliases per FLEXT standards - use FlextLdapModels directly
 
@@ -94,7 +94,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User ID and common name are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> FlextDbtLdapTypes.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -132,7 +132,7 @@ class FlextDbtLdapModels(m_core):
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
-            attrs: dict[str, FlextDbtLdapTypes.DbtLdapCore.StringList] = {}
+            attrs: dict[str, t.DbtLdapCore.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):

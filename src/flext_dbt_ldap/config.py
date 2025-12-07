@@ -20,7 +20,7 @@ from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
 
 from flext_dbt_ldap.constants import FlextDbtLdapConstants
-from flext_dbt_ldap.typings import FlextDbtLdapTypes
+from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -89,7 +89,7 @@ class FlextDbtLdapConfig(FlextConfig):
         le=16,
         description="Number of DBT threads",
     )
-    dbt_log_level: FlextDbtLdapConstants.Literals.DbtLogLevelLiteral = Field(
+    dbt_log_level: FlextDbtLdapConstants.DbtLogLevelLiteral = Field(
         default="info",
         description="DBT log level",
     )
@@ -645,7 +645,7 @@ class FlextDbtLdapConfig(FlextConfig):
 
     def get_ldap_quality_config(
         self,
-    ) -> FlextDbtLdapTypes.DbtTransformation.DataValidation:
+    ) -> t.DbtTransformation.DataValidation:
         """Get data quality configuration for LDAP validation."""
         return {
             "min_quality_threshold": str(self.min_quality_threshold),
@@ -653,7 +653,7 @@ class FlextDbtLdapConfig(FlextConfig):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> FlextDbtLdapTypes.DbtLdapCore.SettingsDict:
+    def get_dbt_ldap_logging_config(self) -> t.DbtLdapCore.SettingsDict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,

@@ -153,7 +153,12 @@ class FlextDbtLdapConstants(c_core):
         AUDIT_LOG_FILE: Final[str] = "flext_dbt_ldap_audit.log"
 
     class LdapOperations(StrEnum):
-        """LDAP operation types."""
+        """LDAP operation types.
+
+        DRY Pattern:
+            StrEnum is the single source of truth. Use LdapOperations.SEARCH.value
+            or LdapOperations.SEARCH directly - no base strings needed.
+        """
 
         SEARCH = "search"
         BIND = "bind"
@@ -163,7 +168,12 @@ class FlextDbtLdapConstants(c_core):
         DELETE = "delete"
 
     class DbtCommands(StrEnum):
-        """DBT command types."""
+        """DBT command types.
+
+        DRY Pattern:
+            StrEnum is the single source of truth. Use DbtCommands.RUN.value
+            or DbtCommands.RUN directly - no base strings needed.
+        """
 
         RUN = "run"
         TEST = "test"
@@ -172,41 +182,40 @@ class FlextDbtLdapConstants(c_core):
         SNAPSHOT = "snapshot"
         DOCS = "docs"
 
-    class Literals:
-        """Type-safe string literals for DBT LDAP operations.
+    # ═══════════════════════════════════════════════════════════════════
+    # LITERAL TYPES: PEP 695 strict type aliases (Python 3.13+)
+    # ═══════════════════════════════════════════════════════════════════
+    # All Literal types reference StrEnum members - NO string duplication!
 
-        Python 3.13+ best practice: Use type keyword for type aliases (PEP 695).
-        """
+    type LdapOperationLiteral = Literal[
+        LdapOperations.SEARCH,
+        LdapOperations.BIND,
+        LdapOperations.UNBIND,
+        LdapOperations.ADD,
+        LdapOperations.MODIFY,
+        LdapOperations.DELETE,
+    ]
+    """LDAP operation literal - references LdapOperations StrEnum members."""
 
-        # DBT log level literal - matches DBT log levels
-        type DbtLogLevelLiteral = Literal["debug", "info", "warn", "error", "none"]
-        """DBT log level literal."""
+    type DbtCommandLiteral = Literal[
+        DbtCommands.RUN,
+        DbtCommands.TEST,
+        DbtCommands.BUILD,
+        DbtCommands.SEED,
+        DbtCommands.SNAPSHOT,
+        DbtCommands.DOCS,
+    ]
+    """DBT command literal - references DbtCommands StrEnum members."""
 
-        # DBT target literal - matches Dbt.ALLOWED_TARGETS
-        type DbtTargetLiteral = Literal["dev", "staging", "prod"]
-        """DBT target literal."""
+    # DBT log level literal - matches DBT log levels (no corresponding StrEnum)
+    type DbtLogLevelLiteral = Literal["debug", "info", "warn", "error", "none"]
+    """DBT log level literal - no corresponding StrEnum."""
 
-        # LDAP operation literal - matches LdapOperations StrEnum
-        type LdapOperationLiteral = Literal[
-            "search",
-            "bind",
-            "unbind",
-            "add",
-            "modify",
-            "delete",
-        ]
-        """LDAP operation literal."""
-
-        # DBT command literal - matches DbtCommands StrEnum
-        type DbtCommandLiteral = Literal[
-            "run",
-            "test",
-            "build",
-            "seed",
-            "snapshot",
-            "docs",
-        ]
-        """DBT command literal."""
+    # DBT target literal - matches Dbt.ALLOWED_TARGETS (no corresponding StrEnum)
+    type DbtTargetLiteral = Literal["dev", "staging", "prod"]
+    """DBT target literal - no corresponding StrEnum."""
 
 
-__all__ = ["FlextDbtLdapConstants"]
+c = FlextDbtLdapConstants
+
+__all__ = ["FlextDbtLdapConstants", "c"]
