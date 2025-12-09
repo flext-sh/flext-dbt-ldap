@@ -45,21 +45,19 @@ class FlextDbtLdapUtilities(u_core):
         r[t.DbtLdapCore.ResultDict]: Service status and capabilities.
 
         """
-        return r[t.DbtLdapCore.ResultDict].ok(
-            {
-                "status": "operational",
-                "service": "flext-dbt-ldap-utilities",
-                "capabilities": [
-                    "dbt_project_management",
-                    "ldap_data_transformation",
-                    "schema_generation",
-                    "macro_management",
-                    "dbt_model_validation",
-                    "ldap_source_configuration",
-                    "transformation_optimization",
-                ],
-            }
-        )
+        return r[t.DbtLdapCore.ResultDict].ok({
+            "status": "operational",
+            "service": "flext-dbt-ldap-utilities",
+            "capabilities": [
+                "dbt_project_management",
+                "ldap_data_transformation",
+                "schema_generation",
+                "macro_management",
+                "dbt_model_validation",
+                "ldap_source_configuration",
+                "transformation_optimization",
+            ],
+        })
 
     class DbtProjectManagement:
         """DBT project management utilities."""
@@ -233,13 +231,11 @@ class FlextDbtLdapUtilities(u_core):
                     else:
                         data_type = "text"  # Default for string attributes
 
-                    columns.append(
-                        {
-                            "name": attr.lower().replace("-", "_"),
-                            "description": f"LDAP {attr} attribute",
-                            "data_type": data_type,
-                        }
-                    )
+                    columns.append({
+                        "name": attr.lower().replace("-", "_"),
+                        "description": f"LDAP {attr} attribute",
+                        "data_type": data_type,
+                    })
 
                 source_schema: t.DbtSource.SourceSchema = {
                     "version": "2",
