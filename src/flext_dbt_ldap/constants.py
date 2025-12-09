@@ -51,9 +51,9 @@ class FlextDbtLdapConstants(c_core):
     class DbtLogging:
         """DBT LDAP-specific logging constants."""
 
-        # Default Logging Levels for DBT LDAP
+        # Default Logging Levels for DBT LDAP - use Settings.LogLevel StrEnum
         DEFAULT_LEVEL: Final[str] = c_core.Logging.DEFAULT_LEVEL
-        AUDIT_LOG_LEVEL: Final[str] = c_core.Logging.INFO
+        AUDIT_LOG_LEVEL: Final[str] = c_core.Settings.LogLevel.INFO
 
         # DBT Operation Logging
         LOG_DBT_OPERATIONS: Final[bool] = True
