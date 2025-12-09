@@ -136,7 +136,7 @@ class FlextDbtLdapTypes(FlextTypes):
     class LdapConnection:
         """LDAP connection complex types using direct type composition.
 
-        Note: For ConnectionConfig protocol, use p.Ldap.Config.ConnectionConfigProtocol via alias
+        Note: For ConnectionConfig protocol, use p.Ldap.ConnectionConfigProtocol via alias
         (from flext_dbt_ldap.protocols import p).
         No direct protocol class references - use p alias.
         """
@@ -165,7 +165,7 @@ class FlextDbtLdapTypes(FlextTypes):
     class LdapData:
         """LDAP data complex types using direct type composition.
 
-        Note: For Entry protocol, use p.Ldap.Entry.EntryProtocol via alias
+        Note: For Entry protocol, use p.Ldap.LdapEntryProtocol via alias
         (from flext_dbt_ldap.protocols import p).
         For Entry type alias, use FlextLdapTypes.Ldap.Entry.Instance directly.
         No direct protocol class references - use p alias.

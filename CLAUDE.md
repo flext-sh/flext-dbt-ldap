@@ -79,6 +79,7 @@ if result.is_success:
 ---
 
 **See Also**:
+
 - [Workspace Standards](../CLAUDE.md)
 - [flext-core Patterns](../flext-core/CLAUDE.md)
 - [flext-ldap Patterns](../flext-ldap/CLAUDE.md)
