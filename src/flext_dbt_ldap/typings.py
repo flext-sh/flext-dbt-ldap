@@ -136,8 +136,9 @@ class FlextDbtLdapTypes(FlextTypes):
     class LdapConnection:
         """LDAP connection complex types using direct type composition.
 
-        Note: For ConnectionConfig protocol, use p_ldap.Ldap.Config.ConnectionConfigProtocol directly.
-        No aliases - use direct references.
+        Note: For ConnectionConfig protocol, use p.Ldap.Config.ConnectionConfigProtocol via alias
+        (from flext_dbt_ldap.protocols import p).
+        No direct protocol class references - use p alias.
         """
 
         type AuthenticationConfig = Mapping[
@@ -164,9 +165,10 @@ class FlextDbtLdapTypes(FlextTypes):
     class LdapData:
         """LDAP data complex types using direct type composition.
 
-        Note: For Entry protocol, use p_ldap.Ldap.Entry.EntryProtocol directly.
+        Note: For Entry protocol, use p.Ldap.Entry.EntryProtocol via alias
+        (from flext_dbt_ldap.protocols import p).
         For Entry type alias, use FlextLdapTypes.Ldap.Entry.Instance directly.
-        No aliases - use direct references.
+        No direct protocol class references - use p alias.
         """
 
         type LdapAttributes = Mapping[str, str | Sequence[str] | bytes]
@@ -328,15 +330,16 @@ class FlextDbtLdapTypes(FlextTypes):
 
         Examples:
             from flext_dbt_ldap.typings import t
-            # Use direct protocol references where needed:
-            # FlextLdapProtocols.Ldap.Config.ConnectionConfigProtocol
+            from flext_dbt_ldap.protocols import p
+            # Use protocol references via p alias:
+            # p.Ldap.Config.ConnectionConfigProtocol
             # Or use type aliases from parent:
             # FlextLdapTypes.Ldap.Entry.Instance
             config: t.DbtLdap.Project.DbtLdapProjectConfig = ...
 
         Note: Namespace composition via inheritance - no aliases needed.
         Access parent namespaces directly through inheritance.
-        Use direct protocol references (FlextLdapProtocols.*) or parent type aliases (FlextLdapTypes.*).
+        Use protocol references via p alias (p.Ldap.*) or parent type aliases (FlextLdapTypes.*).
 
         """
 
@@ -350,7 +353,7 @@ t = FlextDbtLdapTypes
 # - t.DbtLdap.* for DBT LDAP-specific types
 # - t.Project.* for project types
 # - t.Core.* for core types (inherited from parent)
-# For protocols, use FlextLdapProtocols.* directly
+# For protocols, use p.Ldap.* via alias (from flext_dbt_ldap.protocols import p)
 # For type aliases, use FlextLdapTypes.* directly
 
 __all__ = [

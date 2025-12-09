@@ -12,6 +12,7 @@ import logging
 from typing import override
 
 from flext_core import m as m_core, r
+from flext_core.utilities import u
 from flext_ldap import FlextLdapModels
 from pydantic import BaseModel, ConfigDict
 
@@ -34,6 +35,14 @@ class FlextDbtLdapBaseModel(BaseModel):
 
 class FlextDbtLdapModels(m_core):
     """Unified DBT LDAP models collection with nested model classes."""
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        """Warn when FlextDbtLdapModels is subclassed directly."""
+        super().__init_subclass__(**kwargs)
+        u.Deprecation.warn_once(
+            f"subclass:{cls.__name__}",
+            "Subclassing FlextDbtLdapModels is deprecated. Use FlextModels.DbtLdap instead.",
+        )
 
     class UserDimension(m_core.Entity):
         """User dimension model for DBT LDAP transformations.
@@ -441,8 +450,14 @@ class FlextDbtLdapModels(m_core):
             return memberships
 
 
-# Direct export of unified models class - no aliases per FLEXT standards
+# Short aliases
+m = FlextDbtLdapModels
+m_dbt_ldap = FlextDbtLdapModels
+
+# Direct export of unified models class
 __all__: list[str] = [
     "FlextDbtLdapBaseModel",
     "FlextDbtLdapModels",
+    "m",
+    "m_dbt_ldap",
 ]

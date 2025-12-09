@@ -38,6 +38,9 @@ from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
 
+# Domain-specific aliases
+u = FlextDbtLdapUtilities  # Utilities (FlextDbtLdapUtilities extends FlextLdapUtilities)
+
 PROJECT_VERSION: Final[FlextDbtLdapVersion] = VERSION
 
 
@@ -67,5 +70,7 @@ __all__ = [
     "__version__",
     "__version_info__",
     "process_ldap_entries_for_dbt",
+    # Domain-specific aliases
+    "u",
     "validate_ldap_data_quality",
 ]
