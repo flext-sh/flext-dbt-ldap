@@ -10,8 +10,9 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated, TypeVar
 
-from flext_core import r, u as u_core
+from flext_core import r
 from flext_core.container import FlextContainer
+from flext_core.utilities import FlextUtilities as u_core
 from pydantic import BeforeValidator
 
 from flext_dbt_ldap.typings import t

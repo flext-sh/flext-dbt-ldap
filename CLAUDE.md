@@ -1,6 +1,8 @@
-# FLEXT-DBT-LDAP Project Guidelines
+# flext-dbt-ldap - FLEXT DBT Adapters
 
-**Reference**: See [../CLAUDE.md](../CLAUDE.md) for FLEXT ecosystem standards and general rules.
+**Hierarchy**: PROJECT
+**Parent**: [../CLAUDE.md](../CLAUDE.md) - Workspace standards
+**Last Update**: 2025-12-07
 
 ---
 
@@ -76,4 +78,8 @@ if result.is_success:
 
 ---
 
-**Additional Resources**: [../CLAUDE.md](../CLAUDE.md) (workspace), [README.md](README.md) (overview)
+**See Also**:
+- [Workspace Standards](../CLAUDE.md)
+- [flext-core Patterns](../flext-core/CLAUDE.md)
+- [flext-ldap Patterns](../flext-ldap/CLAUDE.md)
+- [flext-tap-ldap Patterns](../flext-tap-ldap/CLAUDE.md)
