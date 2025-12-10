@@ -96,7 +96,7 @@ if _version_result.is_failure:
     error_msg = f"Failed to initialize version: {_version_result.error}"
     raise RuntimeError(error_msg)
 
-VERSION: Final[FlextDbtLdapVersion] = _version_result.unwrap()
+VERSION: Final[FlextDbtLdapVersion] = _version_result.value
 
 __all__ = [
     "VERSION",
