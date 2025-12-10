@@ -167,7 +167,7 @@ class FlextDbtLdapTypes(FlextTypes):
 
         Note: For Entry protocol, use p.Ldap.LdapEntryProtocol via alias
         (from flext_dbt_ldap.protocols import p).
-        For Entry type alias, use FlextLdapTypes.Ldap.Entry.Instance directly.
+        For Entry type alias, use FlextLdapTypes.Ldif.Entry.Instance directly.
         No direct protocol class references - use p alias.
         """
 
@@ -334,7 +334,7 @@ class FlextDbtLdapTypes(FlextTypes):
             # Use protocol references via p alias:
             # p.Ldap.Config.ConnectionConfigProtocol
             # Or use type aliases from parent:
-            # FlextLdapTypes.Ldap.Entry.Instance
+            # FlextLdapTypes.Ldif.Entry.Instance
             config: t.DbtLdap.Project.DbtLdapProjectConfig = ...
 
         Note: Namespace composition via inheritance - no aliases needed.
