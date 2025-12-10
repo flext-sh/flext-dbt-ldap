@@ -309,7 +309,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                     f"Config creation failed: {config_result.error}",
                 )
 
-            config = config_result.unwrap()
+            config = config_result.value
 
             # Use FlextDbtLdapUtilities for DBT project configuration if available
             project_name = config_kwargs.get("project_name", "ldap_analytics")
@@ -334,7 +334,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             )
 
             if project_config_result.is_success:
-                project_config = project_config_result.unwrap()
+                project_config = project_config_result.value
                 project_name_value = (
                     project_config.get("name")
                     if isinstance(project_config, dict)
