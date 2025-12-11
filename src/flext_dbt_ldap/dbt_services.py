@@ -15,7 +15,7 @@ from flext_core import r
 from flext_core.loggings import FlextLogger
 from flext_meltano import FlextMeltanoService
 
-from flext_dbt_ldap.config import FlextDbtLdapConfig
+from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.models import FlextDbtLdapModels
 from flext_dbt_ldap.typings import t
@@ -33,7 +33,7 @@ class FlextDbtLdapService:
     @override
     def __init__(
         self,
-        config: FlextDbtLdapConfig | None = None,
+        config: FlextDbtLdapSettings | None = None,
         client: FlextDbtLdapClient | None = None,
         transformer: FlextDbtLdapModels.Transformer | None = None,
     ) -> None:
@@ -45,8 +45,8 @@ class FlextDbtLdapService:
         transformer: Data transformer (created if None)
 
         """
-        self.config: FlextDbtLdapConfig = (
-            config or FlextDbtLdapConfig.get_global_instance()
+        self.config: FlextDbtLdapSettings = (
+            config or FlextDbtLdapSettings.get_global_instance()
         )
         self.client = client or FlextDbtLdapClient(self.config)
         self.transformer = transformer or FlextDbtLdapModels.Transformer()
@@ -216,7 +216,7 @@ class FlextDbtLdapService:
             search_base
             or (
                 self.config.ldap_base_dn
-                if isinstance(self.config, FlextDbtLdapConfig)
+                if isinstance(self.config, FlextDbtLdapSettings)
                 else ""
             ),
             incremental,

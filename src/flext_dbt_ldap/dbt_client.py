@@ -19,7 +19,7 @@ from flext_core.loggings import FlextLogger
 from flext_ldap import FlextLdap, FlextLdapModels
 from flext_meltano import FlextMeltanoDbtService
 
-from flext_dbt_ldap.config import FlextDbtLdapConfig
+from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
@@ -35,7 +35,7 @@ class FlextDbtLdapClient:
     @override
     def __init__(
         self,
-        config: FlextDbtLdapConfig | None = None,
+        config: FlextDbtLdapSettings | None = None,
     ) -> None:
         """Initialize DBT LDAP client.
 
@@ -43,8 +43,8 @@ class FlextDbtLdapClient:
         config: Configuration for LDAP and DBT operations
 
         """
-        self.config: FlextDbtLdapConfig = (
-            config or FlextDbtLdapConfig.get_global_instance()
+        self.config: FlextDbtLdapSettings = (
+            config or FlextDbtLdapSettings.get_global_instance()
         )
         # Precisely type the LDAP API to enable method access
         self._ldap_api: FlextLdap = FlextLdap()
