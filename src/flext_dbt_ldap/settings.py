@@ -12,10 +12,10 @@ from pathlib import Path
 from typing import ClassVar, Self
 
 from flext_core import r
-from flext_core.config import FlextConfig
 from flext_core.loggings import FlextLogger
+from flext_core.settings import FlextSettings
 from flext_ldap import FlextLdapModels
-from flext_meltano import FlextMeltanoConfig
+from flext_meltano import FlextMeltanoSettings
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
 
@@ -25,11 +25,11 @@ from flext_dbt_ldap.typings import t
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapConfig(FlextConfig):
-    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextConfig.
+class FlextDbtLdapSettings(FlextSettings):
+    """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextSettings.
 
     Follows standardized pattern:
-    - Extends FlextConfig from flext-core
+    - Extends FlextSettings from flext-core
     - No nested classes within Config
     - All defaults from FlextDbtLdapConstants
     - Uses enhanced singleton pattern with inverse dependency injection
@@ -44,7 +44,7 @@ class FlextDbtLdapConfig(FlextConfig):
         str_strip_whitespace=True,
         json_schema_extra={
             "title": "FLEXT DBT LDAP Configuration",
-            "description": "DBT LDAP configuration extending FlextConfig",
+            "description": "DBT LDAP configuration extending FlextSettings",
         },
     )
 
@@ -620,7 +620,7 @@ class FlextDbtLdapConfig(FlextConfig):
             bind_password=bind_password,
         )
 
-    def get_meltano_config(self) -> FlextMeltanoConfig:
+    def get_meltano_config(self) -> FlextMeltanoSettings:
         """Get Meltano configuration for flext-meltano integration."""
         # Convert string to proper Environment string value
         environment_mapping: Mapping[str, str] = {
@@ -638,7 +638,7 @@ class FlextDbtLdapConfig(FlextConfig):
             "development",
         )
 
-        return FlextMeltanoConfig(
+        return FlextMeltanoSettings(
             project_root=Path(self.dbt_project_dir),
             environment=environment_value,
         )
@@ -738,7 +738,7 @@ class FlextDbtLdapConfig(FlextConfig):
         cls,
         environment: str,
         **overrides: object,
-    ) -> FlextDbtLdapConfig:
+    ) -> FlextDbtLdapSettings:
         """Create configuration for specific environment using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
             project_name="flext-dbt-ldap",
@@ -747,12 +747,12 @@ class FlextDbtLdapConfig(FlextConfig):
         )
 
     @classmethod
-    def create_default(cls) -> FlextDbtLdapConfig:
+    def create_default(cls) -> FlextDbtLdapSettings:
         """Create default configuration instance using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
 
     @classmethod
-    def create_for_development(cls) -> FlextDbtLdapConfig:
+    def create_for_development(cls) -> FlextDbtLdapSettings:
         """Create configuration optimized for development using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
             project_name="flext-dbt-ldap",
@@ -764,7 +764,7 @@ class FlextDbtLdapConfig(FlextConfig):
         )
 
     @classmethod
-    def create_for_production(cls) -> FlextDbtLdapConfig:
+    def create_for_production(cls) -> FlextDbtLdapSettings:
         """Create configuration optimized for production using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
             project_name="flext-dbt-ldap",
@@ -777,7 +777,7 @@ class FlextDbtLdapConfig(FlextConfig):
         )
 
     @classmethod
-    def create_for_testing(cls) -> FlextDbtLdapConfig:
+    def create_for_testing(cls) -> FlextDbtLdapSettings:
         """Create configuration optimized for testing using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
             project_name="flext-dbt-ldap",
@@ -792,8 +792,8 @@ class FlextDbtLdapConfig(FlextConfig):
         )
 
     @classmethod
-    def get_global_instance(cls) -> FlextDbtLdapConfig:
-        """Get the global singleton instance using enhanced FlextConfig pattern."""
+    def get_global_instance(cls) -> FlextDbtLdapSettings:
+        """Get the global singleton instance using enhanced FlextSettings pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
 
     @classmethod
@@ -819,11 +819,11 @@ class FlextDbtLdapConfig(FlextConfig):
 
     @classmethod
     def reset_global_instance(cls) -> None:
-        """Reset the global FlextDbtLdapConfig instance (mainly for testing)."""
-        # Use the enhanced FlextConfig reset mechanism
+        """Reset the global FlextDbtLdapSettings instance (mainly for testing)."""
+        # Use the enhanced FlextSettings reset mechanism
         cls.reset_shared_instance()
 
 
 __all__: list[str] = [
-    "FlextDbtLdapConfig",
+    "FlextDbtLdapSettings",
 ]

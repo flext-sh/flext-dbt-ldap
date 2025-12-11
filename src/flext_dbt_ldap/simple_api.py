@@ -16,7 +16,7 @@ from flext_core import (
     r,
 )
 
-from flext_dbt_ldap.config import FlextDbtLdapConfig
+from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
 from flext_dbt_ldap.models import FlextDbtLdapModels
@@ -24,7 +24,7 @@ from flext_dbt_ldap.typings import t
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
 
-class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
+class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
     """Unified DBT LDAP facade with complete FLEXT ecosystem integration.
 
     This is the single unified class for the flext-dbt-ldap domain providing
@@ -46,10 +46,10 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
     PYTHON 3.13+ COMPATIBILITY: Uses modern patterns and latest type features.
     """
 
-    def __init__(self, config: FlextDbtLdapConfig | None = None) -> None:
+    def __init__(self, config: FlextDbtLdapSettings | None = None) -> None:
         """Initialize the unified DBT LDAP service."""
         super().__init__()
-        self._config = config or FlextDbtLdapConfig()
+        self._config = config or FlextDbtLdapSettings()
         self._client: FlextDbtLdapClient | None = None
         self._service: FlextDbtLdapService | None = None
 
@@ -73,7 +73,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         ldap_port: int = 389,
         ldap_base_dn: str = "",
         **kwargs: object,
-    ) -> r[FlextDbtLdapConfig]:
+    ) -> r[FlextDbtLdapSettings]:
         """Create DBT LDAP configuration with sensible defaults.
 
         Args:
@@ -83,7 +83,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         **kwargs: Additional configuration fields
 
         Returns:
-        FlextResult containing configured FlextDbtLdapConfig
+        FlextResult containing configured FlextDbtLdapSettings
 
         """
         try:
@@ -94,7 +94,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
             )
 
             # Create base config
-            config = FlextDbtLdapConfig(
+            config = FlextDbtLdapSettings(
                 ldap_host=ldap_host,
                 ldap_port=ldap_port,
                 ldap_base_dn=ldap_base_dn,
@@ -105,9 +105,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
                 if hasattr(config, key):
                     setattr(config, key, value)
 
-            return r[FlextDbtLdapConfig].ok(config)
+            return r[FlextDbtLdapSettings].ok(config)
         except Exception as e:
-            return r[FlextDbtLdapConfig].fail(f"Config creation failed: {e}")
+            return r[FlextDbtLdapSettings].fail(f"Config creation failed: {e}")
 
     # =============================================================================
     # CLIENT AND SERVICE MANAGEMENT - Enhanced with proper error handling
@@ -128,7 +128,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapConfig]):
         return self._service
 
     @property
-    def config(self) -> FlextDbtLdapConfig:
+    def config(self) -> FlextDbtLdapSettings:
         """Get the current configuration."""
         return self._config
 

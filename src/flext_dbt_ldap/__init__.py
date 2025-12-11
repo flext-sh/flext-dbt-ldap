@@ -9,19 +9,19 @@ from __future__ import annotations
 
 from typing import Final
 
-from flext_core import FlextConfig, FlextModels, FlextResult
+from flext_core import FlextModels, FlextResult, FlextSettings
 
 from flext_dbt_ldap.__version__ import __version__, __version_info__
-from flext_dbt_ldap.config import FlextDbtLdapConfig
+from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_exceptions import (
     FlextDbtLdapAuthenticationError,
-    FlextDbtLdapConfigurationError,
     FlextDbtLdapConnectionError,
     FlextDbtLdapError,
     FlextDbtLdapMacroError,
     FlextDbtLdapModelError,
     FlextDbtLdapProcessingError,
+    FlextDbtLdapSettingsurationError,
     FlextDbtLdapTestError,
     FlextDbtLdapTimeoutError,
     FlextDbtLdapValidationError,
@@ -47,18 +47,17 @@ PROJECT_VERSION: Final[FlextDbtLdapVersion] = VERSION
 __all__ = [
     "PROJECT_VERSION",
     "VERSION",
-    "FlextConfig",
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
-    "FlextDbtLdapConfig",
-    "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapDeprecationWarning",
     "FlextDbtLdapError",
     "FlextDbtLdapMacroError",
     "FlextDbtLdapModelError",
     "FlextDbtLdapProcessingError",
+    "FlextDbtLdapSettings",
+    "FlextDbtLdapSettingsurationError",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapTypes",
@@ -67,6 +66,7 @@ __all__ = [
     "FlextDbtLdapVersion",
     "FlextModels",
     "FlextResult",
+    "FlextSettings",
     "__version__",
     "__version_info__",
     "process_ldap_entries_for_dbt",

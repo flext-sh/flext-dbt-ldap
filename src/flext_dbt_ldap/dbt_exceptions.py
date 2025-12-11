@@ -36,8 +36,8 @@ class FlextDbtLdapValidationError(FlextExceptions.ValidationError):
     """FlextDbtLdapValidationError - real inheritance from ValidationError."""
 
 
-class FlextDbtLdapConfigurationError(FlextExceptions.ConfigurationError):
-    """FlextDbtLdapConfigurationError - real inheritance from ConfigurationError."""
+class FlextDbtLdapSettingsurationError(FlextExceptions.ConfigurationError):
+    """FlextDbtLdapSettingsurationError - real inheritance from ConfigurationError."""
 
 
 # Additional exception classes with real inheritance using base classes
@@ -227,12 +227,12 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
 
 __all__: list[str] = [
     "FlextDbtLdapAuthenticationError",
-    "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapError",
     "FlextDbtLdapMacroError",
     "FlextDbtLdapModelError",
     "FlextDbtLdapProcessingError",
+    "FlextDbtLdapSettingsurationError",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapValidationError",
