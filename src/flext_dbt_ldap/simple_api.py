@@ -16,10 +16,10 @@ from flext_core import (
     r,
 )
 
-from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
 from flext_dbt_ldap.models import FlextDbtLdapModels
+from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
