@@ -15,9 +15,9 @@ from flext_core import r
 from flext_core.loggings import FlextLogger
 from flext_meltano import FlextMeltanoService
 
-from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.models import FlextDbtLdapModels
+from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
