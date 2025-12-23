@@ -3,8 +3,8 @@
 from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
-from flext_ldap.protocols import p_ldap
-from flext_meltano.protocols import p_meltano
+from flext_ldap.protocols import FlextLdapProtocols as p_ldap
+from flext_meltano.protocols import FlextMeltanoProtocols as p_meltano
 
 from flext_dbt_ldap.typings import t
 
