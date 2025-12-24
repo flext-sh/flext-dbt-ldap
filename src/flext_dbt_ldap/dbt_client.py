@@ -14,10 +14,10 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import override
 
+from flext_core import FlextLogger, r
 from flext_ldap import FlextLdap, FlextLdapModels
 from flext_meltano import FlextMeltanoDbtService
 
-from flext import FlextLogger, r
 from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 

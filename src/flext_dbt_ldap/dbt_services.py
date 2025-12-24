@@ -11,10 +11,10 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import override
 
+from flext_core import r
 from flext_core.loggings import FlextLogger
 from flext_meltano import FlextMeltanoService
 
-from flext import r
 from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.models import FlextDbtLdapModels

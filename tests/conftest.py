@@ -14,9 +14,8 @@ import tempfile
 from collections.abc import Generator
 
 import pytest
+from flext_core import u
 from flext_tests import FlextTestsDocker
-
-from flext import u
 
 
 # Import shared fixtures from docker directory
