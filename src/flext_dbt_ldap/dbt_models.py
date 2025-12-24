@@ -9,10 +9,10 @@ from __future__ import annotations
 
 from typing import override
 
+from flext_core import m as m_core, r
 from flext_core.loggings import FlextLogger
 from flext_ldap import FlextLdapModels
 
-from flext import m as m_core, r
 from flext_dbt_ldap.typings import t
 
 # No aliases per FLEXT standards - use FlextLdapModels directly

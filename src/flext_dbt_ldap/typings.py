@@ -18,7 +18,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Literal
 
-from flext import FlextTypes
+from flext_core import FlextTypes
 
 # =============================================================================
 # DBT LDAP-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for DBT LDAP operations
@@ -57,7 +57,8 @@ class FlextDbtLdapTypes(FlextTypes):
 
         # Configuration and settings types - using FlextTypes.JsonValue
         type ConfigDict = Mapping[
-            str, FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
+            str,
+            FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
         ]
         """DBT LDAP configuration dictionary type."""
         type ConnectionDict = Mapping[str, FlextTypes.JsonValue]
@@ -138,7 +139,8 @@ class FlextDbtLdapTypes(FlextTypes):
         """
 
         type AuthenticationConfig = Mapping[
-            str, str | Mapping[str, FlextTypes.JsonValue],
+            str,
+            str | Mapping[str, FlextTypes.JsonValue],
         ]
         """LDAP authentication configuration type."""
         type ServerConfig = Mapping[str, str | int | bool | Sequence[str]]
@@ -146,7 +148,8 @@ class FlextDbtLdapTypes(FlextTypes):
         type TlsConfig = Mapping[str, bool | str | Mapping[str, FlextTypes.JsonValue]]
         """LDAP TLS configuration type."""
         type PoolingConfig = Mapping[
-            str, int | bool | Mapping[str, FlextTypes.JsonValue],
+            str,
+            int | bool | Mapping[str, FlextTypes.JsonValue],
         ]
         """LDAP pooling configuration type."""
         type TimeoutConfig = Mapping[str, int | float]
@@ -173,7 +176,8 @@ class FlextDbtLdapTypes(FlextTypes):
         ]
         """LDAP query type."""
         type LdapSchema = Mapping[
-            str, str | Sequence[Mapping[str, FlextTypes.JsonValue]],
+            str,
+            str | Sequence[Mapping[str, FlextTypes.JsonValue]],
         ]
         """LDAP schema type."""
         type LdapOperationResult = Mapping[
@@ -206,7 +210,8 @@ class FlextDbtLdapTypes(FlextTypes):
         type OutputFormat = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT output format type."""
         type ProcessingStep = Mapping[
-            str, str | int | Mapping[str, FlextTypes.JsonValue],
+            str,
+            str | int | Mapping[str, FlextTypes.JsonValue],
         ]
         """DBT processing step type."""
 
@@ -220,7 +225,8 @@ class FlextDbtLdapTypes(FlextTypes):
         type ModelDefinition = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT model definition type."""
         type ModelExecution = Mapping[
-            str, str | bool | int | Mapping[str, FlextTypes.JsonValue],
+            str,
+            str | bool | int | Mapping[str, FlextTypes.JsonValue],
         ]
         """DBT model execution type."""
         type ModelDependency = Mapping[
@@ -233,7 +239,8 @@ class FlextDbtLdapTypes(FlextTypes):
         type ModelDocumentation = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT model documentation type."""
         type ModelMaterialization = Mapping[
-            str, str | Mapping[str, FlextTypes.JsonValue],
+            str,
+            str | Mapping[str, FlextTypes.JsonValue],
         ]
         """DBT model materialization type."""
 
@@ -247,15 +254,18 @@ class FlextDbtLdapTypes(FlextTypes):
         type SourceDefinition = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
         """DBT source definition type."""
         type SourceConnection = Mapping[
-            str, FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
+            str,
+            FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
         ]
         """DBT source connection type."""
         type SourceTable = Mapping[
-            str, str | Sequence[Mapping[str, FlextTypes.JsonValue]],
+            str,
+            str | Sequence[Mapping[str, FlextTypes.JsonValue]],
         ]
         """DBT source table type."""
         type SourceFreshness = Mapping[
-            str, str | int | Mapping[str, FlextTypes.JsonValue],
+            str,
+            str | int | Mapping[str, FlextTypes.JsonValue],
         ]
         """DBT source freshness type."""
         type SourceTest = Mapping[str, str | bool | Sequence[str]]
