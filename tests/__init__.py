@@ -1,10 +1,17 @@
-"""Tests for FLEXT DBT LDAP.
+"""FLEXT DBT LDAP Tests - Test infrastructure and utilities.
 
-This module is part of the FLEXT ecosystem. Docstrings follow PEP 257 and Google style.
+Provides TestsFlextDbtLdap classes extending FlextTests and FlextDbtLdap for comprehensive testing.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
+
+from tests.constants import TestsFlextDbtLdapConstants, c, tc
+
+__all__ = [
+    "TestsFlextDbtLdapConstants",
+    "c",
+    "tc",
+]

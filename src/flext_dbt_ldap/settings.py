@@ -11,7 +11,6 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import ClassVar, Self
 
-from flext_core import r
 from flext_core.loggings import FlextLogger
 from flext_core.settings import FlextSettings
 from flext_ldap import FlextLdapModels
@@ -19,6 +18,7 @@ from flext_meltano import FlextMeltanoSettings
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
 
+from flext import r
 from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.typings import t
 

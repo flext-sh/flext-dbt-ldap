@@ -8,13 +8,11 @@ Unified facade for FLEXT DBT LDAP operations with complete FLEXT integration.
 
 from __future__ import annotations
 
-from flext_core import (
-    FlextContainer,
+from flext import FlextContainer,
     FlextContext,
     FlextLogger,
     FlextService,
-    r,
-)
+    r
 
 from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient

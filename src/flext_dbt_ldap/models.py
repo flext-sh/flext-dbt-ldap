@@ -11,11 +11,11 @@ from __future__ import annotations
 import logging
 from typing import override
 
-from flext_core import m as m_core, r
 from flext_core.utilities import u
 from flext_ldap import m as m_ldap
 from pydantic import BaseModel, ConfigDict
 
+from flext import m as m_core, r
 from flext_dbt_ldap.typings import t
 
 # Set up logger

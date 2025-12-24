@@ -9,8 +9,7 @@ from __future__ import annotations
 
 from typing import Final
 
-from flext_core import FlextModels, FlextResult, FlextSettings
-
+from flext import FlextModels, FlextResult, FlextSettings
 from flext_dbt_ldap.__version__ import __version__, __version_info__
 from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient

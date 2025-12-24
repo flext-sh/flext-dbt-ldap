@@ -14,11 +14,11 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import override
 
-from flext_core import r
-from flext_core.loggings import FlextLogger
+from flext import FlextLogger
 from flext_ldap import FlextLdap, FlextLdapModels
 from flext_meltano import FlextMeltanoDbtService
 
+from flext import r
 from flext_dbt_ldap.config import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
@@ -357,7 +357,7 @@ class FlextDbtLdapClient:
 
             # Use API directly (synchronous operation)
             result: r[FlextLdapModels.SearchResponse] = api.search_with_request(
-                search_request
+                search_request,
             )
 
             # Use entries directly from SearchResponse
