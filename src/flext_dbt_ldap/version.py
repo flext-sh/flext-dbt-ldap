@@ -10,7 +10,7 @@ from __future__ import annotations
 from importlib.metadata import metadata
 from typing import Final
 
-from flext_core import FlextResult
+from flext import FlextResult
 
 
 class FlextDbtLdapVersion:

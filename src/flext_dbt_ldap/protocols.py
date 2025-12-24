@@ -111,7 +111,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     ...
 
                 def validate_dbt_project(
-                    self, project_path: str
+                    self, project_path: str,
                 ) -> p_meltano.Result[bool]:
                     """Validate DBT project configuration for LDAP integration.
 

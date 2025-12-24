@@ -10,11 +10,11 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated, TypeVar
 
-from flext_core import r
 from flext_core.container import FlextContainer
 from flext_core.utilities import FlextUtilities as u_core
 from pydantic import BeforeValidator
 
+from flext import r
 from flext_dbt_ldap.typings import t
 
 T = TypeVar("T")
@@ -105,7 +105,7 @@ class FlextDbtLdapUtilities(u_core):
                 return r[t.DbtProject.ProjectConfiguration].ok(project_config)
             except Exception as e:
                 return r[t.DbtProject.ProjectConfiguration].fail(
-                    f"DBT project config creation failed: {e}"
+                    f"DBT project config creation failed: {e}",
                 )
 
         @staticmethod
@@ -163,7 +163,7 @@ class FlextDbtLdapUtilities(u_core):
                 return r[t.DbtProject.ProfileConfiguration].ok(profiles_config)
             except Exception as e:
                 return r[t.DbtProject.ProfileConfiguration].fail(
-                    f"DBT profiles generation failed: {e}"
+                    f"DBT profiles generation failed: {e}",
                 )
 
         @staticmethod

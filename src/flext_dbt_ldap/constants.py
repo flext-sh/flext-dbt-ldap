@@ -10,7 +10,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import ClassVar, Final, Literal
 
-from flext_core import c as c_core
+from flext import c as c_core
 
 
 class FlextDbtLdapConstants(c_core):
