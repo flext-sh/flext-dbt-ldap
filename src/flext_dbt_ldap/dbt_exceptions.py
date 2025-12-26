@@ -76,7 +76,7 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
     def _build_context(
         self,
         base_context: dict,
-        **extra_fields: object,
+        **extra_fields: t.FlextTypes.JsonValue,
     ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: t.DbtLdapCore.ContextDict = dict(base_context)
@@ -90,7 +90,7 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
         *,
         model_name: str | None = None,
         model_type: str | None = None,
-        **kwargs: object,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> None:
         """Initialize LDAP DBT model error with context."""
         # Store model attributes before extracting common kwargs
@@ -132,7 +132,7 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
     def _build_context(
         self,
         base_context: dict,
-        **extra_fields: object,
+        **extra_fields: t.FlextTypes.JsonValue,
     ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: t.DbtLdapCore.ContextDict = dict(base_context)
@@ -145,7 +145,7 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
         message: str = "LDAP DBT macro error",
         *,
         macro_name: str | None = None,
-        **kwargs: object,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> None:
         """Initialize LDAP DBT macro error with context."""
         # Store macro name before extracting common kwargs
@@ -185,7 +185,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
     def _build_context(
         self,
         base_context: dict,
-        **extra_fields: object,
+        **extra_fields: t.FlextTypes.JsonValue,
     ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: t.DbtLdapCore.ContextDict = dict(base_context)
@@ -199,7 +199,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         *,
         test_name: str | None = None,
         model_name: str | None = None,
-        **kwargs: object,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> None:
         """Initialize LDAP DBT test error with context."""
         # Store test attributes before extracting common kwargs

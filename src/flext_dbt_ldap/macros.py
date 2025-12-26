@@ -139,7 +139,7 @@ class FlextDbtLdapMacros:
         return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, "cn")
 
     @staticmethod
-    def normalize_ldap_attribute(value: object) -> str:
+    def normalize_ldap_attribute(value: str | list[str] | None) -> str:
         """Normalize LDAP attribute value for DBT processing.
 
         Args:
