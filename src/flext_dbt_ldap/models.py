@@ -36,7 +36,7 @@ class FlextDbtLdapBaseModel(BaseModel):
 class FlextDbtLdapModels(m_core):
     """Unified DBT LDAP models collection with nested model classes."""
 
-    def __init_subclass__(cls, **kwargs: object) -> None:
+    def __init_subclass__(cls, **kwargs: t.FlextTypes.JsonValue) -> None:
         """Warn when FlextDbtLdapModels is subclassed directly."""
         super().__init_subclass__(**kwargs)
         u.Deprecation.warn_once(

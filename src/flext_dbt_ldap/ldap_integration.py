@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from flext_core import FlextLogger
 
+from flext_dbt_ldap.protocols import p
 from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
@@ -18,7 +19,7 @@ class FlextDbtLdapIntegration:
     """Unified DBT LDAP integration service with nested processing methods."""
 
     @staticmethod
-    def process_ldap_entries_for_dbt(df: object) -> object:
+    def process_ldap_entries_for_dbt(df: p.Dbt.DataFrameLike) -> p.Dbt.DataFrameLike:
         """Process LDAP entries DataFrame using flext-ldap generic processing.
 
         ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
@@ -53,7 +54,7 @@ class FlextDbtLdapIntegration:
 
     @staticmethod
     def validate_ldap_data_quality(
-        df: object,
+        df: p.Dbt.DataFrameLike,
     ) -> t.DbtLdapCore.ValidationDict:
         """Validate LDAP data quality using flext-ldap generic validation.
 

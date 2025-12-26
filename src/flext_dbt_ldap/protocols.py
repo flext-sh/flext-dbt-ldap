@@ -47,6 +47,14 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
     class Dbt:
         """DBT domain protocols."""
 
+        @runtime_checkable
+        class DataFrameLike(Protocol):
+            """Protocol for DataFrame-like objects used in DBT Python models."""
+
+            def __len__(self) -> int:
+                """Return the number of rows in the DataFrame."""
+                ...
+
         class Ldap:
             """DBT LDAP domain protocols for LDAP data transformation and analytics."""
 

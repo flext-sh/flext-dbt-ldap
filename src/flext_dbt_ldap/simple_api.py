@@ -72,7 +72,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         ldap_host: str = "localhost",
         ldap_port: int = 389,
         ldap_base_dn: str = "",
-        **kwargs: object,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> r[FlextDbtLdapSettings]:
         """Create DBT LDAP configuration with sensible defaults.
 
@@ -175,7 +175,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         user_id: str,
         common_name: str,
         email: str | None = None,
-        **kwargs: object,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> r[FlextDbtLdapModels.UserDimension]:
         """Create user dimension with required fields.
 
@@ -215,7 +215,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         group_id: str,
         common_name: str,
         description: str | None = None,
-        **kwargs: object,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> r[FlextDbtLdapModels.GroupDimension]:
         """Create group dimension with required fields.
 
@@ -275,7 +275,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         ldap_host: str = "localhost",
         ldap_port: int = 389,
         ldap_base_dn: str = "",
-        **config_kwargs: object,
+        **config_kwargs: t.FlextTypes.JsonValue,
     ) -> r[FlextDbtLdapService]:
         """Create complete DBT LDAP pipeline with minimal configuration using FlextDbtLdapUtilities.
 
