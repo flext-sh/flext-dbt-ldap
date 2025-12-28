@@ -6,7 +6,7 @@ Follows FLEXT standards:
 - No simple aliases to primitive types
 - Python 3.13+ PEP 695 type syntax strict
 - Extends t properly
-- Uses FlextTypes.JsonValue and other t directly
+- Uses t.JsonValue and other t directly
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -33,7 +33,7 @@ class FlextDbtLdapTypes(FlextTypes):
     Domain-specific type system for DBT LDAP data transformation operations.
     Contains ONLY complex DBT LDAP-specific types, no simple aliases.
     Uses Python 3.13+ PEP 695 type syntax strict.
-    Composes with FlextTypes.JsonValue, t.GeneralValueType, etc.
+    Composes with t.JsonValue, t.GeneralValueType, etc.
     """
 
     # =========================================================================
@@ -43,7 +43,7 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtLdapCore:
         """Core DBT LDAP types extending t.
 
-        Uses FlextTypes.JsonValue and t.GeneralValueType for composition.
+        Uses t.JsonValue and t.GeneralValueType for composition.
         No simple aliases - all types are complex and domain-specific.
         """
 
@@ -55,49 +55,49 @@ class FlextDbtLdapTypes(FlextTypes):
         type BoolDict = Mapping[str, bool]
         """Mapping of string keys to boolean values - used for validation results."""
 
-        # Configuration and settings types - using FlextTypes.JsonValue
+        # Configuration and settings types - using t.JsonValue
         type ConfigDict = Mapping[
             str,
-            FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
+            t.JsonValue | Mapping[str, t.JsonValue],
         ]
         """DBT LDAP configuration dictionary type."""
-        type ConnectionDict = Mapping[str, FlextTypes.JsonValue]
+        type ConnectionDict = Mapping[str, t.JsonValue]
         """DBT LDAP connection dictionary type."""
-        type LdapConfigDict = Mapping[str, FlextTypes.JsonValue]
+        type LdapConfigDict = Mapping[str, t.JsonValue]
         """LDAP configuration dictionary type."""
-        type DbtConfigDict = Mapping[str, FlextTypes.JsonValue]
+        type DbtConfigDict = Mapping[str, t.JsonValue]
         """DBT configuration dictionary type."""
-        type ProjectDict = Mapping[str, FlextTypes.JsonValue]
+        type ProjectDict = Mapping[str, t.JsonValue]
         """DBT LDAP project dictionary type."""
 
-        # Data processing types - using FlextTypes.JsonValue
-        type DataDict = Mapping[str, FlextTypes.JsonValue]
+        # Data processing types - using t.JsonValue
+        type DataDict = Mapping[str, t.JsonValue]
         """DBT LDAP data dictionary type."""
-        type ModelDict = Mapping[str, FlextTypes.JsonValue]
+        type ModelDict = Mapping[str, t.JsonValue]
         """DBT LDAP model dictionary type."""
-        type SourceDict = Mapping[str, FlextTypes.JsonValue]
+        type SourceDict = Mapping[str, t.JsonValue]
         """DBT LDAP source dictionary type."""
-        type TransformDict = Mapping[str, FlextTypes.JsonValue]
+        type TransformDict = Mapping[str, t.JsonValue]
         """DBT LDAP transformation dictionary type."""
-        type ValidationDict = Mapping[str, FlextTypes.JsonValue]
+        type ValidationDict = Mapping[str, t.JsonValue]
         """DBT LDAP validation dictionary type."""
 
         # Template and structured response types
-        type TemplateDict = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type TemplateDict = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT LDAP template dictionary type."""
-        type ResponseDict = Mapping[str, FlextTypes.JsonValue]
+        type ResponseDict = Mapping[str, t.JsonValue]
         """DBT LDAP response dictionary type."""
-        type ResultDict = Mapping[str, FlextTypes.JsonValue]
+        type ResultDict = Mapping[str, t.JsonValue]
         """DBT LDAP result dictionary type."""
-        type MetricsDict = Mapping[str, FlextTypes.JsonValue]
+        type MetricsDict = Mapping[str, t.JsonValue]
         """DBT LDAP metrics dictionary type."""
 
         # Operation and context types - PEP 695 strict syntax
-        type OperationDict = Mapping[str, FlextTypes.JsonValue]
+        type OperationDict = Mapping[str, t.JsonValue]
         """DBT LDAP operation dictionary type."""
-        type ContextDict = Mapping[str, FlextTypes.JsonValue]
+        type ContextDict = Mapping[str, t.JsonValue]
         """DBT LDAP context dictionary type."""
-        type SettingsDict = Mapping[str, FlextTypes.JsonValue]
+        type SettingsDict = Mapping[str, t.JsonValue]
         """DBT LDAP settings dictionary type."""
 
     # =========================================================================
@@ -109,19 +109,19 @@ class FlextDbtLdapTypes(FlextTypes):
 
         type ProjectConfiguration = Mapping[
             str,
-            FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
+            t.JsonValue | Mapping[str, t.JsonValue],
         ]
         """DBT project configuration type."""
-        type ModelConfiguration = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type ModelConfiguration = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT model configuration type."""
         type SourceConfiguration = Mapping[
             str,
-            str | Sequence[Mapping[str, FlextTypes.JsonValue]],
+            str | Sequence[Mapping[str, t.JsonValue]],
         ]
         """DBT source configuration type."""
-        type ProfileConfiguration = Mapping[str, FlextTypes.JsonValue]
+        type ProfileConfiguration = Mapping[str, t.JsonValue]
         """DBT profile configuration type."""
-        type MacroConfiguration = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type MacroConfiguration = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT macro configuration type."""
         type TestConfiguration = Mapping[str, str | bool | Sequence[str]]
         """DBT test configuration type."""
@@ -140,16 +140,16 @@ class FlextDbtLdapTypes(FlextTypes):
 
         type AuthenticationConfig = Mapping[
             str,
-            str | Mapping[str, FlextTypes.JsonValue],
+            str | Mapping[str, t.JsonValue],
         ]
         """LDAP authentication configuration type."""
         type ServerConfig = Mapping[str, str | int | bool | Sequence[str]]
         """LDAP server configuration type."""
-        type TlsConfig = Mapping[str, bool | str | Mapping[str, FlextTypes.JsonValue]]
+        type TlsConfig = Mapping[str, bool | str | Mapping[str, t.JsonValue]]
         """LDAP TLS configuration type."""
         type PoolingConfig = Mapping[
             str,
-            int | bool | Mapping[str, FlextTypes.JsonValue],
+            int | bool | Mapping[str, t.JsonValue],
         ]
         """LDAP pooling configuration type."""
         type TimeoutConfig = Mapping[str, int | float]
@@ -172,17 +172,17 @@ class FlextDbtLdapTypes(FlextTypes):
         """LDAP attributes type."""
         type LdapQuery = Mapping[
             str,
-            str | Sequence[str] | int | Mapping[str, FlextTypes.JsonValue],
+            str | Sequence[str] | int | Mapping[str, t.JsonValue],
         ]
         """LDAP query type."""
         type LdapSchema = Mapping[
             str,
-            str | Sequence[Mapping[str, FlextTypes.JsonValue]],
+            str | Sequence[Mapping[str, t.JsonValue]],
         ]
         """LDAP schema type."""
         type LdapOperationResult = Mapping[
             str,
-            bool | str | int | Mapping[str, FlextTypes.JsonValue],
+            bool | str | int | Mapping[str, t.JsonValue],
         ]
         """LDAP operation result type."""
 
@@ -195,23 +195,23 @@ class FlextDbtLdapTypes(FlextTypes):
 
         type TransformationConfig = Mapping[
             str,
-            FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
+            t.JsonValue | Mapping[str, t.JsonValue],
         ]
         """DBT transformation configuration type."""
-        type FieldMapping = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type FieldMapping = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT field mapping type."""
         type DataValidation = Mapping[
             str,
-            bool | str | Sequence[str] | Mapping[str, FlextTypes.JsonValue],
+            bool | str | Sequence[str] | Mapping[str, t.JsonValue],
         ]
         """DBT data validation type."""
-        type TransformationRule = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type TransformationRule = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT transformation rule type."""
-        type OutputFormat = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type OutputFormat = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT output format type."""
         type ProcessingStep = Mapping[
             str,
-            str | int | Mapping[str, FlextTypes.JsonValue],
+            str | int | Mapping[str, t.JsonValue],
         ]
         """DBT processing step type."""
 
@@ -222,25 +222,25 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtModel:
         """DBT LDAP model complex types."""
 
-        type ModelDefinition = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type ModelDefinition = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT model definition type."""
         type ModelExecution = Mapping[
             str,
-            str | bool | int | Mapping[str, FlextTypes.JsonValue],
+            str | bool | int | Mapping[str, t.JsonValue],
         ]
         """DBT model execution type."""
         type ModelDependency = Mapping[
             str,
-            str | Sequence[str] | Mapping[str, FlextTypes.JsonValue],
+            str | Sequence[str] | Mapping[str, t.JsonValue],
         ]
         """DBT model dependency type."""
-        type ModelTest = Mapping[str, str | bool | Mapping[str, FlextTypes.JsonValue]]
+        type ModelTest = Mapping[str, str | bool | Mapping[str, t.JsonValue]]
         """DBT model test type."""
-        type ModelDocumentation = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type ModelDocumentation = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT model documentation type."""
         type ModelMaterialization = Mapping[
             str,
-            str | Mapping[str, FlextTypes.JsonValue],
+            str | Mapping[str, t.JsonValue],
         ]
         """DBT model materialization type."""
 
@@ -251,26 +251,26 @@ class FlextDbtLdapTypes(FlextTypes):
     class DbtSource:
         """DBT LDAP source complex types."""
 
-        type SourceDefinition = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type SourceDefinition = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT source definition type."""
         type SourceConnection = Mapping[
             str,
-            FlextTypes.JsonValue | Mapping[str, FlextTypes.JsonValue],
+            t.JsonValue | Mapping[str, t.JsonValue],
         ]
         """DBT source connection type."""
         type SourceTable = Mapping[
             str,
-            str | Sequence[Mapping[str, FlextTypes.JsonValue]],
+            str | Sequence[Mapping[str, t.JsonValue]],
         ]
         """DBT source table type."""
         type SourceFreshness = Mapping[
             str,
-            str | int | Mapping[str, FlextTypes.JsonValue],
+            str | int | Mapping[str, t.JsonValue],
         ]
         """DBT source freshness type."""
         type SourceTest = Mapping[str, str | bool | Sequence[str]]
         """DBT source test type."""
-        type SourceSchema = Mapping[str, str | Mapping[str, FlextTypes.JsonValue]]
+        type SourceSchema = Mapping[str, str | Mapping[str, t.JsonValue]]
         """DBT source schema type."""
 
     # =========================================================================
@@ -302,17 +302,17 @@ class FlextDbtLdapTypes(FlextTypes):
         ]
         """DBT LDAP project type literal."""
 
-        # DBT LDAP-specific project configurations - using FlextTypes.JsonValue
-        type DbtLdapProjectConfig = Mapping[str, FlextTypes.JsonValue]
+        # DBT LDAP-specific project configurations - using t.JsonValue
+        type DbtLdapProjectConfig = Mapping[str, t.JsonValue]
         """DBT LDAP project configuration type."""
         type LdapTransformConfig = Mapping[str, str | int | bool | Sequence[str]]
         """LDAP transformation configuration type."""
         type DirectoryAnalyticsConfig = Mapping[
             str,
-            bool | str | Mapping[str, FlextTypes.JsonValue],
+            bool | str | Mapping[str, t.JsonValue],
         ]
         """Directory analytics configuration type."""
-        type DbtLdapPipelineConfig = Mapping[str, FlextTypes.JsonValue]
+        type DbtLdapPipelineConfig = Mapping[str, t.JsonValue]
         """DBT LDAP pipeline configuration type."""
 
     class DbtLdap:

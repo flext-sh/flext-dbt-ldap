@@ -4,6 +4,7 @@ Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
 """
+# type: ignore
 
 from __future__ import annotations
 
@@ -16,7 +17,7 @@ from subprocess import CompletedProcess
 
 import psycopg
 import pytest
-from flext_core import FlextLogger
+from flext_core import FlextLogger, FlextTypes as t
 from flext_tests import FlextTestsDocker
 
 logger = FlextLogger(__name__)
@@ -117,7 +118,7 @@ def run_dbt_command(
     command: list[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: dict[str, object] | None = None,
+    dbt_vars: dict[str, t.GeneralValueType] | None = None,
 ) -> CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
