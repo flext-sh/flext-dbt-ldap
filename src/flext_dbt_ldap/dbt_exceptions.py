@@ -65,7 +65,7 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
 
     def _extract_common_kwargs(
         self,
-        kwargs: dict,
+        kwargs: dict[str, t.GeneralValueType],
     ) -> tuple[dict, str | None, str | None]:
         """Extract common parameters from kwargs."""
         base_context = kwargs.get("context", {})
@@ -75,8 +75,8 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
 
     def _build_context(
         self,
-        base_context: dict,
-        **extra_fields: t.FlextTypes.JsonValue,
+        base_context: dict[str, t.GeneralValueType],
+        **extra_fields: t.JsonValue,
     ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: t.DbtLdapCore.ContextDict = dict(base_context)
@@ -90,7 +90,7 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
         *,
         model_name: str | None = None,
         model_type: str | None = None,
-        **kwargs: t.FlextTypes.JsonValue,
+        **kwargs: t.JsonValue,
     ) -> None:
         """Initialize LDAP DBT model error with context."""
         # Store model attributes before extracting common kwargs
@@ -121,7 +121,7 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
 
     def _extract_common_kwargs(
         self,
-        kwargs: dict,
+        kwargs: dict[str, t.GeneralValueType],
     ) -> tuple[dict, str | None, str | None]:
         """Extract common parameters from kwargs."""
         base_context = kwargs.get("context", {})
@@ -131,8 +131,8 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
 
     def _build_context(
         self,
-        base_context: dict,
-        **extra_fields: t.FlextTypes.JsonValue,
+        base_context: dict[str, t.GeneralValueType],
+        **extra_fields: t.JsonValue,
     ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: t.DbtLdapCore.ContextDict = dict(base_context)
@@ -145,7 +145,7 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
         message: str = "LDAP DBT macro error",
         *,
         macro_name: str | None = None,
-        **kwargs: t.FlextTypes.JsonValue,
+        **kwargs: t.JsonValue,
     ) -> None:
         """Initialize LDAP DBT macro error with context."""
         # Store macro name before extracting common kwargs
@@ -174,7 +174,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
 
     def _extract_common_kwargs(
         self,
-        kwargs: dict,
+        kwargs: dict[str, t.GeneralValueType],
     ) -> tuple[dict, str | None, str | None]:
         """Extract common parameters from kwargs."""
         base_context = kwargs.get("context", {})
@@ -184,8 +184,8 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
 
     def _build_context(
         self,
-        base_context: dict,
-        **extra_fields: t.FlextTypes.JsonValue,
+        base_context: dict[str, t.GeneralValueType],
+        **extra_fields: t.JsonValue,
     ) -> t.DbtLdapCore.ContextDict:
         """Build context dictionary with additional fields."""
         context: t.DbtLdapCore.ContextDict = dict(base_context)
@@ -199,7 +199,7 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         *,
         test_name: str | None = None,
         model_name: str | None = None,
-        **kwargs: t.FlextTypes.JsonValue,
+        **kwargs: t.JsonValue,
     ) -> None:
         """Initialize LDAP DBT test error with context."""
         # Store test attributes before extracting common kwargs

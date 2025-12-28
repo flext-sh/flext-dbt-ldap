@@ -366,7 +366,7 @@ class FlextDbtLdapModels(m_core):
             raw = entry.attributes
             object_classes: list[str] = []
             if isinstance(raw, dict):
-                oc_val: list[object] = raw.get("objectClass", [])
+                oc_val: list[t.GeneralValueType] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
@@ -379,7 +379,7 @@ class FlextDbtLdapModels(m_core):
             raw = entry.attributes
             object_classes: list[str] = []
             if isinstance(raw, dict):
-                oc_val: list[object] = raw.get("objectClass", [])
+                oc_val: list[t.GeneralValueType] = raw.get("objectClass", [])
                 if isinstance(oc_val, list):
                     object_classes = [str(x) for x in oc_val]
                 elif oc_val is not None:
