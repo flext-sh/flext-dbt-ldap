@@ -8,16 +8,15 @@ from __future__ import annotations
 
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated, TypeVar
+from typing import Annotated
 
 from flext_core import r
 from flext_core.container import FlextContainer
 from flext_core.utilities import FlextUtilities as u_core
 from pydantic import BeforeValidator
 
+from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.typings import t
-
-T = TypeVar("T")
 
 
 class FlextDbtLdapUtilities(u_core):
@@ -27,11 +26,6 @@ class FlextDbtLdapUtilities(u_core):
     and DBT project management without duplicating functionality.
     Uses FlextDbtLdapModels for all domain-specific data structures.
     """
-
-    # Performance analysis constants
-    PERFORMANCE_EXECUTION_TIME_THRESHOLD = 300  # 5 minutes in seconds
-    PERFORMANCE_MEMORY_USAGE_THRESHOLD = 1000  # 1GB in MB
-    PERFORMANCE_ROWS_PROCESSED_THRESHOLD = 1000000  # 1M rows
 
     def __init__(self) -> None:
         """Initialize FlextDbtLdapUtilities service."""
@@ -628,11 +622,6 @@ where 1=1
     class TransformationOptimization:
         """Transformation optimization utilities."""
 
-        # Performance threshold constants
-        PERFORMANCE_EXECUTION_TIME_THRESHOLD: float = 30.0  # seconds
-        PERFORMANCE_MEMORY_USAGE_THRESHOLD: float = 1024.0  # MB
-        PERFORMANCE_ROWS_PROCESSED_THRESHOLD: int = 100000  # rows
-
         @staticmethod
         def optimize_ldap_query(
             base_query: str,
@@ -712,17 +701,17 @@ where 1=1
                 recommendations: list[str] = []
 
                 # Generate performance recommendations
-                if execution_time > cls.PERFORMANCE_EXECUTION_TIME_THRESHOLD:
+                if execution_time > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD:
                     recommendations.append(
                         "Consider adding indexes or partitioning for large datasets",
                     )
 
-                if memory_usage > cls.PERFORMANCE_MEMORY_USAGE_THRESHOLD:
+                if memory_usage > c.TransformationOptimization.PERFORMANCE_MEMORY_USAGE_THRESHOLD:
                     recommendations.append(
                         "Consider processing data in smaller batches",
                     )
 
-                if rows_processed > cls.PERFORMANCE_ROWS_PROCESSED_THRESHOLD:
+                if rows_processed > c.TransformationOptimization.PERFORMANCE_ROWS_PROCESSED_THRESHOLD:
                     recommendations.append(
                         "Consider incremental processing for large datasets",
                     )

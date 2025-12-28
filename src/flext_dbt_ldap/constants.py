@@ -48,6 +48,14 @@ class FlextDbtLdapConstants(c_core):
         DEFAULT_BATCH_SIZE = c_core.Performance.BatchProcessing.DEFAULT_SIZE
         MAX_BATCH_SIZE = c_core.Performance.BatchProcessing.MAX_ITEMS
 
+    class TransformationOptimization:
+        """Transformation optimization performance thresholds."""
+
+        # Thresholds for performance analysis
+        PERFORMANCE_EXECUTION_TIME_THRESHOLD: Final[float] = 30.0  # seconds
+        PERFORMANCE_MEMORY_USAGE_THRESHOLD: Final[float] = 1024.0  # MB
+        PERFORMANCE_ROWS_PROCESSED_THRESHOLD: Final[int] = 100000  # rows
+
     class DbtLogging:
         """DBT LDAP-specific logging constants."""
 
