@@ -701,17 +701,26 @@ where 1=1
                 recommendations: list[str] = []
 
                 # Generate performance recommendations
-                if execution_time > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD:
+                if (
+                    execution_time
+                    > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD
+                ):
                     recommendations.append(
                         "Consider adding indexes or partitioning for large datasets",
                     )
 
-                if memory_usage > c.TransformationOptimization.PERFORMANCE_MEMORY_USAGE_THRESHOLD:
+                if (
+                    memory_usage
+                    > c.TransformationOptimization.PERFORMANCE_MEMORY_USAGE_THRESHOLD
+                ):
                     recommendations.append(
                         "Consider processing data in smaller batches",
                     )
 
-                if rows_processed > c.TransformationOptimization.PERFORMANCE_ROWS_PROCESSED_THRESHOLD:
+                if (
+                    rows_processed
+                    > c.TransformationOptimization.PERFORMANCE_ROWS_PROCESSED_THRESHOLD
+                ):
                     recommendations.append(
                         "Consider incremental processing for large datasets",
                     )
