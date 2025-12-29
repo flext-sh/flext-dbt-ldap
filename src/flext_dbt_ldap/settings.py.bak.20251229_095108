@@ -737,7 +737,7 @@ class FlextDbtLdapSettings(FlextSettings):
     def create_for_environment(
         cls,
         environment: str,
-        **overrides: t.JsonValue,
+        **overrides: t.FlextTypes.JsonValue,
     ) -> FlextDbtLdapSettings:
         """Create configuration for specific environment using enhanced singleton pattern."""
         return cls.get_or_create_shared_instance(
@@ -800,7 +800,7 @@ class FlextDbtLdapSettings(FlextSettings):
     def get_or_create_shared_instance(
         cls,
         _project_name: str | None = None,
-        **kwargs: t.JsonValue,
+        **kwargs: t.FlextTypes.JsonValue,
     ) -> Self:
         """Get or create shared singleton instance with optional configuration."""
         if cls not in cls._instances:
