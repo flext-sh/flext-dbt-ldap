@@ -4,7 +4,6 @@ Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
 """
-# type: ignore
 
 from __future__ import annotations
 
@@ -21,6 +20,9 @@ from flext_core import FlextLogger, FlextTypes as t
 from flext_tests import FlextTestsDocker
 
 logger = FlextLogger(__name__)
+
+# Constants for test configuration
+POSTGRES_READY_MAX_RETRIES = 30
 
 
 @pytest.fixture(scope="session")
@@ -55,8 +57,7 @@ def postgres_container(
     if start_result.is_failure:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
     # Wait for PostgreSQL to be ready
-    max_retries = 30
-    for i in range(max_retries):
+    for i in range(POSTGRES_READY_MAX_RETRIES):
         try:
             conn = psycopg.connect(
                 host="localhost",
@@ -69,9 +70,11 @@ def postgres_container(
             logger.info("PostgreSQL is ready")
             break
         except (RuntimeError, ValueError, TypeError):
-            if i == max_retries - 1:
+            if i == POSTGRES_READY_MAX_RETRIES - 1:
                 raise
-            logger.info("Waiting for PostgreSQL... (%s/%s)", i + 1, max_retries)
+            logger.info(
+                "Waiting for PostgreSQL... (%s/%s)", i + 1, POSTGRES_READY_MAX_RETRIES
+            )
             time.sleep(2)
     yield
     # Stop containers using FlextTestsDocker

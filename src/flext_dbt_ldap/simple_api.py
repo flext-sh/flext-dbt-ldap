@@ -9,9 +9,6 @@ Unified facade for FLEXT DBT LDAP operations with complete FLEXT integration.
 from __future__ import annotations
 
 from flext_core import (
-    FlextContainer,
-    FlextContext,
-    FlextLogger,
     FlextService,
     r,
 )
@@ -52,11 +49,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         self._config = config or FlextDbtLdapSettings()
         self._client: FlextDbtLdapClient | None = None
         self._service: FlextDbtLdapService | None = None
-
-        # Complete FLEXT ecosystem integration
-        self._container = FlextContainer.get_global().clear()().get_or_create()
-        self._context = FlextContext()
-        self.logger = FlextLogger(__name__)
+        # Note: container, context, and logger are provided automatically by FlextService
 
     @classmethod
     def create(cls) -> FlextDbtLdap:
