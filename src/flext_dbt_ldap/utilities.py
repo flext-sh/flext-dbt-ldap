@@ -32,14 +32,14 @@ class FlextDbtLdapUtilities(u_core):
         super().__init__()
         self._container = FlextContainer.get_global()
 
-    def execute(self) -> r[t.DbtLdapCore.ResultDict]:
+    def execute(self) -> r[t.DbtLdap.ResultDict]:
         """Execute the main DBT LDAP service operation.
 
         Returns:
-        r[t.DbtLdapCore.ResultDict]: Service status and capabilities.
+        r[t.DbtLdap.ResultDict]: Service status and capabilities.
 
         """
-        return r[t.DbtLdapCore.ResultDict].ok({
+        return r[t.DbtLdap.ResultDict].ok({
             "status": "operational",
             "service": "flext-dbt-ldap-utilities",
             "capabilities": [
@@ -53,7 +53,7 @@ class FlextDbtLdapUtilities(u_core):
             ],
         })
 
-    class DbtProjectManagement:
+    class DbtLdap:
         """DBT project management utilities."""
 
         @staticmethod
@@ -163,7 +163,7 @@ class FlextDbtLdapUtilities(u_core):
         @staticmethod
         def validate_dbt_project_structure(
             project_path: Path,
-        ) -> r[t.DbtLdapCore.BoolDict]:
+        ) -> r[t.DbtLdap.BoolDict]:
             """Validate DBT project structure for LDAP transformation project.
 
             Args:
@@ -182,17 +182,66 @@ class FlextDbtLdapUtilities(u_core):
                     "tests_dir": project_path / "tests",
                 }
 
-                validation_results: t.DbtLdapCore.BoolDict = {}
+                validation_results: t.DbtLdap.BoolDict = {}
                 for name, path in required_files.items():
                     validation_results[name] = path.exists()
 
-                return r[t.DbtLdapCore.BoolDict].ok(
+                return r[t.DbtLdap.BoolDict].ok(
                     validation_results,
                 )
             except Exception as e:
-                return r[t.DbtLdapCore.BoolDict].fail(
+                return r[t.DbtLdap.BoolDict].fail(
                     f"DBT project structure validation failed: {e}",
                 )
+
+        # ═══════════════════════════════════════════════════════════════════
+        # COLLECTION UTILITIES: parse_sequence, filter_map - ZERO type errors
+        # ═══════════════════════════════════════════════════════════════════
+
+        class Collection(u_core.Collection):
+            """Collection utilities extending u_core.Collection via inheritance.
+
+            Exposes all flext-core Collection methods through inheritance hierarchy.
+            Access via u.DbtLdap.Collection.* pattern.
+            """
+
+        # ═══════════════════════════════════════════════════════════════════
+        # ARGS UTILITIES: @validated, parse_kwargs - ZERO validation boilerplate
+        # ═══════════════════════════════════════════════════════════════════
+
+        class Args(u_core.Args):
+            """Args utilities extending u_core.Args via inheritance.
+
+            Exposes all flext-core Args methods through inheritance hierarchy,
+            including validated, validated_with_result, parse_kwargs, and get_enum_params.
+            Access via u.DbtLdap.Args.* pattern.
+            """
+
+        # ═══════════════════════════════════════════════════════════════════
+        # MODEL UTILITIES: from_dict, merge_defaults, update - ZERO try/except
+        # ═══════════════════════════════════════════════════════════════════
+
+        class Model(u_core.Model):
+            """Model utilities extending u_core.Model via inheritance.
+
+            Exposes all flext-core Model methods through inheritance hierarchy.
+            Access via u.DbtLdap.Model.* pattern.
+            """
+
+        # ═══════════════════════════════════════════════════════════════════
+        # PYDANTIC UTILITIES: Annotated type factories
+        # ═══════════════════════════════════════════════════════════════════
+
+        class Pydantic:
+            """Annotated type factories."""
+
+            @staticmethod
+            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type:
+                """Create coerced enum type."""
+                return Annotated[
+                    enum_cls,
+                    BeforeValidator(u_core.Enum.coerce_validator(enum_cls)),
+                ]
 
     class LdapDataTransformation:
         """LDAP data transformation utilities."""
@@ -213,7 +262,7 @@ class FlextDbtLdapUtilities(u_core):
 
             """
             try:
-                columns: list[t.DbtLdapCore.DataDict] = []
+                columns: list[t.DbtLdap.DataDict] = []
                 for attr in ldap_attributes:
                     # Map common LDAP attributes to appropriate data types
                     if attr.lower() in {"createtimestamp", "modifytimestamp"}:
@@ -355,7 +404,7 @@ where 1=1
                         column,
                         column_tests,
                     ) in columns_config_value.items():
-                        column_config: t.DbtLdapCore.DataDict = {
+                        column_config: t.DbtLdap.DataDict = {
                             "name": column,
                             "description": f"Tests for {column} column",
                             "tests": column_tests,
@@ -625,7 +674,7 @@ where 1=1
         @staticmethod
         def optimize_ldap_query(
             base_query: str,
-            optimization_hints: t.DbtLdapCore.ConfigDict,
+            optimization_hints: t.DbtLdap.ConfigDict,
         ) -> r[str]:
             """Optimize DBT SQL query for LDAP data processing.
 
@@ -669,8 +718,8 @@ where 1=1
         @classmethod
         def analyze_transformation_performance(
             cls,
-            model_stats: t.DbtLdapCore.MetricsDict,
-        ) -> r[t.DbtLdapCore.MetricsDict]:
+            model_stats: t.DbtLdap.MetricsDict,
+        ) -> r[t.DbtLdap.MetricsDict]:
             """Analyze performance of LDAP transformation models.
 
             Args:
@@ -725,82 +774,20 @@ where 1=1
                         "Consider incremental processing for large datasets",
                     )
 
-                analysis: t.DbtLdapCore.MetricsDict = {
+                analysis: t.DbtLdap.MetricsDict = {
                     "execution_time": execution_time,
                     "rows_processed": rows_processed,
                     "memory_usage": memory_usage,
                     "recommendations": recommendations,
                 }
 
-                return r[t.DbtLdapCore.MetricsDict].ok(
+                return r[t.DbtLdap.MetricsDict].ok(
                     analysis,
                 )
             except Exception as e:
-                return r[t.DbtLdapCore.MetricsDict].fail(
+                return r[t.DbtLdap.MetricsDict].fail(
                     f"Performance analysis failed: {e}",
                 )
-
-    # ═══════════════════════════════════════════════════════════════════
-    # DBT LDAP NAMESPACE: Project-specific utilities
-    # ═══════════════════════════════════════════════════════════════════
-
-    class DbtLdap:
-        """DBT LDAP-specific utility namespace.
-
-        This namespace groups all DBT LDAP-specific utilities for better organization
-        and cross-project access. Access via u.DbtLdap.* pattern.
-
-        Example:
-            from flext_dbt_ldap.utilities import u
-            result = u.DbtLdap.Collection.parse_sequence(Status, ["active", "pending"])
-            parsed = u.DbtLdap.Args.parse_kwargs(kwargs, enum_fields)
-
-        """
-
-        class Collection(u_core.Collection):
-            """Collection utilities extending u_core.Collection via inheritance.
-
-            Exposes all flext-core Collection methods through inheritance hierarchy.
-            Access via u.DbtLdap.Collection.* pattern.
-            """
-
-        # ═══════════════════════════════════════════════════════════════════
-        # ARGS UTILITIES: @validated, parse_kwargs - ZERO validation boilerplate
-        # ═══════════════════════════════════════════════════════════════════
-
-        class Args(u_core.Args):
-            """Args utilities extending u_core.Args via inheritance.
-
-            Exposes all flext-core Args methods through inheritance hierarchy,
-            including validated, validated_with_result, parse_kwargs, and get_enum_params.
-            Access via u.DbtLdap.Args.* pattern.
-            """
-
-        # ═══════════════════════════════════════════════════════════════════
-        # MODEL UTILITIES: from_dict, merge_defaults, update - ZERO try/except
-        # ═══════════════════════════════════════════════════════════════════
-
-        class Model(u_core.Model):
-            """Model utilities extending u_core.Model via inheritance.
-
-            Exposes all flext-core Model methods through inheritance hierarchy.
-            Access via u.DbtLdap.Model.* pattern.
-            """
-
-        # ═══════════════════════════════════════════════════════════════════
-        # PYDANTIC UTILITIES: Annotated type factories
-        # ═══════════════════════════════════════════════════════════════════
-
-        class Pydantic:
-            """Annotated type factories."""
-
-            @staticmethod
-            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type:
-                """Create coerced enum type."""
-                return Annotated[
-                    enum_cls,
-                    BeforeValidator(u_core.Enum.coerce_validator(enum_cls)),
-                ]
 
 
 __all__ = ["FlextDbtLdapUtilities"]

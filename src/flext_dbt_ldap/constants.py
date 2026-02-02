@@ -16,7 +16,7 @@ from flext_core import c as c_core
 class FlextDbtLdapConstants(c_core):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
 
-    class Connection:
+    class DbtLdap:
         """LDAP connection configuration constants."""
 
         class Ldap:
@@ -193,27 +193,27 @@ class FlextDbtLdapConstants(c_core):
     # ═══════════════════════════════════════════════════════════════════
     # LITERAL TYPES: PEP 695 strict type aliases (Python 3.13+)
     # ═══════════════════════════════════════════════════════════════════
-    # All Literal types reference StrEnum members - NO string duplication!
+    # Literal types use string values matching corresponding StrEnum values
 
     type LdapOperationLiteral = Literal[
-        LdapOperations.SEARCH,
-        LdapOperations.BIND,
-        LdapOperations.UNBIND,
-        LdapOperations.ADD,
-        LdapOperations.MODIFY,
-        LdapOperations.DELETE,
+        "search",
+        "bind",
+        "unbind",
+        "add",
+        "modify",
+        "delete",
     ]
-    """LDAP operation literal - references LdapOperations StrEnum members."""
+    """LDAP operation literal - matches LdapOperations StrEnum values."""
 
     type DbtCommandLiteral = Literal[
-        DbtCommands.RUN,
-        DbtCommands.TEST,
-        DbtCommands.BUILD,
-        DbtCommands.SEED,
-        DbtCommands.SNAPSHOT,
-        DbtCommands.DOCS,
+        "run",
+        "test",
+        "build",
+        "seed",
+        "snapshot",
+        "docs",
     ]
-    """DBT command literal - references DbtCommands StrEnum members."""
+    """DBT command literal - matches DbtCommands StrEnum values."""
 
     # DBT log level literal - matches DBT log levels (no corresponding StrEnum)
     type DbtLogLevelLiteral = Literal["debug", "info", "warn", "error", "none"]

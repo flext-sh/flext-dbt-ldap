@@ -243,19 +243,19 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 f"Group dimension creation failed: {e}",
             )
 
-    def create_transformer(self) -> r[FlextDbtLdapModels.Transformer]:
+    def create_transformer(self) -> r[FlextDbtLdapModels.DbtLdap]:
         """Create LDAP data transformer.
 
         Returns:
-        FlextResult containing FlextDbtLdapModels.Transformer instance
+        FlextResult containing FlextDbtLdapModels.DbtLdap instance
 
         """
         try:
             self.logger.debug("Creating LDAP transformer")
-            transformer = FlextDbtLdapModels.Transformer()
-            return r[FlextDbtLdapModels.Transformer].ok(transformer)
+            transformer = FlextDbtLdapModels.DbtLdap()
+            return r[FlextDbtLdapModels.DbtLdap].ok(transformer)
         except Exception as e:
-            return r[FlextDbtLdapModels.Transformer].fail(
+            return r[FlextDbtLdapModels.DbtLdap].fail(
                 f"Transformer creation failed: {e}",
             )
 

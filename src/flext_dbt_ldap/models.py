@@ -36,7 +36,7 @@ class FlextDbtLdapBaseModel(BaseModel):
 class FlextDbtLdapModels(m_core):
     """Unified DBT LDAP models collection with nested model classes."""
 
-    def __init_subclass__(cls, **kwargs: t.FlextTypes.JsonValue) -> None:
+    def __init_subclass__(cls, **kwargs: t.JsonValue) -> None:
         """Warn when FlextDbtLdapModels is subclassed directly."""
         super().__init_subclass__(**kwargs)
         u.Deprecation.warn_once(
@@ -115,7 +115,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User ID and common name are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdap.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -195,7 +195,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("Member count cannot be negative")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdap.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -227,7 +227,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User DN and Group DN are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdap.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -238,7 +238,7 @@ class FlextDbtLdapModels(m_core):
                 "expiry_date": self.expiry_date,
             }
 
-    class Transformer:
+    class DbtLdap:
         """LDAP data transformer for DBT operations.
 
         Transforms LDAP entries into DBT-compatible data models.

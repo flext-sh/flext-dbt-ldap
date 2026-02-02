@@ -77,9 +77,9 @@ class FlextDbtLdapModelError(FlextExceptions.BaseError):
         self,
         base_context: dict[str, t.GeneralValueType],
         **extra_fields: t.JsonValue,
-    ) -> t.DbtLdapCore.ContextDict:
+    ) -> t.DbtLdap.ContextDict:
         """Build context dictionary with additional fields."""
-        context: t.DbtLdapCore.ContextDict = dict(base_context)
+        context: t.DbtLdap.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -133,9 +133,9 @@ class FlextDbtLdapMacroError(FlextExceptions.BaseError):
         self,
         base_context: dict[str, t.GeneralValueType],
         **extra_fields: t.JsonValue,
-    ) -> t.DbtLdapCore.ContextDict:
+    ) -> t.DbtLdap.ContextDict:
         """Build context dictionary with additional fields."""
-        context: t.DbtLdapCore.ContextDict = dict(base_context)
+        context: t.DbtLdap.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
@@ -186,9 +186,9 @@ class FlextDbtLdapTestError(FlextExceptions.BaseError):
         self,
         base_context: dict[str, t.GeneralValueType],
         **extra_fields: t.JsonValue,
-    ) -> t.DbtLdapCore.ContextDict:
+    ) -> t.DbtLdap.ContextDict:
         """Build context dictionary with additional fields."""
-        context: t.DbtLdapCore.ContextDict = dict(base_context)
+        context: t.DbtLdap.ContextDict = dict(base_context)
         context.update(extra_fields)
         return context
 
