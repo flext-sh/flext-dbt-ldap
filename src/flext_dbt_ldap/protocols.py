@@ -41,10 +41,10 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
     dbt: p.Meltano.DbtProtocol
 
     # DBT LDAP-specific protocols
-    dbt_protocol: p.Dbt.Ldap.DbtProtocol
+    dbt_protocol: p.DbtLdap.Ldap.DbtProtocol
     """
 
-    class Dbt:
+    class DbtLdap:
         """DBT domain protocols."""
 
         @runtime_checkable
@@ -65,8 +65,8 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 def run_dbt_models(
                     self,
                     models: Sequence[str] | None = None,
-                    config: t.DbtLdapCore.DbtConfigDict | None = None,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                    config: t.DbtLdap.DbtConfigDict | None = None,
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Run DBT models with LDAP data sources.
 
                     Args:
@@ -74,7 +74,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     config: DBT configuration parameters
 
                     Returns:
-                    r[t.DbtLdapCore.ResultDict]: DBT run results or error
+                    r[t.DbtLdap.ResultDict]: DBT run results or error
 
                     """
                     ...
@@ -82,8 +82,8 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 def test_dbt_models(
                     self,
                     models: Sequence[str] | None = None,
-                    config: t.DbtLdapCore.DbtConfigDict | None = None,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                    config: t.DbtLdap.DbtConfigDict | None = None,
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Test DBT models with LDAP data validation.
 
                     Args:
@@ -91,7 +91,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     config: DBT test configuration
 
                     Returns:
-                    r[t.DbtLdapCore.ResultDict]: DBT test results or error
+                    r[t.DbtLdap.ResultDict]: DBT test results or error
 
                     """
                     ...
@@ -99,8 +99,8 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 def compile_dbt_models(
                     self,
                     models: Sequence[str] | None = None,
-                    config: t.DbtLdapCore.DbtConfigDict | None = None,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                    config: t.DbtLdap.DbtConfigDict | None = None,
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Compile DBT models for LDAP data processing.
 
                     Args:
@@ -108,7 +108,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     config: DBT compilation configuration
 
                     Returns:
-                    r[t.DbtLdapCore.ResultDict]: DBT compilation results or error
+                    r[t.DbtLdap.ResultDict]: DBT compilation results or error
 
                     """
                     ...
@@ -119,7 +119,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     """Get DBT manifest with LDAP model definitions.
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ResultDict]: DBT manifest or error
+                    p_meltano.Result[t.DbtLdap.ResultDict]: DBT manifest or error
 
                     """
                     ...
@@ -147,7 +147,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     self,
                     ldap_config: t.LdapConnection.ConnectionConfig,
                     extraction_config: t.DbtTransformation.TransformationConfig,
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Extract data from LDAP directory for DBT processing.
 
                     Args:
@@ -155,16 +155,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     extraction_config: Data extraction parameters
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Extracted LDAP data or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Extracted LDAP data or error
 
                     """
                     ...
 
                 def transform_ldap_to_dbt_format(
                     self,
-                    ldap_data: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_data: Sequence[t.DbtLdap.DataDict],
                     transformation_config: t.DbtTransformation.TransformationConfig,
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Transform LDAP data to DBT-compatible format.
 
                     Args:
@@ -172,16 +172,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     transformation_config: Transformation parameters
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Transformed data or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Transformed data or error
 
                     """
                     ...
 
                 def validate_ldap_data_quality(
                     self,
-                    data: Sequence[t.DbtLdapCore.DataDict],
+                    data: Sequence[t.DbtLdap.DataDict],
                     quality_rules: t.DbtTransformation.DataValidation,
-                ) -> p_meltano.Result[t.DbtLdapCore.ValidationDict]:
+                ) -> p_meltano.Result[t.DbtLdap.ValidationDict]:
                     """Validate LDAP data quality for DBT processing.
 
                     Args:
@@ -189,16 +189,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     quality_rules: Data quality validation rules
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ValidationDict]: Quality validation results or error
+                    p_meltano.Result[t.DbtLdap.ValidationDict]: Quality validation results or error
 
                     """
                     ...
 
                 def sync_ldap_to_warehouse(
                     self,
-                    ldap_data: Sequence[t.DbtLdapCore.DataDict],
-                    warehouse_config: t.DbtLdapCore.ConfigDict,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                    ldap_data: Sequence[t.DbtLdap.DataDict],
+                    warehouse_config: t.DbtLdap.ConfigDict,
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Sync LDAP data to data warehouse for DBT processing.
 
                     Args:
@@ -217,7 +217,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def create_user_dimension(
                     self,
-                    ldap_users: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_users: Sequence[t.DbtLdap.DataDict],
                     dimension_config: t.DbtModel.ModelDefinition,
                 ) -> p_meltano.Result[t.DbtModel.ModelDefinition]:
                     """Create user dimension model from LDAP user data.
@@ -234,7 +234,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def create_group_dimension(
                     self,
-                    ldap_groups: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_groups: Sequence[t.DbtLdap.DataDict],
                     dimension_config: t.DbtModel.ModelDefinition,
                 ) -> p_meltano.Result[t.DbtModel.ModelDefinition]:
                     """Create group dimension model from LDAP group data.
@@ -251,7 +251,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def create_organizational_hierarchy(
                     self,
-                    ldap_data: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_data: Sequence[t.DbtLdap.DataDict],
                     hierarchy_config: t.DbtModel.ModelDefinition,
                 ) -> p_meltano.Result[t.DbtModel.ModelDefinition]:
                     """Create organizational hierarchy from LDAP organizational units.
@@ -289,9 +289,9 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def normalize_ldap_attributes(
                     self,
-                    ldap_entries: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_entries: Sequence[t.DbtLdap.DataDict],
                     normalization_rules: t.DbtTransformation.TransformationRule,
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Normalize LDAP attributes for consistent data processing.
 
                     Args:
@@ -299,16 +299,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     normalization_rules: Attribute normalization rules
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Normalized LDAP data or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Normalized LDAP data or error
 
                     """
                     ...
 
                 def enrich_ldap_data(
                     self,
-                    ldap_data: Sequence[t.DbtLdapCore.DataDict],
-                    enrichment_sources: Sequence[t.DbtLdapCore.DataDict],
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                    ldap_data: Sequence[t.DbtLdap.DataDict],
+                    enrichment_sources: Sequence[t.DbtLdap.DataDict],
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Enrich LDAP data with additional data sources.
 
                     Args:
@@ -316,16 +316,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     enrichment_sources: Additional data sources for enrichment
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Enriched LDAP data or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Enriched LDAP data or error
 
                     """
                     ...
 
                 def apply_business_rules(
                     self,
-                    data: Sequence[t.DbtLdapCore.DataDict],
+                    data: Sequence[t.DbtLdap.DataDict],
                     business_rules: t.DbtTransformation.TransformationRule,
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Apply business rules to LDAP data transformations.
 
                     Args:
@@ -333,16 +333,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     business_rules: Business transformation rules
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Transformed data or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Transformed data or error
 
                     """
                     ...
 
                 def generate_derived_attributes(
                     self,
-                    ldap_data: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_data: Sequence[t.DbtLdap.DataDict],
                     derivation_config: t.DbtTransformation.TransformationConfig,
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Generate derived attributes from LDAP base attributes.
 
                     Args:
@@ -350,7 +350,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     derivation_config: Attribute derivation configuration
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Data with derived attributes or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Data with derived attributes or error
 
                     """
                     ...
@@ -406,7 +406,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def create_ldap_snapshot_macro(
                     self,
-                    snapshot_config: t.DbtLdapCore.ConfigDict,
+                    snapshot_config: t.DbtLdap.ConfigDict,
                 ) -> p_meltano.Result[str]:
                     """Create DBT snapshot macro for LDAP data versioning.
 
@@ -425,9 +425,9 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def validate_ldap_schema_compliance(
                     self,
-                    ldap_data: Sequence[t.DbtLdapCore.DataDict],
+                    ldap_data: Sequence[t.DbtLdap.DataDict],
                     schema_rules: t.LdapData.LdapSchema,
-                ) -> p_meltano.Result[t.DbtLdapCore.ValidationDict]:
+                ) -> p_meltano.Result[t.DbtLdap.ValidationDict]:
                     """Validate LDAP data against schema compliance rules.
 
                     Args:
@@ -435,16 +435,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     schema_rules: Schema compliance rules
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ValidationDict]: Schema validation results or error
+                    p_meltano.Result[t.DbtLdap.ValidationDict]: Schema validation results or error
 
                     """
                     ...
 
                 def check_data_completeness(
                     self,
-                    data: Sequence[t.DbtLdapCore.DataDict],
+                    data: Sequence[t.DbtLdap.DataDict],
                     completeness_config: t.DbtTransformation.DataValidation,
-                ) -> p_meltano.Result[t.DbtLdapCore.ValidationDict]:
+                ) -> p_meltano.Result[t.DbtLdap.ValidationDict]:
                     """Check LDAP data completeness for DBT processing.
 
                     Args:
@@ -452,16 +452,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     completeness_config: Completeness validation configuration
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ValidationDict]: Completeness check results or error
+                    p_meltano.Result[t.DbtLdap.ValidationDict]: Completeness check results or error
 
                     """
                     ...
 
                 def detect_data_anomalies(
                     self,
-                    data: Sequence[t.DbtLdapCore.DataDict],
+                    data: Sequence[t.DbtLdap.DataDict],
                     anomaly_config: t.DbtTransformation.DataValidation,
-                ) -> p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]:
+                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
                     """Detect anomalies in LDAP data for quality assurance.
 
                     Args:
@@ -469,16 +469,16 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     anomaly_config: Anomaly detection configuration
 
                     Returns:
-                    p_meltano.Result[Sequence[t.DbtLdapCore.DataDict]]: Detected anomalies or error
+                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Detected anomalies or error
 
                     """
                     ...
 
                 def generate_quality_report(
                     self,
-                    quality_results: Sequence[t.DbtLdapCore.ValidationDict],
-                    report_config: t.DbtLdapCore.ConfigDict,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                    quality_results: Sequence[t.DbtLdap.ValidationDict],
+                    report_config: t.DbtLdap.ConfigDict,
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Generate data quality report for LDAP DBT processing.
 
                     Args:
@@ -486,7 +486,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     report_config: Report generation configuration
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ResultDict]: Quality report or error
+                    p_meltano.Result[t.DbtLdap.ResultDict]: Quality report or error
 
                     """
                     ...
@@ -498,7 +498,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 def optimize_dbt_models(
                     self,
                     model_config: t.DbtProject.ModelConfiguration,
-                    performance_metrics: t.DbtLdapCore.MetricsDict,
+                    performance_metrics: t.DbtLdap.MetricsDict,
                 ) -> p_meltano.Result[t.DbtProject.ModelConfiguration]:
                     """Optimize DBT models for LDAP data processing performance.
 
@@ -515,7 +515,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 def cache_ldap_extractions(
                     self,
                     extraction_config: t.DbtTransformation.TransformationConfig,
-                    cache_config: t.DbtLdapCore.ConfigDict,
+                    cache_config: t.DbtLdap.ConfigDict,
                 ) -> p_meltano.Result[bool]:
                     """Cache LDAP data extractions for improved performance.
 
@@ -531,15 +531,15 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def monitor_dbt_performance(
                     self,
-                    run_results: t.DbtLdapCore.ResultDict,
-                ) -> p_meltano.Result[t.DbtLdapCore.MetricsDict]:
+                    run_results: t.DbtLdap.ResultDict,
+                ) -> p_meltano.Result[t.DbtLdap.MetricsDict]:
                     """Monitor DBT performance with LDAP data processing.
 
                     Args:
                     run_results: DBT run results
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.MetricsDict]: Performance metrics or error
+                    p_meltano.Result[t.DbtLdap.MetricsDict]: Performance metrics or error
 
                     """
                     ...
@@ -566,7 +566,7 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 def track_dbt_run_metrics(
                     self,
                     run_id: str,
-                    metrics: t.DbtLdapCore.MetricsDict,
+                    metrics: t.DbtLdap.MetricsDict,
                 ) -> p_meltano.Result[bool]:
                     """Track DBT run metrics for LDAP data processing.
 
@@ -597,26 +597,26 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
 
                 def get_health_status(
                     self,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Get DBT LDAP integration health status.
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ResultDict]: Health status or error
+                    p_meltano.Result[t.DbtLdap.ResultDict]: Health status or error
 
                     """
                     ...
 
                 def create_monitoring_dashboard(
                     self,
-                    dashboard_config: t.DbtLdapCore.ConfigDict,
-                ) -> p_meltano.Result[t.DbtLdapCore.ResultDict]:
+                    dashboard_config: t.DbtLdap.ConfigDict,
+                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
                     """Create monitoring dashboard for DBT LDAP operations.
 
                     Args:
                     dashboard_config: Dashboard configuration
 
                     Returns:
-                    p_meltano.Result[t.DbtLdapCore.ResultDict]: Dashboard creation result or error
+                    p_meltano.Result[t.DbtLdap.ResultDict]: Dashboard creation result or error
 
                     """
                     ...

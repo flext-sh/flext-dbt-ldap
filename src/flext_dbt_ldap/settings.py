@@ -653,7 +653,7 @@ class FlextDbtLdapSettings(FlextSettings):
             "validate_dns": self.validate_dns,
         }
 
-    def get_dbt_ldap_logging_config(self) -> t.DbtLdapCore.SettingsDict:
+    def get_dbt_ldap_logging_config(self) -> t.DbtLdap.SettingsDict:
         """Get DBT LDAP-specific logging configuration dictionary."""
         return {
             "log_dbt_operations": self.log_dbt_operations,

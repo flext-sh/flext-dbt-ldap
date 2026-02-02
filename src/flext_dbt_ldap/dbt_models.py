@@ -44,7 +44,7 @@ class FlextDbtLdapModels(m_core):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: FlextLdapModels.Entry,
+            entry: FlextLdapModels.Ldif.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             # Normalize attributes to dict[str, list[str]]
@@ -94,7 +94,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User ID and common name are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdap.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -128,11 +128,11 @@ class FlextDbtLdapModels(m_core):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: FlextLdapModels.Entry,
+            entry: FlextLdapModels.Ldif.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             raw = entry.attributes
-            attrs: dict[str, t.DbtLdapCore.StringList] = {}
+            attrs: dict[str, t.DbtLdap.StringList] = {}
             if isinstance(raw, dict):
                 for k, v in raw.items():
                     if isinstance(v, list):
@@ -174,7 +174,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("Member count cannot be negative")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdap.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -206,7 +206,7 @@ class FlextDbtLdapModels(m_core):
                 return r[None].fail("User DN and Group DN are required")
             return r[None].ok(None)
 
-        def to_dbt_dict(self) -> t.DbtLdapCore.DataDict:
+        def to_dbt_dict(self) -> t.DbtLdap.DataDict:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -230,7 +230,7 @@ class FlextDbtLdapModels(m_core):
 
         def transform_users(
             self,
-            entries: list[FlextLdapModels.Entry],
+            entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions.
 
@@ -262,7 +262,7 @@ class FlextDbtLdapModels(m_core):
 
         def transform_groups(
             self,
-            entries: list[FlextLdapModels.Entry],
+            entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions.
 
@@ -300,7 +300,7 @@ class FlextDbtLdapModels(m_core):
 
         def transform_memberships(
             self,
-            entries: list[FlextLdapModels.Entry],
+            entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts.
 
@@ -340,7 +340,7 @@ class FlextDbtLdapModels(m_core):
             logger.info("Transformed %d membership facts", len(membership_facts))
             return membership_facts
 
-        def _is_user_entry(self, entry: FlextLdapModels.Entry) -> bool:
+        def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
             """Check if entry is a user entry."""
             raw = entry.attributes
             object_classes: list[str] = []
@@ -353,7 +353,7 @@ class FlextDbtLdapModels(m_core):
             user_classes = ["person", "user", "inetOrgPerson", "organizationalPerson"]
             return any(cls in object_classes for cls in user_classes)
 
-        def _is_group_entry(self, entry: FlextLdapModels.Entry) -> bool:
+        def _is_group_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
             """Check if entry is a group entry."""
             raw = entry.attributes
             object_classes: list[str] = []
@@ -373,7 +373,7 @@ class FlextDbtLdapModels(m_core):
 
         def _extract_group_memberships(
             self,
-            group_entry: FlextLdapModels.Entry,
+            group_entry: FlextLdapModels.Ldif.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
@@ -403,7 +403,7 @@ class FlextDbtLdapModels(m_core):
 
         def _extract_user_memberships(
             self,
-            user_entry: FlextLdapModels.Entry,
+            user_entry: FlextLdapModels.Ldif.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []

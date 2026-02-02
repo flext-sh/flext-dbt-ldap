@@ -40,7 +40,7 @@ class FlextDbtLdapTypes(FlextTypes):
     # CORE DBT LDAP TYPES - Complex types using t composition
     # =========================================================================
 
-    class DbtLdapCore:
+    class DbtLdap:
         """Core DBT LDAP types extending t.
 
         Uses t.JsonValue and t.GeneralValueType for composition.
@@ -314,28 +314,6 @@ class FlextDbtLdapTypes(FlextTypes):
         """Directory analytics configuration type."""
         type DbtLdapPipelineConfig = Mapping[str, t.JsonValue]
         """DBT LDAP pipeline configuration type."""
-
-    class DbtLdap:
-        """DBT LDAP types namespace for cross-project access.
-
-        Provides organized access to all DBT LDAP types for other FLEXT projects.
-        Usage: Other projects can reference `t.DbtLdap.LdapData.*`, `t.DbtLdap.Project.*`, etc.
-        This enables consistent namespace patterns for cross-project type access.
-
-        Examples:
-            from flext_dbt_ldap.typings import t
-            from flext_dbt_ldap.protocols import p
-            # Use protocol references via p alias:
-            # p.Ldap.Config.ConnectionConfigProtocol
-            # Or use type aliases from parent:
-            # FlextLdapTypes.Ldif.Entry.Instance
-            config: t.DbtLdap.Project.DbtLdapProjectConfig = ...
-
-        Note: Namespace composition via inheritance - no aliases needed.
-        Access parent namespaces directly through inheritance.
-        Use protocol references via p alias (p.Ldap.*) or parent type aliases (FlextLdapTypes.*).
-
-        """
 
 
 # Alias for simplified usage
