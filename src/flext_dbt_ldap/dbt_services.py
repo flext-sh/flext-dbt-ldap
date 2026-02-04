@@ -297,9 +297,7 @@ class FlextDbtLdapService:
 
             if test_result.is_success:
                 logger.info("Data quality validation completed successfully")
-                validation_result: t.DbtLdap.ValidationDict = (
-                    test_result.value or {}
-                )
+                validation_result: t.DbtLdap.ValidationDict = test_result.value or {}
                 return r[t.DbtLdap.ValidationDict].ok(
                     validation_result,
                 )
