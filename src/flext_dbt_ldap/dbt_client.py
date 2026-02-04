@@ -292,7 +292,9 @@ class FlextDbtLdapClient:
         )
         return prepared_data
 
-    def _matches_schema(self, entry: FlextLdapModels.Ldif.Entry, schema_name: str) -> bool:
+    def _matches_schema(
+        self, entry: FlextLdapModels.Ldif.Entry, schema_name: str
+    ) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes = entry.object_classes
         schema_mapping = {

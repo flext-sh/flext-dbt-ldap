@@ -19,7 +19,9 @@ class FlextDbtLdapIntegration:
     """Unified DBT LDAP integration service with nested processing methods."""
 
     @staticmethod
-    def process_ldap_entries_for_dbt(df: p.DbtLdap.DataFrameLike) -> p.DbtLdap.DataFrameLike:
+    def process_ldap_entries_for_dbt(
+        df: p.DbtLdap.DataFrameLike,
+    ) -> p.DbtLdap.DataFrameLike:
         """Process LDAP entries DataFrame using flext-ldap generic processing.
 
         ELIMINATED DUPLICATION: This function now 100% delegates to flext-ldap API
