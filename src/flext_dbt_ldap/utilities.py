@@ -16,42 +16,34 @@ from flext_core.utilities import FlextUtilities as u_core
 from pydantic import BeforeValidator
 
 from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap.models import FlextDbtLdapModels as m
 
 
 class FlextDbtLdapUtilities(u_core):
-    """Unified DBT LDAP utilities service extending u.
-
-    Provides complete DBT LDAP utilities for data transformation, LDAP integration,
-    and DBT project management without duplicating functionality.
-    Uses FlextDbtLdapModels for all domain-specific data structures.
-    """
+    """Unified DBT LDAP utilities service extending u."""
 
     def __init__(self) -> None:
         """Initialize FlextDbtLdapUtilities service."""
         super().__init__()
         self._container = FlextContainer.get_global()
 
-    def execute(self) -> r[t.DbtLdap.ResultDict]:
-        """Execute the main DBT LDAP service operation.
-
-        Returns:
-        r[t.DbtLdap.ResultDict]: Service status and capabilities.
-
-        """
-        return r[t.DbtLdap.ResultDict].ok({
-            "status": "operational",
-            "service": "flext-dbt-ldap-utilities",
-            "capabilities": [
-                "dbt_project_management",
-                "ldap_data_transformation",
-                "schema_generation",
-                "macro_management",
-                "dbt_model_validation",
-                "ldap_source_configuration",
-                "transformation_optimization",
-            ],
-        })
+    def execute(self) -> r[m.ServiceStatus]:
+        """Execute the main DBT LDAP service operation."""
+        return r[m.ServiceStatus].ok(
+            m.ServiceStatus(
+                status="operational",
+                service="flext-dbt-ldap-utilities",
+                capabilities=[
+                    "dbt_project_management",
+                    "ldap_data_transformation",
+                    "schema_generation",
+                    "macro_management",
+                    "dbt_model_validation",
+                    "ldap_source_configuration",
+                    "transformation_optimization",
+                ],
+            ),
+        )
 
     class DbtLdap:
         """DBT project management utilities."""
@@ -59,120 +51,41 @@ class FlextDbtLdapUtilities(u_core):
         @staticmethod
         def create_dbt_project_config(
             project_name: str,
-            ldap_sources: list[t.DbtSource.SourceTable],
+            ldap_sources: list[m.DbtSourceTable],
             target_schema: str = "ldap_transformed",
-        ) -> r[t.DbtProject.ProjectConfiguration]:
-            """Create DBT project configuration for LDAP data transformation.
-
-            Args:
-            project_name: Name of the DBT project
-            ldap_sources: List of LDAP source configurations
-            target_schema: Target schema for transformed data
-
-            Returns:
-            r containing DBT project configuration or error
-
-            """
+        ) -> r[m.DbtProjectConfig]:
+            """Create DBT project configuration for LDAP data transformation."""
             try:
-                project_config = {
-                    "name": project_name,
-                    "version": "1.0.0",
-                    "profile": f"{project_name}_profile",
-                    "model-paths": ["models"],
-                    "analysis-paths": ["analyses"],
-                    "test-paths": ["tests"],
-                    "seed-paths": ["seeds"],
-                    "macro-paths": ["macros"],
-                    "snapshot-paths": ["snapshots"],
-                    "target-path": "target",
-                    "clean-targets": ["target", "dbt_packages"],
-                    "models": {
-                        project_name: {
-                            "materialized": "table",
-                            "schema": target_schema,
-                            "tags": ["ldap", "transformation"],
-                        },
-                    },
-                    "sources": {"ldap_sources": {"tables": ldap_sources}},
-                }
-
-                return r[t.DbtProject.ProjectConfiguration].ok(project_config)
+                project_config = m.DbtProjectConfig(
+                    name=project_name,
+                    profile=f"{project_name}_profile",
+                    target_schema=target_schema,
+                    tags=["ldap", "transformation"],
+                )
+                return r[m.DbtProjectConfig].ok(project_config)
             except Exception as e:
-                return r[t.DbtProject.ProjectConfiguration].fail(
+                return r[m.DbtProjectConfig].fail(
                     f"DBT project config creation failed: {e}",
                 )
 
         @staticmethod
         def generate_dbt_profiles(
             profile_name: str,
-            connection_config: t.DbtProject.ProfileConfiguration,
-        ) -> r[t.DbtProject.ProfileConfiguration]:
-            """Generate DBT profiles configuration for LDAP data sources.
-
-            Args:
-            profile_name: Name of the DBT profile
-            connection_config: Database connection configuration
-
-            Returns:
-            r containing DBT profiles configuration or error
-
-            """
+            connection_config: m.DbtProfileConfig,
+        ) -> r[m.DbtProfileConfig]:
+            """Generate DBT profiles configuration for LDAP data sources."""
             try:
-                profiles_config = {
-                    profile_name: {
-                        "target": "dev",
-                        "outputs": {
-                            "dev": {
-                                "type": connection_config.get("type", "postgres"),
-                                "host": connection_config.get("host", "localhost"),
-                                "user": connection_config.get("user", "dbt_user"),
-                                "password": connection_config.get("password", ""),
-                                "port": connection_config.get("port", 5432),
-                                "dbname": connection_config.get("dbname", "ldap_db"),
-                                "schema": connection_config.get("schema", "public"),
-                                "threads": connection_config.get("threads", 4),
-                                "keepalives_idle": 0,
-                            },
-                            "prod": {
-                                "type": connection_config.get("type", "postgres"),
-                                "host": connection_config.get("prod_host", "prod-db"),
-                                "user": connection_config.get("prod_user", "dbt_user"),
-                                "password": connection_config.get("prod_password", ""),
-                                "port": connection_config.get("port", 5432),
-                                "dbname": connection_config.get(
-                                    "prod_dbname",
-                                    "ldap_prod",
-                                ),
-                                "schema": connection_config.get(
-                                    "prod_schema",
-                                    "public",
-                                ),
-                                "threads": connection_config.get("threads", 8),
-                                "keepalives_idle": 0,
-                            },
-                        },
-                    },
-                }
-
-                return r[t.DbtProject.ProfileConfiguration].ok(profiles_config)
+                return r[m.DbtProfileConfig].ok(connection_config)
             except Exception as e:
-                return r[t.DbtProject.ProfileConfiguration].fail(
+                return r[m.DbtProfileConfig].fail(
                     f"DBT profiles generation failed: {e}",
                 )
 
         @staticmethod
         def validate_dbt_project_structure(
             project_path: Path,
-        ) -> r[t.DbtLdap.BoolDict]:
-            """Validate DBT project structure for LDAP transformation project.
-
-            Args:
-            project_path: Path to the DBT project
-
-            Returns:
-            r containing validation results or error
-
-            """
+        ) -> r[m.ProjectStructureValidation]:
+            """Validate DBT project structure for LDAP transformation project."""
             try:
                 required_files = {
                     "dbt_project.yml": project_path / "dbt_project.yml",
@@ -181,56 +94,26 @@ class FlextDbtLdapUtilities(u_core):
                     "macros_dir": project_path / "macros",
                     "tests_dir": project_path / "tests",
                 }
-
-                validation_results: t.DbtLdap.BoolDict = {}
+                results: dict[str, bool] = {}
                 for name, path in required_files.items():
-                    validation_results[name] = path.exists()
+                    results[name] = path.exists()
 
-                return r[t.DbtLdap.BoolDict].ok(
-                    validation_results,
+                return r[m.ProjectStructureValidation].ok(
+                    m.ProjectStructureValidation(results=results),
                 )
             except Exception as e:
-                return r[t.DbtLdap.BoolDict].fail(
+                return r[m.ProjectStructureValidation].fail(
                     f"DBT project structure validation failed: {e}",
                 )
 
-        # ═══════════════════════════════════════════════════════════════════
-        # COLLECTION UTILITIES: parse_sequence, filter_map - ZERO type errors
-        # ═══════════════════════════════════════════════════════════════════
-
         class Collection(u_core.Collection):
-            """Collection utilities extending u_core.Collection via inheritance.
-
-            Exposes all flext-core Collection methods through inheritance hierarchy.
-            Access via u.DbtLdap.Collection.* pattern.
-            """
-
-        # ═══════════════════════════════════════════════════════════════════
-        # ARGS UTILITIES: @validated, parse_kwargs - ZERO validation boilerplate
-        # ═══════════════════════════════════════════════════════════════════
+            """Collection utilities extending u_core.Collection via inheritance."""
 
         class Args(u_core.Args):
-            """Args utilities extending u_core.Args via inheritance.
-
-            Exposes all flext-core Args methods through inheritance hierarchy,
-            including validated, validated_with_result, parse_kwargs, and get_enum_params.
-            Access via u.DbtLdap.Args.* pattern.
-            """
-
-        # ═══════════════════════════════════════════════════════════════════
-        # MODEL UTILITIES: from_dict, merge_defaults, update - ZERO try/except
-        # ═══════════════════════════════════════════════════════════════════
+            """Args utilities extending u_core.Args via inheritance."""
 
         class Model(u_core.Model):
-            """Model utilities extending u_core.Model via inheritance.
-
-            Exposes all flext-core Model methods through inheritance hierarchy.
-            Access via u.DbtLdap.Model.* pattern.
-            """
-
-        # ═══════════════════════════════════════════════════════════════════
-        # PYDANTIC UTILITIES: Annotated type factories
-        # ═══════════════════════════════════════════════════════════════════
+            """Model utilities extending u_core.Model via inheritance."""
 
         class Pydantic:
             """Annotated type factories."""
@@ -250,39 +133,27 @@ class FlextDbtLdapUtilities(u_core):
         def generate_ldap_source_schema(
             ldap_attributes: list[str],
             source_name: str = "ldap_users",
-        ) -> r[t.DbtSource.SourceSchema]:
-            """Generate DBT source schema for LDAP attributes.
-
-            Args:
-            ldap_attributes: List of LDAP attribute names
-            source_name: Name for the LDAP source
-
-            Returns:
-            r containing DBT source schema or error
-
-            """
+        ) -> r[m.DbtSourceSchema]:
+            """Generate DBT source schema for LDAP attributes."""
             try:
-                columns: list[t.DbtLdap.DataDict] = []
+                columns: list[dict[str, str]] = []
                 for attr in ldap_attributes:
-                    # Map common LDAP attributes to appropriate data types
                     if attr.lower() in {"createtimestamp", "modifytimestamp"}:
                         data_type = "timestamp"
                     elif attr.lower() in {"memberof", "objectclass"}:
-                        data_type = "text[]"  # Array for multi-valued attributes
+                        data_type = "text[]"
                     elif attr.lower() in {"uidnumber", "gidnumber"}:
                         data_type = "integer"
                     else:
-                        data_type = "text"  # Default for string attributes
-
+                        data_type = "text"
                     columns.append({
                         "name": attr.lower().replace("-", "_"),
                         "description": f"LDAP {attr} attribute",
                         "data_type": data_type,
                     })
 
-                source_schema: t.DbtSource.SourceSchema = {
-                    "version": "2",
-                    "sources": [
+                source_schema = m.DbtSourceSchema(
+                    sources=[
                         {
                             "name": "ldap",
                             "description": "LDAP directory data source",
@@ -295,13 +166,10 @@ class FlextDbtLdapUtilities(u_core):
                             ],
                         },
                     ],
-                }
-
-                return r[t.DbtSource.SourceSchema].ok(
-                    source_schema,
                 )
+                return r[m.DbtSourceSchema].ok(source_schema)
             except Exception as e:
-                return r[t.DbtSource.SourceSchema].fail(
+                return r[m.DbtSourceSchema].fail(
                     f"LDAP source schema generation failed: {e}",
                 )
 
@@ -311,19 +179,8 @@ class FlextDbtLdapUtilities(u_core):
             source_table: str,
             transformations: dict[str, str],
         ) -> r[str]:
-            """Create DBT model SQL for LDAP data transformation.
-
-            Args:
-            model_name: Name of the DBT model
-            source_table: Source table name
-            transformations: Dictionary of column transformations
-
-            Returns:
-            r containing DBT model SQL or error
-
-            """
+            """Create DBT model SQL for LDAP data transformation."""
             try:
-                # Build SELECT clause with transformations
                 select_clauses: list[str] = []
                 for column, transformation in transformations.items():
                     if transformation == "identity":
@@ -331,7 +188,6 @@ class FlextDbtLdapUtilities(u_core):
                     else:
                         select_clauses.append(f"    {transformation} as {column}")
 
-                # DBT template generation - safe string formatting
                 model_sql = f"""{{{{
     config(
         materialized='table',
@@ -347,7 +203,6 @@ where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
 """
-
                 return r[str].ok(model_sql)
             except Exception as e:
                 return r[str].fail(
@@ -357,65 +212,35 @@ where 1=1
         @staticmethod
         def generate_ldap_data_tests(
             model_name: str,
-            test_config: t.DbtProject.TestConfiguration,
-        ) -> r[t.DbtProject.TestConfiguration]:
-            """Generate DBT data tests for LDAP transformation models.
-
-            Args:
-            model_name: Name of the model to test
-            test_config: Test configuration parameters
-
-            Returns:
-            r containing DBT test configuration or error
-
-            """
+            test_config: m.DbtTestConfig,
+        ) -> r[m.DbtTestConfig]:
+            """Generate DBT data tests for LDAP transformation models."""
             try:
-                tests: t.DbtProject.TestConfiguration = {
-                    "version": "2",
-                    "models": [
+                tests = m.DbtTestConfig(
+                    models=[
                         {
                             "name": model_name,
                             "description": f"Data tests for {model_name} LDAP model",
-                            "tests": [
-                                "unique",
-                                "not_null",
-                            ],
+                            "tests": ["unique", "not_null"],
                             "columns": [],
                         },
                     ],
-                }
-
-                # Add column-specific tests
-                columns_config_value = test_config.get("columns")
-                if not isinstance(columns_config_value, dict):
-                    return r[t.DbtProject.TestConfiguration].ok(tests)
-
-                models_list_value = tests.get("models")
-                if not isinstance(models_list_value, list) or not models_list_value:
-                    return r[t.DbtProject.TestConfiguration].ok(tests)
-
-                model_dict = models_list_value[0]
-                if not isinstance(model_dict, dict):
-                    return r[t.DbtProject.TestConfiguration].ok(tests)
-
-                columns_list_value = model_dict.get("columns")
-                if isinstance(columns_list_value, list):
-                    for (
-                        column,
-                        column_tests,
-                    ) in columns_config_value.items():
-                        column_config: t.DbtLdap.DataDict = {
-                            "name": column,
-                            "description": f"Tests for {column} column",
-                            "tests": column_tests,
-                        }
-                        columns_list_value.append(column_config)
-
-                return r[t.DbtProject.TestConfiguration].ok(
-                    tests,
                 )
+                # Add column-specific tests from input config
+                if test_config.columns and tests.models:
+                    model_dict = tests.models[0]
+                    if isinstance(model_dict, dict):
+                        columns_list = model_dict.get("columns")
+                        if isinstance(columns_list, list):
+                            for col, col_tests in test_config.columns.items():
+                                columns_list.append({
+                                    "name": col,
+                                    "description": f"Tests for {col} column",
+                                    "tests": col_tests,
+                                })
+                return r[m.DbtTestConfig].ok(tests)
             except Exception as e:
-                return r[t.DbtProject.TestConfiguration].fail(
+                return r[m.DbtTestConfig].fail(
                     f"LDAP data tests generation failed: {e}",
                 )
 
@@ -426,15 +251,7 @@ where 1=1
         def create_ldap_parsing_macro(
             macro_name: str = "parse_ldap_dn",
         ) -> r[str]:
-            """Create DBT macro for parsing LDAP distinguished names.
-
-            Args:
-            macro_name: Name of the macro
-
-            Returns:
-            r containing macro SQL or error
-
-            """
+            """Create DBT macro for parsing LDAP distinguished names."""
             try:
                 macro_sql = f"""-- Macro to parse LDAP Distinguished Name (DN) components
 {{% macro {macro_name}(dn_column, component='cn') %}}
@@ -454,7 +271,6 @@ where 1=1
         )
     end
 {{% endmacro %}}"""
-
                 return r[str].ok(macro_sql)
             except Exception as e:
                 return r[str].fail(f"LDAP parsing macro creation failed: {e}")
@@ -463,17 +279,8 @@ where 1=1
         def create_ldap_attribute_macro(
             macro_name: str = "extract_ldap_attribute",
         ) -> r[str]:
-            """Create DBT macro for extracting LDAP attributes from arrays.
-
-            Args:
-            macro_name: Name of the macro
-
-            Returns:
-            r containing macro SQL or error
-
-            """
+            """Create DBT macro for extracting LDAP attributes from arrays."""
             try:
-                # DBT macro template generation - safe string formatting
                 macro_sql = f"""-- Macro to extract specific values from LDAP multi-valued attributes
 {{% macro {macro_name}(attribute_array, filter_pattern='') %}}
  case
@@ -490,7 +297,6 @@ where 1=1
  {{% endif %}}
  end
 {{% endmacro %}}"""
-
                 return r[str].ok(macro_sql)
             except Exception as e:
                 return r[str].fail(
@@ -501,15 +307,7 @@ where 1=1
         def create_ldap_normalization_macro(
             macro_name: str = "normalize_ldap_timestamp",
         ) -> r[str]:
-            """Create DBT macro for normalizing LDAP timestamps.
-
-            Args:
-            macro_name: Name of the macro
-
-            Returns:
-            r containing macro SQL or error
-
-            """
+            """Create DBT macro for normalizing LDAP timestamps."""
             try:
                 macro_sql = f"""-- Macro to normalize LDAP timestamps to standard format
 {{% macro {macro_name}(timestamp_column) %}}
@@ -526,7 +324,6 @@ where 1=1
  try_cast({{{{{{timestamp_column}}}}}} as timestamp)
  end
 {{% endmacro %}}"""
-
                 return r[str].ok(macro_sql)
             except Exception as e:
                 return r[str].fail(
@@ -537,17 +334,11 @@ where 1=1
         """Schema generation utilities for LDAP data structures."""
 
         @staticmethod
-        def generate_user_schema() -> r[t.DbtModel.ModelDefinition]:
-            """Generate standard schema for LDAP user data.
-
-            Returns:
-            r containing user schema configuration or error
-
-            """
+        def generate_user_schema() -> r[m.DbtModelDefinition]:
+            """Generate standard schema for LDAP user data."""
             try:
-                user_schema: t.DbtModel.ModelDefinition = {
-                    "version": "2",
-                    "models": [
+                user_schema = m.DbtModelDefinition(
+                    models=[
                         {
                             "name": "ldap_users",
                             "description": "Normalized LDAP user data",
@@ -575,10 +366,7 @@ where 1=1
                                     "name": "department",
                                     "description": "User department",
                                 },
-                                {
-                                    "name": "manager",
-                                    "description": "User manager",
-                                },
+                                {"name": "manager", "description": "User manager"},
                                 {
                                     "name": "groups",
                                     "description": "User group memberships",
@@ -599,28 +387,19 @@ where 1=1
                             ],
                         },
                     ],
-                }
-
-                return r[t.DbtModel.ModelDefinition].ok(
-                    user_schema,
                 )
+                return r[m.DbtModelDefinition].ok(user_schema)
             except Exception as e:
-                return r[t.DbtModel.ModelDefinition].fail(
+                return r[m.DbtModelDefinition].fail(
                     f"User schema generation failed: {e}",
                 )
 
         @staticmethod
-        def generate_group_schema() -> r[t.DbtModel.ModelDefinition]:
-            """Generate standard schema for LDAP group data.
-
-            Returns:
-            r containing group schema configuration or error
-
-            """
+        def generate_group_schema() -> r[m.DbtModelDefinition]:
+            """Generate standard schema for LDAP group data."""
             try:
-                group_schema: t.DbtModel.ModelDefinition = {
-                    "version": "2",
-                    "models": [
+                group_schema = m.DbtModelDefinition(
+                    models=[
                         {
                             "name": "ldap_groups",
                             "description": "Normalized LDAP group data",
@@ -639,14 +418,8 @@ where 1=1
                                     "name": "description",
                                     "description": "Group description",
                                 },
-                                {
-                                    "name": "group_type",
-                                    "description": "Type of group (security, distribution, etc.)",
-                                },
-                                {
-                                    "name": "members",
-                                    "description": "Group member list",
-                                },
+                                {"name": "group_type", "description": "Type of group"},
+                                {"name": "members", "description": "Group member list"},
                                 {
                                     "name": "created_at",
                                     "description": "Group creation timestamp",
@@ -658,13 +431,10 @@ where 1=1
                             ],
                         },
                     ],
-                }
-
-                return r[t.DbtModel.ModelDefinition].ok(
-                    group_schema,
                 )
+                return r[m.DbtModelDefinition].ok(group_schema)
             except Exception as e:
-                return r[t.DbtModel.ModelDefinition].fail(
+                return r[m.DbtModelDefinition].fail(
                     f"Group schema generation failed: {e}",
                 )
 
@@ -674,43 +444,23 @@ where 1=1
         @staticmethod
         def optimize_ldap_query(
             base_query: str,
-            optimization_hints: t.DbtLdap.ConfigDict,
+            optimization_hints: m.OptimizationHints,
         ) -> r[str]:
-            """Optimize DBT SQL query for LDAP data processing.
-
-            Args:
-            base_query: Base SQL query to optimize
-            optimization_hints: Optimization configuration
-
-            Returns:
-            r containing optimized query or error
-
-            """
+            """Optimize DBT SQL query for LDAP data processing."""
             try:
                 optimized_query = base_query
-
-                # Add indexing hints if specified
-                add_indexes_value = optimization_hints.get("add_indexes")
-                if add_indexes_value:
-                    index_columns_value = optimization_hints.get("index_columns")
-                    if isinstance(index_columns_value, list):
-                        for column in index_columns_value:
-                            if isinstance(column, str):
-                                optimized_query = f"-- Consider adding index on {column}\n{optimized_query}"
-
-                # Add partitioning hints
-                partition_by_value = optimization_hints.get("partition_by")
-                if partition_by_value:
-                    optimized_query = f"{optimized_query}\n-- Consider partitioning by {partition_by_value}"
-
-                # Add filtering optimizations
-                filter_early_value = optimization_hints.get("filter_early")
-                if filter_early_value:
+                if optimization_hints.add_indexes:
+                    for column in optimization_hints.index_columns:
+                        optimized_query = (
+                            f"-- Consider adding index on {column}\n{optimized_query}"
+                        )
+                if optimization_hints.partition_by:
+                    optimized_query = f"{optimized_query}\n-- Consider partitioning by {optimization_hints.partition_by}"
+                if optimization_hints.filter_early:
                     optimized_query = optimized_query.replace(
                         "where 1=1",
                         "where 1=1\n    -- Apply filters early for performance",
                     )
-
                 return r[str].ok(optimized_query)
             except Exception as e:
                 return r[str].fail(f"Query optimization failed: {e}")
@@ -718,74 +468,41 @@ where 1=1
         @classmethod
         def analyze_transformation_performance(
             cls,
-            model_stats: t.DbtLdap.MetricsDict,
-        ) -> r[t.DbtLdap.MetricsDict]:
-            """Analyze performance of LDAP transformation models.
-
-            Args:
-            model_stats: Model execution statistics
-
-            Returns:
-            r containing performance analysis or error
-
-            """
+            model_stats: m.PerformanceAnalysis,
+        ) -> r[m.PerformanceAnalysis]:
+            """Analyze performance of LDAP transformation models."""
             try:
-                execution_time_value = model_stats.get("execution_time", 0)
-                rows_processed_value = model_stats.get("rows_processed", 0)
-                memory_usage_value = model_stats.get("memory_usage", 0)
-
-                execution_time = (
-                    execution_time_value
-                    if isinstance(execution_time_value, (int, float))
-                    else 0.0
-                )
-                rows_processed = (
-                    rows_processed_value if isinstance(rows_processed_value, int) else 0
-                )
-                memory_usage = (
-                    memory_usage_value
-                    if isinstance(memory_usage_value, (int, float))
-                    else 0.0
-                )
                 recommendations: list[str] = []
-
-                # Generate performance recommendations
                 if (
-                    execution_time
+                    model_stats.execution_time
                     > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD
                 ):
                     recommendations.append(
                         "Consider adding indexes or partitioning for large datasets",
                     )
-
                 if (
-                    memory_usage
+                    model_stats.memory_usage
                     > c.TransformationOptimization.PERFORMANCE_MEMORY_USAGE_THRESHOLD
                 ):
                     recommendations.append(
                         "Consider processing data in smaller batches",
                     )
-
                 if (
-                    rows_processed
+                    model_stats.rows_processed
                     > c.TransformationOptimization.PERFORMANCE_ROWS_PROCESSED_THRESHOLD
                 ):
                     recommendations.append(
                         "Consider incremental processing for large datasets",
                     )
-
-                analysis: t.DbtLdap.MetricsDict = {
-                    "execution_time": execution_time,
-                    "rows_processed": rows_processed,
-                    "memory_usage": memory_usage,
-                    "recommendations": recommendations,
-                }
-
-                return r[t.DbtLdap.MetricsDict].ok(
-                    analysis,
+                analysis = m.PerformanceAnalysis(
+                    execution_time=model_stats.execution_time,
+                    rows_processed=model_stats.rows_processed,
+                    memory_usage=model_stats.memory_usage,
+                    recommendations=recommendations,
                 )
+                return r[m.PerformanceAnalysis].ok(analysis)
             except Exception as e:
-                return r[t.DbtLdap.MetricsDict].fail(
+                return r[m.PerformanceAnalysis].fail(
                     f"Performance analysis failed: {e}",
                 )
 

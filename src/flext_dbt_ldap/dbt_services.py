@@ -3,7 +3,6 @@
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
-High-level service classes for DBT LDAP operations.
 """
 
 from __future__ import annotations
@@ -13,47 +12,32 @@ from typing import override
 
 from flext_core import r
 from flext_core.loggings import FlextLogger
-from flext_meltano import FlextMeltanoService
+from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
-from flext_dbt_ldap.models import FlextDbtLdapModels
+from flext_dbt_ldap.models import FlextDbtLdapModels as m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
-from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
 
 
 class FlextDbtLdapService:
-    """High-level service for DBT LDAP operations.
-
-    Provides workflow orchestration and automation for LDAP data transformations
-    using modern FlextMeltano APIs and FlextDbt wrapper for type-safe operations.
-    """
+    """High-level service for DBT LDAP operations."""
 
     @override
     def __init__(
         self,
         config: FlextDbtLdapSettings | None = None,
         client: FlextDbtLdapClient | None = None,
-        transformer: FlextDbtLdapModels.DbtLdap | None = None,
+        transformer: m.DbtLdap | None = None,
     ) -> None:
-        """Initialize DBT LDAP service.
-
-        Args:
-        config: Configuration for operations
-        client: DBT LDAP client (created if None)
-        transformer: Data transformer (created if None)
-
-        """
+        """Initialize DBT LDAP service."""
         self.config: FlextDbtLdapSettings = (
             config or FlextDbtLdapSettings.get_global_instance()
         )
         self.client = client or FlextDbtLdapClient(self.config)
-        self.transformer = transformer or FlextDbtLdapModels.DbtLdap()
-
-        # Initialize FlextMeltano service for DBT operations
-        self._meltano_service = FlextMeltanoService(service_type="dbt")
-
+        self.transformer = transformer or m.DbtLdap()
+        self._dbt_service = FlextMeltanoDbtService()
         logger.info("Initialized DBT LDAP service")
 
     def sync_users_to_warehouse(
@@ -61,28 +45,14 @@ class FlextDbtLdapService:
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[t.DbtLdap.ResultDict]:
-        """Synchronize LDAP users to data warehouse.
-
-        Args:
-        search_base: LDAP search base for users
-        incremental: Whether to do incremental sync
-
-        Returns:
-        r with sync statistics
-
-        """
+    ) -> r[m.PipelineResult]:
+        """Synchronize LDAP users to data warehouse."""
         try:
             logger.info("Starting user sync to warehouse, incremental=%s", incremental)
-
-            # Define user-specific search filter
             user_filter = "(objectClass=person)"
             if incremental:
-                # Add timestamp filter for incremental sync
-                # This would need to be implemented based on your specific needs
                 logger.info("Incremental sync not yet implemented, doing full sync")
 
-            # Run pipeline for users
             result = self.client.run_full_pipeline(
                 search_base=search_base,
                 search_filter=user_filter,
@@ -96,303 +66,176 @@ class FlextDbtLdapService:
                 ],
                 model_names=["stg_users", "dim_users"],
             )
-
             if result.is_success:
                 logger.info("User sync completed successfully")
             else:
                 logger.error("User sync failed: %s", result.error)
-
             return result
-
         except Exception as e:
             logger.exception("Unexpected error during user sync")
-            return r[t.DbtLdap.ResultDict].fail(
-                f"User sync error: {e}",
-            )
+            return r[m.PipelineResult].fail(f"User sync error: {e}")
 
     def sync_groups_to_warehouse(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[t.DbtLdap.ResultDict]:
-        """Synchronize LDAP groups to data warehouse.
-
-        Args:
-        search_base: LDAP search base for groups
-        incremental: Whether to do incremental sync
-
-        Returns:
-        r with sync statistics
-
-        """
+    ) -> r[m.PipelineResult]:
+        """Synchronize LDAP groups to data warehouse."""
         try:
             logger.info("Starting group sync to warehouse, incremental=%s", incremental)
-
-            # Define group-specific search filter
             group_filter = "(objectClass=group)"
             if incremental:
                 logger.info("Incremental sync not yet implemented, doing full sync")
 
-            # Run pipeline for groups
             result = self.client.run_full_pipeline(
                 search_base=search_base,
                 search_filter=group_filter,
                 attributes=["cn", "description", "member", "groupType"],
                 model_names=["stg_groups", "dim_groups"],
             )
-
             if result.is_success:
                 logger.info("Group sync completed successfully")
             else:
                 logger.error("Group sync failed: %s", result.error)
-
             return result
-
         except Exception as e:
             logger.exception("Unexpected error during group sync")
-            return r[t.DbtLdap.ResultDict].fail(
-                f"Group sync error: {e}",
-            )
+            return r[m.PipelineResult].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
         self,
         search_base: str | None = None,
-    ) -> r[t.DbtLdap.ResultDict]:
-        """Synchronize LDAP memberships to data warehouse.
-
-        Args:
-        search_base: LDAP search base
-
-        Returns:
-        r with sync statistics
-
-        """
+    ) -> r[m.PipelineResult]:
+        """Synchronize LDAP memberships to data warehouse."""
         try:
             logger.info("Starting membership sync to warehouse")
-
-            # Get both users and groups for membership extraction
             membership_filter = "(|(objectClass=person)(objectClass=group))"
 
-            # Run pipeline for memberships
             result = self.client.run_full_pipeline(
                 search_base=search_base,
                 search_filter=membership_filter,
                 attributes=["cn", "member", "memberOf", "uniqueMember"],
                 model_names=["fact_memberships"],
             )
-
             if result.is_success:
                 logger.info("Membership sync completed successfully")
             else:
                 logger.error("Membership sync failed: %s", result.error)
-
             return result
-
         except Exception as e:
             logger.exception("Unexpected error during membership sync")
-            return r[t.DbtLdap.ResultDict].fail(
-                f"Membership sync error: {e}",
-            )
+            return r[m.PipelineResult].fail(f"Membership sync error: {e}")
 
     def run_full_data_warehouse_sync(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[t.DbtLdap.ResultDict]:
-        """Run complete LDAP to data warehouse synchronization.
-
-        Args:
-        search_base: LDAP search base
-        incremental: Whether to do incremental sync
-
-        Returns:
-        r with complete sync statistics
-
-        """
+    ) -> r[m.SyncResult]:
+        """Run complete LDAP to data warehouse synchronization."""
         logger.info(
             "Starting full data warehouse sync, base=%s, incremental=%s",
-            search_base
-            or (
-                self.config.ldap_base_dn
-                if isinstance(self.config, FlextDbtLdapSettings)
-                else ""
-            ),
+            search_base or self.config.ldap_base_dn,
             incremental,
         )
 
-        sync_results: t.DbtLdap.ResultDict = {}
-
-        # Sync users
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
-        sync_results["users"] = user_result.value or (
-            {} if user_result.is_success else {"error": str(user_result.error)}
-        )
-
-        # Sync groups
         group_result = self.sync_groups_to_warehouse(
-            search_base,
-            incremental=incremental,
+            search_base, incremental=incremental
         )
-        sync_results["groups"] = group_result.value or (
-            {} if group_result.is_success else {"error": str(group_result.error)}
-        )
-
-        # Sync memberships
         membership_result = self.sync_memberships_to_warehouse(search_base)
-        sync_results["memberships"] = membership_result.value or (
-            {}
-            if membership_result.is_success
-            else {"error": str(membership_result.error)}
-        )
 
-        # Calculate overall success
         successful_syncs = [
             user_result.is_success,
             group_result.is_success,
             membership_result.is_success,
         ]
-
         overall_success = all(successful_syncs)
-        sync_results["overall_success"] = overall_success
-        sync_results["successful_components"] = sum(successful_syncs)
-        sync_results["total_components"] = len(successful_syncs)
+
+        sync_result = m.SyncResult(
+            overall_success=overall_success,
+            successful_components=sum(successful_syncs),
+            total_components=len(successful_syncs),
+        )
 
         if overall_success:
             logger.info("Full data warehouse sync completed successfully")
-            return r[t.DbtLdap.ResultDict].ok(
-                sync_results,
-            )
+            return r[m.SyncResult].ok(sync_result)
         logger.warning(
             "Full data warehouse sync completed with %d/%d successful components",
             sum(successful_syncs),
             len(successful_syncs),
         )
-        return r[t.DbtLdap.ResultDict].fail(
-            "Some components failed in full sync",
-        )
+        return r[m.SyncResult].fail("Some components failed in full sync")
 
     def validate_warehouse_data_quality(
         self,
         model_names: Sequence[str] | None = None,
-    ) -> r[t.DbtLdap.ValidationDict]:
-        """Validate data quality in the warehouse using modern FlextDbt API.
-
-        Args:
-        model_names: Specific models to validate (None = all)
-
-        Returns:
-        r with validation results
-
-        """
+    ) -> r[m.ValidationMetrics]:
+        """Validate data quality in the warehouse."""
         try:
             logger.info("Validating warehouse data quality for models: %s", model_names)
-
-            # FlextMeltano service is always initialized
-
-            # Use modern FlextDbt API to run tests
             model_list = list(model_names) if model_names else None
-            test_result = self._meltano_service.run_models(models=model_list)
+            test_result = self._dbt_service.run_models(models=model_list)
 
             if test_result.is_success:
                 logger.info("Data quality validation completed successfully")
-                validation_result: t.DbtLdap.ValidationDict = test_result.value or {}
-                return r[t.DbtLdap.ValidationDict].ok(
-                    validation_result,
+                return r[m.ValidationMetrics].ok(
+                    m.ValidationMetrics(validation_passed=True),
                 )
-
             logger.error("Data quality validation failed: %s", test_result.error)
-            return r[t.DbtLdap.ValidationDict].fail(
-                test_result.error or "dBT tests failed",
+            return r[m.ValidationMetrics].fail(
+                test_result.error or "DBT tests failed",
             )
-
         except Exception as e:
             logger.exception("Unexpected error during data quality validation")
-            return r[t.DbtLdap.ValidationDict].fail(
+            return r[m.ValidationMetrics].fail(
                 f"Data quality validation error: {e}",
             )
 
     def run_dbt_models(
         self,
         model_names: Sequence[str] | None = None,
-    ) -> r[t.DbtLdap.ResultDict]:
-        """Run dBT models using modern FlextDbt API.
-
-        Args:
-        model_names: Specific models to run (None = all)
-
-        Returns:
-        r with execution results
-
-        """
+    ) -> r[m.DbtRunStatus]:
+        """Run DBT models."""
         try:
-            logger.info("Running dBT models: %s", model_names)
-
-            # FlextMeltano service is always initialized
-
-            # Use modern FlextDbt API to run models
+            logger.info("Running DBT models: %s", model_names)
             model_list = list(model_names) if model_names else None
-            run_result = self._meltano_service.run_models(models=model_list)
+            run_result = self._dbt_service.run_models(models=model_list)
 
             if run_result.is_success:
-                logger.info("dBT models executed successfully")
-                result_data: t.DbtLdap.ResultDict = run_result.value or {}
-                return r[t.DbtLdap.ResultDict].ok(
-                    result_data,
+                logger.info("DBT models executed successfully")
+                return r[m.DbtRunStatus].ok(
+                    m.DbtRunStatus(
+                        status="completed",
+                        models_run=model_list or [],
+                    ),
                 )
-
-            logger.error("dBT model execution failed: %s", run_result.error)
-            return r[t.DbtLdap.ResultDict].fail(
-                run_result.error or "dBT model execution failed",
+            logger.error("DBT model execution failed: %s", run_result.error)
+            return r[m.DbtRunStatus].fail(
+                run_result.error or "DBT model execution failed",
             )
-
         except Exception as e:
-            logger.exception("Unexpected error during dBT model execution")
-            return r[t.DbtLdap.ResultDict].fail(
-                f"dBT model execution error: {e}",
-            )
+            logger.exception("Unexpected error during DBT model execution")
+            return r[m.DbtRunStatus].fail(f"DBT model execution error: {e}")
 
     def generate_analytics_report(
         self,
         report_type: str = "summary",
-    ) -> r[t.DbtLdap.ResultDict]:
-        """Generate analytics report from warehouse data.
-
-        Args:
-        report_type: Type of report to generate
-
-        Returns:
-        r with report data
-
-        """
+    ) -> r[m.AnalyticsReport]:
+        """Generate analytics report from warehouse data."""
         try:
             logger.info("Generating analytics report: %s", report_type)
-
-            # This would typically run specific DBT models or queries
-            # For now, return a placeholder structure
-            report_data: t.DbtLdap.ResultDict = {
-                "report_type": report_type,
-                "generated_at": "2025-01-01T00:00:00Z",  # Would use actual timestamp
-                "summary": {
-                    "total_users": 0,  # Would query from warehouse
-                    "total_groups": 0,  # Would query from warehouse
-                    "total_memberships": 0,  # Would query from warehouse
-                },
-                "data_quality": {
-                    "overall_score": 0.0,  # Would calculate from quality metrics
-                    "issues": [],  # Would list any data quality issues
-                },
-            }
-
+            report = m.AnalyticsReport(
+                report_type=report_type,
+                generated_at="2025-01-01T00:00:00Z",
+            )
             logger.info("Analytics report generated successfully")
-            return r[t.DbtLdap.ResultDict].ok(report_data)
-
+            return r[m.AnalyticsReport].ok(report)
         except Exception as e:
             logger.exception("Unexpected error during report generation")
-            return r[t.DbtLdap.ResultDict].fail(
-                f"Report generation error: {e}",
-            )
+            return r[m.AnalyticsReport].fail(f"Report generation error: {e}")
 
 
 __all__: list[str] = [

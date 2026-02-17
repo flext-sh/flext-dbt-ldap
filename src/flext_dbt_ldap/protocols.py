@@ -12,37 +12,11 @@ from typing import Protocol, runtime_checkable
 from flext_ldap.protocols import FlextLdapProtocols as p_ldap
 from flext_meltano.protocols import FlextMeltanoProtocols as p_meltano
 
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap.models import FlextDbtLdapModels as m
 
 
 class FlextDbtLdapProtocols(p_meltano, p_ldap):
-    """DBT LDAP protocols extending LDAP and Meltano protocols.
-
-    Extends both FlextLdapProtocols and FlextMeltanoProtocols via multiple inheritance
-    to inherit all LDAP protocols, Meltano protocols, and foundation protocols.
-
-    Architecture:
-    - EXTENDS: FlextLdapProtocols (inherits .Ldap.* and .Ldif.* protocols)
-    - EXTENDS: FlextMeltanoProtocols (inherits .Meltano.* protocols)
-    - ADDS: DBT LDAP-specific protocols in Dbt.Ldap namespace
-    - PROVIDES: Root-level alias `p` for convenient access
-
-    Usage:
-    from flext_dbt_ldap.protocols import p
-
-    # Foundation protocols (inherited)
-    result: p.Result[str]
-    service: p.Service[str]
-
-    # LDAP protocols (inherited)
-    entry: p.Ldap.EntryProtocol
-
-    # Meltano protocols (inherited)
-    dbt: p.Meltano.DbtProtocol
-
-    # DBT LDAP-specific protocols
-    dbt_protocol: p.DbtLdap.Ldap.DbtProtocol
-    """
+    """DBT LDAP protocols extending LDAP and Meltano protocols."""
 
     class DbtLdap:
         """DBT domain protocols."""
@@ -56,569 +30,289 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                 ...
 
         class Ldap:
-            """DBT LDAP domain protocols for LDAP data transformation and analytics."""
+            """DBT LDAP domain protocols."""
 
             @runtime_checkable
-            class DbtProtocol(p_ldap.Service[object], Protocol):
+            class DbtProtocol(p_ldap.Service[m.DbtRunStatus], Protocol):
                 """Protocol for DBT operations with LDAP data."""
 
                 def run_dbt_models(
                     self,
                     models: Sequence[str] | None = None,
-                    config: t.DbtLdap.DbtConfigDict | None = None,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Run DBT models with LDAP data sources.
-
-                    Args:
-                    models: Specific models to run, or None for all models
-                    config: DBT configuration parameters
-
-                    Returns:
-                    r[t.DbtLdap.ResultDict]: DBT run results or error
-
-                    """
+                    config: m.DbtConfig | None = None,
+                ) -> p_meltano.Result[m.DbtRunStatus]:
+                    """Run DBT models with LDAP data sources."""
                     ...
 
                 def test_dbt_models(
                     self,
                     models: Sequence[str] | None = None,
-                    config: t.DbtLdap.DbtConfigDict | None = None,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Test DBT models with LDAP data validation.
-
-                    Args:
-                    models: Specific models to test, or None for all models
-                    config: DBT test configuration
-
-                    Returns:
-                    r[t.DbtLdap.ResultDict]: DBT test results or error
-
-                    """
+                    config: m.DbtConfig | None = None,
+                ) -> p_meltano.Result[m.DbtRunStatus]:
+                    """Test DBT models with LDAP data validation."""
                     ...
 
                 def compile_dbt_models(
                     self,
                     models: Sequence[str] | None = None,
-                    config: t.DbtLdap.DbtConfigDict | None = None,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Compile DBT models for LDAP data processing.
-
-                    Args:
-                    models: Specific models to compile, or None for all models
-                    config: DBT compilation configuration
-
-                    Returns:
-                    r[t.DbtLdap.ResultDict]: DBT compilation results or error
-
-                    """
+                    config: m.DbtConfig | None = None,
+                ) -> p_meltano.Result[m.DbtRunStatus]:
+                    """Compile DBT models for LDAP data processing."""
                     ...
 
                 def get_dbt_manifest(
                     self,
-                ) -> p_meltano.Result[t.DbtProject.ProjectConfiguration]:
-                    """Get DBT manifest with LDAP model definitions.
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ResultDict]: DBT manifest or error
-
-                    """
+                ) -> p_meltano.Result[m.DbtProjectConfig]:
+                    """Get DBT manifest with LDAP model definitions."""
                     ...
 
                 def validate_dbt_project(
                     self,
                     project_path: str,
                 ) -> p_meltano.Result[bool]:
-                    """Validate DBT project configuration for LDAP integration.
-
-                    Args:
-                    project_path: Path to DBT project directory
-
-                    Returns:
-                    r[bool]: Validation status or error
-
-                    """
+                    """Validate DBT project configuration."""
                     ...
 
             @runtime_checkable
-            class LdapIntegrationProtocol(p_ldap.Service[object], Protocol):
+            class LdapIntegrationProtocol(p_ldap.Service[m.PipelineResult], Protocol):
                 """Protocol for LDAP data integration operations."""
 
                 def extract_ldap_data(
                     self,
-                    ldap_config: t.LdapConnection.ConnectionConfig,
-                    extraction_config: t.DbtTransformation.TransformationConfig,
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Extract data from LDAP directory for DBT processing.
-
-                    Args:
-                    ldap_config: LDAP connection configuration
-                    extraction_config: Data extraction parameters
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Extracted LDAP data or error
-
-                    """
+                    ldap_config: m.LdapQuery,
+                    extraction_config: m.TransformationConfig,
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Extract data from LDAP directory for DBT processing."""
                     ...
 
                 def transform_ldap_to_dbt_format(
                     self,
-                    ldap_data: Sequence[t.DbtLdap.DataDict],
-                    transformation_config: t.DbtTransformation.TransformationConfig,
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Transform LDAP data to DBT-compatible format.
-
-                    Args:
-                    ldap_data: Raw LDAP data
-                    transformation_config: Transformation parameters
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Transformed data or error
-
-                    """
+                    ldap_data: Sequence[m.UserDimension],
+                    transformation_config: m.TransformationConfig,
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Transform LDAP data to DBT-compatible format."""
                     ...
 
                 def validate_ldap_data_quality(
                     self,
-                    data: Sequence[t.DbtLdap.DataDict],
-                    quality_rules: t.DbtTransformation.DataValidation,
-                ) -> p_meltano.Result[t.DbtLdap.ValidationDict]:
-                    """Validate LDAP data quality for DBT processing.
-
-                    Args:
-                    data: LDAP data to validate
-                    quality_rules: Data quality validation rules
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ValidationDict]: Quality validation results or error
-
-                    """
+                    data: Sequence[m.UserDimension],
+                    quality_rules: m.DataValidationConfig,
+                ) -> p_meltano.Result[m.ValidationMetrics]:
+                    """Validate LDAP data quality for DBT processing."""
                     ...
 
                 def sync_ldap_to_warehouse(
                     self,
-                    ldap_data: Sequence[t.DbtLdap.DataDict],
-                    warehouse_config: t.DbtLdap.ConfigDict,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Sync LDAP data to data warehouse for DBT processing.
-
-                    Args:
-                    ldap_data: LDAP data to sync
-                    warehouse_config: Data warehouse configuration
-
-                    Returns:
-                    r[ResultDict]: Sync operation results or error
-
-                    """
+                    ldap_data: Sequence[m.UserDimension],
+                    warehouse_config: m.DbtConfig,
+                ) -> p_meltano.Result[m.DbtRunStatus]:
+                    """Sync LDAP data to data warehouse."""
                     ...
 
             @runtime_checkable
-            class ModelingProtocol(p_ldap.Service[object], Protocol):
+            class ModelingProtocol(p_ldap.Service[m.DbtModelDefinition], Protocol):
                 """Protocol for LDAP data modeling operations."""
 
                 def create_user_dimension(
                     self,
-                    ldap_users: Sequence[t.DbtLdap.DataDict],
-                    dimension_config: t.DbtModel.ModelDefinition,
-                ) -> p_meltano.Result[t.DbtModel.ModelDefinition]:
-                    """Create user dimension model from LDAP user data.
-
-                    Args:
-                    ldap_users: LDAP user data
-                    dimension_config: Dimension modeling configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtModel.ModelDefinition]: User dimension model or error
-
-                    """
+                    ldap_users: Sequence[m.UserDimension],
+                    dimension_config: m.DbtModelDefinition,
+                ) -> p_meltano.Result[m.DbtModelDefinition]:
+                    """Create user dimension model from LDAP user data."""
                     ...
 
                 def create_group_dimension(
                     self,
-                    ldap_groups: Sequence[t.DbtLdap.DataDict],
-                    dimension_config: t.DbtModel.ModelDefinition,
-                ) -> p_meltano.Result[t.DbtModel.ModelDefinition]:
-                    """Create group dimension model from LDAP group data.
-
-                    Args:
-                    ldap_groups: LDAP group data
-                    dimension_config: Dimension modeling configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtModel.ModelDefinition]: Group dimension model or error
-
-                    """
+                    ldap_groups: Sequence[m.GroupDimension],
+                    dimension_config: m.DbtModelDefinition,
+                ) -> p_meltano.Result[m.DbtModelDefinition]:
+                    """Create group dimension model from LDAP group data."""
                     ...
 
                 def create_organizational_hierarchy(
                     self,
-                    ldap_data: Sequence[t.DbtLdap.DataDict],
-                    hierarchy_config: t.DbtModel.ModelDefinition,
-                ) -> p_meltano.Result[t.DbtModel.ModelDefinition]:
-                    """Create organizational hierarchy from LDAP organizational units.
-
-                    Args:
-                    ldap_data: LDAP organizational data
-                    hierarchy_config: Hierarchy modeling configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtModel.ModelDefinition]: Organizational hierarchy or error
-
-                    """
+                    ldap_data: Sequence[m.UserDimension],
+                    hierarchy_config: m.DbtModelDefinition,
+                ) -> p_meltano.Result[m.DbtModelDefinition]:
+                    """Create organizational hierarchy from LDAP OUs."""
                     ...
 
                 def generate_fact_tables(
                     self,
-                    dimensions: Sequence[t.DbtModel.ModelDefinition],
-                    fact_config: t.DbtModel.ModelDefinition,
-                ) -> p_meltano.Result[Sequence[t.DbtModel.ModelDefinition]]:
-                    """Generate fact tables from LDAP dimensions.
-
-                    Args:
-                    dimensions: LDAP dimension models
-                    fact_config: Fact table configuration
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtModel.ModelDefinition]]: Generated fact tables or error
-
-                    """
+                    dimensions: Sequence[m.DbtModelDefinition],
+                    fact_config: m.DbtModelDefinition,
+                ) -> p_meltano.Result[Sequence[m.DbtModelDefinition]]:
+                    """Generate fact tables from LDAP dimensions."""
                     ...
 
             @runtime_checkable
-            class TransformationProtocol(p_ldap.Service[object], Protocol):
+            class TransformationProtocol(p_ldap.Service[m.UserDimension], Protocol):
                 """Protocol for LDAP data transformation operations."""
 
                 def normalize_ldap_attributes(
                     self,
-                    ldap_entries: Sequence[t.DbtLdap.DataDict],
-                    normalization_rules: t.DbtTransformation.TransformationRule,
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Normalize LDAP attributes for consistent data processing.
-
-                    Args:
-                    ldap_entries: Raw LDAP entries
-                    normalization_rules: Attribute normalization rules
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Normalized LDAP data or error
-
-                    """
+                    ldap_entries: Sequence[m.UserDimension],
+                    normalization_rules: m.TransformationRule,
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Normalize LDAP attributes for consistent processing."""
                     ...
 
                 def enrich_ldap_data(
                     self,
-                    ldap_data: Sequence[t.DbtLdap.DataDict],
-                    enrichment_sources: Sequence[t.DbtLdap.DataDict],
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Enrich LDAP data with additional data sources.
-
-                    Args:
-                    ldap_data: Base LDAP data
-                    enrichment_sources: Additional data sources for enrichment
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Enriched LDAP data or error
-
-                    """
+                    ldap_data: Sequence[m.UserDimension],
+                    enrichment_sources: Sequence[m.UserDimension],
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Enrich LDAP data with additional data sources."""
                     ...
 
                 def apply_business_rules(
                     self,
-                    data: Sequence[t.DbtLdap.DataDict],
-                    business_rules: t.DbtTransformation.TransformationRule,
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Apply business rules to LDAP data transformations.
-
-                    Args:
-                    data: LDAP data to transform
-                    business_rules: Business transformation rules
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Transformed data or error
-
-                    """
+                    data: Sequence[m.UserDimension],
+                    business_rules: m.TransformationRule,
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Apply business rules to LDAP data transformations."""
                     ...
 
                 def generate_derived_attributes(
                     self,
-                    ldap_data: Sequence[t.DbtLdap.DataDict],
-                    derivation_config: t.DbtTransformation.TransformationConfig,
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Generate derived attributes from LDAP base attributes.
-
-                    Args:
-                    ldap_data: Base LDAP data
-                    derivation_config: Attribute derivation configuration
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Data with derived attributes or error
-
-                    """
+                    ldap_data: Sequence[m.UserDimension],
+                    derivation_config: m.TransformationConfig,
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Generate derived attributes from LDAP base attributes."""
                     ...
 
             @runtime_checkable
-            class MacroProtocol(p_ldap.Service[object], Protocol):
+            class MacroProtocol(p_ldap.Service[str], Protocol):
                 """Protocol for DBT macro operations with LDAP data."""
 
                 def generate_ldap_source_macro(
                     self,
-                    source_config: t.DbtSource.SourceDefinition,
+                    source_config: m.DbtSourceDefinition,
                 ) -> p_meltano.Result[str]:
-                    """Generate DBT macro for LDAP data sources.
-
-                    Args:
-                    source_config: LDAP source configuration
-
-                    Returns:
-                    p_meltano.Result[str]: Generated DBT macro or error
-
-                    """
+                    """Generate DBT macro for LDAP data sources."""
                     ...
 
                 def create_ldap_test_macro(
                     self,
-                    test_config: t.DbtProject.TestConfiguration,
+                    test_config: m.DbtTestConfig,
                 ) -> p_meltano.Result[str]:
-                    """Create DBT test macro for LDAP data validation.
-
-                    Args:
-                    test_config: LDAP test configuration
-
-                    Returns:
-                    p_meltano.Result[str]: Generated test macro or error
-
-                    """
+                    """Create DBT test macro for LDAP data validation."""
                     ...
 
                 def generate_ldap_transformation_macro(
                     self,
-                    transformation_config: t.DbtTransformation.TransformationConfig,
+                    transformation_config: m.TransformationConfig,
                 ) -> p_meltano.Result[str]:
-                    """Generate DBT transformation macro for LDAP data.
-
-                    Args:
-                    transformation_config: Transformation configuration
-
-                    Returns:
-                    p_meltano.Result[str]: Generated transformation macro or error
-
-                    """
+                    """Generate DBT transformation macro for LDAP data."""
                     ...
 
                 def create_ldap_snapshot_macro(
                     self,
-                    snapshot_config: t.DbtLdap.ConfigDict,
+                    snapshot_config: m.DbtConfig,
                 ) -> p_meltano.Result[str]:
-                    """Create DBT snapshot macro for LDAP data versioning.
-
-                    Args:
-                    snapshot_config: Snapshot configuration
-
-                    Returns:
-                    p_meltano.Result[str]: Generated snapshot macro or error
-
-                    """
+                    """Create DBT snapshot macro for LDAP data versioning."""
                     ...
 
             @runtime_checkable
-            class QualityProtocol(p_ldap.Service[object], Protocol):
+            class QualityProtocol(p_ldap.Service[m.ValidationMetrics], Protocol):
                 """Protocol for LDAP data quality operations."""
 
                 def validate_ldap_schema_compliance(
                     self,
-                    ldap_data: Sequence[t.DbtLdap.DataDict],
-                    schema_rules: t.LdapData.LdapSchema,
-                ) -> p_meltano.Result[t.DbtLdap.ValidationDict]:
-                    """Validate LDAP data against schema compliance rules.
-
-                    Args:
-                    ldap_data: LDAP data to validate
-                    schema_rules: Schema compliance rules
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ValidationDict]: Schema validation results or error
-
-                    """
+                    ldap_data: Sequence[m.UserDimension],
+                    schema_rules: m.LdapSchema,
+                ) -> p_meltano.Result[m.ValidationMetrics]:
+                    """Validate LDAP data against schema compliance rules."""
                     ...
 
                 def check_data_completeness(
                     self,
-                    data: Sequence[t.DbtLdap.DataDict],
-                    completeness_config: t.DbtTransformation.DataValidation,
-                ) -> p_meltano.Result[t.DbtLdap.ValidationDict]:
-                    """Check LDAP data completeness for DBT processing.
-
-                    Args:
-                    data: LDAP data to check
-                    completeness_config: Completeness validation configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ValidationDict]: Completeness check results or error
-
-                    """
+                    data: Sequence[m.UserDimension],
+                    completeness_config: m.DataValidationConfig,
+                ) -> p_meltano.Result[m.ValidationMetrics]:
+                    """Check LDAP data completeness for DBT processing."""
                     ...
 
                 def detect_data_anomalies(
                     self,
-                    data: Sequence[t.DbtLdap.DataDict],
-                    anomaly_config: t.DbtTransformation.DataValidation,
-                ) -> p_meltano.Result[Sequence[t.DbtLdap.DataDict]]:
-                    """Detect anomalies in LDAP data for quality assurance.
-
-                    Args:
-                    data: LDAP data to analyze
-                    anomaly_config: Anomaly detection configuration
-
-                    Returns:
-                    p_meltano.Result[Sequence[t.DbtLdap.DataDict]]: Detected anomalies or error
-
-                    """
+                    data: Sequence[m.UserDimension],
+                    anomaly_config: m.DataValidationConfig,
+                ) -> p_meltano.Result[Sequence[m.UserDimension]]:
+                    """Detect anomalies in LDAP data."""
                     ...
 
                 def generate_quality_report(
                     self,
-                    quality_results: Sequence[t.DbtLdap.ValidationDict],
-                    report_config: t.DbtLdap.ConfigDict,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Generate data quality report for LDAP DBT processing.
-
-                    Args:
-                    quality_results: Quality validation results
-                    report_config: Report generation configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ResultDict]: Quality report or error
-
-                    """
+                    quality_results: Sequence[m.ValidationMetrics],
+                    report_config: m.DbtConfig,
+                ) -> p_meltano.Result[m.DbtRunStatus]:
+                    """Generate data quality report."""
                     ...
 
             @runtime_checkable
-            class PerformanceProtocol(p_ldap.Service[object], Protocol):
-                """Protocol for DBT LDAP performance optimization operations."""
+            class PerformanceProtocol(p_ldap.Service[m.PerformanceAnalysis], Protocol):
+                """Protocol for DBT LDAP performance optimization."""
 
                 def optimize_dbt_models(
                     self,
-                    model_config: t.DbtProject.ModelConfiguration,
-                    performance_metrics: t.DbtLdap.MetricsDict,
-                ) -> p_meltano.Result[t.DbtProject.ModelConfiguration]:
-                    """Optimize DBT models for LDAP data processing performance.
-
-                    Args:
-                    model_config: DBT model configuration
-                    performance_metrics: Current performance metrics
-
-                    Returns:
-                    p_meltano.Result[t.DbtProject.ModelConfiguration]: Optimization recommendations or error
-
-                    """
+                    model_config: m.DbtProjectConfig,
+                    performance_metrics: m.PerformanceAnalysis,
+                ) -> p_meltano.Result[m.DbtProjectConfig]:
+                    """Optimize DBT models for performance."""
                     ...
 
                 def cache_ldap_extractions(
                     self,
-                    extraction_config: t.DbtTransformation.TransformationConfig,
-                    cache_config: t.DbtLdap.ConfigDict,
+                    extraction_config: m.TransformationConfig,
+                    cache_config: m.DbtConfig,
                 ) -> p_meltano.Result[bool]:
-                    """Cache LDAP data extractions for improved performance.
-
-                    Args:
-                    extraction_config: LDAP extraction configuration
-                    cache_config: Caching configuration
-
-                    Returns:
-                    p_meltano.Result[bool]: Caching setup success status
-
-                    """
+                    """Cache LDAP data extractions."""
                     ...
 
                 def monitor_dbt_performance(
                     self,
-                    run_results: t.DbtLdap.ResultDict,
-                ) -> p_meltano.Result[t.DbtLdap.MetricsDict]:
-                    """Monitor DBT performance with LDAP data processing.
-
-                    Args:
-                    run_results: DBT run results
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.MetricsDict]: Performance metrics or error
-
-                    """
+                    run_results: m.DbtRunStatus,
+                ) -> p_meltano.Result[m.PerformanceAnalysis]:
+                    """Monitor DBT performance."""
                     ...
 
                 def optimize_ldap_queries(
                     self,
-                    query_config: t.LdapData.LdapQuery,
-                ) -> p_meltano.Result[t.LdapData.LdapQuery]:
-                    """Optimize LDAP queries for DBT data extraction.
-
-                    Args:
-                    query_config: LDAP query configuration
-
-                    Returns:
-                    p_meltano.Result[t.LdapData.LdapQuery]: Query optimization results or error
-
-                    """
+                    query_config: m.LdapQuery,
+                ) -> p_meltano.Result[m.LdapQuery]:
+                    """Optimize LDAP queries for DBT data extraction."""
                     ...
 
             @runtime_checkable
-            class MonitoringProtocol(p_ldap.Service[object], Protocol):
+            class MonitoringProtocol(p_ldap.Service[m.DbtRunStatus], Protocol):
                 """Protocol for DBT LDAP monitoring operations."""
 
                 def track_dbt_run_metrics(
                     self,
                     run_id: str,
-                    metrics: t.DbtLdap.MetricsDict,
+                    metrics: m.PerformanceAnalysis,
                 ) -> p_meltano.Result[bool]:
-                    """Track DBT run metrics for LDAP data processing.
-
-                    Args:
-                    run_id: DBT run identifier
-                    metrics: Run metrics data
-
-                    Returns:
-                    p_meltano.Result[bool]: Metric tracking success status
-
-                    """
+                    """Track DBT run metrics."""
                     ...
 
                 def monitor_ldap_data_freshness(
                     self,
-                    freshness_config: t.DbtSource.SourceFreshness,
-                ) -> p_meltano.Result[t.DbtSource.SourceFreshness]:
-                    """Monitor LDAP data freshness for DBT processing.
-
-                    Args:
-                    freshness_config: Data freshness monitoring configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtSource.SourceFreshness]: Data freshness status or error
-
-                    """
+                    freshness_config: m.DbtSourceFreshness,
+                ) -> p_meltano.Result[m.DbtSourceFreshness]:
+                    """Monitor LDAP data freshness."""
                     ...
 
                 def get_health_status(
                     self,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Get DBT LDAP integration health status.
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ResultDict]: Health status or error
-
-                    """
+                ) -> p_meltano.Result[m.ServiceStatus]:
+                    """Get DBT LDAP integration health status."""
                     ...
 
                 def create_monitoring_dashboard(
                     self,
-                    dashboard_config: t.DbtLdap.ConfigDict,
-                ) -> p_meltano.Result[t.DbtLdap.ResultDict]:
-                    """Create monitoring dashboard for DBT LDAP operations.
-
-                    Args:
-                    dashboard_config: Dashboard configuration
-
-                    Returns:
-                    p_meltano.Result[t.DbtLdap.ResultDict]: Dashboard creation result or error
-
-                    """
+                    dashboard_config: m.DbtConfig,
+                ) -> p_meltano.Result[m.DbtRunStatus]:
+                    """Create monitoring dashboard."""
                     ...
 
 
