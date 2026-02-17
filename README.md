@@ -6,6 +6,8 @@
 
 **FLEXT-DBT-LDAP** provides production-ready dbt models and transformations for LDAP directory data. It standardizes raw LDAP entries from Singer taps into business-ready dimensional models for user, group, and organizational analytics.
 
+Part of the [FLEXT](https://github.com/flext/flext) ecosystem.
+
 ## 🚀 Key Features
 
 - **Dimensional Modeling**: Pre-built star schema for Users (`dim_users`), Groups (`dim_groups`), and Organizational Units (`dim_org_units`).
