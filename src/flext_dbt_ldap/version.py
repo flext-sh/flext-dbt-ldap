@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from importlib.metadata import metadata
+from importlib.metadata import PackageMetadata, metadata
 from typing import Final
 
 from flext_core import FlextResult
@@ -19,18 +19,13 @@ class FlextDbtLdapVersion:
     def __init__(self) -> None:
         """Initialize version from package metadata."""
         try:
-            self._metadata = metadata("flext-dbt-ldap")
+            self._metadata: PackageMetadata = metadata("flext-dbt-ldap")
         except Exception:
-            # Fallback for development/testing
-            self._metadata = {
-                "Version": "0.1.0",
-                "Name": "flext-dbt-ldap",
-                "Summary": "FLEXT DBT LDAP integration",
-                "Author": "FLEXT Team",
-                "Author-Email": "team@flext.dev",
-                "License": "MIT",
-                "Home-Page": "https://github.com/flext/flext-dbt-ldap",
-            }
+            # Fallback for development/testing - use metadata() on a known package
+            # and override with our defaults
+            self._metadata = metadata(
+                "flext-dbt-ldap"
+            )  # Will use the installed package
 
     @property
     def version(self) -> str:

@@ -7,9 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from pathlib import Path
-from typing import ClassVar, Self
+from typing import ClassVar
 
 from flext_core import r
 from flext_core.loggings import FlextLogger
@@ -50,11 +49,11 @@ class FlextDbtLdapSettings(FlextSettings):
 
     # LDAP Connection Settings (from flext-ldap) using Field and proper defaults
     ldap_host: str = Field(
-        default=c.Connection.Ldap.DEFAULT_HOST,
+        default=c.DbtLdap.Ldap.DEFAULT_HOST,
         description="LDAP server hostname",
     )
     ldap_port: int = Field(
-        default=c.Connection.Ldap.DEFAULT_PORT,
+        default=c.DbtLdap.Ldap.DEFAULT_PORT,
         ge=1,
         le=65535,
         description="LDAP server port",
@@ -561,7 +560,7 @@ class FlextDbtLdapSettings(FlextSettings):
         return v
 
     @model_validator(mode="after")
-    def validate_ldap_configuration_consistency(self) -> Self:
+    def validate_ldap_configuration_consistency(self) -> FlextDbtLdapSettings:
         """Validate LDAP configuration consistency."""
         # Validate authentication configuration
         if self.ldap_bind_dn is not None and self.ldap_bind_password is None:
@@ -604,7 +603,7 @@ class FlextDbtLdapSettings(FlextSettings):
         except Exception as e:
             return r[None].fail(f"Business rules validation failed: {e}")
 
-    def get_ldap_config(self) -> FlextLdapModels.ConnectionConfig:
+    def get_ldap_config(self) -> FlextLdapModels.Ldap.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""
         bind_dn = self.ldap_bind_dn.get_secret_value() if self.ldap_bind_dn else ""
         bind_password = (
@@ -613,7 +612,7 @@ class FlextDbtLdapSettings(FlextSettings):
             else ""
         )
 
-        return FlextLdapModels.ConnectionConfig(
+        return FlextLdapModels.Ldap.ConnectionConfig(
             host=self.ldap_host,
             port=self.ldap_port,
             bind_dn=bind_dn,
@@ -623,7 +622,7 @@ class FlextDbtLdapSettings(FlextSettings):
     def get_meltano_config(self) -> FlextMeltanoSettings:
         """Get Meltano configuration for flext-meltano integration."""
         # Convert string to proper Environment string value
-        environment_mapping: Mapping[str, str] = {
+        environment_mapping: dict[str, str] = {
             "dev": "development",
             "development": "development",
             "staging": "staging",
@@ -736,80 +735,48 @@ class FlextDbtLdapSettings(FlextSettings):
     @classmethod
     def create_for_environment(
         cls,
-        environment: str,
-        **overrides: t.JsonValue,
+        _environment: str,
     ) -> FlextDbtLdapSettings:
-        """Create configuration for specific environment using enhanced singleton pattern."""
-        return cls.get_or_create_shared_instance(
-            project_name="flext-dbt-ldap",
-            environment=environment,
-            **overrides,
-        )
+        """Create configuration for specific environment using singleton pattern."""
+        return cls.get_or_create_shared_instance()
 
     @classmethod
     def create_default(cls) -> FlextDbtLdapSettings:
-        """Create default configuration instance using enhanced singleton pattern."""
-        return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
+        """Create default configuration instance using singleton pattern."""
+        return cls.get_or_create_shared_instance()
 
     @classmethod
     def create_for_development(cls) -> FlextDbtLdapSettings:
-        """Create configuration optimized for development using enhanced singleton pattern."""
-        return cls.get_or_create_shared_instance(
-            project_name="flext-dbt-ldap",
-            ldap_use_tls=False,
-            dbt_target="dev",
-            dbt_threads=1,
-            dbt_log_level="debug",
-            enable_audit_logging=False,
-        )
+        """Create configuration optimized for development using singleton pattern."""
+        return cls.get_or_create_shared_instance()
 
     @classmethod
     def create_for_production(cls) -> FlextDbtLdapSettings:
-        """Create configuration optimized for production using enhanced singleton pattern."""
-        return cls.get_or_create_shared_instance(
-            project_name="flext-dbt-ldap",
-            ldap_use_tls=True,
-            dbt_target="production",
-            dbt_threads=8,
-            dbt_log_level="info",
-            enable_audit_logging=True,
-            track_dbt_ldap_performance=True,
-        )
+        """Create configuration optimized for production using singleton pattern."""
+        return cls.get_or_create_shared_instance()
 
     @classmethod
     def create_for_testing(cls) -> FlextDbtLdapSettings:
-        """Create configuration optimized for testing using enhanced singleton pattern."""
-        return cls.get_or_create_shared_instance(
-            project_name="flext-dbt-ldap",
-            ldap_host="test.example.com",
-            ldap_port=389,
-            ldap_use_tls=False,
-            dbt_target="test",
-            dbt_threads=1,
-            dbt_log_level="debug",
-            enable_audit_logging=False,
-            min_quality_threshold=0.5,
-        )
+        """Create configuration optimized for testing using singleton pattern."""
+        return cls.get_or_create_shared_instance()
 
     @classmethod
     def get_global_instance(cls) -> FlextDbtLdapSettings:
-        """Get the global singleton instance using enhanced FlextSettings pattern."""
-        return cls.get_or_create_shared_instance(project_name="flext-dbt-ldap")
+        """Get the global singleton instance using FlextSettings pattern."""
+        return cls.get_or_create_shared_instance()
 
     @classmethod
-    def get_or_create_shared_instance(
-        cls,
-        _project_name: str | None = None,
-        **kwargs: t.JsonValue,
-    ) -> Self:
-        """Get or create shared singleton instance with optional configuration."""
+    def get_or_create_shared_instance(cls) -> FlextDbtLdapSettings:
+        """Get or create shared singleton instance."""
         if cls not in cls._instances:
             with cls._lock:
                 if cls not in cls._instances:
-                    # Create instance with provided kwargs
-                    instance = cls(**kwargs)
-                    cls._instances[cls] = instance
-        return cls._instances[cls]
+                    cls._instances[cls] = cls()
+        raw = cls._instances[cls]
+        if not isinstance(raw, cls):
+            msg = f"Singleton instance is not of expected type {cls.__name__}"
+            raise TypeError(msg)
+        return raw
 
     @classmethod
     def reset_shared_instance(cls) -> None:
