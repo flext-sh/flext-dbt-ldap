@@ -56,6 +56,7 @@ class FlextDbtLdapUtilities(u_core):
         ) -> r[m.DbtProjectConfig]:
             """Create DBT project configuration for LDAP data transformation."""
             try:
+                _ = ldap_sources
                 project_config = m.DbtProjectConfig(
                     name=project_name,
                     profile=f"{project_name}_profile",
@@ -75,6 +76,7 @@ class FlextDbtLdapUtilities(u_core):
         ) -> r[m.DbtProfileConfig]:
             """Generate DBT profiles configuration for LDAP data sources."""
             try:
+                _ = profile_name
                 return r[m.DbtProfileConfig].ok(connection_config)
             except Exception as e:
                 return r[m.DbtProfileConfig].fail(
