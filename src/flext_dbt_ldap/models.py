@@ -259,7 +259,7 @@ class FlextDbtLdapModels(m_core):
             entry: m_ldap.Ldif.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
-            attrs = FlextDbtLdapModels.DbtLdap._normalize_attributes(entry)
+            attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
             return cls(
                 user_id=attrs.get("uid", [""])[0] if "uid" in attrs else "",
                 common_name=attrs.get("cn", [""])[0] if "cn" in attrs else "",
@@ -331,7 +331,7 @@ class FlextDbtLdapModels(m_core):
             entry: m_ldap.Ldif.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
-            attrs = FlextDbtLdapModels.DbtLdap._normalize_attributes(entry)
+            attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
             member_count = len(attrs.get("member", [])) or len(
                 attrs.get("uniqueMember", []),
             )
@@ -415,7 +415,7 @@ class FlextDbtLdapModels(m_core):
             logger.info("Initialized LDAP DBT transformer")
 
         @staticmethod
-        def _normalize_attributes(
+        def normalize_attributes(
             entry: m_ldap.Ldif.Entry,
         ) -> dict[str, list[str]]:
             """Normalize entry attributes to dict[str, list[str]]."""
@@ -553,7 +553,7 @@ class FlextDbtLdapModels(m_core):
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
-            attrs = self._normalize_attributes(group_entry)
+            attrs = self.normalize_attributes(group_entry)
             group_dn = str(group_entry.dn) if group_entry.dn is not None else ""
             for attr in ("member", "uniqueMember", "memberUid"):
                 if attr in attrs:
@@ -573,7 +573,7 @@ class FlextDbtLdapModels(m_core):
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
-            attrs = self._normalize_attributes(user_entry)
+            attrs = self.normalize_attributes(user_entry)
             user_dn = str(user_entry.dn) if user_entry.dn is not None else ""
             if "memberOf" in attrs:
                 memberships.extend(
