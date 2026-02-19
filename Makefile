@@ -1,8 +1,5 @@
 # flext-dbt-ldap - LDAP dbt Package
 PROJECT_NAME := flext-dbt-ldap
-COV_DIR := flext_dbt_ldap
-MIN_COVERAGE := 90
-
 include ../base.mk
 
 # === PROJECT-SPECIFIC TARGETS ===
