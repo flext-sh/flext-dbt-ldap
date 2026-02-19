@@ -291,11 +291,11 @@ class FlextDbtLdapModels(m_core):
                 else None,
             )
 
-        def validate_business_rules(self) -> r[None]:
+        def validate_business_rules(self) -> r[bool]:
             """Validate user dimension business rules."""
             if not self.user_id or not self.common_name:
-                return r[None].fail("User ID and common name are required")
-            return r[None].ok(None)
+                return r[bool].fail("User ID and common name are required")
+            return r[bool].ok(True)
 
         def to_dbt_dict(self) -> dict[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
@@ -332,7 +332,7 @@ class FlextDbtLdapModels(m_core):
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
-            member_count = len(attrs.get("member", [])) or len(
+            member_count = len(attrs.get("member", [])) + len(
                 attrs.get("uniqueMember", []),
             )
             return cls(
@@ -354,13 +354,13 @@ class FlextDbtLdapModels(m_core):
                 else None,
             )
 
-        def validate_business_rules(self) -> r[None]:
+        def validate_business_rules(self) -> r[bool]:
             """Validate group dimension business rules."""
             if not self.group_id or not self.common_name:
-                return r[None].fail("Group ID and common name are required")
+                return r[bool].fail("Group ID and common name are required")
             if self.member_count < 0:
-                return r[None].fail("Member count cannot be negative")
-            return r[None].ok(None)
+                return r[bool].fail("Member count cannot be negative")
+            return r[bool].ok(True)
 
         def to_dbt_dict(self) -> dict[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
@@ -385,11 +385,11 @@ class FlextDbtLdapModels(m_core):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def validate_business_rules(self) -> r[None]:
+        def validate_business_rules(self) -> r[bool]:
             """Validate membership fact business rules."""
             if not self.user_dn or not self.group_dn:
-                return r[None].fail("User DN and Group DN are required")
-            return r[None].ok(None)
+                return r[bool].fail("User DN and Group DN are required")
+            return r[bool].ok(True)
 
         def to_dbt_dict(self) -> dict[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""

@@ -7,8 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Final
-
 from flext_core import FlextModels, FlextResult, FlextSettings
 
 from flext_dbt_ldap.__version__ import __version__, __version_info__
@@ -38,14 +36,7 @@ from flext_dbt_ldap.typings import FlextDbtLdapTypes
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
 
-# Domain-specific aliases
-u = FlextDbtLdapUtilities  # Utilities (FlextDbtLdapUtilities extends FlextLdapUtilities)
-
-PROJECT_VERSION: Final[FlextDbtLdapVersion] = VERSION
-
-
 __all__ = [
-    "PROJECT_VERSION",
     "VERSION",
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
@@ -70,7 +61,5 @@ __all__ = [
     "__version__",
     "__version_info__",
     "process_ldap_entries_for_dbt",
-    # Domain-specific aliases
-    "u",
     "validate_ldap_data_quality",
 ]

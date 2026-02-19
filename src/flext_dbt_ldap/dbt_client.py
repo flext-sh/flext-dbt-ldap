@@ -9,10 +9,16 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import override
+from typing import cast
 
 from flext_core import FlextLogger, r
-from flext_ldap import FlextLdap, FlextLdapModels
+from flext_ldap import (
+    FlextLdap,
+    FlextLdapConnection,
+    FlextLdapModels,
+    FlextLdapOperations,
+    FlextLdapSettings,
+)
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.models import FlextDbtLdapModels as m
@@ -29,26 +35,48 @@ class FlextDbtLdapClient:
     and DBT transformation operations.
     """
 
-    @override
     def __init__(
         self,
         config: FlextDbtLdapSettings | None = None,
         *,
-        ldap_api: FlextLdap | None = None,
+        ldap_api: FlextLdap,
     ) -> None:
         """Initialize DBT LDAP client.
 
         Args:
         config: Configuration for LDAP and DBT operations
-        ldap_api: Injected FlextLdap instance (required for LDAP operations)
+        ldap_api: Injected FlextLdap instance (mandatory)
 
         """
+        super().__init__()
         self.config: FlextDbtLdapSettings = (
             config or FlextDbtLdapSettings.get_global_instance()
         )
-        self._ldap_api: FlextLdap | None = ldap_api
+        self._ldap_api: FlextLdap = ldap_api
         self._dbt_manager: FlextMeltanoDbtService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
+
+    @staticmethod
+    def create_ldap_api(config: FlextDbtLdapSettings) -> FlextLdap:
+        """Create a FlextLdap API instance from DBT LDAP settings."""
+        ldap_bind_dn = (
+            config.ldap_bind_dn.get_secret_value() if config.ldap_bind_dn else None
+        )
+        ldap_bind_password = (
+            config.ldap_bind_password.get_secret_value()
+            if config.ldap_bind_password
+            else None
+        )
+        ldap_settings = FlextLdapSettings(
+            host=config.ldap_host,
+            port=config.ldap_port,
+            use_tls=config.ldap_use_tls,
+            bind_dn=ldap_bind_dn,
+            bind_password=ldap_bind_password,
+        )
+        connection = FlextLdapConnection(config=ldap_settings)
+        operations = FlextLdapOperations(connection=connection)
+        return FlextLdap(connection=connection, operations=operations)
 
     @property
     def dbt_manager(self) -> FlextMeltanoDbtService:
@@ -238,10 +266,7 @@ class FlextDbtLdapClient:
         object_classes: list[str] = []
         if isinstance(raw, dict):
             oc_val = raw.get("objectClass", [])
-            if isinstance(oc_val, list):
-                object_classes = [str(x) for x in oc_val]
-            elif oc_val is not None:
-                object_classes = [str(oc_val)]
+            object_classes = [str(x) for x in oc_val]
         schema_mapping: dict[str, list[str]] = {
             "users": ["person", "user", "inetOrgPerson"],
             "groups": ["group", "groupOfNames", "groupOfUniqueNames"],
@@ -262,26 +287,12 @@ class FlextDbtLdapClient:
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry.attributes:
                 values_obj = entry.attributes[ldap_attr]
-                first_value = (
-                    values_obj[0]
-                    if isinstance(values_obj, list) and values_obj
-                    else values_obj
-                )
-                mapped_attrs[dbt_attr] = (
-                    first_value
-                    if isinstance(first_value, str)
-                    else str(first_value or "")
-                )
+                first_value = values_obj[0] if values_obj else ""
+                mapped_attrs[dbt_attr] = first_value
         for attr, values in entry.attributes.items():
             if attr not in self.config.ldap_attribute_mapping:
-                first_value = (
-                    values[0] if isinstance(values, list) and values else values
-                )
-                mapped_attrs[attr] = (
-                    first_value
-                    if isinstance(first_value, str)
-                    else str(first_value or "")
-                )
+                first_value = values[0] if values else ""
+                mapped_attrs[attr] = first_value
         return mapped_attrs
 
     def _search_entries_sync(
@@ -293,11 +304,6 @@ class FlextDbtLdapClient:
     ) -> r[list[FlextLdapModels.Ldif.Entry]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
-            if self._ldap_api is None:
-                return r[list[FlextLdapModels.Ldif.Entry]].fail(
-                    "FlextLdap API not injected. Pass ldap_api= to FlextDbtLdapClient.",
-                )
-
             search_options = FlextLdapModels.Ldap.SearchOptions(
                 base_dn=base_dn,
                 filter_str=search_filter,
@@ -307,7 +313,11 @@ class FlextDbtLdapClient:
             result = self._ldap_api.search(search_options=search_options)
 
             if result.is_success and result.value:
-                return r[list[FlextLdapModels.Ldif.Entry]].ok(result.value.entries)
+                entries: list[FlextLdapModels.Ldif.Entry] = cast(
+                    "list[FlextLdapModels.Ldif.Entry]",
+                    result.value.entries,
+                )
+                return r[list[FlextLdapModels.Ldif.Entry]].ok(entries)
 
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 result.error or "Search returned no results",

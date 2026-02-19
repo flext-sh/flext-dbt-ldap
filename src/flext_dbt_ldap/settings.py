@@ -577,31 +577,31 @@ class FlextDbtLdapSettings(FlextSettings):
 
         return self
 
-    def validate_business_rules(self) -> r[None]:
+    def validate_business_rules(self) -> r[bool]:
         """Validate DBT LDAP specific business rules."""
         try:
             # Validate LDAP configuration
             if not self.ldap_host:
-                return r[None].fail("LDAP host is required")
+                return r[bool].fail("LDAP host is required")
 
             # Validate DBT configuration
             if not self.dbt_project_dir:
-                return r[None].fail("DBT project directory is required")
+                return r[bool].fail("DBT project directory is required")
 
             # Validate performance thresholds
             if self.dbt_ldap_performance_threshold_warning < 0:
-                return r[None].fail(
+                return r[bool].fail(
                     "Performance warning threshold must be non-negative",
                 )
 
             if self.dbt_ldap_performance_threshold_critical < 0:
-                return r[None].fail(
+                return r[bool].fail(
                     "Performance critical threshold must be non-negative",
                 )
 
-            return r[None].ok(None)
+            return r[bool].ok(True)
         except Exception as e:
-            return r[None].fail(f"Business rules validation failed: {e}")
+            return r[bool].fail(f"Business rules validation failed: {e}")
 
     def get_ldap_config(self) -> FlextLdapModels.Ldap.ConnectionConfig:
         """Get LDAP configuration for flext-ldap integration."""

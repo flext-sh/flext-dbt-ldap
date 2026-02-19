@@ -22,6 +22,18 @@ class FlextDbtLdapTypes(FlextTypes):
     This module only contains Literal types and type variables.
     """
 
+    class DbtTransformation:
+        """DBT LDAP transformation type contracts."""
+
+        type DataValidation = dict[str, str | list[str] | bool]
+        """Data validation configuration contract."""
+
+    class DbtLdap:
+        """DBT LDAP settings type contracts."""
+
+        type SettingsDict = dict[str, bool | float | str | None]
+        """DBT LDAP logging settings configuration contract."""
+
     class Project:
         """DBT LDAP-specific project types."""
 
