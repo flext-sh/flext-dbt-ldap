@@ -1,5 +1,18 @@
 # FLEXT-DBT-LDAP
 
+
+<!-- TOC START -->
+- [🚀 Key Features](#-key-features)
+- [📦 Installation](#-installation)
+- [🛠️ Usage](#-usage)
+  - [Core Models](#core-models)
+  - [Parsing Distinguished Names (DN)](#parsing-distinguished-names-dn)
+  - [Analyzing Group Membership](#analyzing-group-membership)
+- [🏗️ Architecture](#-architecture)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+<!-- TOC END -->
+
 [![dbt 1.6+](https://img.shields.io/badge/dbt-1.6+-orange.svg)](https://getdbt.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)

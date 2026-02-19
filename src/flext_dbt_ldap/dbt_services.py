@@ -35,7 +35,8 @@ class FlextDbtLdapService:
         self.config: FlextDbtLdapSettings = (
             config or FlextDbtLdapSettings.get_global_instance()
         )
-        self.client = client or FlextDbtLdapClient(self.config)
+        ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
+        self.client = client or FlextDbtLdapClient(self.config, ldap_api=ldap_api)
         self.transformer = transformer or m.DbtLdap()
         self._dbt_service = FlextMeltanoDbtService()
         logger.info("Initialized DBT LDAP service")

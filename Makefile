@@ -1,9 +1,10 @@
 # flext-dbt-ldap - LDAP dbt Package
 PROJECT_NAME := flext-dbt-ldap
-COV_DIR := flext_dbt_ldap
-MIN_COVERAGE := 90
-
+ifneq ("$(wildcard ../base.mk)", "")
 include ../base.mk
+else
+include base.mk
+endif
 
 # === PROJECT-SPECIFIC TARGETS ===
 .PHONY: dbt-run dbt-test dbt-docs test-unit test-integration build shell

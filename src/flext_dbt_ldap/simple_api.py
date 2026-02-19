@@ -24,7 +24,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
     def __init__(self, config: FlextDbtLdapSettings | None = None) -> None:
         """Initialize the unified DBT LDAP service."""
         super().__init__()
-        self._config = config or FlextDbtLdapSettings()
+        self._dbt_ldap_config: FlextDbtLdapSettings = config or FlextDbtLdapSettings()
+        self._config = self._dbt_ldap_config
         self._client: FlextDbtLdapClient | None = None
         self._service: FlextDbtLdapService | None = None
 
@@ -67,20 +68,21 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
     def client(self) -> FlextDbtLdapClient:
         """Get the DBT LDAP client instance."""
         if self._client is None:
-            self._client = FlextDbtLdapClient(self._config)
+            ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
+            self._client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
         return self._client
 
     @property
     def service(self) -> FlextDbtLdapService:
         """Get the DBT LDAP service instance."""
         if self._service is None:
-            self._service = FlextDbtLdapService(self._config)
+            self._service = FlextDbtLdapService(self.config)
         return self._service
 
     @property
     def config(self) -> FlextDbtLdapSettings:
         """Get the current configuration."""
-        return self._config
+        return self._dbt_ldap_config
 
     # =============================================================================
     # FACTORY METHODS
@@ -90,7 +92,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         """Create DBT LDAP client with current configuration."""
         try:
             self.logger.info("Creating DBT LDAP client")
-            client = FlextDbtLdapClient(self._config)
+            ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
+            client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
             return r[FlextDbtLdapClient].ok(client)
         except Exception as e:
             return r[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
@@ -99,7 +102,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         """Create DBT LDAP service with current configuration."""
         try:
             self.logger.info("Creating DBT LDAP service")
-            service = FlextDbtLdapService(self._config)
+            service = FlextDbtLdapService(self.config)
             return r[FlextDbtLdapService].ok(service)
         except Exception as e:
             return r[FlextDbtLdapService].fail(

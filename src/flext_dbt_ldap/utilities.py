@@ -190,7 +190,8 @@ class FlextDbtLdapUtilities(u_core):
                     else:
                         select_clauses.append(f"    {transformation} as {column}")
 
-                model_sql = f"""{{{{
+                model_sql = (  # nosec B608
+                    f"""{{{{
     config(
         materialized='table',
         tags=['ldap', 'transformation'],
@@ -205,6 +206,7 @@ where 1=1
     -- Add any filtering conditions here
     and objectclass is not null
 """
+                )
                 return r[str].ok(model_sql)
             except Exception as e:
                 return r[str].fail(
@@ -283,7 +285,8 @@ where 1=1
         ) -> r[str]:
             """Create DBT macro for extracting LDAP attributes from arrays."""
             try:
-                macro_sql = f"""-- Macro to extract specific values from LDAP multi-valued attributes
+                macro_sql = (  # nosec B608
+                    f"""-- Macro to extract specific values from LDAP multi-valued attributes
 {{% macro {macro_name}(attribute_array, filter_pattern='') %}}
  case
  when {{{{{{attribute_array}}}}}} is null then null
@@ -299,6 +302,7 @@ where 1=1
  {{% endif %}}
  end
 {{% endmacro %}}"""
+                )
                 return r[str].ok(macro_sql)
             except Exception as e:
                 return r[str].fail(

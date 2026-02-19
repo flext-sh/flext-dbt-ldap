@@ -34,7 +34,7 @@ class FlextDbtLdapMacros:
                 # Very simple DN parsing: split by commas, then by '='
                 parts = [p.strip() for p in dn.split(",") if "=" in p]
                 for part in parts:
-                    value, key = part.split("=", 1)
+                    key, value = part.split("=", 1)
                     if key.lower() == component.lower():
                         return value
                 return None
