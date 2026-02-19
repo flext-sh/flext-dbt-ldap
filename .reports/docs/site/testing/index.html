@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/flext-sh/flext/testing/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Testing - flext-dbt-ldap Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">flext-dbt-ldap Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Testing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../troubleshooting/" class="nav-link">Troubleshooting</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../security/" class="nav-link">Security</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../skill-automation-pattern/" class="nav-link">Automation Skill Pattern</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../development/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../troubleshooting/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/flext-sh/flext/edit/main/flext-dbt-ldap/docs/guides/testing.md" class="nav-link">Edit on flext-sh/flext
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#flext-dbt-ldap-flext-testing-guide" class="nav-link">flext-dbt-ldap - FLEXT Testing Guide</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#overview" class="nav-link">Overview</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#test-structure" class="nav-link">Test Structure</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#test-categories" class="nav-link">Test Categories</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#test-markers" class="nav-link">Test Markers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#running-tests" class="nav-link">Running Tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#test-fixtures" class="nav-link">Test Fixtures</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#mocking-and-stubbing" class="nav-link">Mocking and Stubbing</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#performance-testing" class="nav-link">Performance Testing</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#test-data-management" class="nav-link">Test Data Management</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#continuous-integration" class="nav-link">Continuous Integration</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#best-practices" class="nav-link">Best Practices</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#troubleshooting" class="nav-link">Troubleshooting</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#resources" class="nav-link">Resources</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- Generated from docs/guides/testing.md for flext-dbt-ldap. -->
+<!-- Source of truth: workspace docs/guides/. -->
+
+<h1 id="flext-dbt-ldap-flext-testing-guide">flext-dbt-ldap - FLEXT Testing Guide</h1>
+<blockquote>
+<p>Project profile: <code>flext-dbt-ldap</code></p>
+</blockquote>
+<p>This guide covers testing strategies, best practices, and procedures for FLEXT applications and libraries.</p>
+<h2 id="overview">Overview</h2>
+<p>FLEXT maintains comprehensive test coverage across all <strong>33 projects</strong> with the following standards:</p>
+<ul>
+<li><strong>85%+ coverage</strong> for foundation libraries (flext-core)</li>
+<li><strong>75%+ coverage</strong> for applications and domain libraries</li>
+<li><strong>100% test pass rate</strong> across all projects</li>
+<li><strong>Zero Pyrefly errors</strong> in strict mode (successor to MyPy)</li>
+<li><strong>Zero Ruff violations</strong> in production code</li>
+</ul>
+<h2 id="test-structure">Test Structure</h2>
+<p>FLEXT uses a hierarchical test structure:</p>
+<pre><code>tests/
+├── unit/           # Unit tests (fast, isolated)
+├── integration/    # Integration tests (component interaction)
+├── e2e/           # End-to-end tests (full workflow)
+├── fixtures/      # Test data and fixtures
+└── conftest.py    # Pytest configuration
+</code></pre>
+<h2 id="test-categories">Test Categories</h2>
+<h3 id="unit-tests">Unit Tests</h3>
+<p>Test individual functions and classes in isolation:</p>
+<pre><code class="language-python">import pytest
+from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+from flext_ldif import FlextLdif
+
+class TestLdifParsing:
+    def test_parse_valid_ldif(self):
+        &quot;&quot;&quot;Test parsing valid LDIF content.&quot;&quot;&quot;
+        ldif = FlextLdif()
+        content = &quot;&quot;&quot;dn: cn=test,dc=example,dc=com
+cn: test
+objectClass: inetOrgPerson&quot;&quot;&quot;
+
+        result = ldif.parse(content)
+
+        assert result.is_success
+        entries = result.unwrap()
+        assert len(entries) == 1
+        assert entries[0].dn == &quot;cn=test,dc=example,dc=com&quot;
+
+    def test_parse_invalid_ldif(self):
+        &quot;&quot;&quot;Test parsing invalid LDIF content.&quot;&quot;&quot;
+        ldif = FlextLdif()
+        content = &quot;invalid ldif content&quot;
+
+        result = ldif.parse(content)
+
+        assert result.is_failure
+        assert &quot;parsing&quot; in str(result.failure()).lower()
+</code></pre>
+<h3 id="integration-tests">Integration Tests</h3>
+<p>Test component interactions and workflows:</p>
+<pre><code class="language-python">import pytest
+from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+from flext_ldif import FlextLdif, FlextLdifSettings
+
+class TestLdifIntegration:
+    def test_ldif_with_container(self):
+        &quot;&quot;&quot;Test LDIF processing with dependency injection.&quot;&quot;&quot;
+        container = FlextContainer.get_global()
+
+        # Register LDIF service
+        config = FlextLdifSettings(batch_size=100)
+        ldif = FlextLdif(config=config)
+        container.register(&quot;ldif&quot;, ldif)
+
+        # Retrieve and use service
+        ldif_result = container.get(&quot;ldif&quot;)
+        assert ldif_result.is_success
+
+        ldif_service = ldif_result.unwrap()
+        # Test LDIF operations
+        result = ldif_service.parse(&quot;dn: test&quot;)
+        assert result.is_success
+</code></pre>
+<h3 id="end-to-end-tests">End-to-End Tests</h3>
+<p>Test complete workflows and user scenarios:</p>
+<pre><code class="language-python">import pytest
+from pathlib import Path
+from flext_ldif import FlextLdif, FlextLdifSettings
+
+class TestLdifMigration:
+    def test_oid_to_oud_migration(self):
+        &quot;&quot;&quot;Test complete OID to OUD migration workflow.&quot;&quot;&quot;
+        # Setup test data
+        input_dir = Path(&quot;test_data/oid&quot;)
+        output_dir = Path(&quot;test_data/oud&quot;)
+
+        input_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # Create sample LDIF file
+        sample_ldif = &quot;&quot;&quot;dn: cn=test,dc=example,dc=com
+cn: test
+objectClass: inetOrgPerson&quot;&quot;&quot;
+
+        with open(input_dir / &quot;test.ldif&quot;, 'w') as f:
+            f.write(sample_ldif)
+
+        # Configure and run migration
+        config = FlextLdifSettings(
+            source_server=&quot;oid&quot;,
+            target_server=&quot;oud&quot;,
+            preserve_oid_modifiers=True
+        )
+
+        ldif = FlextLdif(config=config)
+        result = ldif.migrate(input_dir, output_dir, &quot;oid&quot;, &quot;oud&quot;)
+
+        # Verify migration
+        assert result.is_success
+        report = result.unwrap()
+        assert report.successful_entries &gt; 0
+        assert (output_dir / &quot;test.ldif&quot;).exists()
+</code></pre>
+<h2 id="test-markers">Test Markers</h2>
+<p>FLEXT uses pytest markers to categorize tests:</p>
+<pre><code class="language-python">import pytest
+
+@pytest.mark.unit
+def test_unit_function():
+    &quot;&quot;&quot;Unit test - fast and isolated.&quot;&quot;&quot;
+    pass
+
+@pytest.mark.integration
+def test_integration_workflow():
+    &quot;&quot;&quot;Integration test - component interaction.&quot;&quot;&quot;
+    pass
+
+@pytest.mark.e2e
+def test_end_to_end_scenario():
+    &quot;&quot;&quot;End-to-end test - complete workflow.&quot;&quot;&quot;
+    pass
+
+@pytest.mark.slow
+def test_performance_benchmark():
+    &quot;&quot;&quot;Slow test - performance or load testing.&quot;&quot;&quot;
+    pass
+</code></pre>
+<h2 id="running-tests">Running Tests</h2>
+<h3 id="basic-test-execution">Basic Test Execution</h3>
+<pre><code class="language-bash"># Run all tests
+make test
+
+# Run specific test categories
+pytest tests/unit/        # Unit tests only
+pytest tests/integration/ # Integration tests only
+pytest tests/e2e/         # End-to-end tests only
+
+# Run with markers
+pytest -m unit           # Unit tests
+pytest -m integration    # Integration tests
+pytest -m &quot;not slow&quot;     # Skip slow tests
+</code></pre>
+<h3 id="coverage-analysis">Coverage Analysis</h3>
+<p>Coverage thresholds and source directories are configured in each project's <code>pyproject.toml</code> under <code>[tool.coverage]</code>. Use <code>make test</code> which reads these automatically.</p>
+<pre><code class="language-bash"># Run with coverage (reads [tool.coverage] from pyproject.toml)
+make test
+
+# HTML coverage report
+pytest --cov --cov-report=html
+</code></pre>
+<h3 id="parallel-test-execution">Parallel Test Execution</h3>
+<pre><code class="language-bash"># Run tests in parallel
+pytest -n auto
+
+# Specific number of workers
+pytest -n 4
+</code></pre>
+<h2 id="test-fixtures">Test Fixtures</h2>
+<h3 id="pytest-fixtures">Pytest Fixtures</h3>
+<pre><code class="language-python">import pytest
+from pathlib import Path
+from flext_ldif import FlextLdif, FlextLdifSettings
+
+@pytest.fixture
+def ldif_config():
+    &quot;&quot;&quot;Provide LDIF configuration for tests.&quot;&quot;&quot;
+    return FlextLdifSettings(
+        batch_size=10,
+        strict_validation=False
+    )
+
+@pytest.fixture
+def ldif_service(ldif_config):
+    &quot;&quot;&quot;Provide LDIF service instance.&quot;&quot;&quot;
+    return FlextLdif(config=ldif_config)
+
+@pytest.fixture
+def sample_ldif_content():
+    &quot;&quot;&quot;Provide sample LDIF content for tests.&quot;&quot;&quot;
+    return &quot;&quot;&quot;dn: cn=test,dc=example,dc=com
+cn: test
+sn: user
+objectClass: inetOrgPerson&quot;&quot;&quot;
+
+@pytest.fixture
+def temp_directories(tmp_path):
+    &quot;&quot;&quot;Provide temporary directories for file tests.&quot;&quot;&quot;
+    input_dir = tmp_path / &quot;input&quot;
+    output_dir = tmp_path / &quot;output&quot;
+
+    input_dir.mkdir()
+    output_dir.mkdir()
+
+    return input_dir, output_dir
+</code></pre>
+<h3 id="using-fixtures">Using Fixtures</h3>
+<pre><code class="language-python">def test_ldif_parsing(ldif_service, sample_ldif_content):
+    &quot;&quot;&quot;Test LDIF parsing with fixtures.&quot;&quot;&quot;
+    result = ldif_service.parse(sample_ldif_content)
+    assert result.is_success
+
+def test_file_migration(ldif_service, temp_directories):
+    &quot;&quot;&quot;Test file migration with temporary directories.&quot;&quot;&quot;
+    input_dir, output_dir = temp_directories
+
+    # Create test file
+    test_file = input_dir / &quot;test.ldif&quot;
+    test_file.write_text(&quot;dn: test&quot;)
+
+    # Run migration
+    result = ldif_service.migrate(input_dir, output_dir, &quot;oid&quot;, &quot;oud&quot;)
+    assert result.is_success
+</code></pre>
+<h2 id="mocking-and-stubbing">Mocking and Stubbing</h2>
+<h3 id="unit-test-mocking">Unit Test Mocking</h3>
+<pre><code class="language-python">from unittest.mock import Mock, patch
+from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+def test_with_mocked_dependency():
+    &quot;&quot;&quot;Test with mocked external dependency.&quot;&quot;&quot;
+    with patch('flext_ldif.external_service') as mock_service:
+        # Configure mock
+        mock_service.process.return_value = FlextResult.ok(&quot;processed&quot;)
+
+        # Test function that uses mock
+        result = my_function()
+
+        # Verify mock was called
+        mock_service.process.assert_called_once()
+        assert result.is_success
+</code></pre>
+<h3 id="integration-test-stubbing">Integration Test Stubbing</h3>
+<pre><code class="language-python">from unittest.mock import Mock
+from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+def test_with_stubbed_service():
+    &quot;&quot;&quot;Test with stubbed service in container.&quot;&quot;&quot;
+    container = FlextContainer.get_global()
+
+    # Create stub service
+    stub_service = Mock()
+    stub_service.process.return_value = FlextResult.ok(&quot;stubbed&quot;)
+
+    # Register stub
+    container.register(&quot;external_service&quot;, stub_service)
+
+    # Test integration
+    result = integration_function()
+    assert result.is_success
+</code></pre>
+<h2 id="performance-testing">Performance Testing</h2>
+<h3 id="load-testing">Load Testing</h3>
+<pre><code class="language-python">import pytest
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+@pytest.mark.slow
+def test_concurrent_processing():
+    &quot;&quot;&quot;Test concurrent processing performance.&quot;&quot;&quot;
+    ldif = FlextLdif()
+    content = &quot;dn: test\ncn: test&quot;
+
+    def process_entry():
+        return ldif.parse(content)
+
+    # Run concurrent processing
+    start_time = time.time()
+
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(process_entry) for _ in range(100)]
+        results = [future.result() for future in futures]
+
+    end_time = time.time()
+
+    # Verify all succeeded
+    assert all(result.is_success for result in results)
+
+    # Verify performance (should complete in &lt; 1 second)
+    assert (end_time - start_time) &lt; 1.0
+</code></pre>
+<h3 id="memory-testing">Memory Testing</h3>
+<pre><code class="language-python">import pytest
+import psutil
+import os
+
+@pytest.mark.slow
+def test_memory_usage():
+    &quot;&quot;&quot;Test memory usage during large file processing.&quot;&quot;&quot;
+    process = psutil.Process(os.getpid())
+    initial_memory = process.memory_info().rss
+
+    # Process large dataset
+    ldif = FlextLdif()
+    large_content = &quot;dn: test\ncn: test\n&quot; * 10000
+
+    result = ldif.parse(large_content)
+    assert result.is_success
+
+    # Check memory usage (should not exceed 100MB)
+    current_memory = process.memory_info().rss
+    memory_used = current_memory - initial_memory
+
+    assert memory_used &lt; 100 * 1024 * 1024  # 100MB
+</code></pre>
+<h2 id="test-data-management">Test Data Management</h2>
+<h3 id="test-fixtures-directory">Test Fixtures Directory</h3>
+<pre><code>tests/
+├── fixtures/
+│   ├── ldif/
+│   │   ├── valid.ldif
+│   │   ├── invalid.ldif
+│   │   └── large.ldif
+│   ├── config/
+│   │   ├── dev.yaml
+│   │   └── prod.yaml
+│   └── data/
+│       ├── users.json
+│       └── schema.json
+</code></pre>
+<h3 id="loading-test-data">Loading Test Data</h3>
+<pre><code class="language-python">import json
+from pathlib import Path
+
+def load_test_fixture(fixture_name: str) -&gt; str:
+    &quot;&quot;&quot;Load test fixture from fixtures directory.&quot;&quot;&quot;
+    fixture_path = Path(__file__).parent / &quot;fixtures&quot; / fixture_name
+    return fixture_path.read_text()
+
+def load_json_fixture(fixture_name: str) -&gt; dict[str, object]:
+    &quot;&quot;&quot;Load JSON test fixture.&quot;&quot;&quot;
+    fixture_path = Path(__file__).parent / &quot;fixtures&quot; / fixture_name
+    return json.loads(fixture_path.read_text())
+
+# Usage
+def test_with_fixture():
+    &quot;&quot;&quot;Test using loaded fixture data.&quot;&quot;&quot;
+    ldif_content = load_test_fixture(&quot;ldif/valid.ldif&quot;)
+    config_data = load_json_fixture(&quot;config/dev.yaml&quot;)
+
+    # Use fixture data in test
+    result = process_ldif(ldif_content, config_data)
+    assert result.is_success
+</code></pre>
+<h2 id="continuous-integration">Continuous Integration</h2>
+<h3 id="github-actions-workflow">GitHub Actions Workflow</h3>
+<pre><code class="language-yaml">name: Test Suite
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.13]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          poetry install
+
+      - name: Run tests
+        run: |
+          poetry run pytest --cov=src --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="1-test-naming">1. Test Naming</h3>
+<pre><code class="language-python"># ✅ GOOD - Descriptive test names
+def test_parse_valid_ldif_returns_success():
+    &quot;&quot;&quot;Test that parsing valid LDIF returns success result.&quot;&quot;&quot;
+    pass
+
+def test_parse_invalid_ldif_returns_failure():
+    &quot;&quot;&quot;Test that parsing invalid LDIF returns failure result.&quot;&quot;&quot;
+    pass
+
+# ❌ BAD - Vague test names
+def test_parse():
+    pass
+
+def test_ldif():
+    pass
+</code></pre>
+<h3 id="2-test-organization">2. Test Organization</h3>
+<pre><code class="language-python">class TestLdifParsing:
+    &quot;&quot;&quot;Test LDIF parsing functionality.&quot;&quot;&quot;
+
+    def test_parse_valid_single_entry(self):
+        &quot;&quot;&quot;Test parsing single valid LDIF entry.&quot;&quot;&quot;
+        pass
+
+    def test_parse_valid_multiple_entries(self):
+        &quot;&quot;&quot;Test parsing multiple valid LDIF entries.&quot;&quot;&quot;
+        pass
+
+    def test_parse_invalid_format(self):
+        &quot;&quot;&quot;Test parsing invalid LDIF format.&quot;&quot;&quot;
+        pass
+
+class TestLdifMigration:
+    &quot;&quot;&quot;Test LDIF migration functionality.&quot;&quot;&quot;
+
+    def test_migrate_oid_to_oud(self):
+        &quot;&quot;&quot;Test OID to OUD migration.&quot;&quot;&quot;
+        pass
+</code></pre>
+<h3 id="3-assertion-quality">3. Assertion Quality</h3>
+<pre><code class="language-python"># ✅ GOOD - Specific assertions
+def test_parse_result():
+    result = ldif.parse(content)
+
+    assert result.is_success
+    entries = result.unwrap()
+    assert len(entries) == 1
+    assert entries[0].dn == &quot;cn=test,dc=example,dc=com&quot;
+    assert &quot;cn&quot; in entries[0].attributes
+
+# ❌ BAD - Vague assertions
+def test_parse_result():
+    result = ldif.parse(content)
+    assert result  # Too vague
+</code></pre>
+<h3 id="4-test-independence">4. Test Independence</h3>
+<pre><code class="language-python"># ✅ GOOD - Independent tests
+def test_parse_valid_ldif():
+    ldif = FlextLdif()  # Fresh instance
+    result = ldif.parse(&quot;dn: test&quot;)
+    assert result.is_success
+
+def test_parse_invalid_ldif():
+    ldif = FlextLdif()  # Fresh instance
+    result = ldif.parse(&quot;invalid&quot;)
+    assert result.is_failure
+
+# ❌ BAD - Dependent tests
+ldif = FlextLdif()  # Shared instance
+
+def test_parse_valid_ldif():
+    result = ldif.parse(&quot;dn: test&quot;)
+    assert result.is_success
+
+def test_parse_invalid_ldif():
+    result = ldif.parse(&quot;invalid&quot;)
+    assert result.is_failure
+</code></pre>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-test-issues">Common Test Issues</h3>
+<ol>
+<li><strong>Import Errors</strong></li>
+</ol>
+<p><code>bash
+   # Set PYTHONPATH
+   export PYTHONPATH=src
+   pytest</code></p>
+<ol>
+<li><strong>Fixture Not Found</strong></li>
+</ol>
+<p><code>python
+   # Check fixture scope and dependencies
+   @pytest.fixture(scope="function")
+   def my_fixture():
+       return "value"</code></p>
+<ol>
+<li><strong>Test Timeout</strong></li>
+</ol>
+<p><code>bash
+   # Increase timeout
+   pytest --timeout=300</code></p>
+<ol>
+<li><strong>Coverage Issues</strong></li>
+</ol>
+<p><code>bash
+   # Check coverage configuration
+   pytest --cov=src --cov-report=term-missing</code></p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://docs.pytest.org/">Pytest Documentation</a></li>
+<li><a href="https://coverage.readthedocs.io/">Coverage.py Documentation</a></li>
+<li>FLEXT Quality Standards</li>
+<li>Test Examples</li>
+<li>CI/CD Configuration</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

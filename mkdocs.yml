@@ -1,0 +1,23 @@
+site_name: flext-dbt-ldap Documentation
+site_description: Standard guides for flext-dbt-ldap
+site_url: https://github.com/flext-sh/flext
+repo_name: flext-sh/flext
+repo_url: https://github.com/flext-sh/flext
+edit_uri: edit/main/flext-dbt-ldap/docs/guides/
+docs_dir: docs/guides
+site_dir: .reports/docs/site
+
+theme:
+  name: mkdocs
+
+plugins: []
+
+nav:
+  - Home: README.md
+  - Getting Started: getting-started.md
+  - Configuration: configuration.md
+  - Development: development.md
+  - Testing: testing.md
+  - Troubleshooting: troubleshooting.md
+  - Security: security.md
+  - Automation Skill Pattern: skill-automation-pattern.md

@@ -1,0 +1,11 @@
+{
+  "summary": {
+    "scope": "flext-dbt-ldap",
+    "result": "OK",
+    "message": "validation passed",
+    "apply": false
+  },
+  "details": {
+    "todo_written": false
+  }
+}
