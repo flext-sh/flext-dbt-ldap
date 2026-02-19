@@ -1,7 +1,7 @@
 {
   "summary": {
     "scope": "flext-dbt-ldap",
-    "generated": 7,
+    "generated": 8,
     "apply": true,
     "source": "workspace-docs-guides"
   },
@@ -24,7 +24,7 @@
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/security.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/skill-automation-pattern.md",

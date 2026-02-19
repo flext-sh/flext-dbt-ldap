@@ -2,5 +2,5 @@
 
 Scope: flext-dbt-ldap
 Apply: 1
-Generated files: 7
+Generated files: 8
 Source: workspace-docs-guides
