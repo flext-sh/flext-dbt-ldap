@@ -1,26 +1,26 @@
 {
   "summary": {
     "scope": "flext-dbt-ldap",
-    "generated": 0,
+    "generated": 7,
     "apply": true,
     "source": "workspace-docs-guides"
   },
   "files": [
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/README.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/configuration.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/development.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/getting-started.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/security.md",
@@ -28,15 +28,15 @@
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/skill-automation-pattern.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/testing.md",
-      "written": false
+      "written": true
     },
     {
       "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/troubleshooting.md",
-      "written": false
+      "written": true
     }
   ]
 }

@@ -1,86 +1,13 @@
 {
   "summary": {
     "scope": "flext-dbt-ldap",
-    "issues": 12,
+    "issues": 0,
     "checks": [
       "forbidden-terms",
       "links"
     ],
-    "strict": false,
+    "strict": true,
     "report_dir": "/home/marlonsc/flext/flext-dbt-ldap/.reports/docs"
   },
-  "issues": [
-    {
-      "file": "README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 104: target not found -> docs/development.md"
-    },
-    {
-      "file": "README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 108: target not found -> LICENSE"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 19: target not found -> ./getting-started.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 20: target not found -> ./configuration.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 25: target not found -> ./architecture.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 26: target not found -> ./api-reference.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 27: target not found -> ./architecture/patterns.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 31: target not found -> ./development.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 32: target not found -> ./testing.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 33: target not found -> ./troubleshooting.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 51: target not found -> ../../CONTRIBUTING.md"
-    },
-    {
-      "file": "docs/README.md",
-      "issue_type": "broken_link",
-      "severity": "high",
-      "message": "line 52: target not found -> ../LICENSE"
-    }
-  ]
+  "issues": []
 }

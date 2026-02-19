@@ -1,8 +1,8 @@
 {
   "summary": {
     "scope": "flext-dbt-ldap",
-    "changed_files": 8,
-    "apply": false
+    "changed_files": 7,
+    "apply": true
   },
   "changes": [
     {
@@ -22,11 +22,6 @@
     },
     {
       "file": "docs/guides/getting-started.md",
-      "links": 0,
-      "toc": 1
-    },
-    {
-      "file": "docs/guides/security.md",
       "links": 0,
       "toc": 1
     },
