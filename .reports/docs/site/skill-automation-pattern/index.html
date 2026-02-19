@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/flext-sh/flext/skill-automation-pattern/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Automation Skill Pattern - flext-dbt-ldap Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">flext-dbt-ldap Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../troubleshooting/" class="nav-link">Troubleshooting</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../security/" class="nav-link">Security</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Automation Skill Pattern</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../security/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/flext-sh/flext/edit/main/flext-dbt-ldap/docs/guides/skill-automation-pattern.md" class="nav-link">Edit on flext-sh/flext
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#flext-dbt-ldap-skill-automation-pattern" class="nav-link">flext-dbt-ldap - Skill Automation Pattern</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#goal" class="nav-link">Goal</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#required-outputs" class="nav-link">Required Outputs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#standard-skill-contract" class="nav-link">Standard Skill Contract</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#standard-skill-format" class="nav-link">Standard Skill Format</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#implementation-checklist" class="nav-link">Implementation Checklist</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#example-current-pattern" class="nav-link">Example (Current Pattern)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#verification-commands" class="nav-link">Verification Commands</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#adoption-rule" class="nav-link">Adoption Rule</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- Generated from docs/guides/skill-automation-pattern.md for flext-dbt-ldap. -->
+<!-- Source of truth: workspace docs/guides/. -->
+
+<h1 id="flext-dbt-ldap-skill-automation-pattern">flext-dbt-ldap - Skill Automation Pattern</h1>
+<blockquote>
+<p>Project profile: <code>flext-dbt-ldap</code></p>
+</blockquote>
+<p>This guide defines the standard way to create reusable automation skills in this repository.</p>
+<h2 id="goal">Goal</h2>
+<p>Create automations that are reproducible, script-first, and enforceable by CI-style commands.</p>
+<h2 id="required-outputs">Required Outputs</h2>
+<p>For each new automation family, deliver all items below:</p>
+<ol>
+<li>One skill folder: <code>.claude/skills/&lt;automation-name&gt;/</code> containing:</li>
+<li><code>SKILL.md</code> — canonical skill document</li>
+<li><code>rules.yml</code> — detection rules (ast-grep, ripgrep, or custom)</li>
+<li><code>rules/</code> — ast-grep rule files (if any)</li>
+<li><code>baseline.json</code> — violation baseline (auto-generated)</li>
+<li>One docs page in <code>docs/guides/</code> (if cross-cutting)</li>
+</ol>
+<h2 id="standard-skill-contract">Standard Skill Contract</h2>
+<p>Skills are validated by the generic runner:</p>
+<pre><code class="language-bash">python3 scripts/core/skill_validate.py --skill &lt;name&gt;
+python3 scripts/core/skill_validate.py --skill &lt;name&gt; --mode strict
+python3 scripts/core/skill_validate.py --skill &lt;name&gt; --update-baseline
+</code></pre>
+<p>The runner auto-discovers all skills:</p>
+<pre><code class="language-bash">python3 scripts/core/skill_validate.py --all
+</code></pre>
+<h2 id="standard-skill-format">Standard Skill Format</h2>
+<p>The skill must follow the canonical format from <code>skill-format-universal</code> and include:</p>
+<ul>
+<li>Concrete paths under <code>## Scope</code></li>
+<li>Existing anchors under <code>## References</code></li>
+<li>Enforceable behaviors under <code>## Rules</code></li>
+<li>Copyable commands under <code>## Instructions</code></li>
+<li>Ordered execution in <code>## Workflow</code></li>
+<li>Good/Bad examples under <code>## Examples</code></li>
+<li>Executable checks under <code>## Verification</code></li>
+</ul>
+<h2 id="implementation-checklist">Implementation Checklist</h2>
+<ol>
+<li>Define the invariant (policy or quality requirement).</li>
+<li>Create <code>rules.yml</code> with detection rules (ast-grep, ripgrep, or custom).</li>
+<li>Place ast-grep rule files in skill <code>rules/</code> directory.</li>
+<li>Initialize baseline with <code>python3 scripts/core/skill_validate.py --skill &lt;name&gt; --update-baseline</code>.</li>
+<li>Write or update skill doc with exact commands.</li>
+<li>Add or update a docs guide in <code>docs/guides/</code> (if cross-cutting).</li>
+<li>Run <code>python3 scripts/core/skill_validate.py --all</code> to verify integration.</li>
+</ol>
+<h2 id="example-current-pattern">Example (Current Pattern)</h2>
+<p>Current repository implementation uses the <strong>self-contained skill architecture</strong>. Each skill
+folder (<code>.claude/skills/&lt;skill&gt;/</code>) owns its own <code>rules.yml</code>, <code>rules/</code> ast-grep files,
+<code>baseline.json</code>, and <code>report.json</code>. The generic runner <code>scripts/core/skill_validate.py</code>
+discovers and executes everything.</p>
+<p><strong>Dict/Any Policy Gate</strong>:
+- Skill: <code>.claude/skills/flext-strict-typing/SKILL.md</code>
+- Rules: <code>.claude/skills/flext-strict-typing/rules.yml</code> (10 rules: 8 ast-grep + 2 ripgrep)
+- AST rules: <code>.claude/skills/flext-strict-typing/rules/*.yml</code>
+- Baseline: <code>.claude/skills/flext-strict-typing/baseline.json</code></p>
+<p><strong>Pydantic v2 Policy Gate</strong>:
+- Skill: <code>.claude/skills/lib-pydantic-v2/SKILL.md</code>
+- Rules: <code>.claude/skills/lib-pydantic-v2/rules.yml</code> (8 ast-grep rules)
+- AST rules: <code>.claude/skills/lib-pydantic-v2/rules/*.yml</code>
+- Baseline: <code>.claude/skills/lib-pydantic-v2/baseline.json</code></p>
+<p><strong>Generic runner</strong>:
+- <code>scripts/core/skill_validate.py</code> — auto-discovers <code>.claude/skills/*/rules.yml</code></p>
+<h2 id="verification-commands">Verification Commands</h2>
+<pre><code class="language-bash">python3 scripts/core/skill_validate.py --list-skills
+python3 scripts/core/skill_validate.py --skill flext-strict-typing
+python3 scripts/core/skill_validate.py --skill lib-pydantic-v2
+python3 scripts/core/skill_validate.py --all
+</code></pre>
+<h2 id="adoption-rule">Adoption Rule</h2>
+<p>For future automation work, do not introduce manual-only procedures. Ship scripts + skill + docs together in the same change.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Standard guides for flext-dbt-ldap">
+        
+        <link rel="canonical" href="https://github.com/flext-sh/flext/">
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>flext-dbt-ldap Documentation</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/fontawesome.min.css" rel="stylesheet">
+        <link href="css/brands.min.css" rel="stylesheet">
+        <link href="css/solid.min.css" rel="stylesheet">
+        <link href="css/v4-font-face.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">flext-dbt-ldap Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="." class="nav-link active" aria-current="page">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="troubleshooting/" class="nav-link">Troubleshooting</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="security/" class="nav-link">Security</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="skill-automation-pattern/" class="nav-link">Automation Skill Pattern</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="getting-started/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/flext-sh/flext/edit/main/flext-dbt-ldap/docs/guides/README.md" class="nav-link">Edit on flext-sh/flext
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#flext-dbt-ldap-user-guides" class="nav-link">flext-dbt-ldap - User Guides</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#getting-started" class="nav-link">Getting Started</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#development" class="nav-link">Development</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#operations" class="nav-link">Operations</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#integration" class="nav-link">Integration</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#migration" class="nav-link">Migration</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#best-practices" class="nav-link">Best Practices</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- Generated from docs/guides/README.md for flext-dbt-ldap. -->
+<!-- Source of truth: workspace docs/guides/. -->
+
+<h1 id="flext-dbt-ldap-user-guides">flext-dbt-ldap - User Guides</h1>
+<blockquote>
+<p>Project profile: <code>flext-dbt-ldap</code></p>
+</blockquote>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="installation-guide">Installation Guide ✅</h3>
+<p>Complete installation instructions for FLEXT and all its components.</p>
+<h3 id="quick-start-tutorial-coming-soon">Quick Start Tutorial (Coming Soon)</h3>
+<p>Hands-on tutorial to get you up and running with FLEXT in minutes.</p>
+<h3 id="configuration-guide">Configuration Guide ✅</h3>
+<p>How to configure FLEXT for your specific environment and requirements.</p>
+<h2 id="development">Development</h2>
+<h3 id="development-setup">Development Setup ✅</h3>
+<p>Setting up a development environment for FLEXT contributions.</p>
+<h3 id="automation-skill-pattern">Automation Skill Pattern ✅</h3>
+<p>Standard pattern for creating future script-backed automation skills and docs.</p>
+<h3 id="contributing-guide-coming-soon">Contributing Guide (Coming Soon)</h3>
+<p>Guidelines for contributing to the FLEXT ecosystem.</p>
+<h3 id="testing-guide">Testing Guide ✅</h3>
+<p>Best practices for testing FLEXT applications and libraries.</p>
+<h2 id="operations">Operations</h2>
+<h3 id="deployment-guide-coming-soon">Deployment Guide (Coming Soon)</h3>
+<p>Deploying FLEXT applications to production environments.</p>
+<h3 id="monitoring-guide-coming-soon">Monitoring Guide (Coming Soon)</h3>
+<p>Monitoring and observability for FLEXT applications.</p>
+<h3 id="troubleshooting-guide">Troubleshooting Guide ✅</h3>
+<p>Common issues and their solutions.</p>
+<h2 id="integration">Integration</h2>
+<h3 id="ldap-integration-coming-soon">LDAP Integration (Coming Soon)</h3>
+<p>Integrating FLEXT with LDAP servers and directories.</p>
+<h3 id="database-integration-coming-soon">Database Integration (Coming Soon)</h3>
+<p>Working with databases through FLEXT's data access layer.</p>
+<h3 id="api-integration-coming-soon">API Integration (Coming Soon)</h3>
+<p>Building and consuming APIs with FLEXT.</p>
+<h2 id="migration">Migration</h2>
+<h3 id="ldif-migration-guide-coming-soon">LDIF Migration Guide (Coming Soon)</h3>
+<p>Complete guide for migrating LDIF data between LDAP servers.</p>
+<h3 id="data-migration-coming-soon">Data Migration (Coming Soon)</h3>
+<p>Migrating data between different systems using FLEXT.</p>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="performance-optimization-coming-soon">Performance Optimization (Coming Soon)</h3>
+<p>Optimizing FLEXT applications for better performance.</p>
+<h3 id="security-best-practices-coming-soon">Security Best Practices (Coming Soon)</h3>
+<p>Security considerations when using FLEXT.</p>
+<h3 id="error-handling-coming-soon">Error Handling (Coming Soon)</h3>
+<p>Effective error handling strategies in FLEXT applications.</p>
+<hr />
+<p><strong>Note</strong>: This guide structure is being updated. Currently,
+only the Getting Started guide is available. Additional guides are being created as part of the documentation maintenance process.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2026-02-19 16:55:23.511469+00:00
+-->

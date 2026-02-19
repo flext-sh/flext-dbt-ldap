@@ -1,0 +1,127 @@
+[repo.client-a-oud-mig]
+ssh_url = "git@github.com:flext-sh/client-a-oud-mig.git"
+https_url = "https://github.com/flext-sh/client-a-oud-mig.git"
+
+[repo.flexcore]
+ssh_url = "git@github.com:flext-sh/flexcore.git"
+https_url = "https://github.com/flext-sh/flexcore.git"
+
+[repo.flext-api]
+ssh_url = "git@github.com:flext-sh/flext-api.git"
+https_url = "https://github.com/flext-sh/flext-api.git"
+
+[repo.flext-auth]
+ssh_url = "git@github.com:flext-sh/flext-auth.git"
+https_url = "https://github.com/flext-sh/flext-auth.git"
+
+[repo.flext-cli]
+ssh_url = "git@github.com:flext-sh/flext-cli.git"
+https_url = "https://github.com/flext-sh/flext-cli.git"
+
+[repo.flext-core]
+ssh_url = "git@github.com:flext-sh/flext-core.git"
+https_url = "https://github.com/flext-sh/flext-core.git"
+
+[repo.flext-db-oracle]
+ssh_url = "git@github.com:flext-sh/flext-db-oracle.git"
+https_url = "https://github.com/flext-sh/flext-db-oracle.git"
+
+[repo.flext-dbt-ldap]
+ssh_url = "git@github.com:flext-sh/flext-dbt-ldap.git"
+https_url = "https://github.com/flext-sh/flext-dbt-ldap.git"
+
+[repo.flext-dbt-ldif]
+ssh_url = "git@github.com:flext-sh/flext-dbt-ldif.git"
+https_url = "https://github.com/flext-sh/flext-dbt-ldif.git"
+
+[repo.flext-dbt-oracle]
+ssh_url = "git@github.com:flext-sh/flext-dbt-oracle.git"
+https_url = "https://github.com/flext-sh/flext-dbt-oracle.git"
+
+[repo.flext-dbt-oracle-wms]
+ssh_url = "git@github.com:flext-sh/flext-dbt-oracle-wms.git"
+https_url = "https://github.com/flext-sh/flext-dbt-oracle-wms.git"
+
+[repo.flext-grpc]
+ssh_url = "git@github.com:flext-sh/flext-grpc.git"
+https_url = "https://github.com/flext-sh/flext-grpc.git"
+
+[repo.flext-ldap]
+ssh_url = "git@github.com:flext-sh/flext-ldap.git"
+https_url = "https://github.com/flext-sh/flext-ldap.git"
+
+[repo.flext-ldif]
+ssh_url = "git@github.com:flext-sh/flext-ldif.git"
+https_url = "https://github.com/flext-sh/flext-ldif.git"
+
+[repo.flext-meltano]
+ssh_url = "git@github.com:flext-sh/flext-meltano.git"
+https_url = "https://github.com/flext-sh/flext-meltano.git"
+
+[repo.flext-observability]
+ssh_url = "git@github.com:flext-sh/flext-observability.git"
+https_url = "https://github.com/flext-sh/flext-observability.git"
+
+[repo.flext-oracle-oic]
+ssh_url = "git@github.com:flext-sh/flext-oracle-oic.git"
+https_url = "https://github.com/flext-sh/flext-oracle-oic.git"
+
+[repo.flext-oracle-wms]
+ssh_url = "git@github.com:flext-sh/flext-oracle-wms.git"
+https_url = "https://github.com/flext-sh/flext-oracle-wms.git"
+
+[repo.flext-plugin]
+ssh_url = "git@github.com:flext-sh/flext-plugin.git"
+https_url = "https://github.com/flext-sh/flext-plugin.git"
+
+[repo.flext-quality]
+ssh_url = "git@github.com:flext-sh/flext-quality.git"
+https_url = "https://github.com/flext-sh/flext-quality.git"
+
+[repo.flext-tap-ldap]
+ssh_url = "git@github.com:flext-sh/flext-tap-ldap.git"
+https_url = "https://github.com/flext-sh/flext-tap-ldap.git"
+
+[repo.flext-tap-ldif]
+ssh_url = "git@github.com:flext-sh/flext-tap-ldif.git"
+https_url = "https://github.com/flext-sh/flext-tap-ldif.git"
+
+[repo.flext-tap-oracle]
+ssh_url = "git@github.com:flext-sh/flext-tap-oracle.git"
+https_url = "https://github.com/flext-sh/flext-tap-oracle.git"
+
+[repo.flext-tap-oracle-oic]
+ssh_url = "git@github.com:flext-sh/flext-tap-oracle-oic.git"
+https_url = "https://github.com/flext-sh/flext-tap-oracle-oic.git"
+
+[repo.flext-tap-oracle-wms]
+ssh_url = "git@github.com:flext-sh/flext-tap-oracle-wms.git"
+https_url = "https://github.com/flext-sh/flext-tap-oracle-wms.git"
+
+[repo.flext-target-ldap]
+ssh_url = "git@github.com:flext-sh/flext-target-ldap.git"
+https_url = "https://github.com/flext-sh/flext-target-ldap.git"
+
+[repo.flext-target-ldif]
+ssh_url = "git@github.com:flext-sh/flext-target-ldif.git"
+https_url = "https://github.com/flext-sh/flext-target-ldif.git"
+
+[repo.flext-target-oracle]
+ssh_url = "git@github.com:flext-sh/flext-target-oracle.git"
+https_url = "https://github.com/flext-sh/flext-target-oracle.git"
+
+[repo.flext-target-oracle-oic]
+ssh_url = "git@github.com:flext-sh/flext-target-oracle-oic.git"
+https_url = "https://github.com/flext-sh/flext-target-oracle-oic.git"
+
+[repo.flext-target-oracle-wms]
+ssh_url = "git@github.com:flext-sh/flext-target-oracle-wms.git"
+https_url = "https://github.com/flext-sh/flext-target-oracle-wms.git"
+
+[repo.flext-web]
+ssh_url = "git@github.com:flext-sh/flext-web.git"
+https_url = "https://github.com/flext-sh/flext-web.git"
+
+[repo.client-b-meltano-native]
+ssh_url = "git@github.com:flext-sh/client-b-meltano-native.git"
+https_url = "https://github.com/flext-sh/client-b-meltano-native.git"

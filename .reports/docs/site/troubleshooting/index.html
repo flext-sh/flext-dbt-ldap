@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/flext-sh/flext/troubleshooting/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Troubleshooting - flext-dbt-ldap Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">flext-dbt-ldap Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Troubleshooting</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../security/" class="nav-link">Security</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../skill-automation-pattern/" class="nav-link">Automation Skill Pattern</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../testing/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../security/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/flext-sh/flext/edit/main/flext-dbt-ldap/docs/guides/troubleshooting.md" class="nav-link">Edit on flext-sh/flext
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#flext-dbt-ldap-flext-troubleshooting-guide" class="nav-link">flext-dbt-ldap - FLEXT Troubleshooting Guide</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#quick-diagnosis" class="nav-link">Quick Diagnosis</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#common-issues" class="nav-link">Common Issues</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debugging-techniques" class="nav-link">Debugging Techniques</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#error-codes-reference" class="nav-link">Error Codes Reference</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#performance-troubleshooting" class="nav-link">Performance Troubleshooting</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#getting-help" class="nav-link">Getting Help</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#your-minimal-example-here" class="nav-link">Your minimal example here</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#prevention" class="nav-link">Prevention</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#resources" class="nav-link">Resources</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- Generated from docs/guides/troubleshooting.md for flext-dbt-ldap. -->
+<!-- Source of truth: workspace docs/guides/. -->
+
+<h1 id="flext-dbt-ldap-flext-troubleshooting-guide">flext-dbt-ldap - FLEXT Troubleshooting Guide</h1>
+<blockquote>
+<p>Project profile: <code>flext-dbt-ldap</code></p>
+</blockquote>
+<p>This guide covers common issues, their solutions, and debugging techniques for FLEXT applications and libraries.</p>
+<h2 id="quick-diagnosis">Quick Diagnosis</h2>
+<h3 id="health-check-commands">Health Check Commands</h3>
+<pre><code class="language-bash"># Check overall system health
+make validate
+
+# Check specific components
+make lint          # Code quality
+make type-check    # Type safety
+make test          # Functionality
+make security      # Security issues
+
+# Check individual projects
+cd flext-core &amp;&amp; make validate
+cd flext-ldif &amp;&amp; make validate
+cd flext-api &amp;&amp; make validate
+</code></pre>
+<h3 id="system-status">System Status</h3>
+<pre><code class="language-bash"># Check Python version
+python --version  # Should be 3.13+
+
+# Check Poetry environment
+poetry env info
+
+# Check dependencies
+poetry show --tree
+
+# Check git status
+git status
+</code></pre>
+<h2 id="common-issues">Common Issues</h2>
+<h3 id="1-import-errors">1. Import Errors</h3>
+<h4 id="problem-modulenotfounderror">Problem: ModuleNotFoundError</h4>
+<pre><code class="language-python"># Error
+ModuleNotFoundError: No module named 'flext_core'
+</code></pre>
+<h4 id="solutions">Solutions</h4>
+<p><strong>Check PYTHONPATH:</strong></p>
+<pre><code class="language-bash">export PYTHONPATH=src
+python -c &quot;import flext_core; print(flext_core.__file__)&quot;
+</code></pre>
+<p><strong>Reinstall dependencies:</strong></p>
+<pre><code class="language-bash">make clean
+make setup
+</code></pre>
+<p><strong>Check Poetry environment:</strong></p>
+<pre><code class="language-bash">poetry env info
+poetry install
+</code></pre>
+<h3 id="r">r</h3>
+<pre><code class="language-python"># Debug import issues
+import sys
+print(&quot;Python path:&quot;)
+for path in sys.path:
+    print(f&quot;  {path}&quot;)
+
+print(&quot;\nTrying to import flext_core...&quot;)
+try:
+    import flext_core
+    print(f&quot;Success: {flext_core.__file__}&quot;)
+except ImportError as e:
+    print(f&quot;Failed: {e}&quot;)
+</code></pre>
+<h3 id="2-type-checking-errors">2. Type Checking Errors</h3>
+<h4 id="problem-mypy-errors">Problem: MyPy errors</h4>
+<pre><code class="language-python"># Error
+error: Argument 1 to &quot;process&quot; has incompatible type &quot;str&quot;; expected &quot;dict[str, object]&quot;
+</code></pre>
+<h4 id="solutions_1">Solutions</h4>
+<p><strong>Fix type annotations:</strong></p>
+<pre><code class="language-python"># ❌ WRONG
+def process(data):
+    return data
+
+# ✅ CORRECT
+def process(data: dict[str, object]) -&gt; FlextResult[ProcessedData]:
+    return FlextResult.ok(ProcessedData(**data))
+</code></pre>
+<p><strong>Run MyPy with details:</strong></p>
+<pre><code class="language-bash">mypy src/module.py --show-error-codes --show-traceback
+</code></pre>
+<p><strong>Check specific error:</strong></p>
+<pre><code class="language-bash">mypy src/ --show-error-codes | grep &quot;error-code&quot;
+</code></pre>
+<h3 id="3-test-failures">3. Test Failures</h3>
+<h4 id="problem-tests-failing">Problem: Tests failing</h4>
+<pre><code class="language-python"># Error
+AssertionError: Expected success but got failure
+</code></pre>
+<h4 id="solutions_2">Solutions</h4>
+<p><strong>Run with verbose output:</strong></p>
+<pre><code class="language-bash">pytest tests/unit/test_module.py -vv --tb=long
+</code></pre>
+<p><strong>Debug specific test:</strong></p>
+<pre><code class="language-bash">pytest tests/unit/test_module.py::TestClass::test_method -v --pdb
+</code></pre>
+<p><strong>Check test data:</strong></p>
+<pre><code class="language-python">def test_with_debug():
+    result = my_function()
+    print(f&quot;Result: {result}&quot;)
+    print(f&quot;Success: {result.is_success}&quot;)
+    if result.is_failure:
+        print(f&quot;Error: {result.failure()}&quot;)
+    assert result.is_success
+</code></pre>
+<h3 id="4-configuration-issues">4. Configuration Issues</h3>
+<h4 id="problem-configuration-not-loading">Problem: Configuration not loading</h4>
+<pre><code class="language-python"># Error
+ValidationError: field required
+</code></pre>
+<h4 id="solutions_3">Solutions</h4>
+<p><strong>Check environment variables:</strong></p>
+<pre><code class="language-bash">env | grep FLEXT_
+</code></pre>
+<p><strong>Validate configuration:</strong></p>
+<pre><code class="language-python">from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+try:
+    config = FlextSettings()
+    print(&quot;Configuration valid&quot;)
+except ValidationError as e:
+    print(f&quot;Configuration error: {e}&quot;)
+</code></pre>
+<p><strong>Debug configuration loading:</strong></p>
+<pre><code class="language-python">import os
+from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+# Print all FLEXT environment variables
+for key, value in os.environ.items():
+    if key.startswith('FLEXT_'):
+        print(f&quot;{key}={value}&quot;)
+
+# Load and print configuration
+config = FlextSettings()
+print(f&quot;Config: {config.dict()}&quot;)
+</code></pre>
+<h3 id="5-ldif-processing-issues">5. LDIF Processing Issues</h3>
+<h4 id="problem-ldif-parsing-fails">Problem: LDIF parsing fails</h4>
+<pre><code class="language-python"># Error
+LdifParsingException: Invalid LDIF format
+</code></pre>
+<h4 id="solutions_4">Solutions</h4>
+<p><strong>Check LDIF content:</strong></p>
+<pre><code class="language-python">from flext_ldif import FlextLdif
+
+ldif = FlextLdif()
+content = &quot;&quot;&quot;dn: cn=test,dc=example,dc=com
+cn: test
+objectClass: inetOrgPerson&quot;&quot;&quot;
+
+result = ldif.parse(content)
+if result.is_failure:
+    print(f&quot;Parse error: {result.failure()}&quot;)
+    print(f&quot;Content: {repr(content)}&quot;)
+</code></pre>
+<p><strong>Enable debug logging:</strong></p>
+<pre><code class="language-python">import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Your LDIF processing code
+</code></pre>
+<p><strong>Validate LDIF format:</strong></p>
+<pre><code class="language-python"># Check for common LDIF issues
+def validate_ldif_content(content: str) -&gt; t.StringList:
+    issues = []
+
+    if not content.strip():
+        issues.append(&quot;Empty content&quot;)
+
+    if not content.startswith(&quot;dn:&quot;):
+        issues.append(&quot;Missing DN line&quot;)
+
+    lines = content.split('\n')
+    for i, line in enumerate(lines):
+        if line and not line.startswith(('dn:', ' ', '\t')) and ':' not in line:
+            issues.append(f&quot;Invalid line {i+1}: {line}&quot;)
+
+    return issues
+</code></pre>
+<h3 id="6-migration-issues">6. Migration Issues</h3>
+<h4 id="problem-migration-fails">Problem: Migration fails</h4>
+<pre><code class="language-python"># Error
+LdifMigrationException: Server compatibility error
+</code></pre>
+<h4 id="solutions_5">Solutions</h4>
+<p><strong>Check server configuration:</strong></p>
+<pre><code class="language-python">from flext_ldif import FlextLdifSettings
+
+config = FlextLdifSettings(
+    source_server=&quot;oid&quot;,
+    target_server=&quot;oud&quot;,
+    preserve_oid_modifiers=True,
+    handle_schema_extensions=True
+)
+
+print(f&quot;Config: {config.dict()}&quot;)
+</code></pre>
+<p><strong>Enable server quirks:</strong></p>
+<pre><code class="language-python">config = FlextLdifSettings(
+    servers_enabled=True,
+    source_server=&quot;oid&quot;,
+    target_server=&quot;oud&quot;
+)
+</code></pre>
+<p><strong>Test with sample data:</strong></p>
+<pre><code class="language-python"># Test migration with small sample
+sample_ldif = &quot;&quot;&quot;dn: cn=test,dc=example,dc=com
+cn: test
+objectClass: inetOrgPerson&quot;&quot;&quot;
+
+result = ldif.parse(sample_ldif)
+if result.is_success:
+    print(&quot;Sample parsing successful&quot;)
+else:
+    print(f&quot;Sample parsing failed: {result.failure()}&quot;)
+</code></pre>
+<h3 id="7-performance-issues">7. Performance Issues</h3>
+<h4 id="problem-slow-processing">Problem: Slow processing</h4>
+<pre><code class="language-python"># Symptoms
+# - High memory usage
+# - Slow response times
+# - Timeout errors
+</code></pre>
+<h4 id="solutions_6">Solutions</h4>
+<p><strong>Profile memory usage:</strong></p>
+<pre><code class="language-python">import psutil
+import os
+
+def profile_memory():
+    process = psutil.Process(os.getpid())
+    initial_memory = process.memory_info().rss
+
+    # Your processing code here
+
+    final_memory = process.memory_info().rss
+    memory_used = final_memory - initial_memory
+
+    print(f&quot;Memory used: {memory_used / 1024 / 1024:.2f} MB&quot;)
+
+profile_memory()
+</code></pre>
+<p><strong>Optimize batch size:</strong></p>
+<pre><code class="language-python">from flext_ldif import FlextLdifSettings
+
+# Reduce batch size for memory-constrained environments
+config = FlextLdifSettings(
+    batch_size=100,  # Instead of default 1000
+    parallel_processing=False  # Disable for memory issues
+)
+</code></pre>
+<p><strong>Enable parallel processing:</strong></p>
+<pre><code class="language-python">config = FlextLdifSettings(
+    parallel_processing=True,
+    max_workers=4  # Adjust based on CPU cores
+)
+</code></pre>
+<h2 id="debugging-techniques">Debugging Techniques</h2>
+<h3 id="1-logging-configuration">1. Logging Configuration</h3>
+<pre><code class="language-python">import logging
+from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+# Use FLEXT logger
+logger = FlextLogger.get_logger(__name__)
+logger.debug(&quot;Debug message&quot;)
+logger.info(&quot;Info message&quot;)
+logger.warning(&quot;Warning message&quot;)
+logger.error(&quot;Error message&quot;)
+</code></pre>
+<h3 id="2-exception-handling">2. Exception Handling</h3>
+<pre><code class="language-python">from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+def safe_operation(data: dict) -&gt; FlextResult[dict]:
+    try:
+        # Your operation here
+        result = process_data(data)
+        return FlextResult.ok(result)
+    except ValidationError as e:
+        logger.error(f&quot;Validation error: {e}&quot;)
+        return FlextResult.fail(f&quot;Validation failed: {e}&quot;)
+    except Exception as e:
+        logger.error(f&quot;Unexpected error: {e}&quot;, exc_info=True)
+        return FlextResult.fail(f&quot;Operation failed: {e}&quot;)
+</code></pre>
+<h3 id="3-debug-mode">3. Debug Mode</h3>
+<pre><code class="language-python">from flext_core import FlextBus
+from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u
+
+# Enable debug mode
+config = FlextSettings(debug=True)
+
+# Debug information will be printed
+print(f&quot;Debug mode: {config.debug}&quot;)
+print(f&quot;Log level: {config.log_level}&quot;)
+</code></pre>
+<h3 id="4-step-by-step-debugging">4. Step-by-Step Debugging</h3>
+<pre><code class="language-python">def debug_ldif_processing(content: str):
+    &quot;&quot;&quot;Debug LDIF processing step by step.&quot;&quot;&quot;
+    print(f&quot;Input content length: {len(content)}&quot;)
+    print(f&quot;First 100 chars: {repr(content[:100])}&quot;)
+
+    # Step 1: Basic validation
+    if not content.strip():
+        print(&quot;ERROR: Empty content&quot;)
+        return
+
+    # Step 2: Check DN format
+    lines = content.split('\n')
+    dn_line = lines[0] if lines else &quot;&quot;
+    print(f&quot;DN line: {repr(dn_line)}&quot;)
+
+    if not dn_line.startswith(&quot;dn:&quot;):
+        print(&quot;ERROR: Missing or invalid DN line&quot;)
+        return
+
+    # Step 3: Try parsing
+    from flext_ldif import FlextLdif
+    ldif = FlextLdif()
+
+    result = ldif.parse(content)
+    if result.is_success:
+        entries = result.unwrap()
+        print(f&quot;SUCCESS: Parsed {len(entries)} entries&quot;)
+    else:
+        print(f&quot;ERROR: Parse failed: {result.failure()}&quot;)
+</code></pre>
+<h2 id="error-codes-reference">Error Codes Reference</h2>
+<h3 id="flext-core-errors">FLEXT Core Errors</h3>
+<table>
+<thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FLEXT_001</code></td>
+<td>Configuration validation failed</td>
+<td>Check environment variables and config files</td>
+</tr>
+<tr>
+<td><code>FLEXT_002</code></td>
+<td>Dependency injection failed</td>
+<td>Verify service registration in container</td>
+</tr>
+<tr>
+<td><code>FLEXT_003</code></td>
+<td>Type validation failed</td>
+<td>Fix type annotations and data types</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ldif-processing-errors">LDIF Processing Errors</h3>
+<table>
+<thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LDIF_001</code></td>
+<td>Invalid LDIF format</td>
+<td>Check LDIF syntax and structure</td>
+</tr>
+<tr>
+<td><code>LDIF_002</code></td>
+<td>Server compatibility error</td>
+<td>Enable server quirks or check server type</td>
+</tr>
+<tr>
+<td><code>LDIF_003</code></td>
+<td>Schema validation failed</td>
+<td>Verify schema definitions and attributes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="api-errors">API Errors</h3>
+<table>
+<thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>API_001</code></td>
+<td>HTTP request failed</td>
+<td>Check network connectivity and URL</td>
+</tr>
+<tr>
+<td><code>API_002</code></td>
+<td>Authentication failed</td>
+<td>Verify API keys and credentials</td>
+</tr>
+<tr>
+<td><code>API_003</code></td>
+<td>Rate limit exceeded</td>
+<td>Implement retry logic with backoff</td>
+</tr>
+</tbody>
+</table>
+<h2 id="performance-troubleshooting">Performance Troubleshooting</h2>
+<h3 id="memory-issues">Memory Issues</h3>
+<pre><code class="language-python"># Monitor memory usage
+import psutil
+import os
+
+def monitor_memory():
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+
+    print(f&quot;RSS: {memory_info.rss / 1024 / 1024:.2f} MB&quot;)
+    print(f&quot;VMS: {memory_info.vms / 1024 / 1024:.2f} MB&quot;)
+
+    # Check for memory leaks
+    if memory_info.rss &gt; 500 * 1024 * 1024:  # 500MB
+        print(&quot;WARNING: High memory usage detected&quot;)
+
+monitor_memory()
+</code></pre>
+<h3 id="cpu-issues">CPU Issues</h3>
+<pre><code class="language-python"># Monitor CPU usage
+import psutil
+import time
+
+def monitor_cpu():
+    process = psutil.Process(os.getpid())
+
+    # Get CPU usage over time
+    for i in range(10):
+        cpu_percent = process.cpu_percent()
+        print(f&quot;CPU usage: {cpu_percent}%&quot;)
+        time.sleep(1)
+
+monitor_cpu()
+</code></pre>
+<h2 id="getting-help">Getting Help</h2>
+<h3 id="self-service-resources">Self-Service Resources</h3>
+<ol>
+<li><strong>Check Documentation</strong></li>
+<li>API Reference</li>
+<li>Configuration Guide</li>
+<li>
+<p>Development Guide</p>
+</li>
+<li>
+<p><strong>Run Diagnostics</strong></p>
+</li>
+</ol>
+<p>```bash
+   # System health check
+   make validate</p>
+<p># Project-specific check
+   cd flext-core &amp;&amp; make validate
+   ```</p>
+<ol>
+<li><strong>Check Logs</strong></li>
+</ol>
+<p><code>bash
+   # Enable debug logging
+   export FLEXT_LOG_LEVEL=DEBUG
+   python your_script.py</code></p>
+<h3 id="community-support">Community Support</h3>
+<ol>
+<li><strong>GitHub Issues</strong></li>
+<li><a href="https://github.com/flext-sh/flext/issues">Create Issue</a></li>
+<li>Search existing issues</li>
+<li>
+<p>Check closed issues for solutions</p>
+</li>
+<li>
+<p><strong>GitHub Discussions</strong></p>
+</li>
+<li><a href="https://github.com/flext-sh/flext/discussions">Ask Question</a></li>
+<li>Share solutions</li>
+<li>
+<p>Discuss best practices</p>
+</li>
+<li>
+<p><strong>Email Support</strong></p>
+</li>
+<li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#101;&#118;&#64;&#102;&#108;&#101;&#120;&#116;&#46;&#99;&#111;&#109;">&#100;&#101;&#118;&#64;&#102;&#108;&#101;&#120;&#116;&#46;&#99;&#111;&#109;</a> for technical issues</li>
+<li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#64;&#102;&#108;&#101;&#120;&#116;&#46;&#99;&#111;&#109;">&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#64;&#102;&#108;&#101;&#120;&#116;&#46;&#99;&#111;&#109;</a> for general questions</li>
+</ol>
+<h3 id="reporting-issues">Reporting Issues</h3>
+<p>When reporting issues, include:</p>
+<ol>
+<li><strong>Environment Information</strong></li>
+</ol>
+<p><code>bash
+   python --version
+   poetry env info
+   make info</code></p>
+<ol>
+<li><strong>Error Details</strong></li>
+</ol>
+<p><code>python
+   # Full error traceback
+   import traceback
+   try:
+       # Your code here
+   except Exception as e:
+       traceback.print_exc()</code></p>
+<ol>
+<li><strong>Minimal Reproduction</strong></li>
+</ol>
+<p><code>python
+   # Minimal code that reproduces the issue
+   from flext_core import FlextBus</code></p>
+<p>from flext_core import FlextSettings
+from flext_core import FlextConstants
+from flext_core import FlextContainer
+from flext_core import FlextContext
+from flext_core import FlextDecorators
+from flext_core import FlextDispatcher
+from flext_core import FlextExceptions
+from flext_core import h
+from flext_core import FlextLogger
+from flext_core import x
+from flext_core import FlextModels
+from flext_core import FlextProcessors
+from flext_core import p
+from flext_core import FlextRegistry
+from flext_core import FlextResult
+from flext_core import FlextRuntime
+from flext_core import FlextService
+from flext_core import t
+from flext_core import u</p>
+<h1 id="your-minimal-example-here">Your minimal example here</h1>
+<ol>
+<li><strong>Expected vs Actual Behavior</strong></li>
+<li>What you expected to happen</li>
+<li>What actually happened</li>
+<li>Steps to reproduce</li>
+</ol>
+<h2 id="prevention">Prevention</h2>
+<h3 id="best-practices">Best Practices</h3>
+<ol>
+<li><strong>Always Use FlextResult</strong></li>
+</ol>
+<pre><code class="language-python"># ✅ GOOD
+def process(data: dict) -&gt; FlextResult[ProcessedData]:
+    return FlextResult.ok(ProcessedData(**data))
+
+# ❌ BAD
+def process(data: dict) -&gt; ProcessedData:
+    return ProcessedData(**data)
+</code></pre>
+<ol>
+<li><strong>Validate Input Early</strong></li>
+</ol>
+<p>```python
+   def process_data(data: dict) -&gt; FlextResult[dict]:
+       if not data:
+           return FlextResult.fail("Data required")</p>
+<pre><code>   # Process data
+   return FlextResult.ok(processed_data)
+</code></pre>
+<p>```</p>
+<ol>
+<li><strong>Use Type Hints</strong></li>
+</ol>
+<p>```python
+   # ✅ GOOD
+   def process(items: list[Item]) -&gt; FlextResult[list[ProcessedItem]]:
+       pass</p>
+<p># ❌ BAD
+   def process(items):
+       pass
+   ```</p>
+<ol>
+<li><strong>Test Thoroughly</strong></li>
+</ol>
+<p>```python
+   def test_process_data():
+       # Test success case
+       result = process_data({"key": "value"})
+       assert result.is_success</p>
+<pre><code>   # Test failure case
+   result = process_data(None)
+   assert result.is_failure
+</code></pre>
+<p>```</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li>FLEXT Core Documentation</li>
+<li>Configuration Guide</li>
+<li>Development Guide</li>
+<li>Testing Guide</li>
+<li><a href="https://github.com/flext-sh/flext/issues">GitHub Issues</a></li>
+<li><a href="https://github.com/flext-sh/flext/discussions">GitHub Discussions</a></li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
