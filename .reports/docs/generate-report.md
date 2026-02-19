@@ -1,6 +1,6 @@
 # Docs Generate Report
 
-Scope: flext-dbt-ldap
+Scope: root
 Apply: 1
-Generated files: 8
-Source: workspace-docs-guides
+Generated files: 3
+Source: root-generated-artifacts

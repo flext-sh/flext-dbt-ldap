@@ -147,6 +147,7 @@
                     <div class="col-md-9" role="main">
 
 <!-- Generated from docs/guides/configuration.md for flext-dbt-ldap. -->
+
 <!-- Source of truth: workspace docs/guides/. -->
 
 <h1 id="flext-dbt-ldap-flext-configuration-guide">flext-dbt-ldap - FLEXT Configuration Guide</h1>
@@ -502,8 +503,12 @@ class MyAppConfig(FlextSettings):
 <h2 id="troubleshooting">Troubleshooting</h2>
 <h3 id="common-configuration-issues">Common Configuration Issues</h3>
 <ol>
-<li><strong>Environment Variables Not Loading</strong></li>
-<li>Ensure variables are prefixed with <code>FLEXT_</code></li>
+<li>
+<p><strong>Environment Variables Not Loading</strong></p>
+</li>
+<li>
+<p>Ensure variables are prefixed with <code>FLEXT_</code></p>
+</li>
 <li>Check for typos in variable names</li>
 <li>
 <p>Verify environment is set before running application</p>
@@ -511,7 +516,9 @@ class MyAppConfig(FlextSettings):
 <li>
 <p><strong>Configuration File Not Found</strong></p>
 </li>
-<li>Check file path is correct</li>
+<li>
+<p>Check file path is correct</p>
+</li>
 <li>Ensure file has proper permissions</li>
 <li>
 <p>Verify file format (YAML, JSON, or TOML)</p>
@@ -519,7 +526,9 @@ class MyAppConfig(FlextSettings):
 <li>
 <p><strong>Validation Errors</strong></p>
 </li>
-<li>Check Pydantic model field types</li>
+<li>
+<p>Check Pydantic model field types</p>
+</li>
 <li>Verify required fields are provided</li>
 <li>Review field validators for constraints</li>
 </ol>

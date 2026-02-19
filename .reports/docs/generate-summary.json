@@ -1,41 +1,21 @@
 {
   "summary": {
-    "scope": "flext-dbt-ldap",
-    "generated": 8,
+    "scope": "root",
+    "generated": 3,
     "apply": true,
-    "source": "workspace-docs-guides"
+    "source": "root-generated-artifacts"
   },
   "files": [
     {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/README.md",
+      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/CHANGELOG.md",
       "written": true
     },
     {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/configuration.md",
+      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/releases/latest.md",
       "written": true
     },
     {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/development.md",
-      "written": true
-    },
-    {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/getting-started.md",
-      "written": true
-    },
-    {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/security.md",
-      "written": true
-    },
-    {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/skill-automation-pattern.md",
-      "written": true
-    },
-    {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/testing.md",
-      "written": true
-    },
-    {
-      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/guides/troubleshooting.md",
+      "path": "/home/marlonsc/flext/flext-dbt-ldap/docs/roadmap/index.md",
       "written": true
     }
   ]

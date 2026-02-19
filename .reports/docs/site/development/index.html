@@ -159,6 +159,7 @@
                     <div class="col-md-9" role="main">
 
 <!-- Generated from docs/guides/development.md for flext-dbt-ldap. -->
+
 <!-- Source of truth: workspace docs/guides/. -->
 
 <h1 id="flext-dbt-ldap-flext-development-guide">flext-dbt-ldap - FLEXT Development Guide</h1>
@@ -546,16 +547,17 @@ config = FlextNewlibSettings(new_setting=&quot;value&quot;)
 </ol>
 <p># Reinstall dependencies
    make clean &amp;&amp; make setup
-```</p>
-<ol>
-<li><strong>Test Failures</strong></li>
-</ol>
-<p>```bash
-   # Run with debug output
-   pytest -vv --tb=long</p>
-<p># Check specific test
-   pytest tests/unit/test_specific.py::test_function -v
    ```</p>
+<pre><code>
+2. **Test Failures**
+
+   ```bash
+   # Run with debug output
+   pytest -vv --tb=long
+
+   # Check specific test
+   pytest tests/unit/test_specific.py::test_function -v
+</code></pre>
 <ol>
 <li><strong>Build Issues</strong></li>
 </ol>

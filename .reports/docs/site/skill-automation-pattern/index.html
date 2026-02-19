@@ -135,6 +135,7 @@
                     <div class="col-md-9" role="main">
 
 <!-- Generated from docs/guides/skill-automation-pattern.md for flext-dbt-ldap. -->
+
 <!-- Source of truth: workspace docs/guides/. -->
 
 <h1 id="flext-dbt-ldap-skill-automation-pattern">flext-dbt-ldap - Skill Automation Pattern</h1>
@@ -202,18 +203,24 @@ python3 scripts/core/skill_validate.py --skill &lt;name&gt; --update-baseline
 folder (<code>.claude/skills/&lt;skill&gt;/</code>) owns its own <code>rules.yml</code>, <code>rules/</code> ast-grep files,
 <code>baseline.json</code>, and <code>report.json</code>. The generic runner <code>scripts/core/skill_validate.py</code>
 discovers and executes everything.</p>
-<p><strong>Dict/Any Policy Gate</strong>:
-- Skill: <code>.claude/skills/flext-strict-typing/SKILL.md</code>
-- Rules: <code>.claude/skills/flext-strict-typing/rules.yml</code> (10 rules: 8 ast-grep + 2 ripgrep)
-- AST rules: <code>.claude/skills/flext-strict-typing/rules/*.yml</code>
-- Baseline: <code>.claude/skills/flext-strict-typing/baseline.json</code></p>
-<p><strong>Pydantic v2 Policy Gate</strong>:
-- Skill: <code>.claude/skills/lib-pydantic-v2/SKILL.md</code>
-- Rules: <code>.claude/skills/lib-pydantic-v2/rules.yml</code> (8 ast-grep rules)
-- AST rules: <code>.claude/skills/lib-pydantic-v2/rules/*.yml</code>
-- Baseline: <code>.claude/skills/lib-pydantic-v2/baseline.json</code></p>
-<p><strong>Generic runner</strong>:
-- <code>scripts/core/skill_validate.py</code> — auto-discovers <code>.claude/skills/*/rules.yml</code></p>
+<p><strong>Dict/Any Policy Gate</strong>:</p>
+<ul>
+<li>Skill: <code>.claude/skills/flext-strict-typing/SKILL.md</code></li>
+<li>Rules: <code>.claude/skills/flext-strict-typing/rules.yml</code> (10 rules: 8 ast-grep + 2 ripgrep)</li>
+<li>AST rules: <code>.claude/skills/flext-strict-typing/rules/*.yml</code></li>
+<li>Baseline: <code>.claude/skills/flext-strict-typing/baseline.json</code></li>
+</ul>
+<p><strong>Pydantic v2 Policy Gate</strong>:</p>
+<ul>
+<li>Skill: <code>.claude/skills/lib-pydantic-v2/SKILL.md</code></li>
+<li>Rules: <code>.claude/skills/lib-pydantic-v2/rules.yml</code> (8 ast-grep rules)</li>
+<li>AST rules: <code>.claude/skills/lib-pydantic-v2/rules/*.yml</code></li>
+<li>Baseline: <code>.claude/skills/lib-pydantic-v2/baseline.json</code></li>
+</ul>
+<p><strong>Generic runner</strong>:</p>
+<ul>
+<li><code>scripts/core/skill_validate.py</code> — auto-discovers <code>.claude/skills/*/rules.yml</code></li>
+</ul>
 <h2 id="verification-commands">Verification Commands</h2>
 <pre><code class="language-bash">python3 scripts/core/skill_validate.py --list-skills
 python3 scripts/core/skill_validate.py --skill flext-strict-typing

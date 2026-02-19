@@ -1,6 +1,6 @@
 # Docs Validate Report
 
-Scope: flext-dbt-ldap
+Scope: root
 Result: OK
 Message: validation passed
 TODO written: 0
