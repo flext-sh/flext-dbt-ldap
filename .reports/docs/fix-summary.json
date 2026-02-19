@@ -1,10 +1,45 @@
 {
   "summary": {
-    "scope": "flext-dbt-ldap",
-    "changed_files": 7,
+    "scope": "root",
+    "changed_files": 18,
     "apply": true
   },
   "changes": [
+    {
+      "file": "docs/README.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/api-reference.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/architecture/patterns.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/architecture.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/configuration.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/development.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/getting-started.md",
+      "links": 0,
+      "toc": 1
+    },
     {
       "file": "docs/guides/README.md",
       "links": 0,
@@ -26,6 +61,11 @@
       "toc": 1
     },
     {
+      "file": "docs/guides/security.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
       "file": "docs/guides/skill-automation-pattern.md",
       "links": 0,
       "toc": 1
@@ -37,6 +77,21 @@
     },
     {
       "file": "docs/guides/troubleshooting.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/index.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/testing.md",
+      "links": 0,
+      "toc": 1
+    },
+    {
+      "file": "docs/troubleshooting.md",
       "links": 0,
       "toc": 1
     }

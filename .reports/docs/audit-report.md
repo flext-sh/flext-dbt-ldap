@@ -1,7 +1,7 @@
 # Docs Audit Report
 
-Scope: flext-dbt-ldap
-Files scanned: 18
+Scope: root
+Files scanned: 21
 Issues: 0
 
 | file | type | severity | message |

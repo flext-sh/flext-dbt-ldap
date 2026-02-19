@@ -1,6 +1,6 @@
 {
   "summary": {
-    "scope": "flext-dbt-ldap",
+    "scope": "root",
     "issues": 0,
     "checks": [
       "forbidden-terms",
