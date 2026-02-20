@@ -1,109 +1,27 @@
-# FLEXT-DBT-LDAP
+# FLEXT dbt LDAP
 
-<!-- TOC START -->
+Projeto dbt para transformar dados LDAP em modelos analiticos operacionais e de auditoria.
 
-- [🚀 Key Features](#-key-features)
-- [📦 Installation](#-installation)
-- [🛠️ Usage](#-usage)
-  - [Core Models](#core-models)
-  - [Parsing Distinguished Names (DN)](#parsing-distinguished-names-dn)
-  - [Analyzing Group Membership](#analyzing-group-membership)
-- [🏗️ Architecture](#-architecture)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+Descricao oficial atual: "FLEXT dbt LDAP - dbt Models for LDAP Data Transformation".
 
-<!-- TOC END -->
+## O que este projeto entrega
 
-[![dbt 1.6+](https://img.shields.io/badge/dbt-1.6+-orange.svg)](https://getdbt.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+- Converte staging em marts com regras SQL versionadas.
+- Padroniza transformacoes para identidades e grupos.
+- Entrega camada analitica para consumo de BI e controles.
 
-**FLEXT-DBT-LDAP** provides production-ready dbt models and transformations for LDAP directory data. It standardizes raw LDAP entries from Singer taps into business-ready dimensional models for user, group, and organizational analytics.
+## Contexto operacional
 
-Part of the [FLEXT](https://github.com/flext-sh/flext) ecosystem.
+- Entrada: tabelas de staging LDAP.
+- Saida: modelos analiticos dbt para consulta.
+- Dependencias: ambiente dbt e fonte LDAP previamente ingerida.
 
-## 🚀 Key Features
+## Estado atual e risco de adocao
 
-- **Dimensional Modeling**: Pre-built star schema for Users (`dim_users`), Groups (`dim_groups`), and Organizational Units (`dim_org_units`).
-- **Security Analytics**: Dedicated fact tables for analyzing group memberships, password expiry risks, and account status.
-- **Historical Tracking**: Built-in dbt snapshots for SCD Type 2 tracking of directory changes over time.
-- **LDAP Macros**: Custom Jinja macros for parsing DNs (`distinguishedName`), handling bitmask attributes (UserAccountControl), and specialized timestamp conversions.
-- **Hierarchy Handling**: Recursive CTE models to flatten nested Organizational Unit structures.
-- **Quality Controls**: Integrated `dbt test` suites for referential integrity, schema validation, and orphan detection.
+- Qualidade: **Alpha**
+- Uso recomendado: **Nao produtivo**
+- Nivel de estabilidade: em maturacao funcional e tecnica, sujeito a mudancas de contrato sem garantia de retrocompatibilidade.
 
-## 📦 Installation
+## Diretriz para uso nesta fase
 
-To use in your dbt project, add to your `packages.yml`:
-
-```yaml
-packages:
-  - git: "https://github.com/organization/flext.git"
-    subdirectory: "flext-dbt-ldap"
-    revision: "main" 
-```
-
-Run dependencies:
-
-```bash
-dbt deps
-```
-
-## 🛠️ Usage
-
-### Core Models
-
-Easily reference standardized models in your own analysis:
-
-```sql
--- Analyze Active User Distribution by Department
-SELECT 
-    department,
-    COUNT(*) as user_count
-FROM {{ ref('dim_users') }}
-WHERE is_active = true
-GROUP BY department
-ORDER BY user_count DESC
-```
-
-### Parsing Distinguished Names (DN)
-
-Use the provided macros to handle complex LDAP attributes:
-
-```sql
-SELECT
-    dn,
-    -- Extract specific components
-    {{ flext_dbt_ldap.extract_rdn('dn') }} as common_name,
-    {{ flext_dbt_ldap.extract_parent_dn('dn') }} as parent_ou
-FROM {{ ref('stg_ldap_entries') }}
-```
-
-### Analyzing Group Membership
-
-Resolve nested group memberships effectively.
-
-```sql
-SELECT
-    u.common_name as user_name,
-    g.common_name as group_name,
-    m.membership_type -- 'DIRECT' or 'NESTED'
-FROM {{ ref('fact_group_memberships') }} m
-JOIN {{ ref('dim_users') }} u ON m.user_key = u.user_key
-JOIN {{ ref('dim_groups') }} g ON m.group_key = g.group_key
-```
-
-## 🏗️ Architecture
-
-The project follows a standard dbt layer structure:
-
-- **Staging**: Cleans raw JSON data from Singer taps (`stg_ldap_*`).
-- **Intermediate**: Handles heavy transformations like DN parsing and hierarchy flattening (`int_ldap_*`).
-- **Marts**: Business-facing dimensional models exposed to BI tools (`dim_*`, `fact_*`).
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](docs/development.md) for details on adding new models, improving macros, and running the test suite.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Aplicar este projeto somente em desenvolvimento, prova de conceito e homologacao controlada, com expectativa de ajustes frequentes ate maturidade de release.
