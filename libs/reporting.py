@@ -23,7 +23,7 @@ def ensure_report_dir(workspace_root: Path, *parts: str) -> Path:
 
     Args:
         workspace_root: The root directory of the workspace.
-        *parts: Subdirectory parts to join with the reports root.
+        parts: Subdirectory parts to join with the reports root.
 
     Returns:
         The Path to the ensured report directory.

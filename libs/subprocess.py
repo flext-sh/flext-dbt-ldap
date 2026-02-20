@@ -1,3 +1,5 @@
+"""Subprocess execution utilities."""
+
 from __future__ import annotations
 
 import shlex
@@ -6,6 +8,16 @@ from pathlib import Path
 
 
 def run_checked(command: list[str], cwd: Path | None = None) -> None:
+    """Run a command and raise RuntimeError if it fails.
+
+    Args:
+        command: The command line arguments as a list.
+        cwd: Optional working directory for the command.
+
+    Raises:
+        RuntimeError: If the command returns a non-zero exit code.
+
+    """
     result = subprocess.run(command, cwd=cwd, check=False)
     if result.returncode != 0:
         cmd = shlex.join(command)
@@ -14,6 +26,19 @@ def run_checked(command: list[str], cwd: Path | None = None) -> None:
 
 
 def run_capture(command: list[str], cwd: Path | None = None) -> str:
+    """Run a command, capture its output, and raise RuntimeError if it fails.
+
+    Args:
+        command: The command line arguments as a list.
+        cwd: Optional working directory for the command.
+
+    Returns:
+        The stripped standard output of the command.
+
+    Raises:
+        RuntimeError: If the command returns a non-zero exit code.
+
+    """
     result = subprocess.run(
         command,
         cwd=cwd,
