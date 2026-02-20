@@ -7,7 +7,6 @@ from pathlib import Path
 import tomlkit
 from tomlkit.items import Table
 
-
 SEMVER_RE = re.compile(
     r"^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$"
 )
@@ -16,7 +15,8 @@ SEMVER_RE = re.compile(
 def parse_semver(version: str) -> tuple[int, int, int]:
     match = SEMVER_RE.match(version)
     if not match:
-        raise ValueError(f"invalid semver version: {version}")
+        msg = f"invalid semver version: {version}"
+        raise ValueError(msg)
     return (
         int(match.group("major")),
         int(match.group("minor")),
@@ -32,7 +32,8 @@ def bump_version(current_version: str, bump: str) -> str:
         return f"{major}.{minor + 1}.0"
     if bump == "patch":
         return f"{major}.{minor}.{patch + 1}"
-    raise ValueError(f"unsupported bump: {bump}")
+    msg = f"unsupported bump: {bump}"
+    raise ValueError(msg)
 
 
 def release_tag_from_branch(branch: str) -> str | None:
@@ -50,10 +51,12 @@ def current_workspace_version(root: Path) -> str:
     data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
     project = data.get("project")
     if not isinstance(project, dict):
-        raise RuntimeError("unable to detect [project] section from pyproject.toml")
+        msg = "unable to detect [project] section from pyproject.toml"
+        raise RuntimeError(msg)
     version = project.get("version")
     if not isinstance(version, str) or not version:
-        raise RuntimeError("unable to detect version from pyproject.toml")
+        msg = "unable to detect version from pyproject.toml"
+        raise RuntimeError(msg)
     return version.removesuffix("-dev")
 
 

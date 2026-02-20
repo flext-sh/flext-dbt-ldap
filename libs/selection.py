@@ -20,7 +20,8 @@ def resolve_projects(workspace_root: Path, names: list[str]) -> list[ProjectInfo
     missing = [name for name in names if name not in by_name]
     if missing:
         missing_text = ", ".join(sorted(missing))
-        raise RuntimeError(f"unknown projects: {missing_text}")
+        msg = f"unknown projects: {missing_text}"
+        raise RuntimeError(msg)
 
     resolved = [by_name[name] for name in names]
     return sorted(resolved, key=lambda project: project.name)
