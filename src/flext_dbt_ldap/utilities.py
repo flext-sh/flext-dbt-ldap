@@ -121,8 +121,8 @@ class FlextDbtLdapUtilities(u_core):
             """Annotated type factories."""
 
             @staticmethod
-            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type:
-                """Create coerced enum type."""
+            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> object:
+                """Create coerced enum type (Annotated wrapper)."""
                 return Annotated[
                     enum_cls,
                     BeforeValidator(u_core.Enum.coerce_validator(enum_cls)),
@@ -190,23 +190,22 @@ class FlextDbtLdapUtilities(u_core):
                     else:
                         select_clauses.append(f"    {transformation} as {column}")
 
-                model_sql = (  # nosec B608
-                    f"""{{{{
-    config(
-        materialized='table',
-        tags=['ldap', 'transformation'],
-        description=f'Transformed LDAP data for {model_name}'
-    )
-}}}}
-
-select
-{",".join(select_clauses)}
-from {{{{ source('ldap', '{source_table}') }}}}
-where 1=1
-    -- Add any filtering conditions here
-    and objectclass is not null
-"""
-                )
+                model_sql = "".join([  # nosec B608
+                    "{{\n",
+                    "    config(\n",
+                    "        materialized='table',\n",
+                    "        tags=['ldap', 'transformation'],\n",
+                    f"        description=f'Transformed LDAP data for {model_name}'\n",
+                    "    )\n",
+                    "}}\n\n",
+                    "select\n",
+                    ",".join(select_clauses),
+                    "\n",
+                    f"from {{{{ source('ldap', '{source_table}') }}}}\n",
+                    "where 1=1\n",
+                    "    -- Add any filtering conditions here\n",
+                    "    and objectclass is not null\n",
+                ])
                 return r[str].ok(model_sql)
             except Exception as e:
                 return r[str].fail(
@@ -285,24 +284,24 @@ where 1=1
         ) -> r[str]:
             """Create DBT macro for extracting LDAP attributes from arrays."""
             try:
-                macro_sql = (  # nosec B608
-                    f"""-- Macro to extract specific values from LDAP multi-valued attributes
-{{% macro {macro_name}(attribute_array, filter_pattern='') %}}
- case
- when {{{{{{attribute_array}}}}}} is null then null
- when array_length({{{{{{attribute_array}}}}}}, 1) = 0 then null
- {{% if filter_pattern %}}
- else (
- select array_agg(attr)
- from unnest({{{{{{attribute_array}}}}}}) as attr
- where attr ilike '%{{{{{{filter_pattern}}}}}}%'
- )[1]
- {{% else %}}
- else {{{{{{attribute_array}}}}}}[1]
- {{% endif %}}
- end
-{{% endmacro %}}"""
-                )
+                macro_sql = "".join([  # nosec B608
+                    "-- Macro to extract specific values from LDAP multi-valued attributes\n",
+                    f"{{% macro {macro_name}(attribute_array, filter_pattern='') %}}\n",
+                    " case\n",
+                    " when {{{{attribute_array}}}} is null then null\n",
+                    " when array_length({{{{attribute_array}}}}, 1) = 0 then null\n",
+                    " {% if filter_pattern %}\n",
+                    " else (\n",
+                    " select array_agg(attr)\n",
+                    " from unnest({{{{attribute_array}}}}) as attr\n",
+                    " where attr ilike '%{{{{filter_pattern}}}}%'\n",
+                    " )[1]\n",
+                    " {% else %}\n",
+                    " else {{{{attribute_array}}}}[1]\n",
+                    " {% endif %}\n",
+                    " end\n",
+                    "{% endmacro %}",
+                ])
                 return r[str].ok(macro_sql)
             except Exception as e:
                 return r[str].fail(

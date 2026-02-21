@@ -37,138 +37,30 @@
         "driver": {
           "name": "Mypy",
           "informationUri": "https://mypy.readthedocs.io/",
-          "rules": [
-            {
-              "id": "return-value",
-              "shortDescription": {
-                "text": "return-value"
-              }
-            }
-          ]
+          "rules": []
         }
       },
-      "results": [
-        {
-          "ruleId": "return-value",
-          "level": "error",
-          "message": {
-            "text": "Incompatible return value type (got \"<typing special form>\", expected \"type\")"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/flext_dbt_ldap/utilities.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 126,
-                  "startColumn": 23
-                }
-              }
-            }
-          ]
-        }
-      ]
+      "results": []
     },
     {
       "tool": {
         "driver": {
           "name": "Pyright",
           "informationUri": "https://github.com/microsoft/pyright",
-          "rules": [
-            {
-              "id": "reportReturnType",
-              "shortDescription": {
-                "text": "reportReturnType"
-              }
-            }
-          ]
+          "rules": []
         }
       },
-      "results": [
-        {
-          "ruleId": "reportReturnType",
-          "level": "error",
-          "message": {
-            "text": "Type \"Annotated\" is not assignable to return type \"type\"\n\u00a0\u00a0\"Annotated\" is not assignable to \"type\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/src/flext_dbt_ldap/utilities.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 126,
-                  "startColumn": 24
-                }
-              }
-            }
-          ]
-        }
-      ]
+      "results": []
     },
     {
       "tool": {
         "driver": {
           "name": "Bandit",
           "informationUri": "https://bandit.readthedocs.io/",
-          "rules": [
-            {
-              "id": "B608",
-              "shortDescription": {
-                "text": "B608"
-              }
-            }
-          ]
+          "rules": []
         }
       },
-      "results": [
-        {
-          "ruleId": "B608",
-          "level": "warning",
-          "message": {
-            "text": "Possible SQL injection vector through string-based query construction."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/flext_dbt_ldap/utilities.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 194,
-                  "startColumn": 1
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "B608",
-          "level": "warning",
-          "message": {
-            "text": "Possible SQL injection vector through string-based query construction."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/flext_dbt_ldap/utilities.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 289,
-                  "startColumn": 1
-                }
-              }
-            }
-          ]
-        }
-      ]
+      "results": []
     },
     {
       "tool": {
