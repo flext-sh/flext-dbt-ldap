@@ -1,14 +1,14 @@
 # FLEXT Check Report
 
-**Generated**: 2026-02-21 11:55:02 UTC  
+**Generated**: 2026-02-21 14:00:19 UTC  
 **Projects**: 1  
-**Gates**: lint  
+**Gates**: lint, format, pyrefly, mypy, pyright, security, markdown, go  
 
 ## Summary
 
-| Project | Lint | Total | Status |
-|---------|------|-------|--------|
-| flext-dbt-ldap | 0 | 0 | PASS |
+| Project | Lint | Format | Pyrefly | Mypy | Pyright | Security | Markdown | Go | Total | Status |
+|---------|------|------|------|------|------|------|------|------|-------|--------|
+| flext-dbt-ldap | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | PASS |
 
 **Total errors**: 0  
 **Failed projects**: 0/1  

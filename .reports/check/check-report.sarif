@@ -11,6 +11,76 @@
         }
       },
       "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Ruff Formatter",
+          "informationUri": "https://docs.astral.sh/ruff/formatter/",
+          "rules": []
+        }
+      },
+      "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Pyrefly",
+          "informationUri": "https://github.com/facebook/pyrefly",
+          "rules": []
+        }
+      },
+      "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Mypy",
+          "informationUri": "https://mypy.readthedocs.io/",
+          "rules": []
+        }
+      },
+      "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Pyright",
+          "informationUri": "https://github.com/microsoft/pyright",
+          "rules": []
+        }
+      },
+      "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Bandit",
+          "informationUri": "https://bandit.readthedocs.io/",
+          "rules": []
+        }
+      },
+      "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "MarkdownLint",
+          "informationUri": "https://github.com/DavidAnson/markdownlint",
+          "rules": []
+        }
+      },
+      "results": []
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Go Vet",
+          "informationUri": "https://pkg.go.dev/cmd/vet",
+          "rules": []
+        }
+      },
+      "results": []
     }
   ]
 }
