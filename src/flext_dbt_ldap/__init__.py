@@ -30,6 +30,7 @@ from flext_dbt_ldap.ldap_integration import (
     process_ldap_entries_for_dbt,
     validate_ldap_data_quality,
 )
+from flext_dbt_ldap.models import FlextDbtLdapModels, m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.simple_api import FlextDbtLdap
 from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
@@ -46,6 +47,7 @@ __all__ = [
     "FlextDbtLdapError",
     "FlextDbtLdapMacroError",
     "FlextDbtLdapModelError",
+    "FlextDbtLdapModels",
     "FlextDbtLdapProcessingError",
     "FlextDbtLdapSettings",
     "FlextDbtLdapSettingsurationError",
@@ -60,6 +62,7 @@ __all__ = [
     "FlextSettings",
     "__version__",
     "__version_info__",
+    "m",
     "process_ldap_entries_for_dbt",
     "t",
     "validate_ldap_data_quality",
