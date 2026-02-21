@@ -74,7 +74,9 @@ class FlextDbtLdapProtocols(p_meltano, p_ldap):
                     ...
 
             @runtime_checkable
-            class LdapIntegrationProtocol(p_ldap.Service[m.PipelineResult], Protocol):
+            class LdapIntegrationProtocol(
+                p_ldap.Service[m.DbtLdapPipelineResult], Protocol
+            ):
                 """Protocol for LDAP data integration operations."""
 
                 def extract_ldap_data(

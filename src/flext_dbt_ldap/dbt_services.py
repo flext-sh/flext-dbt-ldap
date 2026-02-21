@@ -46,7 +46,7 @@ class FlextDbtLdapService:
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[m.PipelineResult]:
+    ) -> r[m.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse."""
         try:
             logger.info("Starting user sync to warehouse, incremental=%s", incremental)
@@ -74,14 +74,14 @@ class FlextDbtLdapService:
             return result
         except Exception as e:
             logger.exception("Unexpected error during user sync")
-            return r[m.PipelineResult].fail(f"User sync error: {e}")
+            return r[m.DbtLdapPipelineResult].fail(f"User sync error: {e}")
 
     def sync_groups_to_warehouse(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[m.PipelineResult]:
+    ) -> r[m.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse."""
         try:
             logger.info("Starting group sync to warehouse, incremental=%s", incremental)
@@ -102,12 +102,12 @@ class FlextDbtLdapService:
             return result
         except Exception as e:
             logger.exception("Unexpected error during group sync")
-            return r[m.PipelineResult].fail(f"Group sync error: {e}")
+            return r[m.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
         self,
         search_base: str | None = None,
-    ) -> r[m.PipelineResult]:
+    ) -> r[m.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse."""
         try:
             logger.info("Starting membership sync to warehouse")
@@ -126,7 +126,7 @@ class FlextDbtLdapService:
             return result
         except Exception as e:
             logger.exception("Unexpected error during membership sync")
-            return r[m.PipelineResult].fail(f"Membership sync error: {e}")
+            return r[m.DbtLdapPipelineResult].fail(f"Membership sync error: {e}")
 
     def run_full_data_warehouse_sync(
         self,

@@ -56,7 +56,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         models_run: list[str] = Field(default_factory=list)
         entries_processed: int = 0
 
-    class PipelineResult(FlextModels.ValueObject):
+    class DbtLdapPipelineResult(FlextModels.ValueObject):
         """Result of a complete LDAP-to-DBT pipeline run."""
 
         extracted_entries: int = 0
