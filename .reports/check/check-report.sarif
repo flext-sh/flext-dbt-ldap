@@ -37,20 +37,1833 @@
         "driver": {
           "name": "Mypy",
           "informationUri": "https://mypy.readthedocs.io/",
-          "rules": []
+          "rules": [
+            {
+              "id": "misc",
+              "shortDescription": {
+                "text": "misc"
+              }
+            },
+            {
+              "id": "attr-defined",
+              "shortDescription": {
+                "text": "attr-defined"
+              }
+            },
+            {
+              "id": "name-defined",
+              "shortDescription": {
+                "text": "name-defined"
+              }
+            }
+          ]
         }
       },
-      "results": []
+      "results": [
+        {
+          "ruleId": "misc",
+          "level": "error",
+          "message": {
+            "text": "Cannot assign multiple types to name \"c\" without an explicit \"type[...]\" annotation"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/constants.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 227,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLdap\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 52,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLdap\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 56,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtProcessing\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 86,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "name-defined",
+          "level": "error",
+          "message": {
+            "text": "Name \"c.DbtLogLevelLiteral\" is not defined"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 91,
+                  "startColumn": 19
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 128,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 133,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 138,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 143,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 148,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 153,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 158,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 163,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 168,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 173,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 179,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 184,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 189,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 194,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 199,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 204,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 209,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 214,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 219,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 225,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 230,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 235,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 240,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 245,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 250,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 255,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 260,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 265,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 271,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 276,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 281,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 286,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 291,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 296,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 301,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 306,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 311,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 317,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 322,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 332,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 337,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 342,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 347,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 352,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 358,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 363,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 368,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 373,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 378,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 383,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 388,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 393,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 398,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 404,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 409,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 415,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 422,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 427,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 432,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 437,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 442,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 447,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 452,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 457,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 463,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 468,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 473,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 478,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 483,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 488,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 494,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 499,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 505,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"DbtLogging\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 510,
+                  "startColumn": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "misc",
+          "level": "error",
+          "message": {
+            "text": "Cannot assign multiple types to name \"m\" without an explicit \"type[...]\" annotation"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/models.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 591,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"TransformationOptimization\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/utilities.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 483,
+                  "startColumn": 22
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"TransformationOptimization\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/utilities.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 490,
+                  "startColumn": 22
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "attr-defined",
+          "level": "error",
+          "message": {
+            "text": "\"type[FlextConstants]\" has no attribute \"TransformationOptimization\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/flext_dbt_ldap/utilities.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 497,
+                  "startColumn": 22
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "tool": {
         "driver": {
           "name": "Pyright",
           "informationUri": "https://github.com/microsoft/pyright",
-          "rules": []
+          "rules": [
+            {
+              "id": "reportInvalidTypeForm",
+              "shortDescription": {
+                "text": "reportInvalidTypeForm"
+              }
+            }
+          ]
         }
       },
-      "results": []
+      "results": [
+        {
+          "ruleId": "reportInvalidTypeForm",
+          "level": "error",
+          "message": {
+            "text": "Variable not allowed in type expression"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/tmp/flext-merge/flext-dbt-ldap/src/flext_dbt_ldap/settings.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 91,
+                  "startColumn": 20
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "tool": {

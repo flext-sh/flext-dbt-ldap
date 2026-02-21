@@ -14,13 +14,13 @@ import tempfile
 from collections.abc import Generator
 
 import pytest
-from flext_core import FlextTypes as t, u
+from flext_dbt_ldap import t
 from flext_tests import FlextTestsDocker
 
 
 # Import shared fixtures from docker directory
 @pytest.fixture(scope="session")
-def shared_ldap_container(flext_docker: FlextTestsDocker) -> Generator[str]:
+def shared_ldap_container(flext_docker: FlextTestsDocker) -> str:
     """Managed LDAP container using centralized FlextTestsDocker with docker-compose."""
     # Use centralized docker-compose file for OpenLDAP
     compose_file = pathlib.Path(
@@ -28,13 +28,11 @@ def shared_ldap_container(flext_docker: FlextTestsDocker) -> Generator[str]:
     ).expanduser()
 
     # Start OpenLDAP stack using docker-compose
-    start_result = flext_docker.start_compose_stack(compose_file)
+    start_result = flext_docker.start_compose_stack(str(compose_file))
     if start_result.is_failure:
         pytest.skip(f"OpenLDAP container failed to start: {start_result.error}")
 
     return "flext-openldap-test"
-
-    # Cleanup handled by FlextTestsDocker automatically
 
 
 @pytest.fixture(scope="session")
@@ -506,128 +504,132 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 # Mock services
+class MockLdapDbtAdapter:
+    """Mock LDAP dbt adapter."""
+
+    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+        """Initialize the instance."""
+        self.config = config
+        self.ldap_entries: dict[str, t.GeneralValueType] = {}
+        self.compiled_models: dict[str, t.GeneralValueType] = {}
+
+    def extract_ldap_data(
+        self,
+        _base_dn: str,
+        _search_filter: str,
+    ) -> list[dict[str, t.GeneralValueType]]:
+        """Extract LDAP data for dbt processing."""
+        # Mock LDAP extraction using shared container domain
+        return [
+            {
+                "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
+                "attributes": {
+                    "cn": "john.doe",
+                    "mail": "john.doe@internal.invalid",
+                    "objectClass": "inetOrgPerson",
+                },
+                "extracted_at": "2023-01-01T12:00:00Z",
+            },
+        ]
+
+    def split(self, dn: str) -> bool:
+        """Validate DN format."""
+        return bool(re.match(r"^(?:cn|uid)=.+(?:,(?:ou|dc)=.+)+", dn))
+
+    def parse_ldap_attributes(
+        self,
+        attributes: dict[str, t.GeneralValueType],
+    ) -> dict[str, str | None]:
+        """Parse LDAP attributes for dbt models."""
+        parsed: dict[str, str | None] = {}
+        for key, value in attributes.items():
+            if isinstance(value, list):
+                parsed[key] = str(value[0]) if value else None
+            else:
+                parsed[key] = str(value) if value is not None else None
+        return parsed
+
+    def transform_ldap_to_relational(
+        self,
+        ldap_data: list[dict[str, t.GeneralValueType]],
+    ) -> list[dict[str, t.GeneralValueType]]:
+        """Transform LDAP data to relational format."""
+        transformed: list[dict[str, t.GeneralValueType]] = []
+        for entry in ldap_data:
+            flat_entry = {
+                "dn": entry["dn"],
+                "extracted_at": entry["extracted_at"],
+            }
+            attrs = entry.get("attributes")
+            if isinstance(attrs, dict):
+                flat_entry.update(self.parse_ldap_attributes(attrs))
+            transformed.append(flat_entry)
+        return transformed
+
+
 @pytest.fixture
-def mock_ldap_dbt_adapter() -> object:
+def mock_ldap_dbt_adapter() -> type[MockLdapDbtAdapter]:
     """Mock LDAP dbt adapter for testing."""
+    return MockLdapDbtAdapter
 
-    class MockLdapDbtAdapter:
-        def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
-            """Initialize the instance."""
-            self.config = config
-            self.ldap_entries: dict[str, t.GeneralValueType] = {}
-            self.compiled_models: dict[str, t.GeneralValueType] = {}
 
-        def extract_ldap_data(
-            self,
-            _base_dn: str,
-            _search_filter: str,
-        ) -> list[dict[str, t.GeneralValueType]]:
-            """Extract LDAP data for dbt processing."""
-            # Mock LDAP extraction using shared container domain
+class MockLdapConnection:
+    """Mock LDAP connection."""
+
+    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+        """Initialize the instance."""
+        self.config = config
+        self.connected = False
+        self.entries: list[dict[str, t.GeneralValueType]] = []
+
+    def connect(self) -> bool:
+        """Connect to LDAP server."""
+        self.connected = True
+        return True
+
+    def disconnect(self) -> bool:
+        """Disconnect from LDAP server."""
+        self.connected = False
+        return True
+
+    def search(
+        self,
+        base_dn: str,
+        _search_filter: str,
+        _attributes: list[str] | None = None,
+    ) -> list[dict[str, t.GeneralValueType]]:
+        """Search LDAP directory."""
+        # Mock search results using shared container domain
+        if "people" in base_dn or "users" in base_dn:
             return [
                 {
                     "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
                     "attributes": {
-                        "cn": "john.doe",
-                        "mail": "john.doe@internal.invalid",
-                        "objectClass": "inetOrgPerson",
+                        "cn": ["john.doe"],
+                        "mail": ["john.doe@internal.invalid"],
+                        "objectClass": ["inetOrgPerson"],
                     },
-                    "extracted_at": "2023-01-01T12:00:00Z",
                 },
             ]
+        if "groups" in base_dn:
+            return [
+                {
+                    "dn": "cn=developers,ou=groups,dc=flext,dc=local",
+                    "attributes": {
+                        "cn": ["developers"],
+                        "member": ["cn=john.doe,ou=people,dc=flext,dc=local"],
+                        "objectClass": ["groupOfNames"],
+                    },
+                },
+            ]
+        return []
 
-        def split(self, dn: str) -> bool:
-            """Validate DN format."""
-            return bool(re.match(u.DN_FORMAT_PATTERN, dn))
-
-        def parse_ldap_attributes(
-            self,
-            attributes: dict[str, t.GeneralValueType],
-        ) -> dict[str, str | None]:
-            """Parse LDAP attributes for dbt models."""
-            parsed: dict[str, str | None] = {}
-            for key, value in attributes.items():
-                if isinstance(value, list):
-                    parsed[key] = value[0] if value else None
-                else:
-                    parsed[key] = str(value) if value is not None else None
-            return parsed
-
-        def transform_ldap_to_relational(
-            self,
-            ldap_data: list[dict[str, t.GeneralValueType]],
-        ) -> list[dict[str, t.GeneralValueType]]:
-            """Transform LDAP data to relational format."""
-            transformed: list[dict[str, t.GeneralValueType]] = []
-            for entry in ldap_data:
-                flat_entry = {
-                    "dn": entry["dn"],
-                    "extracted_at": entry["extracted_at"],
-                }
-                attrs = entry.get("attributes")
-                if isinstance(attrs, dict):
-                    flat_entry.update(self.parse_ldap_attributes(attrs))
-                transformed.append(flat_entry)
-            return transformed
-
-    return MockLdapDbtAdapter
+    def validate_entry(self, dn: str) -> bool:
+        """Validate LDAP entry exists."""
+        return dn in [entry["dn"] for entry in self.entries]
 
 
 @pytest.fixture
-def mock_ldap_connection() -> object:
+def mock_ldap_connection() -> type[MockLdapConnection]:
     """Mock LDAP connection for testing."""
-
-    class MockLdapConnection:
-        def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
-            """Initialize the instance."""
-            self.config = config
-            self.connected = False
-            self.entries: list[dict[str, t.GeneralValueType]] = []
-
-        def connect(self) -> bool:
-            """Connect to LDAP server."""
-            self.connected = True
-            return True
-
-        def disconnect(self) -> bool:
-            """Disconnect from LDAP server."""
-            self.connected = False
-            return True
-
-        def search(
-            self,
-            base_dn: str,
-            _search_filter: str,
-            _attributes: list[str] | None = None,
-        ) -> list[dict[str, t.GeneralValueType]]:
-            """Search LDAP directory."""
-            # Mock search results using shared container domain
-            if "people" in base_dn or "users" in base_dn:
-                return [
-                    {
-                        "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
-                        "attributes": {
-                            "cn": ["john.doe"],
-                            "mail": ["john.doe@internal.invalid"],
-                            "objectClass": ["inetOrgPerson"],
-                        },
-                    },
-                ]
-            if "groups" in base_dn:
-                return [
-                    {
-                        "dn": "cn=developers,ou=groups,dc=flext,dc=local",
-                        "attributes": {
-                            "cn": ["developers"],
-                            "member": ["cn=john.doe,ou=people,dc=flext,dc=local"],
-                            "objectClass": ["groupOfNames"],
-                        },
-                    },
-                ]
-            return []
-
-        def validate_entry(self, dn: str) -> bool:
-            """Validate LDAP entry exists."""
-            return dn in [entry["dn"] for entry in self.entries]
-
     return MockLdapConnection

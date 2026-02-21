@@ -12,14 +12,14 @@ from typing import Annotated
 
 from flext_core import r
 from flext_core.container import FlextContainer
-from flext_core.utilities import FlextUtilities as u_core
+from flext_core.utilities import u
 from pydantic import BeforeValidator
 
 from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.models import FlextDbtLdapModels as m
 
 
-class FlextDbtLdapUtilities(u_core):
+class FlextDbtLdapUtilities(u):
     """Unified DBT LDAP utilities service extending u."""
 
     def __init__(self) -> None:
@@ -108,14 +108,14 @@ class FlextDbtLdapUtilities(u_core):
                     f"DBT project structure validation failed: {e}",
                 )
 
-        class Collection(u_core.Collection):
-            """Collection utilities extending u_core.Collection via inheritance."""
+        class Collection(u.Collection):
+            """Collection utilities extending u.Collection via inheritance."""
 
-        class Args(u_core.Args):
-            """Args utilities extending u_core.Args via inheritance."""
+        class Args(u.Args):
+            """Args utilities extending u.Args via inheritance."""
 
-        class Model(u_core.Model):
-            """Model utilities extending u_core.Model via inheritance."""
+        class Model(u.Model):
+            """Model utilities extending u.Model via inheritance."""
 
         class Pydantic:
             """Annotated type factories."""
@@ -125,7 +125,7 @@ class FlextDbtLdapUtilities(u_core):
                 """Create coerced enum type (Annotated wrapper)."""
                 return Annotated[
                     enum_cls,
-                    BeforeValidator(u_core.Enum.coerce_validator(enum_cls)),
+                    BeforeValidator(u.Enum.coerce_validator(enum_cls)),
                 ]
 
     class LdapDataTransformation:

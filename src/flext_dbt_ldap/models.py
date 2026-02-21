@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 from typing import override
 
-from flext_core import m as m_core, r
+from flext_core import m, r
 from flext_core.utilities import u
 from flext_ldap import m as m_ldap
 from pydantic import BaseModel, ConfigDict, Field
@@ -33,7 +33,7 @@ class FlextDbtLdapBaseModel(BaseModel):
     )
 
 
-class FlextDbtLdapModels(m_core):
+class FlextDbtLdapModels(m):
     """Unified DBT LDAP models collection with nested model classes."""
 
     def __init_subclass__(cls, **kwargs: t.JsonValue) -> None:
@@ -238,7 +238,7 @@ class FlextDbtLdapModels(m_core):
     # DOMAIN MODELS - LDAP data transformation entities
     # =========================================================================
 
-    class UserDimension(m_core.Entity):
+    class UserDimension(m.Entity):
         """User dimension model for DBT LDAP transformations."""
 
         user_id: str
@@ -313,7 +313,7 @@ class FlextDbtLdapModels(m_core):
                 "modified_date": self.modified_date,
             }
 
-    class GroupDimension(m_core.Entity):
+    class GroupDimension(m.Entity):
         """Group dimension model for DBT LDAP transformations."""
 
         group_id: str
@@ -375,7 +375,7 @@ class FlextDbtLdapModels(m_core):
                 "modified_date": self.modified_date,
             }
 
-    class MembershipFact(m_core.Entity):
+    class MembershipFact(m.Entity):
         """Membership fact model for DBT LDAP transformations."""
 
         user_dn: str
