@@ -432,12 +432,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entry: FlextLdapModels.Ldif.Entry,
         ) -> dict[str, list[str]]:
             """Normalize entry attributes to dict[str, list[str]]."""
-            return DbtLdapTransformer._entry_attrs_mapping(entry)
+            return FlextDbtLdapModels.DbtLdap._entry_attrs_mapping(entry)
 
         @staticmethod
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
-            raw = DbtLdapTransformer._entry_attrs_mapping(entry)
+            raw = FlextDbtLdapModels.DbtLdap._entry_attrs_mapping(entry)
             oc_val = raw.get("objectClass", [])
             if isinstance(oc_val, list):
                 return [str(x) for x in oc_val]
