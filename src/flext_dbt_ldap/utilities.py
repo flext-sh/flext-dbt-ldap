@@ -232,7 +232,7 @@ class FlextDbtLdapUtilities(u):
                 # Add column-specific tests from input config
                 if test_config.columns and tests.models:
                     model_dict = tests.models[0]
-                    if isinstance(model_dict, dict):
+                    if isinstance(model_dict, dict):  # pyright: ignore[reportUnnecessaryIsInstance]
                         columns_list = model_dict.get("columns")
                         if isinstance(columns_list, list):
                             for col, col_tests in test_config.columns.items():

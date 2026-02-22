@@ -18,6 +18,7 @@ class FlextDbtLdapVersion:
 
     def __init__(self) -> None:
         """Initialize version from package metadata."""
+        super().__init__()
         try:
             self._metadata: PackageMetadata = metadata("flext-dbt-ldap")
         except Exception:

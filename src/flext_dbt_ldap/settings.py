@@ -782,7 +782,7 @@ class FlextDbtLdapSettings(FlextSettings):
     def reset_shared_instance(cls) -> None:
         """Reset the shared singleton instance."""
         with cls._lock:
-            cls._instances.pop(cls, None)
+            _ = cls._instances.pop(cls, None)
 
     @classmethod
     def reset_global_instance(cls) -> None:

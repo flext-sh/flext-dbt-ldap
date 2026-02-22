@@ -32,6 +32,7 @@ class FlextDbtLdapService:
         transformer: m.DbtLdap | None = None,
     ) -> None:
         """Initialize DBT LDAP service."""
+        super().__init__()
         self.config: FlextDbtLdapSettings = (
             config or FlextDbtLdapSettings.get_global_instance()
         )

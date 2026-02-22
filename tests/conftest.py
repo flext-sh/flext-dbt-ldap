@@ -58,10 +58,10 @@ def set_test_environment() -> Generator[None]:
     os.environ["LDAP_TEST_MODE"] = "true"
     yield
     # Cleanup
-    os.environ.pop("FLEXT_ENV", None)
-    os.environ.pop("FLEXT_LOG_LEVEL", None)
-    os.environ.pop("DBT_PROFILES_DIR", None)
-    os.environ.pop("LDAP_TEST_MODE", None)
+    _ = os.environ.pop("FLEXT_ENV", None)
+    _ = os.environ.pop("FLEXT_LOG_LEVEL", None)
+    _ = os.environ.pop("DBT_PROFILES_DIR", None)
+    _ = os.environ.pop("LDAP_TEST_MODE", None)
 
 
 # dbt LDAP configuration fixtures
@@ -133,7 +133,9 @@ def dbt_ldap_project_config() -> dict[str, t.GeneralValueType]:
 
 # LDAP source fixtures
 @pytest.fixture
-def ldap_source_config(shared_ldap_config: dict) -> dict[str, t.GeneralValueType]:
+def ldap_source_config(
+    shared_ldap_config: dict[str, t.GeneralValueType],
+) -> dict[str, t.GeneralValueType]:
     """LDAP source configuration for testing using shared container."""
     # Suppress unused parameter warning - fixture is used for side effects
     _ = shared_ldap_config
@@ -510,6 +512,7 @@ class MockLdapDbtAdapter:
 
     def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
         """Initialize the instance."""
+        super().__init__()
         self.config = config
         self.ldap_entries: dict[str, t.GeneralValueType] = {}
         self.compiled_models: dict[str, t.GeneralValueType] = {}
@@ -579,6 +582,7 @@ class MockLdapConnection:
 
     def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
         """Initialize the instance."""
+        super().__init__()
         self.config = config
         self.connected = False
         self.entries: list[dict[str, t.GeneralValueType]] = []

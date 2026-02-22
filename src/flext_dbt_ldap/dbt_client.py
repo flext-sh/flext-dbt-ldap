@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import cast
 
 from flext_core import FlextLogger, r
 from flext_ldap import (
@@ -313,11 +312,8 @@ class FlextDbtLdapClient:
             result = self._ldap_api.search(search_options=search_options)
 
             if result.is_success and result.value:
-                entries: list[FlextLdapModels.Ldif.Entry] = cast(
-                    "list[FlextLdapModels.Ldif.Entry]",
-                    result.value.entries,
-                )
-                return r[list[FlextLdapModels.Ldif.Entry]].ok(entries)
+                entries = result.value.entries
+                return r[list[FlextLdapModels.Ldif.Entry]].ok(entries)  # type: ignore[arg-type]
 
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 result.error or "Search returned no results",

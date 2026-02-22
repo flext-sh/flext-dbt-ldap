@@ -404,6 +404,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         @override
         def __init__(self) -> None:
             """Initialize LDAP transformer."""
+            super().__init__()
             logger.info("Initialized LDAP DBT transformer")
 
         @staticmethod
