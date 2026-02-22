@@ -21,6 +21,7 @@ from flext_ldap import (
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.models import FlextDbtLdapModels as m
+from flext_dbt_ldap.models import _entry_attrs_mapping
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
@@ -261,11 +262,10 @@ class FlextDbtLdapClient:
         self, entry: FlextLdapModels.Ldif.Entry, schema_name: str
     ) -> bool:
         """Check if LDAP entry matches schema type."""
-        raw = entry.attributes
-        object_classes: list[str] = []
-        if isinstance(raw, dict):
-            oc_val = raw.get("objectClass", [])
-            object_classes = [str(x) for x in oc_val]
+        raw = _entry_attrs_mapping(entry)
+        object_classes: list[str] = [
+            str(x) for x in raw.get("objectClass", [])
+        ]
         schema_mapping: dict[str, list[str]] = {
             "users": ["person", "user", "inetOrgPerson"],
             "groups": ["group", "groupOfNames", "groupOfUniqueNames"],

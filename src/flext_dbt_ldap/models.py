@@ -438,12 +438,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
-            oc_val = raw.get("objectClass", [])
+            oc_val: object = raw.get("objectClass", [])
+            if oc_val is None:
+                return []
             if isinstance(oc_val, list):
                 return [str(x) for x in oc_val]
-            if oc_val is not None:
-                return [str(oc_val)]
-            return []
+            return [str(oc_val)]
 
         def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
             """Check if entry is a user entry."""
