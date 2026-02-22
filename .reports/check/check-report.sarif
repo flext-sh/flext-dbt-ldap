@@ -7,61 +7,17 @@
         "driver": {
           "name": "Ruff Linter",
           "informationUri": "https://docs.astral.sh/ruff/",
-          "rules": []
-        }
-      },
-      "results": []
-    },
-    {
-      "tool": {
-        "driver": {
-          "name": "Ruff Formatter",
-          "informationUri": "https://docs.astral.sh/ruff/formatter/",
-          "rules": []
-        }
-      },
-      "results": []
-    },
-    {
-      "tool": {
-        "driver": {
-          "name": "Pyrefly",
-          "informationUri": "https://github.com/facebook/pyrefly",
           "rules": [
             {
-              "id": "missing-import",
+              "id": "D100",
               "shortDescription": {
-                "text": "missing-import"
+                "text": "D100"
               }
             },
             {
-              "id": "missing-attribute",
+              "id": "D103",
               "shortDescription": {
-                "text": "missing-attribute"
-              }
-            },
-            {
-              "id": "missing-argument",
-              "shortDescription": {
-                "text": "missing-argument"
-              }
-            },
-            {
-              "id": "no-matching-overload",
-              "shortDescription": {
-                "text": "no-matching-overload"
-              }
-            },
-            {
-              "id": "bad-return",
-              "shortDescription": {
-                "text": "bad-return"
-              }
-            },
-            {
-              "id": "bad-override",
-              "shortDescription": {
-                "text": "bad-override"
+                "text": "D103"
               }
             }
           ]
@@ -69,20 +25,20 @@
       },
       "results": [
         {
-          "ruleId": "missing-import",
+          "ruleId": "D100",
           "level": "error",
           "message": {
-            "text": "Could not find import of `tests.constants`\n  Looked in these locations (from config in `/home/marlonsc/flext/flext-dbt-ldap/pyproject.toml`):\n  Search path (from config file): [\"/home/marlonsc/flext/typings\", \"/home/marlonsc/flext/typings/generated\", \"/home/marlonsc/flext/flext-dbt-ldap/src\", \"/home/marlonsc/flext/flext-dbt-ldap/tests\", \"/home/marlonsc/flext/flext-dbt-ldap/examples\", \"/home/marlonsc/flext/flext-dbt-ldap/scripts\"]\n  Import root (inferred from project layout): \"/home/marlonsc/flext/flext-dbt-ldap/src\"\n  Site package path queried from interpreter: [\"/usr/lib/python3.13\", \"/usr/lib/python3.13/lib-dynload\", \"/home/marlonsc/flext/.venv/lib/python3.13/site-packages\", \"/home/marlonsc/flext/algar-oud-mig/src\", \"/home/marlonsc/flext/flexcore/src\", \"/home/marlonsc/flext/src\", \"/home/marlonsc/flext\", \"/home/marlonsc/flext/flext-api/src\", \"/home/marlonsc/flext/flext-auth/src\", \"/home/marlonsc/flext/flext-cli/src\", \"/home/marlonsc/flext/flext-core/src\", \"/home/marlonsc/flext/flext-db-oracle/src\", \"/home/marlonsc/flext/flext-dbt-ldap/src\", \"/home/marlonsc/flext/flext-dbt-ldif/src\", \"/home/marlonsc/flext/flext-dbt-oracle/src\", \"/home/marlonsc/flext/flext-dbt-oracle-wms/src\", \"/home/marlonsc/flext/flext-grpc/src\", \"/home/marlonsc/flext/flext-ldap/src\", \"/home/marlonsc/flext/flext-ldif/src\", \"/home/marlonsc/flext/flext-meltano/src\", \"/home/marlonsc/flext/flext-observability/src\", \"/home/marlonsc/flext/flext-oracle-oic/src\", \"/home/marlonsc/flext/flext-oracle-wms/src\", \"/home/marlonsc/flext/flext-plugin/src\", \"/home/marlonsc/flext/flext-quality/src\", \"/home/marlonsc/flext/flext-tap-ldap/src\", \"/home/marlonsc/flext/flext-tap-ldif/src\", \"/home/marlonsc/flext/flext-tap-oracle/src\", \"/home/marlonsc/flext/flext-tap-oracle-oic/src\", \"/home/marlonsc/flext/flext-tap-oracle-wms/src\", \"/home/marlonsc/flext/flext-target-ldap/src\", \"/home/marlonsc/flext/flext-target-ldif/src\", \"/home/marlonsc/flext/flext-target-oracle/src\", \"/home/marlonsc/flext/flext-target-oracle-oic/src\", \"/home/marlonsc/flext/flext-target-oracle-wms/src\", \"/home/marlonsc/flext/flext-web/src\", \"/home/marlonsc/flext/gruponos-meltano-native/src\"]"
+            "text": "Missing docstring in public module"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "tests/__init__.py",
+                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/scripts/libs/toml_sync.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 11,
+                  "startLine": 1,
                   "startColumn": 1
                 }
               }
@@ -90,252 +46,84 @@
           ]
         },
         {
-          "ruleId": "missing-attribute",
+          "ruleId": "D103",
           "level": "error",
           "message": {
-            "text": "Object of class `FlextTestsDocker` has no attribute `start_compose_service`"
+            "text": "Missing docstring in public function"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
+                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/scripts/libs/toml_sync.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 52,
-                  "startColumn": 20
+                  "startLine": 12,
+                  "startColumn": 5
                 }
               }
             }
           ]
         },
         {
-          "ruleId": "missing-attribute",
+          "ruleId": "D103",
           "level": "error",
           "message": {
-            "text": "Object of class `FlextTestsDocker` has no attribute `stop_compose_service`"
+            "text": "Missing docstring in public function"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
+                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/scripts/libs/toml_sync.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 83,
-                  "startColumn": 19
+                  "startLine": 18,
+                  "startColumn": 5
                 }
               }
             }
           ]
         },
         {
-          "ruleId": "missing-attribute",
+          "ruleId": "D103",
           "level": "error",
           "message": {
-            "text": "Object of class `Coroutine` has no attribute `communicate`"
+            "text": "Missing docstring in public function"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
+                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/scripts/libs/toml_sync.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 149,
-                  "startColumn": 26
+                  "startLine": 28,
+                  "startColumn": 5
                 }
               }
             }
           ]
         },
         {
-          "ruleId": "missing-attribute",
+          "ruleId": "D103",
           "level": "error",
           "message": {
-            "text": "Object of class `Coroutine` has no attribute `returncode`"
+            "text": "Missing docstring in public function"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
+                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/scripts/libs/toml_sync.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 150,
-                  "startColumn": 16
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "missing-argument",
-          "level": "error",
-          "message": {
-            "text": "Missing argument `env` in function `_run_db`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 152,
-                  "startColumn": 27
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "no-matching-overload",
-          "level": "error",
-          "message": {
-            "text": "No matching overload found for function `str.__new__` called with arguments: (type[str], Path, dict[str, str])\n  Possible overloads:\n  (cls: type[str], object: object = '') -> str\n  (cls: type[str], object: Buffer, encoding: str = 'utf-8', errors: str = 'strict') -> str [closest match]"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 152,
-                  "startColumn": 36
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "bad-return",
-          "level": "error",
-          "message": {
-            "text": "Returned type `e2e.conftest.run_dbt_command.CompletedProcess` is not assignable to declared return type `subprocess.CompletedProcess[str]`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 161,
-                  "startColumn": 12
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "missing-attribute",
-          "level": "error",
-          "message": {
-            "text": "Object of class `object` has no attribute `cursor`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 166,
-                  "startColumn": 10
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "missing-attribute",
-          "level": "error",
-          "message": {
-            "text": "Object of class `object` has no attribute `cursor`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 174,
-                  "startColumn": 10
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "missing-attribute",
-          "level": "error",
-          "message": {
-            "text": "Object of class `object` has no attribute `cursor`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 191,
-                  "startColumn": 10
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "missing-attribute",
-          "level": "error",
-          "message": {
-            "text": "Object of class `object` has no attribute `cursor`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 203,
-                  "startColumn": 10
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "bad-override",
-          "level": "error",
-          "message": {
-            "text": "Class member `TestsFlextDbtLdapProtocols.Tests` overrides parent class `FlextTestsProtocols` in an inconsistent manner\n  `TestsFlextDbtLdapProtocols.Tests` has type `type[TestsFlextDbtLdapProtocols.Tests]`, which is not assignable to `type[FlextTestsProtocols.Tests]`, the type of `FlextTestsProtocols.Tests`"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tests/protocols.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 25,
-                  "startColumn": 11
+                  "startLine": 74,
+                  "startColumn": 5
                 }
               }
             }
@@ -346,353 +134,8 @@
     {
       "tool": {
         "driver": {
-          "name": "Mypy",
-          "informationUri": "https://mypy.readthedocs.io/",
-          "rules": []
-        }
-      },
-      "results": []
-    },
-    {
-      "tool": {
-        "driver": {
-          "name": "Pyright",
-          "informationUri": "https://github.com/microsoft/pyright",
-          "rules": [
-            {
-              "id": "reportAttributeAccessIssue",
-              "shortDescription": {
-                "text": "reportAttributeAccessIssue"
-              }
-            },
-            {
-              "id": "reportCallIssue",
-              "shortDescription": {
-                "text": "reportCallIssue"
-              }
-            },
-            {
-              "id": "reportArgumentType",
-              "shortDescription": {
-                "text": "reportArgumentType"
-              }
-            },
-            {
-              "id": "reportReturnType",
-              "shortDescription": {
-                "text": "reportReturnType"
-              }
-            },
-            {
-              "id": "reportIncompatibleVariableOverride",
-              "shortDescription": {
-                "text": "reportIncompatibleVariableOverride"
-              }
-            }
-          ]
-        }
-      },
-      "results": [
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"start_compose_service\" for class \"FlextTestsDocker\"\n\u00a0\u00a0Attribute \"start_compose_service\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 52,
-                  "startColumn": 33
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"stop_compose_service\" for class \"FlextTestsDocker\"\n\u00a0\u00a0Attribute \"stop_compose_service\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 83,
-                  "startColumn": 32
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"communicate\" for class \"CoroutineType[Any, Any, Process]\"\n\u00a0\u00a0Attribute \"communicate\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 149,
-                  "startColumn": 34
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"returncode\" for class \"CoroutineType[Any, Any, Process]\"\n\u00a0\u00a0Attribute \"returncode\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 150,
-                  "startColumn": 24
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportCallIssue",
-          "level": "error",
-          "message": {
-            "text": "Argument missing for parameter \"env\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 152,
-                  "startColumn": 20
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportArgumentType",
-          "level": "error",
-          "message": {
-            "text": "Argument of type \"Path\" cannot be assigned to parameter \"object\" of type \"ReadableBuffer\" in function \"__new__\"\n\u00a0\u00a0\"Path\" is incompatible with protocol \"Buffer\"\n\u00a0\u00a0\u00a0\u00a0\"__buffer__\" is not present"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 152,
-                  "startColumn": 37
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportArgumentType",
-          "level": "error",
-          "message": {
-            "text": "Argument of type \"dict[str, str]\" cannot be assigned to parameter \"encoding\" of type \"str\" in function \"__new__\"\n\u00a0\u00a0\"dict[str, str]\" is not assignable to \"str\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 152,
-                  "startColumn": 50
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportReturnType",
-          "level": "error",
-          "message": {
-            "text": "Type \"CompletedProcess\" is not assignable to return type \"CompletedProcess[str]\"\n\u00a0\u00a0\"CompletedProcess\" is not assignable to \"CompletedProcess[str]\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 161,
-                  "startColumn": 12
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"cursor\" for class \"object\"\n\u00a0\u00a0Attribute \"cursor\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 166,
-                  "startColumn": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"cursor\" for class \"object\"\n\u00a0\u00a0Attribute \"cursor\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 174,
-                  "startColumn": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"cursor\" for class \"object\"\n\u00a0\u00a0Attribute \"cursor\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 191,
-                  "startColumn": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportAttributeAccessIssue",
-          "level": "error",
-          "message": {
-            "text": "Cannot access attribute \"cursor\" for class \"object\"\n\u00a0\u00a0Attribute \"cursor\" is unknown"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/e2e/conftest.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 203,
-                  "startColumn": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "reportIncompatibleVariableOverride",
-          "level": "error",
-          "message": {
-            "text": "\"Tests\" overrides symbol of same name in class \"FlextTestsProtocols\"\n\u00a0\u00a0\"tests.protocols.TestsFlextDbtLdapProtocols.Tests\" is not assignable to \"flext_tests.protocols.FlextTestsProtocols.Tests\"\n\u00a0\u00a0Type \"type[tests.protocols.TestsFlextDbtLdapProtocols.Tests]\" is not assignable to type \"type[flext_tests.protocols.FlextTestsProtocols.Tests]\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/home/marlonsc/flext/flext-dbt-ldap/tests/protocols.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 25,
-                  "startColumn": 11
-                }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tool": {
-        "driver": {
-          "name": "Bandit",
-          "informationUri": "https://bandit.readthedocs.io/",
-          "rules": []
-        }
-      },
-      "results": []
-    },
-    {
-      "tool": {
-        "driver": {
-          "name": "MarkdownLint",
-          "informationUri": "https://github.com/DavidAnson/markdownlint",
-          "rules": []
-        }
-      },
-      "results": []
-    },
-    {
-      "tool": {
-        "driver": {
-          "name": "Go Vet",
-          "informationUri": "https://pkg.go.dev/cmd/vet",
+          "name": "Ruff Formatter",
+          "informationUri": "https://docs.astral.sh/ruff/formatter/",
           "rules": []
         }
       },
