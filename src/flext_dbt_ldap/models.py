@@ -10,6 +10,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from typing import override
 
 from flext_core import FlextModels, FlextResult
@@ -408,26 +409,35 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             logger.info("Initialized LDAP DBT transformer")
 
         @staticmethod
+        def _entry_attrs_mapping(
+            entry: FlextLdapModels.Ldif.Entry,
+        ) -> dict[str, list[str]]:
+            """Get dict[str, list[str]] from entry.attributes (Attributes or Mapping)."""
+            raw = entry.attributes
+            if raw is None:
+                return {}
+            mapping = getattr(raw, "attributes", raw)
+            if not isinstance(mapping, Mapping):
+                return {}
+            out: dict[str, list[str]] = {}
+            for k, v in mapping.items():
+                if isinstance(v, list):
+                    out[k] = [str(x) for x in v]
+                else:
+                    out[k] = [str(v)] if v is not None else []
+            return out
+
+        @staticmethod
         def normalize_attributes(
             entry: FlextLdapModels.Ldif.Entry,
         ) -> dict[str, list[str]]:
             """Normalize entry attributes to dict[str, list[str]]."""
-            raw = entry.attributes
-            attrs: dict[str, list[str]] = {}
-            if isinstance(raw, dict):
-                for k, v in raw.items():
-                    if isinstance(v, list):
-                        attrs[k] = [str(x) for x in v]
-                    else:
-                        attrs[k] = [str(v)] if v is not None else []
-            return attrs
+            return DbtLdapTransformer._entry_attrs_mapping(entry)
 
         @staticmethod
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
-            raw = entry.attributes
-            if not isinstance(raw, dict):
-                return []
+            raw = DbtLdapTransformer._entry_attrs_mapping(entry)
             oc_val = raw.get("objectClass", [])
             if isinstance(oc_val, list):
                 return [str(x) for x in oc_val]
