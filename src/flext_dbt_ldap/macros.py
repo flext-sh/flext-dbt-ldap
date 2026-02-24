@@ -8,8 +8,10 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import FlextLogger
+from pydantic import TypeAdapter, ValidationError
 
 logger = FlextLogger(__name__)
+_STRING_LIST_ADAPTER = TypeAdapter(list[str])
 
 
 class FlextDbtLdapMacros:
@@ -151,12 +153,11 @@ class FlextDbtLdapMacros:
         """
         if value is None:
             return ""
-
-        if isinstance(value, list):
-            # Take first value from list
-            return str(value[0]) if value else ""
-
-        return str(value)
+        try:
+            values = _STRING_LIST_ADAPTER.validate_python(value)
+        except ValidationError:
+            return str(value)
+        return str(values[0]) if values else ""
 
     @staticmethod
     def is_user_active(user_account_control: int | None) -> bool:

@@ -20,8 +20,7 @@ from flext_ldap import (
 )
 from flext_meltano import FlextMeltanoDbtService
 
-from flext_dbt_ldap.models import FlextDbtLdapModels as m
-from flext_dbt_ldap.models import _entry_attrs_mapping
+from flext_dbt_ldap.models import FlextDbtLdapModels as m, _entry_attrs_mapping
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
@@ -135,10 +134,8 @@ class FlextDbtLdapClient:
             for entry in entries:
                 if getattr(entry, "dn", ""):
                     valid_dns += 1
-                attrs = getattr(entry, "attributes", {})
-                if isinstance(attrs, dict) and all(
-                    attr in attrs and attrs[attr] for attr in required_attributes
-                ):
+                attrs = _entry_attrs_mapping(entry)
+                if all(attr in attrs and attrs[attr] for attr in required_attributes):
                     valid_entries += 1
             quality_score = (
                 (valid_entries / total_entries) if total_entries > 0 else 0.0
@@ -263,9 +260,7 @@ class FlextDbtLdapClient:
     ) -> bool:
         """Check if LDAP entry matches schema type."""
         raw = _entry_attrs_mapping(entry)
-        object_classes: list[str] = [
-            str(x) for x in raw.get("objectClass", [])
-        ]
+        object_classes: list[str] = [str(x) for x in raw.get("objectClass", [])]
         schema_mapping: dict[str, list[str]] = {
             "users": ["person", "user", "inetOrgPerson"],
             "groups": ["group", "groupOfNames", "groupOfUniqueNames"],

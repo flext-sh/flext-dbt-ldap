@@ -1,8 +1,0 @@
-{
-  "summary": {
-    "scope": "root",
-    "result": "OK",
-    "reason": "build succeeded",
-    "site_dir": "/home/marlonsc/flext/flext-dbt-ldap/.reports/docs/site"
-  }
-}

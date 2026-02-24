@@ -15,7 +15,7 @@ from flext_core.loggings import FlextLogger
 from flext_core.settings import FlextSettings
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoSettings
-from pydantic import Field, SecretStr, field_validator, model_validator
+from pydantic import Field, SecretStr, ValidationError, field_validator, model_validator
 from pydantic_settings import SettingsConfigDict
 
 from flext_dbt_ldap.constants import c
@@ -773,10 +773,11 @@ class FlextDbtLdapSettings(FlextSettings):
                 if cls not in cls._instances:
                     cls._instances[cls] = cls()
         raw = cls._instances[cls]
-        if not isinstance(raw, cls):
+        try:
+            return cls.model_validate(raw)
+        except ValidationError as exc:
             msg = f"Singleton instance is not of expected type {cls.__name__}"
-            raise TypeError(msg)
-        return raw
+            raise TypeError(msg) from exc
 
     @classmethod
     def reset_shared_instance(cls) -> None:

@@ -219,28 +219,24 @@ class FlextDbtLdapUtilities(u):
         ) -> r[m.DbtTestConfig]:
             """Generate DBT data tests for LDAP transformation models."""
             try:
+                column_tests = [
+                    {
+                        "name": col,
+                        "description": f"Tests for {col} column",
+                        "tests": col_tests,
+                    }
+                    for col, col_tests in test_config.columns.items()
+                ]
                 tests = m.DbtTestConfig(
                     models=[
                         {
                             "name": model_name,
                             "description": f"Data tests for {model_name} LDAP model",
                             "tests": ["unique", "not_null"],
-                            "columns": [],
+                            "columns": column_tests,
                         },
                     ],
                 )
-                # Add column-specific tests from input config
-                if test_config.columns and tests.models:
-                    model_dict = tests.models[0]
-                    if isinstance(model_dict, dict):  # pyright: ignore[reportUnnecessaryIsInstance]
-                        columns_list = model_dict.get("columns")
-                        if isinstance(columns_list, list):
-                            for col, col_tests in test_config.columns.items():
-                                columns_list.append({
-                                    "name": col,
-                                    "description": f"Tests for {col} column",
-                                    "tests": col_tests,
-                                })
                 return r[m.DbtTestConfig].ok(tests)
             except Exception as e:
                 return r[m.DbtTestConfig].fail(

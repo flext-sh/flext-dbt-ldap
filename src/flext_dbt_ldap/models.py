@@ -16,7 +16,7 @@ from typing import override
 from flext_core import FlextModels, FlextResult
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
-from pydantic import Field
+from pydantic import Field, TypeAdapter, ValidationError
 
 from flext_dbt_ldap.typings import t
 
@@ -24,6 +24,9 @@ logger = logging.getLogger(__name__)
 
 # Short alias for FlextResult used throughout this module
 r = FlextResult
+
+_MAPPING_ADAPTER = TypeAdapter(Mapping[str, object])
+_STRING_LIST_ADAPTER = TypeAdapter(list[str])
 
 
 def _entry_attrs_mapping(
@@ -34,14 +37,16 @@ def _entry_attrs_mapping(
     if raw is None:
         return {}
     mapping = getattr(raw, "attributes", raw)
-    if not isinstance(mapping, Mapping):
+    try:
+        validated_mapping = _MAPPING_ADAPTER.validate_python(mapping)
+    except ValidationError:
         return {}
     out: dict[str, list[str]] = {}
-    for k, v in mapping.items():
-        if isinstance(v, list):
-            out[k] = [str(x) for x in v]
-        else:
-            out[k] = [str(v)] if v is not None else []
+    for k, v in validated_mapping.items():
+        try:
+            out[k] = _STRING_LIST_ADAPTER.validate_python(v)
+        except ValidationError:
+            out[k] = [] if v is None else [str(v)]
     return out
 
 
@@ -441,9 +446,10 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             oc_val: object = raw.get("objectClass", [])
             if oc_val is None:
                 return []
-            if isinstance(oc_val, list):
-                return [str(x) for x in oc_val]
-            return [str(oc_val)]
+            try:
+                return _STRING_LIST_ADAPTER.validate_python(oc_val)
+            except ValidationError:
+                return [str(oc_val)]
 
         def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
             """Check if entry is a user entry."""
