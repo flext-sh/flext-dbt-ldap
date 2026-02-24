@@ -31,8 +31,8 @@ _STRING_LIST_ADAPTER = TypeAdapter(list[str])
 
 def _entry_attrs_mapping(
     entry: FlextLdapModels.Ldif.Entry,
-) -> dict[str, list[str]]:
-    """Get dict[str, list[str]] from entry.attributes (Attributes or Mapping)."""
+) -> Mapping[str, list[str]]:
+    """Get Mapping[str, list[str]] from entry.attributes (Attributes or Mapping)."""
     raw = entry.attributes
     if raw is None:
         return {}
@@ -314,7 +314,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 return r[bool].fail("User ID and common name are required")
             return r[bool].ok(value=True)
 
-        def to_dbt_dict(self) -> dict[str, t.JsonValue]:
+        def to_dbt_dict(self) -> Mapping[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -379,7 +379,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 return r[bool].fail("Member count cannot be negative")
             return r[bool].ok(value=True)
 
-        def to_dbt_dict(self) -> dict[str, t.JsonValue]:
+        def to_dbt_dict(self) -> Mapping[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -408,7 +408,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 return r[bool].fail("User DN and Group DN are required")
             return r[bool].ok(value=True)
 
-        def to_dbt_dict(self) -> dict[str, t.JsonValue]:
+        def to_dbt_dict(self) -> Mapping[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -435,8 +435,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         @staticmethod
         def normalize_attributes(
             entry: FlextLdapModels.Ldif.Entry,
-        ) -> dict[str, list[str]]:
-            """Normalize entry attributes to dict[str, list[str]]."""
+        ) -> Mapping[str, list[str]]:
+            """Normalize entry attributes to Mapping[str, list[str]]."""
             return _entry_attrs_mapping(entry)
 
         @staticmethod

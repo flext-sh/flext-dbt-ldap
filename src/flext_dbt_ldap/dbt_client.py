@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from flext_core import FlextLogger, r
@@ -238,7 +238,7 @@ class FlextDbtLdapClient:
     def _prepare_ldap_data_for_dbt(
         self,
         entries: list[FlextLdapModels.Ldif.Entry],
-    ) -> dict[str, list[dict[str, t.JsonValue]]]:
+    ) -> Mapping[str, list[dict[str, t.JsonValue]]]:
         """Prepare LDAP entries for DBT processing."""
         prepared_data: dict[str, list[dict[str, t.JsonValue]]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
@@ -272,7 +272,7 @@ class FlextDbtLdapClient:
     def _map_entry_attributes(
         self,
         entry: FlextLdapModels.Ldif.Entry,
-    ) -> dict[str, t.JsonValue]:
+    ) -> Mapping[str, t.JsonValue]:
         """Map LDAP entry attributes using configuration mapping."""
         dn_str = str(entry.dn) if entry.dn is not None else ""
         mapped_attrs: dict[str, t.JsonValue] = {"dn": dn_str}

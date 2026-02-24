@@ -9,6 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import override
 
 from flext_core import FlextExceptions
@@ -50,7 +51,7 @@ class _DbtLdapContextMixin:
     @staticmethod
     def _build_context(
         **fields: t.MetadataAttributeValue,
-    ) -> dict[str, t.MetadataAttributeValue]:
+    ) -> Mapping[str, t.MetadataAttributeValue]:
         """Build context dictionary from keyword arguments."""
         return {k: v for k, v in fields.items() if v is not None}
 
