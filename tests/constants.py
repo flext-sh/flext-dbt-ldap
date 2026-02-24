@@ -14,4 +14,4 @@ class TestsFlextDbtLdapConstants:
 
 c = TestsFlextDbtLdapConstants
 
-__all__ = ["TestsFlextDbtLdapConstants", "c", "c"]
+__all__ = ["TestsFlextDbtLdapConstants", "c"]

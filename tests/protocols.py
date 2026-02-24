@@ -36,4 +36,4 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 p = TestsFlextDbtLdapProtocols
 p = TestsFlextDbtLdapProtocols
 
-__all__ = ["TestsFlextDbtLdapProtocols", "p", "p"]
+__all__ = ["TestsFlextDbtLdapProtocols", "p"]
