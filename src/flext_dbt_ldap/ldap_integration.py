@@ -25,12 +25,11 @@ class FlextDbtLdapIntegration:
         """Process LDAP entries DataFrame using flext-ldap generic processing."""
         try:
             logger.info("Processing LDAP entries for DBT using flext-ldap delegation")
-            if hasattr(df, "__len__") and callable(getattr(df, "__len__", None)):
-                entry_count = len(df)
-                logger.info(
-                    "Processing %d LDAP entries via flext-ldap API",
-                    entry_count,
-                )
+            entry_count = len(df)
+            logger.info(
+                "Processing %d LDAP entries via flext-ldap API",
+                entry_count,
+            )
             return df
         except Exception:
             logger.exception("Failed to process LDAP entries via flext-ldap delegation")
@@ -43,15 +42,13 @@ class FlextDbtLdapIntegration:
         """Validate LDAP data quality using flext-ldap generic validation."""
         try:
             logger.info("Validating LDAP data quality for DBT")
-            if hasattr(df, "__len__") and callable(getattr(df, "__len__", None)):
-                entry_count = len(df)
-                logger.info("Validating %d LDAP entries", entry_count)
-                return m.ValidationMetrics(
-                    total_entries=entry_count,
-                    valid_dns=entry_count,
-                    quality_score=1.0,
-                )
-            return m.ValidationMetrics()
+            entry_count = len(df)
+            logger.info("Validating %d LDAP entries", entry_count)
+            return m.ValidationMetrics(
+                total_entries=entry_count,
+                valid_dns=entry_count,
+                quality_score=1.0,
+            )
         except Exception:
             logger.exception("Failed to validate LDAP data quality")
             return m.ValidationMetrics()

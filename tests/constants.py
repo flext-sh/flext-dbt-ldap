@@ -12,6 +12,6 @@ class TestsFlextDbtLdapConstants:
     pass
 
 
-tc = TestsFlextDbtLdapConstants
+c = TestsFlextDbtLdapConstants
 
-__all__ = ["TestsFlextDbtLdapConstants", "c", "tc"]
+__all__ = ["TestsFlextDbtLdapConstants", "c", "c"]

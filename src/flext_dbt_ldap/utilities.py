@@ -6,6 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -179,7 +180,7 @@ class FlextDbtLdapUtilities(u):
         def create_ldap_transformation_model(
             model_name: str,
             source_table: str,
-            transformations: dict[str, str],
+            transformations: Mapping[str, str],
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:

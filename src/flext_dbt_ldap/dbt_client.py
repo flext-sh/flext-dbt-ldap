@@ -238,14 +238,14 @@ class FlextDbtLdapClient:
     def _prepare_ldap_data_for_dbt(
         self,
         entries: list[FlextLdapModels.Ldif.Entry],
-    ) -> Mapping[str, list[dict[str, t.JsonValue]]]:
+    ) -> Mapping[str, Sequence[Mapping[str, t.JsonValue]]]:
         """Prepare LDAP entries for DBT processing."""
-        prepared_data: dict[str, list[dict[str, t.JsonValue]]] = {}
+        prepared_data: dict[str, list[Mapping[str, t.JsonValue]]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
-            table_data: list[dict[str, t.JsonValue]] = [
+            table_data: list[Mapping[str, t.JsonValue]] = [
                 self._map_entry_attributes(entry) for entry in schema_entries
             ]
             prepared_data[table_name] = table_data
