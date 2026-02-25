@@ -36,7 +36,7 @@ def _entry_attrs_mapping(
     raw = entry.attributes
     if raw is None:
         return {}
-    mapping = getattr(raw, "attributes", raw)
+    mapping = raw.attributes if hasattr(raw, "attributes") else raw
     try:
         validated_mapping = _MAPPING_ADAPTER.validate_python(mapping)
     except ValidationError:

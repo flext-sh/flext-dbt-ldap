@@ -140,7 +140,7 @@ class FlextDbtLdapClient:
             valid_dns = 0
             valid_entries = 0
             for entry in entries:
-                if getattr(entry, "dn", ""):
+                if entry.dn if hasattr(entry, "dn") else "":
                     valid_dns += 1
                 attrs = _entry_attrs_mapping(entry)
                 if all(attr in attrs and attrs[attr] for attr in required_attributes):

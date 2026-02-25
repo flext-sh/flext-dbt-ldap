@@ -85,8 +85,10 @@ def postgres_container(
     def _default_stop(_path: str) -> _StopResult:
         return _StopResult()
 
-    stop_result = getattr(flext_docker, "stop_compose_stack", _default_stop)(
-        str(compose_file)
+    stop_result = (
+        flext_docker.stop_compose_stack
+        if hasattr(flext_docker, "stop_compose_stack")
+        else _default_stop(str(compose_file))
     )
     if stop_result.is_failure and stop_result.error:
         logger.warning(

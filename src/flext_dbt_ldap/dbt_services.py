@@ -48,7 +48,11 @@ class FlextDbtLdapService:
         logger.info("Initialized DBT LDAP service")
 
     def _resolve_sync_state_file(self) -> Path:
-        configured_state_file = getattr(self.config, "sync_state_file", None)
+        configured_state_file = (
+            self.config.sync_state_file
+            if hasattr(self.config, "sync_state_file")
+            else None
+        )
         if isinstance(configured_state_file, str) and configured_state_file:
             return Path(configured_state_file)
         return Path(self.config.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
