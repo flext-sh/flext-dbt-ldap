@@ -600,7 +600,7 @@ class FlextDbtLdapSettings(FlextSettings):
                 )
 
             return r[bool].ok(True)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[bool].fail(f"Business rules validation failed: {e}")
 
     def get_ldap_config(self) -> FlextLdapModels.Ldap.ConnectionConfig:

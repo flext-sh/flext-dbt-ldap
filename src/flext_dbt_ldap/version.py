@@ -21,7 +21,7 @@ class FlextDbtLdapVersion:
         super().__init__()
         try:
             self._metadata: PackageMetadata = metadata("flext-dbt-ldap")
-        except Exception:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
             # Fallback for development/testing - use metadata() on a known package
             # and override with our defaults
             self._metadata = metadata(
@@ -82,7 +82,7 @@ def _create_version() -> FlextResult[FlextDbtLdapVersion]:
     try:
         version = FlextDbtLdapVersion()
         return FlextResult[FlextDbtLdapVersion].ok(version)
-    except Exception as e:
+    except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
         return FlextResult[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
 
 

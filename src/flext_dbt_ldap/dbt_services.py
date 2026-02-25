@@ -7,7 +7,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import json
 from collections.abc import Sequence
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import override
 
 from flext_core import r
@@ -40,7 +43,88 @@ class FlextDbtLdapService:
         self.client = client or FlextDbtLdapClient(self.config, ldap_api=ldap_api)
         self.transformer = transformer or m.DbtLdap()
         self._dbt_service = FlextMeltanoDbtService()
+        self._sync_state_file = self._resolve_sync_state_file()
+        self._sync_bookmarks = self._load_sync_state()
         logger.info("Initialized DBT LDAP service")
+
+    def _resolve_sync_state_file(self) -> Path:
+        configured_state_file = getattr(self.config, "sync_state_file", None)
+        if isinstance(configured_state_file, str) and configured_state_file:
+            return Path(configured_state_file)
+        return Path(self.config.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
+
+    def _load_sync_state(self) -> dict[str, str]:
+        if not self._sync_state_file.exists():
+            return {}
+        try:
+            payload = json.loads(self._sync_state_file.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            logger.exception("Failed to read sync state file")
+            return {}
+
+        if not isinstance(payload, dict):
+            return {}
+
+        bookmarks: dict[str, str] = {}
+        for key, value in payload.items():
+            if isinstance(key, str) and isinstance(value, str):
+                bookmarks[key] = value
+        return bookmarks
+
+    def _persist_sync_state(self) -> None:
+        self._sync_state_file.parent.mkdir(parents=True, exist_ok=True)
+        self._sync_state_file.write_text(
+            json.dumps(self._sync_bookmarks, indent=2, sort_keys=True),
+            encoding="utf-8",
+        )
+
+    def _bookmark_now(self) -> str:
+        return datetime.now(UTC).strftime("%Y%m%d%H%M%SZ")
+
+    def _build_incremental_filter(self, base_filter: str, bookmark: str | None) -> str:
+        if bookmark is None:
+            return base_filter
+        return f"(&{base_filter}(modifyTimestamp>={bookmark}))"
+
+    def _should_run_incremental(
+        self,
+        sync_key: str,
+        requested_incremental: bool,
+        current_bookmark: str,
+    ) -> bool:
+        if not requested_incremental:
+            return False
+
+        previous_bookmark = self._sync_bookmarks.get(sync_key)
+        if previous_bookmark is None:
+            logger.info(
+                "No previous bookmark for %s; running full sync",
+                sync_key,
+            )
+            return False
+
+        if previous_bookmark >= current_bookmark:
+            logger.info(
+                "Bookmark %s not older than current %s for %s; running full sync",
+                previous_bookmark,
+                current_bookmark,
+                sync_key,
+            )
+            return False
+
+        return True
+
+    def _update_bookmark(
+        self, sync_key: str, bookmark: str, *, successful: bool
+    ) -> None:
+        if not successful:
+            return
+
+        self._sync_bookmarks[sync_key] = bookmark
+        try:
+            self._persist_sync_state()
+        except OSError:
+            logger.exception("Failed to persist bookmark state")
 
     def sync_users_to_warehouse(
         self,
@@ -51,9 +135,18 @@ class FlextDbtLdapService:
         """Synchronize LDAP users to data warehouse."""
         try:
             logger.info("Starting user sync to warehouse, incremental=%s", incremental)
+            current_bookmark = self._bookmark_now()
             user_filter = "(objectClass=person)"
-            if incremental:
-                logger.info("Incremental sync not yet implemented, doing full sync")
+            run_incremental = self._should_run_incremental(
+                "users",
+                incremental,
+                current_bookmark,
+            )
+            if run_incremental:
+                user_filter = self._build_incremental_filter(
+                    user_filter,
+                    self._sync_bookmarks.get("users"),
+                )
 
             result = self.client.run_full_pipeline(
                 search_base=search_base,
@@ -70,10 +163,19 @@ class FlextDbtLdapService:
             )
             if result.is_success:
                 logger.info("User sync completed successfully")
+                self._update_bookmark("users", current_bookmark, successful=True)
             else:
                 logger.error("User sync failed: %s", result.error)
             return result
-        except Exception as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during user sync")
             return r[m.DbtLdapPipelineResult].fail(f"User sync error: {e}")
 
@@ -86,9 +188,18 @@ class FlextDbtLdapService:
         """Synchronize LDAP groups to data warehouse."""
         try:
             logger.info("Starting group sync to warehouse, incremental=%s", incremental)
+            current_bookmark = self._bookmark_now()
             group_filter = "(objectClass=group)"
-            if incremental:
-                logger.info("Incremental sync not yet implemented, doing full sync")
+            run_incremental = self._should_run_incremental(
+                "groups",
+                incremental,
+                current_bookmark,
+            )
+            if run_incremental:
+                group_filter = self._build_incremental_filter(
+                    group_filter,
+                    self._sync_bookmarks.get("groups"),
+                )
 
             result = self.client.run_full_pipeline(
                 search_base=search_base,
@@ -98,10 +209,19 @@ class FlextDbtLdapService:
             )
             if result.is_success:
                 logger.info("Group sync completed successfully")
+                self._update_bookmark("groups", current_bookmark, successful=True)
             else:
                 logger.error("Group sync failed: %s", result.error)
             return result
-        except Exception as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during group sync")
             return r[m.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
 
@@ -125,7 +245,15 @@ class FlextDbtLdapService:
             else:
                 logger.error("Membership sync failed: %s", result.error)
             return result
-        except Exception as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during membership sync")
             return r[m.DbtLdapPipelineResult].fail(f"Membership sync error: {e}")
 
@@ -177,7 +305,10 @@ class FlextDbtLdapService:
     ) -> r[m.ValidationMetrics]:
         """Validate data quality in the warehouse."""
         try:
-            logger.info("Validating warehouse data quality for models: %s", model_names)
+            logger.info(
+                "Validating warehouse data quality for models: %s",
+                str(model_names),
+            )
             model_list = list(model_names) if model_names else None
             test_result = self._dbt_service.run_models(models=model_list)
 
@@ -190,7 +321,15 @@ class FlextDbtLdapService:
             return r[m.ValidationMetrics].fail(
                 test_result.error or "DBT tests failed",
             )
-        except Exception as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during data quality validation")
             return r[m.ValidationMetrics].fail(
                 f"Data quality validation error: {e}",
@@ -202,7 +341,7 @@ class FlextDbtLdapService:
     ) -> r[m.DbtRunStatus]:
         """Run DBT models."""
         try:
-            logger.info("Running DBT models: %s", model_names)
+            logger.info("Running DBT models: %s", str(model_names))
             model_list = list(model_names) if model_names else None
             run_result = self._dbt_service.run_models(models=model_list)
 
@@ -218,7 +357,15 @@ class FlextDbtLdapService:
             return r[m.DbtRunStatus].fail(
                 run_result.error or "DBT model execution failed",
             )
-        except Exception as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during DBT model execution")
             return r[m.DbtRunStatus].fail(f"DBT model execution error: {e}")
 
@@ -235,7 +382,15 @@ class FlextDbtLdapService:
             )
             logger.info("Analytics report generated successfully")
             return r[m.AnalyticsReport].ok(report)
-        except Exception as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during report generation")
             return r[m.AnalyticsReport].fail(f"Report generation error: {e}")
 

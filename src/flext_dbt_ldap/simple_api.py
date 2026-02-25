@@ -57,7 +57,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 ldap_base_dn=ldap_base_dn,
             )
             return r[FlextDbtLdapSettings].ok(config)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[FlextDbtLdapSettings].fail(f"Config creation failed: {e}")
 
     # =============================================================================
@@ -95,7 +95,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
             client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
             return r[FlextDbtLdapClient].ok(client)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
 
     def create_service(self) -> r[FlextDbtLdapService]:
@@ -104,7 +104,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             self.logger.info("Creating DBT LDAP service")
             service = FlextDbtLdapService(self.config)
             return r[FlextDbtLdapService].ok(service)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[FlextDbtLdapService].fail(
                 f"Service creation failed: {e}",
             )
@@ -132,7 +132,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 email=email,
             )
             return r[m.UserDimension].ok(user)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[m.UserDimension].fail(
                 f"User dimension creation failed: {e}",
             )
@@ -156,7 +156,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 description=description,
             )
             return r[m.GroupDimension].ok(group)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[m.GroupDimension].fail(
                 f"Group dimension creation failed: {e}",
             )
@@ -167,7 +167,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             self.logger.debug("Creating LDAP transformer")
             transformer = m.DbtLdap()
             return r[m.DbtLdap].ok(transformer)
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[m.DbtLdap].fail(
                 f"Transformer creation failed: {e}",
             )
@@ -218,7 +218,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 )
 
             return self.create_service()
-        except Exception as e:
+        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
             return r[FlextDbtLdapService].fail(
                 f"Pipeline creation failed: {e}",
             )
