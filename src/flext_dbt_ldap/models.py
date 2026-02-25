@@ -491,7 +491,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                                 entry,
                             ),
                         )
-                    except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+                    except (
+                        ValueError,
+                        TypeError,
+                        KeyError,
+                        AttributeError,
+                        OSError,
+                        RuntimeError,
+                        ImportError,
+                    ):
                         logger.exception(
                             "Failed to transform user entry: %s",
                             entry.dn,
@@ -517,7 +525,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                                 entry,
                             ),
                         )
-                    except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+                    except (
+                        ValueError,
+                        TypeError,
+                        KeyError,
+                        AttributeError,
+                        OSError,
+                        RuntimeError,
+                        ImportError,
+                    ):
                         logger.exception(
                             "Failed to transform group entry: %s",
                             entry.dn,
@@ -545,7 +561,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         membership_facts.extend(
                             self._extract_user_memberships(entry),
                         )
-                except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+                except (
+                    ValueError,
+                    TypeError,
+                    KeyError,
+                    AttributeError,
+                    OSError,
+                    RuntimeError,
+                    ImportError,
+                ):
                     logger.exception(
                         "Failed to transform memberships for entry: %s",
                         entry.dn,

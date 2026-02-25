@@ -65,7 +65,15 @@ class FlextDbtLdapUtilities(u):
                     tags=["ldap", "transformation"],
                 )
                 return r[m.DbtProjectConfig].ok(project_config)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.DbtProjectConfig].fail(
                     f"DBT project config creation failed: {e}",
                 )
@@ -79,7 +87,15 @@ class FlextDbtLdapUtilities(u):
             try:
                 _ = profile_name
                 return r[m.DbtProfileConfig].ok(connection_config)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.DbtProfileConfig].fail(
                     f"DBT profiles generation failed: {e}",
                 )
@@ -104,7 +120,15 @@ class FlextDbtLdapUtilities(u):
                 return r[m.ProjectStructureValidation].ok(
                     m.ProjectStructureValidation(results=results),
                 )
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.ProjectStructureValidation].fail(
                     f"DBT project structure validation failed: {e}",
                 )
@@ -171,7 +195,15 @@ class FlextDbtLdapUtilities(u):
                     ],
                 )
                 return r[m.DbtSourceSchema].ok(source_schema)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.DbtSourceSchema].fail(
                     f"LDAP source schema generation failed: {e}",
                 )
@@ -208,7 +240,15 @@ class FlextDbtLdapUtilities(u):
                     "    and objectclass is not null\n",
                 ])
                 return r[str].ok(model_sql)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[str].fail(
                     f"LDAP transformation model creation failed: {e}",
                 )
@@ -239,7 +279,15 @@ class FlextDbtLdapUtilities(u):
                     ],
                 )
                 return r[m.DbtTestConfig].ok(tests)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.DbtTestConfig].fail(
                     f"LDAP data tests generation failed: {e}",
                 )
@@ -272,7 +320,15 @@ class FlextDbtLdapUtilities(u):
     end
 {{% endmacro %}}"""
                 return r[str].ok(macro_sql)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[str].fail(f"LDAP parsing macro creation failed: {e}")
 
         @staticmethod
@@ -300,7 +356,15 @@ class FlextDbtLdapUtilities(u):
                     "{% endmacro %}",
                 ])
                 return r[str].ok(macro_sql)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[str].fail(
                     f"LDAP attribute macro creation failed: {e}",
                 )
@@ -327,7 +391,15 @@ class FlextDbtLdapUtilities(u):
  end
 {{% endmacro %}}"""
                 return r[str].ok(macro_sql)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[str].fail(
                     f"LDAP normalization macro creation failed: {e}",
                 )
@@ -391,7 +463,15 @@ class FlextDbtLdapUtilities(u):
                     ],
                 )
                 return r[m.DbtModelDefinition].ok(user_schema)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.DbtModelDefinition].fail(
                     f"User schema generation failed: {e}",
                 )
@@ -435,7 +515,15 @@ class FlextDbtLdapUtilities(u):
                     ],
                 )
                 return r[m.DbtModelDefinition].ok(group_schema)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.DbtModelDefinition].fail(
                     f"Group schema generation failed: {e}",
                 )
@@ -464,7 +552,15 @@ class FlextDbtLdapUtilities(u):
                         "where 1=1\n    -- Apply filters early for performance",
                     )
                 return r[str].ok(optimized_query)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[str].fail(f"Query optimization failed: {e}")
 
         @classmethod
@@ -503,7 +599,15 @@ class FlextDbtLdapUtilities(u):
                     recommendations=recommendations,
                 )
                 return r[m.PerformanceAnalysis].ok(analysis)
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
                 return r[m.PerformanceAnalysis].fail(
                     f"Performance analysis failed: {e}",
                 )

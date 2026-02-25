@@ -31,7 +31,15 @@ class FlextDbtLdapIntegration:
                 entry_count,
             )
             return df
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ):
             logger.exception("Failed to process LDAP entries via flext-ldap delegation")
             return df
 
@@ -49,7 +57,15 @@ class FlextDbtLdapIntegration:
                 valid_dns=entry_count,
                 quality_score=1.0,
             )
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ):
             logger.exception("Failed to validate LDAP data quality")
             return m.ValidationMetrics()
 

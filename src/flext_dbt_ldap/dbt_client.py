@@ -114,7 +114,15 @@ class FlextDbtLdapClient:
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during LDAP extraction")
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 f"LDAP extraction error: {e}",
@@ -156,7 +164,15 @@ class FlextDbtLdapClient:
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
             return r[m.ValidationMetrics].ok(metrics)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during LDAP validation")
             return r[m.ValidationMetrics].fail(
                 f"LDAP validation error: {e}",
@@ -191,7 +207,15 @@ class FlextDbtLdapClient:
             )
             logger.info("DBT transformation completed successfully")
             return r[m.DbtRunStatus].ok(result_data)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             logger.exception("Unexpected error during DBT transformation")
             return r[m.DbtRunStatus].fail(
                 f"DBT transformation error: {e}",
@@ -313,7 +337,15 @@ class FlextDbtLdapClient:
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 result.error or "Search returned no results",
             )
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 f"LDAP search failed: {e}",
             )

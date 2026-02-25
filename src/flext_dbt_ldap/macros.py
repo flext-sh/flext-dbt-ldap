@@ -40,7 +40,15 @@ class FlextDbtLdapMacros:
                     if key.lower() == component.lower():
                         return value
                 return None
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ):
                 logger.exception("Failed to parse DN component: %s", dn)
                 return None
 
@@ -60,7 +68,15 @@ class FlextDbtLdapMacros:
                 if len(parts) > 1:
                     return ",".join(parts[1:])
                 return None
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ):
                 logger.exception("Failed to get parent DN: %s", dn)
                 return None
 
@@ -81,7 +97,15 @@ class FlextDbtLdapMacros:
             try:
                 # Basic passthrough; customize if needed
                 return timestamp
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ):
                 logger.exception("Error converting timestamp: %s", timestamp)
                 return None
 

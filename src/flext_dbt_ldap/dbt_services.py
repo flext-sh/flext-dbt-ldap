@@ -65,10 +65,11 @@ class FlextDbtLdapService:
         if not isinstance(payload, dict):
             return {}
 
-        bookmarks: dict[str, str] = {}
-        for key, value in payload.items():
-            if isinstance(key, str) and isinstance(value, str):
-                bookmarks[key] = value
+        bookmarks: dict[str, str] = {
+            key: value
+            for key, value in payload.items()
+            if isinstance(key, str) and isinstance(value, str)
+        }
         return bookmarks
 
     def _persist_sync_state(self) -> None:
