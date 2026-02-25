@@ -308,7 +308,7 @@ class FlextDbtLdapClient:
 
             if result.is_success and result.value:
                 entries = result.value.entries
-                return r[list[FlextLdapModels.Ldif.Entry]].ok(entries)  # type: ignore[arg-type]
+                return r[list[FlextLdapModels.Ldif.Entry]].ok(entries)
 
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 result.error or "Search returned no results",
