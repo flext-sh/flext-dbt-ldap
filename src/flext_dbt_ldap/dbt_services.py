@@ -94,6 +94,7 @@ class FlextDbtLdapService:
     def _should_run_incremental(
         self,
         sync_key: str,
+        *,
         requested_incremental: bool,
         current_bookmark: str,
     ) -> bool:
