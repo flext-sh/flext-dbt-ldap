@@ -78,12 +78,12 @@ logs/
 *backup*
 
 # Validation and test scripts outside proper directories
-**/validate*.sh
-**/validate*.py
+/validate*.sh
+/validate*.py
 **/validate*.yml
 **/validate*.yaml
-**/test*.sh
-**/test*.py
+/test*.sh
+/test*.py
 **/test*.yml
 **/test*.yaml
 
