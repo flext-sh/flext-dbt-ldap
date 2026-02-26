@@ -10,4 +10,7 @@ class TestsFlextDbtLdapConstants:
     pass
 
 
-__all__ = ["TestsFlextDbtLdapConstants"]
+__all__ = ["TestsFlextDbtLdapConstants", "c"]
+
+# Alias for convenience
+c = TestsFlextDbtLdapConstants

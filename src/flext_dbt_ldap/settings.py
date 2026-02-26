@@ -784,7 +784,7 @@ class FlextDbtLdapSettings(FlextSettings):
         try:
             return cls.model_validate(raw)
         except ValidationError as exc:
-            msg = f"Singleton instance is not of expected type {cls.__name__}"
+            msg = f"Singleton instance is not of expected type {type(cls).__name__}"
             raise TypeError(msg) from exc
 
     @classmethod
