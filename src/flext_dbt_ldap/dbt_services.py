@@ -312,7 +312,7 @@ class FlextDbtLdapService:
         try:
             logger.info(
                 "Validating warehouse data quality for models: %s",
-                str(model_names),
+                model_names,
             )
             model_list = list(model_names) if model_names else None
             test_result = self._dbt_service.run_models(models=model_list)
@@ -346,7 +346,7 @@ class FlextDbtLdapService:
     ) -> r[m.DbtRunStatus]:
         """Run DBT models."""
         try:
-            logger.info("Running DBT models: %s", str(model_names))
+            logger.info("Running DBT models: %s", model_names)
             model_list = list(model_names) if model_names else None
             run_result = self._dbt_service.run_models(models=model_list)
 

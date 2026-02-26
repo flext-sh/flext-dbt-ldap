@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from flext_core import c
-
 
 # Project-specific test constants namespace
 class TestsFlextDbtLdapConstants:
@@ -12,6 +10,4 @@ class TestsFlextDbtLdapConstants:
     pass
 
 
-c = TestsFlextDbtLdapConstants
-
-__all__ = ["TestsFlextDbtLdapConstants", "c"]
+__all__ = ["TestsFlextDbtLdapConstants"]
