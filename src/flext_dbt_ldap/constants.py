@@ -10,10 +10,11 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import ClassVar, Final, Literal
 
-from flext_core import FlextConstants
+from flext_ldap import FlextLdapConstants
+from flext_meltano import FlextMeltanoConstants
 
 
-class FlextDbtLdapConstants(FlextConstants):
+class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
 
     class DbtLdap:
