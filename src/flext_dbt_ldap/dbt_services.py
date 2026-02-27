@@ -145,8 +145,8 @@ class FlextDbtLdapService:
             user_filter = "(objectClass=person)"
             run_incremental = self._should_run_incremental(
                 "users",
-                incremental,
-                current_bookmark,
+                requested_incremental=incremental,
+                current_bookmark=current_bookmark,
             )
             if run_incremental:
                 user_filter = self._build_incremental_filter(
@@ -198,8 +198,8 @@ class FlextDbtLdapService:
             group_filter = "(objectClass=group)"
             run_incremental = self._should_run_incremental(
                 "groups",
-                incremental,
-                current_bookmark,
+                requested_incremental=incremental,
+                current_bookmark=current_bookmark,
             )
             if run_incremental:
                 group_filter = self._build_incremental_filter(

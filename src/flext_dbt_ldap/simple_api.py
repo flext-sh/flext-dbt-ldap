@@ -6,6 +6,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from typing import override
+
 from flext_core import (
     FlextService,
     r,
@@ -88,6 +90,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         return self._service
 
     @property
+    @override
+
     def config(self) -> FlextDbtLdapSettings:
         """Get the current configuration."""
         return self._dbt_ldap_config
