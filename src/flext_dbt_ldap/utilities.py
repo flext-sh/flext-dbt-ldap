@@ -6,8 +6,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
-
 from collections.abc import Mapping
 from enum import StrEnum
 from pathlib import Path
@@ -19,7 +17,7 @@ from flext_core.utilities import u
 from pydantic import BeforeValidator
 
 from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import FlextDbtLdapModels as m
+from flext_dbt_ldap.models import m
 
 
 class FlextDbtLdapUtilities(u):

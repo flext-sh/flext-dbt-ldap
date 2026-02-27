@@ -7,8 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
-
 from pathlib import Path
 from typing import ClassVar, override
 
@@ -773,7 +771,6 @@ class FlextDbtLdapSettings(FlextSettings):
     @classmethod
     @override
     @override
-
     def get_global_instance(cls) -> FlextDbtLdapSettings:
         """Get the global singleton instance using FlextSettings pattern."""
         return cls.get_or_create_shared_instance()
@@ -801,7 +798,6 @@ class FlextDbtLdapSettings(FlextSettings):
     @classmethod
     @override
     @override
-
     def reset_global_instance(cls) -> None:
         """Reset the global FlextDbtLdapSettings instance (mainly for testing)."""
         # Use the enhanced FlextSettings reset mechanism

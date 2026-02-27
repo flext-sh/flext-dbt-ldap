@@ -15,7 +15,7 @@ from flext_core import (
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
-from flext_dbt_ldap.models import FlextDbtLdapModels as m
+from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
@@ -91,7 +91,6 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
 
     @property
     @override
-
     def config(self) -> FlextDbtLdapSettings:
         """Get the current configuration."""
         return self._dbt_ldap_config

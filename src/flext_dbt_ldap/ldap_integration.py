@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from flext_core import FlextLogger
 
-from flext_dbt_ldap.models import FlextDbtLdapModels as m
+from flext_dbt_ldap.models import m
 from flext_dbt_ldap.protocols import p
 
 logger = FlextLogger(__name__)
