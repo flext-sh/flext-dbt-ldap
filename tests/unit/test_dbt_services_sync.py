@@ -17,7 +17,9 @@ from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 
-def test_sync_users_uses_incremental_bookmark_and_persists_state(tmp_path: Path) -> None:
+def test_sync_users_uses_incremental_bookmark_and_persists_state(
+    tmp_path: Path,
+) -> None:
     state_file = tmp_path / "sync-state.json"
     state_file.write_text(
         json.dumps({"users": "20250101000000Z"}),
