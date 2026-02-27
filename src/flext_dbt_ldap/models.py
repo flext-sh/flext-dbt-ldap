@@ -65,7 +65,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # RESULT MODELS
     # =========================================================================
 
-    class ValidationMetrics(FlextModels.ValueObject):
+    class ValidationMetrics(FlextModels.Value):
         """Validation metrics for LDAP data quality."""
 
         total_entries: int = 0
@@ -74,26 +74,26 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         quality_score: float = 0.0
         validation_passed: bool = False
 
-    class DbtRunStatus(FlextModels.ValueObject):
+    class DbtRunStatus(FlextModels.Value):
         """Status of a DBT transformation run."""
 
         status: str = "pending"
         models_run: list[str] = Field(default_factory=list)
         entries_processed: int = 0
 
-    class DbtLdapPipelineResult(FlextModels.ValueObject):
+    class DbtLdapPipelineResult(FlextModels.Value):
         """Result of a complete LDAP-to-DBT pipeline run."""
 
         extracted_entries: int = 0
 
-    class SyncResult(FlextModels.ValueObject):
+    class SyncResult(FlextModels.Value):
         """Result of full data warehouse sync."""
 
         overall_success: bool = False
         successful_components: int = 0
         total_components: int = 0
 
-    class PerformanceAnalysis(FlextModels.ValueObject):
+    class PerformanceAnalysis(FlextModels.Value):
         """Performance analysis metrics."""
 
         execution_time: float = 0.0
@@ -101,14 +101,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         memory_usage: float = 0.0
         recommendations: list[str] = Field(default_factory=list)
 
-    class ServiceStatus(FlextModels.ValueObject):
+    class ServiceStatus(FlextModels.Value):
         """Service status and capabilities."""
 
         status: str = "operational"
         service: str = ""
         capabilities: list[str] = Field(default_factory=list)
 
-    class AnalyticsReport(FlextModels.ValueObject):
+    class AnalyticsReport(FlextModels.Value):
         """Analytics report data."""
 
         report_type: str = "summary"
@@ -118,7 +118,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # DBT CONFIGURATION MODELS
     # =========================================================================
 
-    class DbtProjectConfig(FlextModels.ValueObject):
+    class DbtProjectConfig(FlextModels.Value):
         """DBT project configuration (dbt_project.yml)."""
 
         name: str
@@ -138,7 +138,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         tags: list[str] = Field(default_factory=list)
         materialized: str = "table"
 
-    class DbtProfileConfig(FlextModels.ValueObject):
+    class DbtProfileConfig(FlextModels.Value):
         """DBT profile connection configuration."""
 
         type: str = "postgres"
@@ -150,57 +150,57 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         schema_name: str = "public"
         threads: int = 4
 
-    class DbtSourceTable(FlextModels.ValueObject):
+    class DbtSourceTable(FlextModels.Value):
         """DBT source table definition."""
 
         name: str
         description: str = ""
 
-    class DbtSourceSchema(FlextModels.ValueObject):
+    class DbtSourceSchema(FlextModels.Value):
         """DBT source schema definition."""
 
         version: str = "2"
         sources: list[dict[str, t.JsonValue]] = Field(default_factory=list)
 
-    class DbtModelDefinition(FlextModels.ValueObject):
+    class DbtModelDefinition(FlextModels.Value):
         """DBT model definition (schema.yml)."""
 
         version: str = "2"
         models: list[dict[str, t.JsonValue]] = Field(default_factory=list)
 
-    class DbtTestConfig(FlextModels.ValueObject):
+    class DbtTestConfig(FlextModels.Value):
         """DBT test configuration."""
 
         version: str = "2"
         models: list[dict[str, t.JsonValue]] = Field(default_factory=list)
         columns: dict[str, list[str]] = Field(default_factory=dict)
 
-    class DbtSourceFreshness(FlextModels.ValueObject):
+    class DbtSourceFreshness(FlextModels.Value):
         """DBT source freshness configuration."""
 
         warn_after: dict[str, int] = Field(default_factory=dict)
         error_after: dict[str, int] = Field(default_factory=dict)
 
-    class DbtSourceDefinition(FlextModels.ValueObject):
+    class DbtSourceDefinition(FlextModels.Value):
         """Complete DBT source definition."""
 
         name: str
         description: str = ""
         tables: list[dict[str, t.JsonValue]] = Field(default_factory=list)
 
-    class DbtConfig(FlextModels.ValueObject):
+    class DbtConfig(FlextModels.Value):
         """General DBT execution configuration."""
 
         target: str = "dev"
         profiles_dir: str = ""
         project_dir: str = ""
 
-    class ProjectStructureValidation(FlextModels.ValueObject):
+    class ProjectStructureValidation(FlextModels.Value):
         """DBT project structure validation result."""
 
         results: dict[str, bool] = Field(default_factory=dict)
 
-    class OptimizationHints(FlextModels.ValueObject):
+    class OptimizationHints(FlextModels.Value):
         """Query optimization hints."""
 
         add_indexes: bool = False
@@ -212,20 +212,20 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # TRANSFORMATION MODELS
     # =========================================================================
 
-    class TransformationConfig(FlextModels.ValueObject):
+    class TransformationConfig(FlextModels.Value):
         """Transformation configuration."""
 
         source_table: str = ""
         transformations: dict[str, str] = Field(default_factory=dict)
         filters: list[str] = Field(default_factory=list)
 
-    class TransformationRule(FlextModels.ValueObject):
+    class TransformationRule(FlextModels.Value):
         """Transformation rule definition."""
 
         name: str = ""
         rules: dict[str, str] = Field(default_factory=dict)
 
-    class DataValidationConfig(FlextModels.ValueObject):
+    class DataValidationConfig(FlextModels.Value):
         """Data validation configuration."""
 
         min_quality_threshold: str = "0.8"
@@ -237,13 +237,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # LDAP MODELS
     # =========================================================================
 
-    class LdapSchema(FlextModels.ValueObject):
+    class LdapSchema(FlextModels.Value):
         """LDAP schema configuration."""
 
         object_classes: list[str] = Field(default_factory=list)
         required_attributes: list[str] = Field(default_factory=list)
 
-    class LdapQuery(FlextModels.ValueObject):
+    class LdapQuery(FlextModels.Value):
         """LDAP query configuration."""
 
         base_dn: str = ""
