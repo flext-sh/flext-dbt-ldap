@@ -95,6 +95,16 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         """Get the current configuration."""
         return self._dbt_ldap_config
 
+    @override
+    def execute(self) -> r[FlextDbtLdapSettings]:
+        """Execute DBT LDAP domain service logic."""
+        client_result = self.create_client()
+        if client_result.is_failure:
+            return r[FlextDbtLdapSettings].fail(
+                f"Failed to create client: {client_result.error}",
+            )
+        return r[FlextDbtLdapSettings].ok(self.config)
+
     # =============================================================================
     # FACTORY METHODS
     # =============================================================================
