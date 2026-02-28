@@ -50,23 +50,50 @@ if TYPE_CHECKING:
 # Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdap": ("flext_dbt_ldap.simple_api", "FlextDbtLdap"),
-    "FlextDbtLdapAuthenticationError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapAuthenticationError"),
+    "FlextDbtLdapAuthenticationError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapAuthenticationError",
+    ),
     "FlextDbtLdapClient": ("flext_dbt_ldap.dbt_client", "FlextDbtLdapClient"),
-    "FlextDbtLdapConnectionError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapConnectionError"),
+    "FlextDbtLdapConnectionError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapConnectionError",
+    ),
     "FlextDbtLdapConstants": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
-    "FlextDbtLdapDeprecationWarning": ("flext_dbt_ldap.deprecation_warnings", "FlextDbtLdapDeprecationWarning"),
+    "FlextDbtLdapDeprecationWarning": (
+        "flext_dbt_ldap.deprecation_warnings",
+        "FlextDbtLdapDeprecationWarning",
+    ),
     "FlextDbtLdapError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapError"),
-    "FlextDbtLdapMacroError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapMacroError"),
-    "FlextDbtLdapModelError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapModelError"),
+    "FlextDbtLdapMacroError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapMacroError",
+    ),
+    "FlextDbtLdapModelError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapModelError",
+    ),
     "FlextDbtLdapModels": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
-    "FlextDbtLdapProcessingError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapProcessingError"),
+    "FlextDbtLdapProcessingError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapProcessingError",
+    ),
     "FlextDbtLdapSettings": ("flext_dbt_ldap.settings", "FlextDbtLdapSettings"),
-    "FlextDbtLdapSettingsurationError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapSettingsurationError"),
+    "FlextDbtLdapSettingsurationError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapSettingsurationError",
+    ),
     "FlextDbtLdapTestError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapTestError"),
-    "FlextDbtLdapTimeoutError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapTimeoutError"),
+    "FlextDbtLdapTimeoutError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapTimeoutError",
+    ),
     "FlextDbtLdapTypes": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
     "FlextDbtLdapUtilities": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
-    "FlextDbtLdapValidationError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapValidationError"),
+    "FlextDbtLdapValidationError": (
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapValidationError",
+    ),
     "FlextDbtLdapVersion": ("flext_dbt_ldap.version", "FlextDbtLdapVersion"),
     "FlextModels": ("flext_core", "FlextModels"),
     "FlextResult": ("flext_core", "FlextResult"),
@@ -76,10 +103,16 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__version_info__": ("flext_dbt_ldap.__version__", "__version_info__"),
     "c": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
     "m": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
-    "process_ldap_entries_for_dbt": ("flext_dbt_ldap.ldap_integration", "process_ldap_entries_for_dbt"),
+    "process_ldap_entries_for_dbt": (
+        "flext_dbt_ldap.ldap_integration",
+        "process_ldap_entries_for_dbt",
+    ),
     "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
     "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
-    "validate_ldap_data_quality": ("flext_dbt_ldap.ldap_integration", "validate_ldap_data_quality"),
+    "validate_ldap_data_quality": (
+        "flext_dbt_ldap.ldap_integration",
+        "validate_ldap_data_quality",
+    ),
 }
 
 __all__ = [

@@ -10,6 +10,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import ClassVar, Final, Literal
 
+from flext_core import FlextConstants
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
 

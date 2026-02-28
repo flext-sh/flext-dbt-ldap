@@ -133,13 +133,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     f"DBT project structure validation failed: {e}",
                 )
 
-        class Collection(u.Collection):
+        class Collection(FlextMeltanoUtilities.Collection):
             """Collection utilities extending u.Collection via inheritance."""
 
-        class Args(u.Args):
+        class Args(FlextMeltanoUtilities.Args):
             """Args utilities extending u.Args via inheritance."""
 
-        class Model(u.Model):
+        class Model(FlextMeltanoUtilities.Model):
             """Model utilities extending u.Model via inheritance."""
 
         class Pydantic:
