@@ -441,7 +441,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
-            oc_val: object = raw.get("objectClass", [])
+            oc_val: t.GeneralValueType = raw.get("objectClass", [])
             try:
                 return _STRING_LIST_ADAPTER.validate_python(oc_val)
             except ValidationError:
