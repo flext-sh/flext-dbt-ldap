@@ -71,7 +71,9 @@ def postgres_container(
             if i == POSTGRES_READY_MAX_RETRIES - 1:
                 raise
             logger.info(
-                "Waiting for PostgreSQL... (%s/%s)", i + 1, POSTGRES_READY_MAX_RETRIES
+                "Waiting for PostgreSQL... (%s/%s)",
+                i + 1,
+                POSTGRES_READY_MAX_RETRIES,
             )
             time.sleep(2)
     yield
@@ -92,7 +94,8 @@ def postgres_container(
     )
     if stop_result.is_failure and stop_result.error:
         logger.warning(
-            "PostgreSQL container stop reported failure: %s", stop_result.error
+            "PostgreSQL container stop reported failure: %s",
+            stop_result.error,
         )
 
 
@@ -150,7 +153,8 @@ def run_dbt_command(
 
 
 def query_database(
-    conn: psycopg.Connection, query: LiteralString
+    conn: psycopg.Connection,
+    query: LiteralString,
 ) -> list[tuple[object, ...]]:
     """Execute query and return results."""
     with conn.cursor() as cur:
@@ -164,7 +168,7 @@ def table_exists(conn: psycopg.Connection, schema: str, table: str) -> bool:
     with conn.cursor() as cur:
         _ = cur.execute(
             sql.SQL(
-                "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = %s AND table_name = %s)"
+                "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = %s AND table_name = %s)",
             ),
             (schema, table),
         )
@@ -177,8 +181,9 @@ def count_rows(conn: psycopg.Connection, schema: str, table: str) -> int:
     with conn.cursor() as cur:
         _ = cur.execute(
             sql.SQL("SELECT COUNT(*) FROM {}.{}").format(
-                sql.Identifier(schema), sql.Identifier(table)
-            )
+                sql.Identifier(schema),
+                sql.Identifier(table),
+            ),
         )
         result = cur.fetchone()
         return int(result[0]) if result else 0
@@ -193,7 +198,7 @@ def get_column_names(
     with conn.cursor() as cur:
         _ = cur.execute(
             sql.SQL(
-                "SELECT column_name FROM information_schema.columns WHERE table_schema = %s AND table_name = %s ORDER BY ordinal_position"
+                "SELECT column_name FROM information_schema.columns WHERE table_schema = %s AND table_name = %s ORDER BY ordinal_position",
             ),
             (schema, table),
         )

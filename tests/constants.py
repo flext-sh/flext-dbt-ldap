@@ -7,8 +7,6 @@ from __future__ import annotations
 class TestsFlextDbtLdapConstants:
     """Constants for flext-dbt-ldap tests."""
 
-    pass
-
 
 __all__ = ["TestsFlextDbtLdapConstants", "c"]
 

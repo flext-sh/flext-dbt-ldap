@@ -33,7 +33,7 @@ class FlextDbtLdapVersion:
             # Fallback for development/testing - use metadata() on a known package
             # and override with our defaults
             self._metadata = metadata(
-                "flext-dbt-ldap"
+                "flext-dbt-ldap",
             )  # Will use the installed package
 
     @property

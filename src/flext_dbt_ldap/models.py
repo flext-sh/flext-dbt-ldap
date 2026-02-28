@@ -159,7 +159,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         sources: Annotated[
-            list[dict[str, t.GeneralValueType]], Field(default_factory=list)
+            list[dict[str, t.GeneralValueType]],
+            Field(default_factory=list),
         ]
 
     class DbtModelDefinition(FlextModels.Value):
@@ -167,7 +168,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         models: Annotated[
-            list[dict[str, t.GeneralValueType]], Field(default_factory=list)
+            list[dict[str, t.GeneralValueType]],
+            Field(default_factory=list),
         ]
 
     class DbtTestConfig(FlextModels.Value):
@@ -175,7 +177,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         models: Annotated[
-            list[dict[str, t.GeneralValueType]], Field(default_factory=list)
+            list[dict[str, t.GeneralValueType]],
+            Field(default_factory=list),
         ]
         columns: dict[str, list[str]] = Field(default_factory=dict)
 
@@ -191,7 +194,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         name: str
         description: str = ""
         tables: Annotated[
-            list[dict[str, t.GeneralValueType]], Field(default_factory=list)
+            list[dict[str, t.GeneralValueType]],
+            Field(default_factory=list),
         ]
 
     class DbtConfig(FlextModels.Value):

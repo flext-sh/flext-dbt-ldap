@@ -76,7 +76,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class LdapIntegrationProtocol(
-                FlextProtocols.Service[m.DbtLdapPipelineResult], Protocol
+                FlextProtocols.Service[m.DbtLdapPipelineResult],
+                Protocol,
             ):
                 """LDAP integration protocol for dbt LDAP operations."""
 
@@ -114,7 +115,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class ModelingProtocol(
-                FlextProtocols.Service[m.DbtModelDefinition], Protocol
+                FlextProtocols.Service[m.DbtModelDefinition],
+                Protocol,
             ):
                 """Protocol for LDAP data modeling operations."""
 
@@ -152,7 +154,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class TransformationProtocol(
-                FlextProtocols.Service[m.UserDimension], Protocol
+                FlextProtocols.Service[m.UserDimension],
+                Protocol,
             ):
                 """Protocol for LDAP data transformation operations."""
 
@@ -222,7 +225,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class QualityProtocol(
-                FlextProtocols.Service[m.ValidationMetrics], Protocol
+                FlextProtocols.Service[m.ValidationMetrics],
+                Protocol,
             ):
                 """Protocol for LDAP data quality operations."""
 
@@ -260,7 +264,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class PerformanceProtocol(
-                FlextProtocols.Service[m.PerformanceAnalysis], Protocol
+                FlextProtocols.Service[m.PerformanceAnalysis],
+                Protocol,
             ):
                 """Protocol for DBT LDAP performance optimization."""
 

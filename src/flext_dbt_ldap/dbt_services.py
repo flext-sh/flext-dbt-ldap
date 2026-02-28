@@ -121,7 +121,11 @@ class FlextDbtLdapService:
         return True
 
     def _update_bookmark(
-        self, sync_key: str, bookmark: str, *, successful: bool
+        self,
+        sync_key: str,
+        bookmark: str,
+        *,
+        successful: bool,
     ) -> None:
         if not successful:
             return
@@ -170,7 +174,9 @@ class FlextDbtLdapService:
             if result.is_success:
                 logger.info("User sync completed successfully")
                 self._update_bookmark(
-                    c.LdapEntityTypes.USERS, current_bookmark, successful=True
+                    c.LdapEntityTypes.USERS,
+                    current_bookmark,
+                    successful=True,
                 )
             else:
                 logger.error("User sync failed: %s", result.error)
@@ -280,7 +286,8 @@ class FlextDbtLdapService:
 
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
-            search_base, incremental=incremental
+            search_base,
+            incremental=incremental,
         )
         membership_result = self.sync_memberships_to_warehouse(search_base)
 
