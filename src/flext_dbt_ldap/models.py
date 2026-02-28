@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Mapping
-from typing import override
+from typing import Annotated, override
 
 from flext_core import FlextModels, r
 from flext_ldap import FlextLdapModels
@@ -158,19 +158,19 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """DBT source schema definition."""
 
         version: str = "2"
-        sources: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        sources: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
 
     class DbtModelDefinition(FlextModels.Value):
         """DBT model definition (schema.yml)."""
 
         version: str = "2"
-        models: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        models: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
 
     class DbtTestConfig(FlextModels.Value):
         """DBT test configuration."""
 
         version: str = "2"
-        models: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        models: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
         columns: dict[str, list[str]] = Field(default_factory=dict)
 
     class DbtSourceFreshness(FlextModels.Value):
@@ -184,7 +184,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         name: str
         description: str = ""
-        tables: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        tables: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
 
     class DbtConfig(FlextModels.Value):
         """General DBT execution configuration."""
@@ -442,8 +442,6 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """Extract object classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
             oc_val: object = raw.get("objectClass", [])
-            if oc_val is None:
-                return []
             try:
                 return _STRING_LIST_ADAPTER.validate_python(oc_val)
             except ValidationError:
@@ -480,7 +478,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 "Transforming %d LDAP entries to user dimensions",
                 len(entries),
             )
-            user_dims = []
+            user_dims: list[FlextDbtLdapModels.UserDimension] = []
             for entry in entries:
                 if self._is_user_entry(entry):
                     try:
@@ -514,7 +512,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 "Transforming %d LDAP entries to group dimensions",
                 len(entries),
             )
-            group_dims = []
+            group_dims: list[FlextDbtLdapModels.GroupDimension] = []
             for entry in entries:
                 if self._is_group_entry(entry):
                     try:

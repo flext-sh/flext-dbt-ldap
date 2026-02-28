@@ -16,6 +16,7 @@ from typing import override
 from flext_core import FlextLogger, r
 from flext_meltano import FlextMeltanoDbtService
 
+from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
@@ -143,32 +144,32 @@ class FlextDbtLdapService:
             current_bookmark = self._bookmark_now()
             user_filter = "(objectClass=person)"
             run_incremental = self._should_run_incremental(
-                "users",
+                c.LdapEntityTypes.USERS,
                 requested_incremental=incremental,
                 current_bookmark=current_bookmark,
             )
             if run_incremental:
                 user_filter = self._build_incremental_filter(
                     user_filter,
-                    self._sync_bookmarks.get("users"),
+                    self._sync_bookmarks.get(c.LdapEntityTypes.USERS),
                 )
 
             result = self.client.run_full_pipeline(
                 search_base=search_base,
                 search_filter=user_filter,
                 attributes=[
-                    "uid",
-                    "cn",
-                    "mail",
-                    "displayName",
-                    "department",
-                    "manager",
+                    c.LdapAttributes.UID,
+                    c.LdapAttributes.CN,
+                    c.LdapAttributes.MAIL,
+                    c.LdapAttributes.DISPLAY_NAME,
+                    c.LdapAttributes.DEPARTMENT,
+                    c.LdapAttributes.MANAGER,
                 ],
-                model_names=["stg_users", "dim_users"],
+                model_names=[c.DbtModels.STG_USERS, c.DbtModels.DIM_USERS],
             )
             if result.is_success:
                 logger.info("User sync completed successfully")
-                self._update_bookmark("users", current_bookmark, successful=True)
+                self._update_bookmark(c.LdapEntityTypes.USERS, current_bookmark, successful=True)
             else:
                 logger.error("User sync failed: %s", result.error)
             return result

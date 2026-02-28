@@ -44,6 +44,48 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             "prod",
         ]
 
+    class LdapSchemaMapping:
+        """LDAP object class to schema type mappings."""
+
+        USERS_CLASSES: Final[list[str]] = ["person", "user", "inetOrgPerson"]
+        GROUPS_CLASSES: Final[list[str]] = ["group", "groupOfNames", "groupOfUniqueNames"]
+        ORG_UNITS_CLASSES: Final[list[str]] = ["organizationalUnit", "organization"]
+
+    class LdapEntityTypes:
+        """LDAP entity type identifiers."""
+
+        USERS: Final[str] = "users"
+        GROUPS: Final[str] = "groups"
+        ORG_UNITS: Final[str] = "org_units"
+
+    class LdapAttributes:
+        """Common LDAP attribute names."""
+
+        UID: Final[str] = "uid"
+        CN: Final[str] = "cn"
+        MAIL: Final[str] = "mail"
+        DISPLAY_NAME: Final[str] = "displayName"
+        DEPARTMENT: Final[str] = "department"
+        MANAGER: Final[str] = "manager"
+        DESCRIPTION: Final[str] = "description"
+        MEMBER: Final[str] = "member"
+        GROUP_TYPE: Final[str] = "groupType"
+        MEMBER_OF: Final[str] = "memberOf"
+        UNIQUE_MEMBER: Final[str] = "uniqueMember"
+        SAM_ACCOUNT_NAME: Final[str] = "samaccountname"
+        OBJECT_CLASS: Final[str] = "objectClass"
+
+        # User ID attribute lookup order
+        USER_ID_ATTRIBUTES: Final[list[str]] = ["uid", "cn", "samaccountname"]
+
+    class DbtModels:
+        """DBT model names for LDAP transformations."""
+
+        STG_USERS: Final[str] = "stg_users"
+        DIM_USERS: Final[str] = "dim_users"
+        STG_GROUPS: Final[str] = "stg_groups"
+        DIM_GROUPS: Final[str] = "dim_groups"
+        FACT_MEMBERSHIPS: Final[str] = "fact_memberships"
     class DbtProcessing:
         """DBT LDAP transformation configuration."""
 

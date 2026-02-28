@@ -20,6 +20,7 @@ from flext_ldap import (
 )
 from flext_meltano import FlextMeltanoDbtService
 
+from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.models import _entry_attrs_mapping, m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
@@ -286,9 +287,9 @@ class FlextDbtLdapClient:
         raw = _entry_attrs_mapping(entry)
         object_classes: list[str] = [str(x) for x in raw.get("objectClass", [])]
         schema_mapping: dict[str, list[str]] = {
-            "users": ["person", "user", "inetOrgPerson"],
-            "groups": ["group", "groupOfNames", "groupOfUniqueNames"],
-            "org_units": ["organizationalUnit", "organization"],
+            c.LdapEntityTypes.USERS: c.LdapSchemaMapping.USERS_CLASSES,
+            c.LdapEntityTypes.GROUPS: c.LdapSchemaMapping.GROUPS_CLASSES,
+            c.LdapEntityTypes.ORG_UNITS: c.LdapSchemaMapping.ORG_UNITS_CLASSES,
         }
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
