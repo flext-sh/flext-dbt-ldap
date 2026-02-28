@@ -158,19 +158,19 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """DBT source schema definition."""
 
         version: str = "2"
-        sources: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
+        sources: Annotated[list[dict[str, t.GeneralValueType]], Field(default_factory=list)]
 
     class DbtModelDefinition(FlextModels.Value):
         """DBT model definition (schema.yml)."""
 
         version: str = "2"
-        models: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
+        models: Annotated[list[dict[str, t.GeneralValueType]], Field(default_factory=list)]
 
     class DbtTestConfig(FlextModels.Value):
         """DBT test configuration."""
 
         version: str = "2"
-        models: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
+        models: Annotated[list[dict[str, t.GeneralValueType]], Field(default_factory=list)]
         columns: dict[str, list[str]] = Field(default_factory=dict)
 
     class DbtSourceFreshness(FlextModels.Value):
@@ -184,7 +184,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         name: str
         description: str = ""
-        tables: list[dict[str, t.GeneralValueType]] = Field(default_factory=list)
+        tables: Annotated[list[dict[str, t.GeneralValueType]], Field(default_factory=list)]
 
     class DbtConfig(FlextModels.Value):
         """General DBT execution configuration."""
