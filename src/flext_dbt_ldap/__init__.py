@@ -32,7 +32,6 @@ if TYPE_CHECKING:
         FlextDbtLdapTimeoutError,
         FlextDbtLdapValidationError,
     )
-    from flext_dbt_ldap.deprecation_warnings import FlextDbtLdapDeprecationWarning
     from flext_dbt_ldap.ldap_integration import (
         process_ldap_entries_for_dbt,
         validate_ldap_data_quality,
@@ -60,10 +59,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "FlextDbtLdapConnectionError",
     ),
     "FlextDbtLdapConstants": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
-    "FlextDbtLdapDeprecationWarning": (
-        "flext_dbt_ldap.deprecation_warnings",
-        "FlextDbtLdapDeprecationWarning",
-    ),
     "FlextDbtLdapError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapError"),
     "FlextDbtLdapMacroError": (
         "flext_dbt_ldap.dbt_exceptions",
@@ -122,7 +117,6 @@ __all__ = [
     "FlextDbtLdapClient",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapConstants",
-    "FlextDbtLdapDeprecationWarning",
     "FlextDbtLdapError",
     "FlextDbtLdapMacroError",
     "FlextDbtLdapModelError",

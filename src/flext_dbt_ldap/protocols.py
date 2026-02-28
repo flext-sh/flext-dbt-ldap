@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
+from flext_core import t
 from flext_core.protocols import FlextProtocols
 from flext_ldap.protocols import FlextLdapProtocols
 from flext_meltano.protocols import FlextMeltanoProtocols
@@ -39,7 +40,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
                 def run_dbt_models(
                     self,
-                    models: Sequence[str] | None = None,
+                    models: t.GeneralListValue | None = None,
                     config: m.DbtConfig | None = None,
                 ) -> FlextMeltanoProtocols.Result[m.DbtRunStatus]:
                     """Run DBT models with LDAP data sources."""
@@ -47,7 +48,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
                 def test_dbt_models(
                     self,
-                    models: Sequence[str] | None = None,
+                    models: t.GeneralListValue | None = None,
                     config: m.DbtConfig | None = None,
                 ) -> FlextMeltanoProtocols.Result[m.DbtRunStatus]:
                     """Test DBT models with LDAP data validation."""
