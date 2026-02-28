@@ -48,7 +48,11 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         """LDAP object class to schema type mappings."""
 
         USERS_CLASSES: Final[list[str]] = ["person", "user", "inetOrgPerson"]
-        GROUPS_CLASSES: Final[list[str]] = ["group", "groupOfNames", "groupOfUniqueNames"]
+        GROUPS_CLASSES: Final[list[str]] = [
+            "group",
+            "groupOfNames",
+            "groupOfUniqueNames",
+        ]
         ORG_UNITS_CLASSES: Final[list[str]] = ["organizationalUnit", "organization"]
 
     class LdapEntityTypes:
@@ -86,6 +90,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         STG_GROUPS: Final[str] = "stg_groups"
         DIM_GROUPS: Final[str] = "dim_groups"
         FACT_MEMBERSHIPS: Final[str] = "fact_memberships"
+
     class DbtProcessing:
         """DBT LDAP transformation configuration."""
 

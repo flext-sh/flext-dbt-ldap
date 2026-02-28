@@ -9,10 +9,9 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
-from flext_core import t
-from flext_core.protocols import FlextProtocols
-from flext_ldap.protocols import FlextLdapProtocols
-from flext_meltano.protocols import FlextMeltanoProtocols
+from flext_core import FlextProtocols, t
+from flext_ldap import FlextLdapProtocols
+from flext_meltano import FlextMeltanoProtocols
 
 from flext_dbt_ldap.models import m
 
@@ -114,7 +113,9 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class ModelingProtocol(FlextProtocols.Service[m.DbtModelDefinition], Protocol):
+            class ModelingProtocol(
+                FlextProtocols.Service[m.DbtModelDefinition], Protocol
+            ):
                 """Protocol for LDAP data modeling operations."""
 
                 def create_user_dimension(
@@ -150,7 +151,9 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class TransformationProtocol(FlextProtocols.Service[m.UserDimension], Protocol):
+            class TransformationProtocol(
+                FlextProtocols.Service[m.UserDimension], Protocol
+            ):
                 """Protocol for LDAP data transformation operations."""
 
                 def normalize_ldap_attributes(
@@ -218,7 +221,9 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class QualityProtocol(FlextProtocols.Service[m.ValidationMetrics], Protocol):
+            class QualityProtocol(
+                FlextProtocols.Service[m.ValidationMetrics], Protocol
+            ):
                 """Protocol for LDAP data quality operations."""
 
                 def validate_ldap_schema_compliance(
@@ -254,7 +259,9 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class PerformanceProtocol(FlextProtocols.Service[m.PerformanceAnalysis], Protocol):
+            class PerformanceProtocol(
+                FlextProtocols.Service[m.PerformanceAnalysis], Protocol
+            ):
                 """Protocol for DBT LDAP performance optimization."""
 
                 def optimize_dbt_models(

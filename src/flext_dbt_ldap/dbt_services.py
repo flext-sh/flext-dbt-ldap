@@ -169,7 +169,9 @@ class FlextDbtLdapService:
             )
             if result.is_success:
                 logger.info("User sync completed successfully")
-                self._update_bookmark(c.LdapEntityTypes.USERS, current_bookmark, successful=True)
+                self._update_bookmark(
+                    c.LdapEntityTypes.USERS, current_bookmark, successful=True
+                )
             else:
                 logger.error("User sync failed: %s", result.error)
             return result
