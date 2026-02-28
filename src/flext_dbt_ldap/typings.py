@@ -13,9 +13,11 @@ from __future__ import annotations
 from typing import Literal
 
 from flext_core import FlextTypes
+from flext_ldap import FlextLdapTypes
+from flext_meltano import FlextMeltanoTypes
 
 
-class FlextDbtLdapTypes(FlextTypes):
+class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     """DBT LDAP-specific type definitions extending FlextTypes.
 
     All structured data uses Pydantic models in models.py.

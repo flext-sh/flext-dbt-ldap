@@ -37,6 +37,10 @@ if TYPE_CHECKING:
         validate_ldap_data_quality,
     )
     from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
+    from flext_dbt_ldap.protocols import (
+        FlextDbtLdapProtocols,
+        FlextDbtLdapProtocols as p,
+    )
     from flext_dbt_ldap.settings import FlextDbtLdapSettings
     from flext_dbt_ldap.simple_api import FlextDbtLdap
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
@@ -58,6 +62,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdapModelError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapModelError"),
     "FlextDbtLdapModels": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
     "FlextDbtLdapProcessingError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapProcessingError"),
+    "FlextDbtLdapProtocols": ("flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"),
     "FlextDbtLdapSettings": ("flext_dbt_ldap.settings", "FlextDbtLdapSettings"),
     "FlextDbtLdapSettingsurationError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapSettingsurationError"),
     "FlextDbtLdapTestError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapTestError"),
@@ -74,6 +79,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__version_info__": ("flext_dbt_ldap.__version__", "__version_info__"),
     "c": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
     "m": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
+    "p": ("flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"),
     "process_ldap_entries_for_dbt": ("flext_dbt_ldap.ldap_integration", "process_ldap_entries_for_dbt"),
     "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
     "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
@@ -92,6 +98,7 @@ __all__ = [
     "FlextDbtLdapModelError",
     "FlextDbtLdapModels",
     "FlextDbtLdapProcessingError",
+    "FlextDbtLdapProtocols",
     "FlextDbtLdapSettings",
     "FlextDbtLdapSettingsurationError",
     "FlextDbtLdapTestError",
@@ -107,6 +114,7 @@ __all__ = [
     "__version_info__",
     "c",
     "m",
+    "p",
     "process_ldap_entries_for_dbt",
     "t",
     "u",
