@@ -40,6 +40,7 @@ def test_incremental_users_sync_applies_bookmark_filter() -> None:
     service.client = client
     service.config = Mock(ldap_base_dn="dc=example,dc=com")
     service._sync_bookmarks = {"users": "20250101000000Z"}
+    service._sync_state_file = Mock()
 
     result = service.sync_users_to_warehouse(incremental=True)
 
@@ -56,6 +57,7 @@ def test_incremental_groups_sync_applies_bookmark_filter() -> None:
     service.client = client
     service.config = Mock(ldap_base_dn="dc=example,dc=com")
     service._sync_bookmarks = {"groups": "20250101000000Z"}
+    service._sync_state_file = Mock()
 
     result = service.sync_groups_to_warehouse(incremental=True)
 
