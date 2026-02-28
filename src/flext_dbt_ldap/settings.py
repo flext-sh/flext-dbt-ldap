@@ -10,9 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import r
-from flext_core.loggings import FlextLogger
-from flext_core.settings import FlextSettings
+from flext_core import FlextLogger, FlextSettings, r
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoSettings
 from pydantic import Field, SecretStr, ValidationError, field_validator, model_validator

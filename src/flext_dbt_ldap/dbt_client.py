@@ -20,7 +20,7 @@ from flext_ldap import (
 )
 from flext_meltano import FlextMeltanoDbtService
 
-from flext_dbt_ldap.models import m, _entry_attrs_mapping
+from flext_dbt_ldap.models import _entry_attrs_mapping, m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 

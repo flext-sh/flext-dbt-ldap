@@ -12,7 +12,6 @@ from flext_core import FlextModels, FlextResult, FlextSettings
 from flext_dbt_ldap.__version__ import __version__, __version_info__
 from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
-from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_exceptions import (
     FlextDbtLdapAuthenticationError,
     FlextDbtLdapConnectionError,

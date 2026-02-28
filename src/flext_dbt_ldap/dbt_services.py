@@ -13,8 +13,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import override
 
-from flext_core import r
-from flext_core.loggings import FlextLogger
+from flext_core import FlextLogger, r
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient

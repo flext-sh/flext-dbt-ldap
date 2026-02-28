@@ -11,9 +11,7 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
-from flext_core import r
-from flext_core.container import FlextContainer
-from flext_core.utilities import u
+from flext_core import FlextContainer, r, u
 from pydantic import BeforeValidator
 
 from flext_dbt_ldap.constants import c
