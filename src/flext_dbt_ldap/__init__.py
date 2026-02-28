@@ -41,7 +41,10 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.settings import FlextDbtLdapSettings
     from flext_dbt_ldap.simple_api import FlextDbtLdap
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
-    from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
+    from flext_dbt_ldap.utilities import (
+        FlextDbtLdapUtilities,
+        FlextDbtLdapUtilities as u,
+    )
     from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
 
 # Lazy import mapping: export_name -> (module_path, attr_name)
@@ -75,6 +78,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "m": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
     "process_ldap_entries_for_dbt": ("flext_dbt_ldap.ldap_integration", "process_ldap_entries_for_dbt"),
     "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
+    "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
     "validate_ldap_data_quality": ("flext_dbt_ldap.ldap_integration", "validate_ldap_data_quality"),
 }
 
@@ -108,6 +112,7 @@ __all__ = [
     "m",
     "process_ldap_entries_for_dbt",
     "t",
+    "u",
     "validate_ldap_data_quality",
 ]
 

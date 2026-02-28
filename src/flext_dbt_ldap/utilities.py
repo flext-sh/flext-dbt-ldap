@@ -11,14 +11,16 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
-from flext_core import FlextContainer, r, u
+from flext_core import FlextContainer, r
+from flext_ldap import FlextLdapUtilities
+from flext_meltano import FlextMeltanoUtilities
 from pydantic import BeforeValidator
 
 from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.models import m
 
 
-class FlextDbtLdapUtilities(u):
+class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
     """Unified DBT LDAP utilities service extending u."""
 
     def __init__(self) -> None:
@@ -609,6 +611,9 @@ class FlextDbtLdapUtilities(u):
                 return r[m.PerformanceAnalysis].fail(
                     f"Performance analysis failed: {e}",
                 )
+
+
+u = FlextDbtLdapUtilities
 
 
 __all__ = ["FlextDbtLdapUtilities"]
