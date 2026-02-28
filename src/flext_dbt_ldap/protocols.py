@@ -78,6 +78,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
             class LdapIntegrationProtocol(
                 FlextProtocols.Service[m.DbtLdapPipelineResult], Protocol
             ):
+                """LDAP integration protocol for dbt LDAP operations."""
 
                 def extract_ldap_data(
                     self,

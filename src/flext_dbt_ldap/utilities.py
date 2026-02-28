@@ -616,4 +616,4 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 u = FlextDbtLdapUtilities
 
 
-__all__ = ["FlextDbtLdapUtilities"]
+__all__ = ["FlextDbtLdapUtilities", "u"]

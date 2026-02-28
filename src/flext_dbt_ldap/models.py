@@ -13,7 +13,7 @@ import logging
 from collections.abc import Mapping
 from typing import override
 
-from flext_core import FlextModels, FlextResult
+from flext_core import FlextModels, r
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import Field, TypeAdapter, ValidationError
@@ -22,8 +22,6 @@ from flext_dbt_ldap.typings import t
 
 logger = logging.getLogger(__name__)
 
-# Short alias for FlextResult used throughout this module
-r = FlextResult
 
 _MAPPING_ADAPTER = TypeAdapter(Mapping[str, object])
 _STRING_LIST_ADAPTER = TypeAdapter(list[str])
