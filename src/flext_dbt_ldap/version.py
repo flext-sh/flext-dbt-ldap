@@ -8,9 +8,10 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from importlib.metadata import PackageMetadata, metadata
-from typing import Final
 
 from flext_core import FlextResult
+
+from flext_dbt_ldap.constants import VERSION
 
 
 class FlextDbtLdapVersion:
@@ -30,11 +31,7 @@ class FlextDbtLdapVersion:
             RuntimeError,
             ImportError,
         ):
-            # Fallback for development/testing - use metadata() on a known package
-            # and override with our defaults
-            self._metadata = metadata(
-                "flext-dbt-ldap",
-            )  # Will use the installed package
+            self._metadata = metadata("flext-dbt-ldap")
 
     @property
     def version(self) -> str:
@@ -62,7 +59,7 @@ class FlextDbtLdapVersion:
     @property
     def maintainer_name(self) -> str | None:
         """Get maintainer name."""
-        return self._metadata.get("Author")  # Same as author for now
+        return self._metadata.get("Author")
 
     @property
     def description(self) -> str | None:
@@ -102,15 +99,8 @@ def _create_version() -> FlextResult[FlextDbtLdapVersion]:
         return FlextResult[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
 
 
-# Global version instance
 _version_result = _create_version()
 if _version_result.is_failure:
     error_msg = f"Failed to initialize version: {_version_result.error}"
     raise RuntimeError(error_msg)
-
-VERSION: Final[FlextDbtLdapVersion] = _version_result.value
-
-__all__ = [
-    "VERSION",
-    "FlextDbtLdapVersion",
-]
+__all__ = ["VERSION", "FlextDbtLdapVersion"]
