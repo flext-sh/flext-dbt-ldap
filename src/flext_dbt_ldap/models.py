@@ -9,19 +9,15 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import logging
 from collections.abc import Mapping
 from typing import Annotated, override
 
-from flext_core import FlextModels, r
+from flext_core import FlextLogger, FlextModels, r
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import Field, TypeAdapter, ValidationError
 
 from flext_dbt_ldap.typings import t
-
-logger = logging.getLogger(__name__)
-
 
 _MAPPING_ADAPTER = TypeAdapter(Mapping[str, object])
 _STRING_LIST_ADAPTER = TypeAdapter(list[str])
@@ -440,7 +436,17 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def __init__(self) -> None:
             """Initialize LDAP transformer."""
             super().__init__()
-            logger.info("Initialized LDAP DBT transformer")
+            self._logger_instance: FlextLogger | None = None
+
+        @property
+        def logger(self) -> FlextLogger:
+            """Lazy logger via FlextLogger."""
+            if self._logger_instance is None:
+                self._logger_instance = FlextLogger(__name__)
+            return self._logger_instance
+
+        def _post_init_log(self) -> None:
+            self.logger.info("Initialized LDAP DBT transformer")
 
         @staticmethod
         def normalize_attributes(
@@ -486,7 +492,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions."""
-            logger.info(
+            self.logger.info(
                 "Transforming %d LDAP entries to user dimensions",
                 len(entries),
             )
@@ -508,11 +514,11 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         RuntimeError,
                         ImportError,
                     ):
-                        logger.exception(
+                        self.logger.exception(
                             "Failed to transform user entry: %s",
                             entry.dn,
                         )
-            logger.info("Transformed %d user dimensions", len(user_dims))
+            self.logger.info("Transformed %d user dimensions", len(user_dims))
             return user_dims
 
         def transform_groups(
@@ -520,7 +526,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions."""
-            logger.info(
+            self.logger.info(
                 "Transforming %d LDAP entries to group dimensions",
                 len(entries),
             )
@@ -542,11 +548,11 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         RuntimeError,
                         ImportError,
                     ):
-                        logger.exception(
+                        self.logger.exception(
                             "Failed to transform group entry: %s",
                             entry.dn,
                         )
-            logger.info("Transformed %d group dimensions", len(group_dims))
+            self.logger.info("Transformed %d group dimensions", len(group_dims))
             return group_dims
 
         def transform_memberships(
@@ -554,7 +560,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts."""
-            logger.info(
+            self.logger.info(
                 "Transforming %d LDAP entries to membership facts",
                 len(entries),
             )
@@ -578,11 +584,11 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     RuntimeError,
                     ImportError,
                 ):
-                    logger.exception(
+                    self.logger.exception(
                         "Failed to transform memberships for entry: %s",
                         entry.dn,
                     )
-            logger.info(
+            self.logger.info(
                 "Transformed %d membership facts",
                 len(membership_facts),
             )
