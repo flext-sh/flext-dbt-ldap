@@ -25,6 +25,7 @@ wheels/
 *.egg
 MANIFEST
 .mypy_cache/
+.flext-deps/
 
 # Virtual environments
 .env
