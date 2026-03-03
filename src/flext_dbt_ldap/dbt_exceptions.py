@@ -50,8 +50,8 @@ class _DbtLdapContextMixin:
 
     @staticmethod
     def _build_context(
-        **fields: t.MetadataAttributeValue,
-    ) -> Mapping[str, t.MetadataAttributeValue]:
+        **fields: t.MetadataValue,
+    ) -> Mapping[str, t.MetadataValue]:
         """Build context dictionary from keyword arguments."""
         return {k: v for k, v in fields.items() if v is not None}
 

@@ -39,7 +39,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
                 def run_dbt_models(
                     self,
-                    models: t.GeneralListValue | None = None,
+                    models: list[t.ScalarValue] | None = None,
                     config: m.DbtConfig | None = None,
                 ) -> FlextMeltanoProtocols.Result[m.DbtRunStatus]:
                     """Run DBT models with LDAP data sources."""
@@ -47,7 +47,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
                 def test_dbt_models(
                     self,
-                    models: t.GeneralListValue | None = None,
+                    models: list[t.ScalarValue] | None = None,
                     config: m.DbtConfig | None = None,
                 ) -> FlextMeltanoProtocols.Result[m.DbtRunStatus]:
                     """Test DBT models with LDAP data validation."""
