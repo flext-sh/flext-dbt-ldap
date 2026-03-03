@@ -12,6 +12,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from flext_core import r
+
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
 from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
