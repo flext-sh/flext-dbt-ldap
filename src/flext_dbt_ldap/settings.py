@@ -22,6 +22,7 @@ from flext_dbt_ldap.typings import t
 logger = FlextLogger(__name__)
 
 
+@FlextSettings.auto_register("dbt_ldap")
 class FlextDbtLdapSettings(FlextSettings):
     """Single Pydantic 2 Settings class for flext-dbt-ldap extending FlextSettings.
 
