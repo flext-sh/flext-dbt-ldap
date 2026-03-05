@@ -14,8 +14,6 @@ from flext_core import FlextConstants
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
 
-from flext_dbt_ldap.__version__ import __version__ as VERSION
-
 
 class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
@@ -225,4 +223,4 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
 c = FlextDbtLdapConstants
 
-__all__ = ["VERSION", "FlextDbtLdapConstants", "c"]
+__all__ = ["FlextDbtLdapConstants", "c"]

@@ -11,8 +11,6 @@ from importlib.metadata import PackageMetadata, metadata
 
 from flext_core import FlextResult
 
-from flext_dbt_ldap.constants import VERSION
-
 
 class FlextDbtLdapVersion:
     """Version information for flext-dbt-ldap package."""
@@ -103,4 +101,6 @@ _version_result = _create_version()
 if _version_result.is_failure:
     error_msg = f"Failed to initialize version: {_version_result.error}"
     raise RuntimeError(error_msg)
+
+VERSION: FlextDbtLdapVersion = _version_result.value
 __all__ = ["VERSION", "FlextDbtLdapVersion"]
