@@ -521,6 +521,69 @@ class FlextDbtLdapSettings(FlextSettings):
         description="Project version",
     )
 
+    @classmethod
+    def create_default(cls) -> FlextDbtLdapSettings:
+        """Create default configuration instance using singleton pattern."""
+        return cls.get_or_create_shared_instance()
+
+    @classmethod
+    def create_for_development(cls) -> FlextDbtLdapSettings:
+        """Create configuration optimized for development using singleton pattern."""
+        return cls.get_or_create_shared_instance()
+
+    @classmethod
+    def create_for_environment(
+        cls,
+        _environment: str,
+    ) -> FlextDbtLdapSettings:
+        """Create configuration for specific environment using singleton pattern."""
+        return cls.get_or_create_shared_instance()
+
+    @classmethod
+    def create_for_production(cls) -> FlextDbtLdapSettings:
+        """Create configuration optimized for production using singleton pattern."""
+        return cls.get_or_create_shared_instance()
+
+    @classmethod
+    def create_for_testing(cls) -> FlextDbtLdapSettings:
+        """Create configuration optimized for testing using singleton pattern."""
+        return cls.get_or_create_shared_instance()
+
+    @classmethod
+    @override
+    @override
+    def get_global_instance(cls) -> FlextDbtLdapSettings:
+        """Get the global singleton instance using FlextSettings pattern."""
+        return cls.get_or_create_shared_instance()
+
+    @classmethod
+    def get_or_create_shared_instance(cls) -> FlextDbtLdapSettings:
+        """Get or create shared singleton instance."""
+        if cls not in cls._instances:
+            with cls._lock:
+                if cls not in cls._instances:
+                    cls._instances[cls] = cls()
+        raw = cls._instances[cls]
+        try:
+            return cls.model_validate(raw)
+        except ValidationError as exc:
+            msg = f"Singleton instance is not of expected type {type(cls).__name__}"
+            raise TypeError(msg) from exc
+
+    @classmethod
+    @override
+    @override
+    def reset_global_instance(cls) -> None:
+        """Reset the global FlextDbtLdapSettings instance (mainly for testing)."""
+        # Use the enhanced FlextSettings reset mechanism
+        cls.reset_shared_instance()
+
+    @classmethod
+    def reset_shared_instance(cls) -> None:
+        """Reset the shared singleton instance."""
+        with cls._lock:
+            _ = cls._instances.pop(cls, None)
+
     # Pydantic 2.11 field validators
     @field_validator("dbt_target")
     @classmethod
@@ -557,107 +620,6 @@ class FlextDbtLdapSettings(FlextSettings):
             raise ValueError(msg)
 
         return v
-
-    @model_validator(mode="after")
-    def validate_ldap_configuration_consistency(self) -> FlextDbtLdapSettings:
-        """Validate LDAP configuration consistency."""
-        # Validate authentication configuration
-        if self.ldap_bind_dn is not None and self.ldap_bind_password is None:
-            msg = "Bind password is required when bind DN is specified"
-            raise ValueError(msg)
-
-        # Validate performance thresholds
-        if (
-            self.dbt_ldap_performance_threshold_warning
-            > self.dbt_ldap_performance_threshold_critical
-        ):
-            msg = "Warning threshold cannot be greater than critical threshold"
-            raise ValueError(msg)
-
-        return self
-
-    def validate_business_rules(self) -> r[bool]:
-        """Validate DBT LDAP specific business rules."""
-        try:
-            # Validate LDAP configuration
-            if not self.ldap_host:
-                return r[bool].fail("LDAP host is required")
-
-            # Validate DBT configuration
-            if not self.dbt_project_dir:
-                return r[bool].fail("DBT project directory is required")
-
-            # Validate performance thresholds
-            if self.dbt_ldap_performance_threshold_warning < 0:
-                return r[bool].fail(
-                    "Performance warning threshold must be non-negative",
-                )
-
-            if self.dbt_ldap_performance_threshold_critical < 0:
-                return r[bool].fail(
-                    "Performance critical threshold must be non-negative",
-                )
-
-            return r[bool].ok(True)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
-            return r[bool].fail(f"Business rules validation failed: {e}")
-
-    def get_ldap_config(self) -> FlextLdapModels.Ldap.ConnectionConfig:
-        """Get LDAP configuration for flext-ldap integration."""
-        bind_dn = self.ldap_bind_dn.get_secret_value() if self.ldap_bind_dn else ""
-        bind_password = (
-            self.ldap_bind_password.get_secret_value()
-            if self.ldap_bind_password
-            else ""
-        )
-
-        return FlextLdapModels.Ldap.ConnectionConfig(
-            host=self.ldap_host,
-            port=self.ldap_port,
-            bind_dn=bind_dn,
-            bind_password=bind_password,
-        )
-
-    def get_meltano_config(self) -> FlextMeltanoSettings:
-        """Get Meltano configuration for flext-meltano integration."""
-        # Convert string to proper Environment string value
-        environment_mapping: dict[str, str] = {
-            "dev": "development",
-            "development": "development",
-            "staging": "staging",
-            "prod": "production",
-            "production": "production",
-            "test": "test",
-            "local": "local",
-        }
-
-        environment_value = environment_mapping.get(
-            self.dbt_target.lower(),
-            "development",
-        )
-
-        return FlextMeltanoSettings(
-            project_root=Path(self.dbt_project_dir),
-            environment=environment_value,
-        )
-
-    def get_ldap_quality_config(
-        self,
-    ) -> t.DbtTransformation.DataValidation:
-        """Get data quality configuration for LDAP validation."""
-        return {
-            "min_quality_threshold": str(self.min_quality_threshold),
-            "required_attributes": list(self.required_attributes),
-            "validate_dns": self.validate_dns,
-        }
 
     def get_dbt_ldap_logging_config(self) -> t.DbtLdap.SettingsDict:
         """Get DBT LDAP-specific logging configuration dictionary."""
@@ -739,68 +701,106 @@ class FlextDbtLdapSettings(FlextSettings):
             "audit_log_file": self.audit_log_file,
         }
 
-    @classmethod
-    def create_for_environment(
-        cls,
-        _environment: str,
-    ) -> FlextDbtLdapSettings:
-        """Create configuration for specific environment using singleton pattern."""
-        return cls.get_or_create_shared_instance()
+    def get_ldap_config(self) -> FlextLdapModels.Ldap.ConnectionConfig:
+        """Get LDAP configuration for flext-ldap integration."""
+        bind_dn = self.ldap_bind_dn.get_secret_value() if self.ldap_bind_dn else ""
+        bind_password = (
+            self.ldap_bind_password.get_secret_value()
+            if self.ldap_bind_password
+            else ""
+        )
 
-    @classmethod
-    def create_default(cls) -> FlextDbtLdapSettings:
-        """Create default configuration instance using singleton pattern."""
-        return cls.get_or_create_shared_instance()
+        return FlextLdapModels.Ldap.ConnectionConfig(
+            host=self.ldap_host,
+            port=self.ldap_port,
+            bind_dn=bind_dn,
+            bind_password=bind_password,
+        )
 
-    @classmethod
-    def create_for_development(cls) -> FlextDbtLdapSettings:
-        """Create configuration optimized for development using singleton pattern."""
-        return cls.get_or_create_shared_instance()
+    def get_ldap_quality_config(
+        self,
+    ) -> t.DbtTransformation.DataValidation:
+        """Get data quality configuration for LDAP validation."""
+        return {
+            "min_quality_threshold": str(self.min_quality_threshold),
+            "required_attributes": list(self.required_attributes),
+            "validate_dns": self.validate_dns,
+        }
 
-    @classmethod
-    def create_for_production(cls) -> FlextDbtLdapSettings:
-        """Create configuration optimized for production using singleton pattern."""
-        return cls.get_or_create_shared_instance()
+    def get_meltano_config(self) -> FlextMeltanoSettings:
+        """Get Meltano configuration for flext-meltano integration."""
+        # Convert string to proper Environment string value
+        environment_mapping: dict[str, str] = {
+            "dev": "development",
+            "development": "development",
+            "staging": "staging",
+            "prod": "production",
+            "production": "production",
+            "test": "test",
+            "local": "local",
+        }
 
-    @classmethod
-    def create_for_testing(cls) -> FlextDbtLdapSettings:
-        """Create configuration optimized for testing using singleton pattern."""
-        return cls.get_or_create_shared_instance()
+        environment_value = environment_mapping.get(
+            self.dbt_target.lower(),
+            "development",
+        )
 
-    @classmethod
-    @override
-    @override
-    def get_global_instance(cls) -> FlextDbtLdapSettings:
-        """Get the global singleton instance using FlextSettings pattern."""
-        return cls.get_or_create_shared_instance()
+        return FlextMeltanoSettings(
+            project_root=Path(self.dbt_project_dir),
+            environment=environment_value,
+        )
 
-    @classmethod
-    def get_or_create_shared_instance(cls) -> FlextDbtLdapSettings:
-        """Get or create shared singleton instance."""
-        if cls not in cls._instances:
-            with cls._lock:
-                if cls not in cls._instances:
-                    cls._instances[cls] = cls()
-        raw = cls._instances[cls]
+    def validate_business_rules(self) -> r[bool]:
+        """Validate DBT LDAP specific business rules."""
         try:
-            return cls.model_validate(raw)
-        except ValidationError as exc:
-            msg = f"Singleton instance is not of expected type {type(cls).__name__}"
-            raise TypeError(msg) from exc
+            # Validate LDAP configuration
+            if not self.ldap_host:
+                return r[bool].fail("LDAP host is required")
 
-    @classmethod
-    def reset_shared_instance(cls) -> None:
-        """Reset the shared singleton instance."""
-        with cls._lock:
-            _ = cls._instances.pop(cls, None)
+            # Validate DBT configuration
+            if not self.dbt_project_dir:
+                return r[bool].fail("DBT project directory is required")
 
-    @classmethod
-    @override
-    @override
-    def reset_global_instance(cls) -> None:
-        """Reset the global FlextDbtLdapSettings instance (mainly for testing)."""
-        # Use the enhanced FlextSettings reset mechanism
-        cls.reset_shared_instance()
+            # Validate performance thresholds
+            if self.dbt_ldap_performance_threshold_warning < 0:
+                return r[bool].fail(
+                    "Performance warning threshold must be non-negative",
+                )
+
+            if self.dbt_ldap_performance_threshold_critical < 0:
+                return r[bool].fail(
+                    "Performance critical threshold must be non-negative",
+                )
+
+            return r[bool].ok(True)
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
+            return r[bool].fail(f"Business rules validation failed: {e}")
+
+    @model_validator(mode="after")
+    def validate_ldap_configuration_consistency(self) -> FlextDbtLdapSettings:
+        """Validate LDAP configuration consistency."""
+        # Validate authentication configuration
+        if self.ldap_bind_dn is not None and self.ldap_bind_password is None:
+            msg = "Bind password is required when bind DN is specified"
+            raise ValueError(msg)
+
+        # Validate performance thresholds
+        if (
+            self.dbt_ldap_performance_threshold_warning
+            > self.dbt_ldap_performance_threshold_critical
+        ):
+            msg = "Warning threshold cannot be greater than critical threshold"
+            raise ValueError(msg)
+
+        return self
 
 
 __all__: list[str] = [

@@ -56,6 +56,14 @@ class FlextDbtLdapClient:
         self._dbt_manager: FlextMeltanoDbtService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
+    @property
+    def dbt_manager(self) -> FlextMeltanoDbtService:
+        """Get or create DBT manager instance."""
+        if self._dbt_manager is None:
+            (Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None)
+            self._dbt_manager = FlextMeltanoDbtService()
+        return self._dbt_manager
+
     @staticmethod
     def create_ldap_api(config: FlextDbtLdapSettings) -> FlextLdap:
         """Create a FlextLdap API instance from DBT LDAP settings."""
@@ -77,14 +85,6 @@ class FlextDbtLdapClient:
         connection = FlextLdapConnection(config=ldap_settings)
         operations = FlextLdapOperations(connection=connection)
         return FlextLdap(connection=connection, operations=operations)
-
-    @property
-    def dbt_manager(self) -> FlextMeltanoDbtService:
-        """Get or create DBT manager instance."""
-        if self._dbt_manager is None:
-            (Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None)
-            self._dbt_manager = FlextMeltanoDbtService()
-        return self._dbt_manager
 
     def extract_ldap_entries(
         self,
@@ -127,6 +127,87 @@ class FlextDbtLdapClient:
             logger.exception("Unexpected error during LDAP extraction")
             return r[list[FlextLdapModels.Ldif.Entry]].fail(
                 f"LDAP extraction error: {e}",
+            )
+
+    def run_full_pipeline(
+        self,
+        search_base: str | None = None,
+        search_filter: str = "(objectClass=*)",
+        attributes: Sequence[str] | None = None,
+        model_names: Sequence[str] | None = None,
+    ) -> r[m.DbtLdapPipelineResult]:
+        """Run complete LDAP to DBT transformation pipeline."""
+        logger.info("Starting full LDAP-to-DBT pipeline")
+        # Step 1: Extract LDAP data
+        extract_result = self.extract_ldap_entries(
+            search_base,
+            search_filter,
+            attributes,
+        )
+        if extract_result.is_failure:
+            return r[m.DbtLdapPipelineResult].fail(
+                extract_result.error or "LDAP extraction failed",
+            )
+        entries = extract_result.value or []
+        # Step 2: Validate data quality
+        validate_result = self.validate_ldap_data(entries)
+        if validate_result.is_failure:
+            return r[m.DbtLdapPipelineResult].fail(
+                validate_result.error or "LDAP validation failed",
+            )
+        # Step 3: Transform with DBT
+        transform_result = self.transform_with_dbt(entries, model_names)
+        if transform_result.is_failure:
+            return r[m.DbtLdapPipelineResult].fail(
+                transform_result.error or "DBT transformation failed",
+            )
+        pipeline_result = m.DbtLdapPipelineResult(
+            extracted_entries=len(entries),
+        )
+        logger.info("Full LDAP-to-DBT pipeline completed successfully")
+        return r[m.DbtLdapPipelineResult].ok(pipeline_result)
+
+    def transform_with_dbt(
+        self,
+        entries: list[FlextLdapModels.Ldif.Entry],
+        model_names: Sequence[str] | None = None,
+    ) -> r[m.DbtRunStatus]:
+        """Transform LDAP data using DBT models."""
+        try:
+            logger.info(
+                "Running DBT transformations on %d LDAP entries, models=%s",
+                len(entries),
+                ", ".join(model_names) if model_names else "",
+            )
+            _ = self._prepare_ldap_data_for_dbt(entries)
+            model_list = list(model_names) if model_names else None
+            dbt_result = self.dbt_manager.run_models(models=model_list)
+
+            if dbt_result.is_failure:
+                logger.error("DBT transformation failed: %s", dbt_result.error or "")
+                return r[m.DbtRunStatus].fail(
+                    f"DBT transformation failed: {dbt_result.error}",
+                )
+
+            result_data = m.DbtRunStatus(
+                status="completed",
+                models_run=model_list or [],
+                entries_processed=len(entries),
+            )
+            logger.info("DBT transformation completed successfully")
+            return r[m.DbtRunStatus].ok(result_data)
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
+            logger.exception("Unexpected error during DBT transformation")
+            return r[m.DbtRunStatus].fail(
+                f"DBT transformation error: {e}",
             )
 
     def validate_ldap_data(
@@ -179,86 +260,41 @@ class FlextDbtLdapClient:
                 f"LDAP validation error: {e}",
             )
 
-    def transform_with_dbt(
+    def _map_entry_attributes(
         self,
-        entries: list[FlextLdapModels.Ldif.Entry],
-        model_names: Sequence[str] | None = None,
-    ) -> r[m.DbtRunStatus]:
-        """Transform LDAP data using DBT models."""
-        try:
-            logger.info(
-                "Running DBT transformations on %d LDAP entries, models=%s",
-                len(entries),
-                ", ".join(model_names) if model_names else "",
-            )
-            _ = self._prepare_ldap_data_for_dbt(entries)
-            model_list = list(model_names) if model_names else None
-            dbt_result = self.dbt_manager.run_models(models=model_list)
+        entry: FlextLdapModels.Ldif.Entry,
+    ) -> Mapping[str, t.JsonValue]:
+        """Map LDAP entry attributes using configuration mapping."""
+        dn_str = str(entry.dn) if entry.dn is not None else ""
+        mapped_attrs: dict[str, t.JsonValue] = {"dn": dn_str}
+        if entry.attributes is None:
+            return mapped_attrs
+        for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
+            if ldap_attr in entry.attributes:
+                values_obj = entry.attributes[ldap_attr]
+                first_value = values_obj[0] if values_obj else ""
+                mapped_attrs[dbt_attr] = first_value
+        for attr, values in entry.attributes.items():
+            if attr not in self.config.ldap_attribute_mapping:
+                first_value = values[0] if values else ""
+                mapped_attrs[attr] = first_value
+        return mapped_attrs
 
-            if dbt_result.is_failure:
-                logger.error("DBT transformation failed: %s", dbt_result.error or "")
-                return r[m.DbtRunStatus].fail(
-                    f"DBT transformation failed: {dbt_result.error}",
-                )
-
-            result_data = m.DbtRunStatus(
-                status="completed",
-                models_run=model_list or [],
-                entries_processed=len(entries),
-            )
-            logger.info("DBT transformation completed successfully")
-            return r[m.DbtRunStatus].ok(result_data)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
-            logger.exception("Unexpected error during DBT transformation")
-            return r[m.DbtRunStatus].fail(
-                f"DBT transformation error: {e}",
-            )
-
-    def run_full_pipeline(
+    def _matches_schema(
         self,
-        search_base: str | None = None,
-        search_filter: str = "(objectClass=*)",
-        attributes: Sequence[str] | None = None,
-        model_names: Sequence[str] | None = None,
-    ) -> r[m.DbtLdapPipelineResult]:
-        """Run complete LDAP to DBT transformation pipeline."""
-        logger.info("Starting full LDAP-to-DBT pipeline")
-        # Step 1: Extract LDAP data
-        extract_result = self.extract_ldap_entries(
-            search_base,
-            search_filter,
-            attributes,
-        )
-        if extract_result.is_failure:
-            return r[m.DbtLdapPipelineResult].fail(
-                extract_result.error or "LDAP extraction failed",
-            )
-        entries = extract_result.value or []
-        # Step 2: Validate data quality
-        validate_result = self.validate_ldap_data(entries)
-        if validate_result.is_failure:
-            return r[m.DbtLdapPipelineResult].fail(
-                validate_result.error or "LDAP validation failed",
-            )
-        # Step 3: Transform with DBT
-        transform_result = self.transform_with_dbt(entries, model_names)
-        if transform_result.is_failure:
-            return r[m.DbtLdapPipelineResult].fail(
-                transform_result.error or "DBT transformation failed",
-            )
-        pipeline_result = m.DbtLdapPipelineResult(
-            extracted_entries=len(entries),
-        )
-        logger.info("Full LDAP-to-DBT pipeline completed successfully")
-        return r[m.DbtLdapPipelineResult].ok(pipeline_result)
+        entry: FlextLdapModels.Ldif.Entry,
+        schema_name: str,
+    ) -> bool:
+        """Check if LDAP entry matches schema type."""
+        raw = m.DbtLdap.normalize_attributes(entry)
+        object_classes: list[str] = [str(x) for x in raw.get("objectClass", [])]
+        schema_mapping: dict[str, list[str]] = {
+            c.LdapEntityTypes.USERS: c.LdapSchemaMapping.USERS_CLASSES,
+            c.LdapEntityTypes.GROUPS: c.LdapSchemaMapping.GROUPS_CLASSES,
+            c.LdapEntityTypes.ORG_UNITS: c.LdapSchemaMapping.ORG_UNITS_CLASSES,
+        }
+        expected_classes = schema_mapping.get(schema_name, [])
+        return any(cls in object_classes for cls in expected_classes)
 
     def _prepare_ldap_data_for_dbt(
         self,
@@ -280,42 +316,6 @@ class FlextDbtLdapClient:
             total_records=sum(len(v) for v in prepared_data.values()),
         )
         return prepared_data
-
-    def _matches_schema(
-        self,
-        entry: FlextLdapModels.Ldif.Entry,
-        schema_name: str,
-    ) -> bool:
-        """Check if LDAP entry matches schema type."""
-        raw = m.DbtLdap.normalize_attributes(entry)
-        object_classes: list[str] = [str(x) for x in raw.get("objectClass", [])]
-        schema_mapping: dict[str, list[str]] = {
-            c.LdapEntityTypes.USERS: c.LdapSchemaMapping.USERS_CLASSES,
-            c.LdapEntityTypes.GROUPS: c.LdapSchemaMapping.GROUPS_CLASSES,
-            c.LdapEntityTypes.ORG_UNITS: c.LdapSchemaMapping.ORG_UNITS_CLASSES,
-        }
-        expected_classes = schema_mapping.get(schema_name, [])
-        return any(cls in object_classes for cls in expected_classes)
-
-    def _map_entry_attributes(
-        self,
-        entry: FlextLdapModels.Ldif.Entry,
-    ) -> Mapping[str, t.JsonValue]:
-        """Map LDAP entry attributes using configuration mapping."""
-        dn_str = str(entry.dn) if entry.dn is not None else ""
-        mapped_attrs: dict[str, t.JsonValue] = {"dn": dn_str}
-        if entry.attributes is None:
-            return mapped_attrs
-        for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
-            if ldap_attr in entry.attributes:
-                values_obj = entry.attributes[ldap_attr]
-                first_value = values_obj[0] if values_obj else ""
-                mapped_attrs[dbt_attr] = first_value
-        for attr, values in entry.attributes.items():
-            if attr not in self.config.ldap_attribute_mapping:
-                first_value = values[0] if values else ""
-                mapped_attrs[attr] = first_value
-        return mapped_attrs
 
     def _search_entries_sync(
         self,

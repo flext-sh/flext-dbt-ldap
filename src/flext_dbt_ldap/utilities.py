@@ -157,58 +157,6 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         """LDAP data transformation utilities."""
 
         @staticmethod
-        def generate_ldap_source_schema(
-            ldap_attributes: list[str],
-            source_name: str = "ldap_users",
-        ) -> r[m.DbtSourceSchema]:
-            """Generate DBT source schema for LDAP attributes."""
-            try:
-                columns: list[dict[str, str]] = []
-                for attr in ldap_attributes:
-                    if attr.lower() in {"createtimestamp", "modifytimestamp"}:
-                        data_type = "timestamp"
-                    elif attr.lower() in {"memberof", "objectclass"}:
-                        data_type = "text[]"
-                    elif attr.lower() in {"uidnumber", "gidnumber"}:
-                        data_type = "integer"
-                    else:
-                        data_type = "text"
-                    columns.append({
-                        "name": attr.lower().replace("-", "_"),
-                        "description": f"LDAP {attr} attribute",
-                        "data_type": data_type,
-                    })
-
-                source_schema = m.DbtSourceSchema(
-                    sources=[
-                        {
-                            "name": "ldap",
-                            "description": "LDAP directory data source",
-                            "tables": [
-                                {
-                                    "name": source_name,
-                                    "description": f"LDAP {source_name} data",
-                                    "columns": columns,
-                                },
-                            ],
-                        },
-                    ],
-                )
-                return r[m.DbtSourceSchema].ok(source_schema)
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
-                return r[m.DbtSourceSchema].fail(
-                    f"LDAP source schema generation failed: {e}",
-                )
-
-        @staticmethod
         def create_ldap_transformation_model(
             model_name: str,
             source_table: str,
@@ -292,34 +240,45 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     f"LDAP data tests generation failed: {e}",
                 )
 
-    class MacroManagement:
-        """DBT macro management utilities for LDAP operations."""
-
         @staticmethod
-        def create_ldap_parsing_macro(
-            macro_name: str = "parse_ldap_dn",
-        ) -> r[str]:
-            """Create DBT macro for parsing LDAP distinguished names."""
+        def generate_ldap_source_schema(
+            ldap_attributes: list[str],
+            source_name: str = "ldap_users",
+        ) -> r[m.DbtSourceSchema]:
+            """Generate DBT source schema for LDAP attributes."""
             try:
-                macro_sql = f"""-- Macro to parse LDAP Distinguished Name (DN) components
-{{% macro {macro_name}(dn_column, component='cn') %}}
-    case
-        when {{{{{{dn_column}}}}}} is null then null
-        when position('{{{{{{component}}}}}}=' in lower({{{{{{dn_column}}}}}}) = 0 then null
-        else trim(both '"' from
-            split_part(
-                split_part(
-                    lower({{{{{{dn_column}}}}}}),
-                    '{{{{{{component}}}}}}=',
-                    2
-                ),
-                ',',
-                1
-            )
-        )
-    end
-{{% endmacro %}}"""
-                return r[str].ok(macro_sql)
+                columns: list[dict[str, str]] = []
+                for attr in ldap_attributes:
+                    if attr.lower() in {"createtimestamp", "modifytimestamp"}:
+                        data_type = "timestamp"
+                    elif attr.lower() in {"memberof", "objectclass"}:
+                        data_type = "text[]"
+                    elif attr.lower() in {"uidnumber", "gidnumber"}:
+                        data_type = "integer"
+                    else:
+                        data_type = "text"
+                    columns.append({
+                        "name": attr.lower().replace("-", "_"),
+                        "description": f"LDAP {attr} attribute",
+                        "data_type": data_type,
+                    })
+
+                source_schema = m.DbtSourceSchema(
+                    sources=[
+                        {
+                            "name": "ldap",
+                            "description": "LDAP directory data source",
+                            "tables": [
+                                {
+                                    "name": source_name,
+                                    "description": f"LDAP {source_name} data",
+                                    "columns": columns,
+                                },
+                            ],
+                        },
+                    ],
+                )
+                return r[m.DbtSourceSchema].ok(source_schema)
             except (
                 ValueError,
                 TypeError,
@@ -329,7 +288,12 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[str].fail(f"LDAP parsing macro creation failed: {e}")
+                return r[m.DbtSourceSchema].fail(
+                    f"LDAP source schema generation failed: {e}",
+                )
+
+    class MacroManagement:
+        """DBT macro management utilities for LDAP operations."""
 
         @staticmethod
         def create_ldap_attribute_macro(
@@ -404,8 +368,96 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     f"LDAP normalization macro creation failed: {e}",
                 )
 
+        @staticmethod
+        def create_ldap_parsing_macro(
+            macro_name: str = "parse_ldap_dn",
+        ) -> r[str]:
+            """Create DBT macro for parsing LDAP distinguished names."""
+            try:
+                macro_sql = f"""-- Macro to parse LDAP Distinguished Name (DN) components
+{{% macro {macro_name}(dn_column, component='cn') %}}
+    case
+        when {{{{{{dn_column}}}}}} is null then null
+        when position('{{{{{{component}}}}}}=' in lower({{{{{{dn_column}}}}}}) = 0 then null
+        else trim(both '"' from
+            split_part(
+                split_part(
+                    lower({{{{{{dn_column}}}}}}),
+                    '{{{{{{component}}}}}}=',
+                    2
+                ),
+                ',',
+                1
+            )
+        )
+    end
+{{% endmacro %}}"""
+                return r[str].ok(macro_sql)
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
+                return r[str].fail(f"LDAP parsing macro creation failed: {e}")
+
     class SchemaGeneration:
         """Schema generation utilities for LDAP data structures."""
+
+        @staticmethod
+        def generate_group_schema() -> r[m.DbtModelDefinition]:
+            """Generate standard schema for LDAP group data."""
+            try:
+                group_schema = m.DbtModelDefinition(
+                    models=[
+                        {
+                            "name": "ldap_groups",
+                            "description": "Normalized LDAP group data",
+                            "columns": [
+                                {
+                                    "name": "group_id",
+                                    "description": "Unique group identifier",
+                                    "tests": ["unique", "not_null"],
+                                },
+                                {
+                                    "name": "group_name",
+                                    "description": "Group name",
+                                    "tests": ["unique", "not_null"],
+                                },
+                                {
+                                    "name": "description",
+                                    "description": "Group description",
+                                },
+                                {"name": "group_type", "description": "Type of group"},
+                                {"name": "members", "description": "Group member list"},
+                                {
+                                    "name": "created_at",
+                                    "description": "Group creation timestamp",
+                                },
+                                {
+                                    "name": "modified_at",
+                                    "description": "Last modification timestamp",
+                                },
+                            ],
+                        },
+                    ],
+                )
+                return r[m.DbtModelDefinition].ok(group_schema)
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
+                return r[m.DbtModelDefinition].fail(
+                    f"Group schema generation failed: {e}",
+                )
 
         @staticmethod
         def generate_user_schema() -> r[m.DbtModelDefinition]:
@@ -476,92 +528,8 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     f"User schema generation failed: {e}",
                 )
 
-        @staticmethod
-        def generate_group_schema() -> r[m.DbtModelDefinition]:
-            """Generate standard schema for LDAP group data."""
-            try:
-                group_schema = m.DbtModelDefinition(
-                    models=[
-                        {
-                            "name": "ldap_groups",
-                            "description": "Normalized LDAP group data",
-                            "columns": [
-                                {
-                                    "name": "group_id",
-                                    "description": "Unique group identifier",
-                                    "tests": ["unique", "not_null"],
-                                },
-                                {
-                                    "name": "group_name",
-                                    "description": "Group name",
-                                    "tests": ["unique", "not_null"],
-                                },
-                                {
-                                    "name": "description",
-                                    "description": "Group description",
-                                },
-                                {"name": "group_type", "description": "Type of group"},
-                                {"name": "members", "description": "Group member list"},
-                                {
-                                    "name": "created_at",
-                                    "description": "Group creation timestamp",
-                                },
-                                {
-                                    "name": "modified_at",
-                                    "description": "Last modification timestamp",
-                                },
-                            ],
-                        },
-                    ],
-                )
-                return r[m.DbtModelDefinition].ok(group_schema)
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
-                return r[m.DbtModelDefinition].fail(
-                    f"Group schema generation failed: {e}",
-                )
-
     class TransformationOptimization:
         """Transformation optimization utilities."""
-
-        @staticmethod
-        def optimize_ldap_query(
-            base_query: str,
-            optimization_hints: m.OptimizationHints,
-        ) -> r[str]:
-            """Optimize DBT SQL query for LDAP data processing."""
-            try:
-                optimized_query = base_query
-                if optimization_hints.add_indexes:
-                    for column in optimization_hints.index_columns:
-                        optimized_query = (
-                            f"-- Consider adding index on {column}\n{optimized_query}"
-                        )
-                if optimization_hints.partition_by:
-                    optimized_query = f"{optimized_query}\n-- Consider partitioning by {optimization_hints.partition_by}"
-                if optimization_hints.filter_early:
-                    optimized_query = optimized_query.replace(
-                        "where 1=1",
-                        "where 1=1\n    -- Apply filters early for performance",
-                    )
-                return r[str].ok(optimized_query)
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
-                return r[str].fail(f"Query optimization failed: {e}")
 
         @classmethod
         def analyze_transformation_performance(
@@ -611,6 +579,38 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 return r[m.PerformanceAnalysis].fail(
                     f"Performance analysis failed: {e}",
                 )
+
+        @staticmethod
+        def optimize_ldap_query(
+            base_query: str,
+            optimization_hints: m.OptimizationHints,
+        ) -> r[str]:
+            """Optimize DBT SQL query for LDAP data processing."""
+            try:
+                optimized_query = base_query
+                if optimization_hints.add_indexes:
+                    for column in optimization_hints.index_columns:
+                        optimized_query = (
+                            f"-- Consider adding index on {column}\n{optimized_query}"
+                        )
+                if optimization_hints.partition_by:
+                    optimized_query = f"{optimized_query}\n-- Consider partitioning by {optimization_hints.partition_by}"
+                if optimization_hints.filter_early:
+                    optimized_query = optimized_query.replace(
+                        "where 1=1",
+                        "where 1=1\n    -- Apply filters early for performance",
+                    )
+                return r[str].ok(optimized_query)
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
+                return r[str].fail(f"Query optimization failed: {e}")
 
 
 u = FlextDbtLdapUtilities

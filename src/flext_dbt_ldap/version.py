@@ -32,6 +32,31 @@ class FlextDbtLdapVersion:
             self._metadata = metadata("flext-dbt-ldap")
 
     @property
+    def author_name(self) -> str | None:
+        """Get author name."""
+        return self._metadata.get("Author")
+
+    @property
+    def description(self) -> str | None:
+        """Get package description."""
+        return self._metadata.get("Summary")
+
+    @property
+    def license(self) -> str | None:
+        """Get package license."""
+        return self._metadata.get("License")
+
+    @property
+    def maintainer_name(self) -> str | None:
+        """Get maintainer name."""
+        return self._metadata.get("Author")
+
+    @property
+    def url(self) -> str | None:
+        """Get package URL."""
+        return self._metadata.get("Home-Page")
+
+    @property
     def version(self) -> str:
         """Get version string."""
         return self._metadata.get("Version", "0.1.0")
@@ -48,31 +73,6 @@ class FlextDbtLdapVersion:
     def version_tuple(self) -> tuple[int | str, ...]:
         """Alias for version_info."""
         return self.version_info
-
-    @property
-    def author_name(self) -> str | None:
-        """Get author name."""
-        return self._metadata.get("Author")
-
-    @property
-    def maintainer_name(self) -> str | None:
-        """Get maintainer name."""
-        return self._metadata.get("Author")
-
-    @property
-    def description(self) -> str | None:
-        """Get package description."""
-        return self._metadata.get("Summary")
-
-    @property
-    def license(self) -> str | None:
-        """Get package license."""
-        return self._metadata.get("License")
-
-    @property
-    def url(self) -> str | None:
-        """Get package URL."""
-        return self._metadata.get("Home-Page")
 
 
 def _create_version() -> FlextResult[FlextDbtLdapVersion]:

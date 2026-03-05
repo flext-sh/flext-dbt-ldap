@@ -31,10 +31,57 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         self._client: FlextDbtLdapClient | None = None
         self._service: FlextDbtLdapService | None = None
 
+    # =============================================================================
+    # CLIENT AND SERVICE MANAGEMENT
+    # =============================================================================
+
+    @property
+    def client(self) -> FlextDbtLdapClient:
+        """Get the DBT LDAP client instance."""
+        if self._client is None:
+            ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
+            self._client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
+        return self._client
+
+    @property
+    @override
+    def config(self) -> FlextDbtLdapSettings:
+        """Get the current configuration."""
+        return self._dbt_ldap_config
+
+    @property
+    def service(self) -> FlextDbtLdapService:
+        """Get the DBT LDAP service instance."""
+        if self._service is None:
+            self._service = FlextDbtLdapService(self.config)
+        return self._service
+
     @classmethod
     def create(cls) -> FlextDbtLdap:
         """Create a new FlextDbtLdap instance (factory method)."""
         return cls()
+
+    # =============================================================================
+    # FACTORY METHODS
+    # =============================================================================
+
+    def create_client(self) -> r[FlextDbtLdapClient]:
+        """Create DBT LDAP client with current configuration."""
+        try:
+            self.logger.info("Creating DBT LDAP client")
+            ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
+            client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
+            return r[FlextDbtLdapClient].ok(client)
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
+            return r[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
 
     # =============================================================================
     # CONFIGURATION
@@ -70,118 +117,6 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         ) as e:
             return r[FlextDbtLdapSettings].fail(f"Config creation failed: {e}")
 
-    # =============================================================================
-    # CLIENT AND SERVICE MANAGEMENT
-    # =============================================================================
-
-    @property
-    def client(self) -> FlextDbtLdapClient:
-        """Get the DBT LDAP client instance."""
-        if self._client is None:
-            ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
-            self._client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
-        return self._client
-
-    @property
-    def service(self) -> FlextDbtLdapService:
-        """Get the DBT LDAP service instance."""
-        if self._service is None:
-            self._service = FlextDbtLdapService(self.config)
-        return self._service
-
-    @property
-    @override
-    def config(self) -> FlextDbtLdapSettings:
-        """Get the current configuration."""
-        return self._dbt_ldap_config
-
-    @override
-    def execute(self) -> r[FlextDbtLdapSettings]:
-        """Execute DBT LDAP domain service logic."""
-        client_result = self.create_client()
-        if client_result.is_failure:
-            return r[FlextDbtLdapSettings].fail(
-                f"Failed to create client: {client_result.error}",
-            )
-        return r[FlextDbtLdapSettings].ok(self.config)
-
-    # =============================================================================
-    # FACTORY METHODS
-    # =============================================================================
-
-    def create_client(self) -> r[FlextDbtLdapClient]:
-        """Create DBT LDAP client with current configuration."""
-        try:
-            self.logger.info("Creating DBT LDAP client")
-            ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
-            client = FlextDbtLdapClient(self.config, ldap_api=ldap_api)
-            return r[FlextDbtLdapClient].ok(client)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
-            return r[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
-
-    def create_service(self) -> r[FlextDbtLdapService]:
-        """Create DBT LDAP service with current configuration."""
-        try:
-            self.logger.info("Creating DBT LDAP service")
-            service = FlextDbtLdapService(self.config)
-            return r[FlextDbtLdapService].ok(service)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
-            return r[FlextDbtLdapService].fail(
-                f"Service creation failed: {e}",
-            )
-
-    # =============================================================================
-    # MODEL FACTORY METHODS
-    # =============================================================================
-
-    def create_user_dimension(
-        self,
-        user_id: str,
-        common_name: str,
-        email: str | None = None,
-    ) -> r[m.UserDimension]:
-        """Create user dimension with required fields."""
-        try:
-            self.logger.debug(
-                "Creating user dimension: user_id=%s, name=%s",
-                user_id,
-                common_name,
-            )
-            user = m.UserDimension(
-                user_id=user_id,
-                common_name=common_name,
-                email=email,
-            )
-            return r[m.UserDimension].ok(user)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
-            return r[m.UserDimension].fail(
-                f"User dimension creation failed: {e}",
-            )
-
     def create_group_dimension(
         self,
         group_id: str,
@@ -214,12 +149,12 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 f"Group dimension creation failed: {e}",
             )
 
-    def create_transformer(self) -> r[m.DbtLdap]:
-        """Create LDAP data transformer."""
+    def create_service(self) -> r[FlextDbtLdapService]:
+        """Create DBT LDAP service with current configuration."""
         try:
-            self.logger.debug("Creating LDAP transformer")
-            transformer = m.DbtLdap()
-            return r[m.DbtLdap].ok(transformer)
+            self.logger.info("Creating DBT LDAP service")
+            service = FlextDbtLdapService(self.config)
+            return r[FlextDbtLdapService].ok(service)
         except (
             ValueError,
             TypeError,
@@ -229,8 +164,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[m.DbtLdap].fail(
-                f"Transformer creation failed: {e}",
+            return r[FlextDbtLdapService].fail(
+                f"Service creation failed: {e}",
             )
 
     # =============================================================================
@@ -291,6 +226,71 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             return r[FlextDbtLdapService].fail(
                 f"Pipeline creation failed: {e}",
             )
+
+    def create_transformer(self) -> r[m.DbtLdap]:
+        """Create LDAP data transformer."""
+        try:
+            self.logger.debug("Creating LDAP transformer")
+            transformer = m.DbtLdap()
+            return r[m.DbtLdap].ok(transformer)
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
+            return r[m.DbtLdap].fail(
+                f"Transformer creation failed: {e}",
+            )
+
+    # =============================================================================
+    # MODEL FACTORY METHODS
+    # =============================================================================
+
+    def create_user_dimension(
+        self,
+        user_id: str,
+        common_name: str,
+        email: str | None = None,
+    ) -> r[m.UserDimension]:
+        """Create user dimension with required fields."""
+        try:
+            self.logger.debug(
+                "Creating user dimension: user_id=%s, name=%s",
+                user_id,
+                common_name,
+            )
+            user = m.UserDimension(
+                user_id=user_id,
+                common_name=common_name,
+                email=email,
+            )
+            return r[m.UserDimension].ok(user)
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
+            return r[m.UserDimension].fail(
+                f"User dimension creation failed: {e}",
+            )
+
+    @override
+    def execute(self) -> r[FlextDbtLdapSettings]:
+        """Execute DBT LDAP domain service logic."""
+        client_result = self.create_client()
+        if client_result.is_failure:
+            return r[FlextDbtLdapSettings].fail(
+                f"Failed to create client: {client_result.error}",
+            )
+        return r[FlextDbtLdapSettings].ok(self.config)
 
 
 __all__ = [

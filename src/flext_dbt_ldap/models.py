@@ -314,12 +314,6 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 else None,
             )
 
-        def validate_business_rules(self) -> r[bool]:
-            """Validate user dimension business rules."""
-            if not self.user_id or not self.common_name:
-                return r[bool].fail("User ID and common name are required")
-            return r[bool].ok(value=True)
-
         def to_dbt_dict(self) -> Mapping[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
             return {
@@ -335,6 +329,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 "created_date": self.created_date or "",
                 "modified_date": self.modified_date or "",
             }
+
+        def validate_business_rules(self) -> r[bool]:
+            """Validate user dimension business rules."""
+            if not self.user_id or not self.common_name:
+                return r[bool].fail("User ID and common name are required")
+            return r[bool].ok(value=True)
 
     class GroupDimension(FlextModels.Entity):
         """Group dimension model for DBT LDAP transformations."""
@@ -377,14 +377,6 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 else None,
             )
 
-        def validate_business_rules(self) -> r[bool]:
-            """Validate group dimension business rules."""
-            if not self.group_id or not self.common_name:
-                return r[bool].fail("Group ID and common name are required")
-            if self.member_count < 0:
-                return r[bool].fail("Member count cannot be negative")
-            return r[bool].ok(value=True)
-
         def to_dbt_dict(self) -> Mapping[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
             return {
@@ -398,6 +390,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 "modified_date": self.modified_date or "",
             }
 
+        def validate_business_rules(self) -> r[bool]:
+            """Validate group dimension business rules."""
+            if not self.group_id or not self.common_name:
+                return r[bool].fail("Group ID and common name are required")
+            if self.member_count < 0:
+                return r[bool].fail("Member count cannot be negative")
+            return r[bool].ok(value=True)
+
     class MembershipFact(FlextModels.Entity):
         """Membership fact model for DBT LDAP transformations."""
 
@@ -407,12 +407,6 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         is_primary: bool = False
         effective_date: str | None = None
         expiry_date: str | None = None
-
-        def validate_business_rules(self) -> r[bool]:
-            """Validate membership fact business rules."""
-            if not self.user_dn or not self.group_dn:
-                return r[bool].fail("User DN and Group DN are required")
-            return r[bool].ok(value=True)
 
         def to_dbt_dict(self) -> Mapping[str, t.JsonValue]:
             """Convert to dictionary suitable for DBT processing."""
@@ -424,6 +418,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 "effective_date": self.effective_date or "",
                 "expiry_date": self.expiry_date or "",
             }
+
+        def validate_business_rules(self) -> r[bool]:
+            """Validate membership fact business rules."""
+            if not self.user_dn or not self.group_dn:
+                return r[bool].fail("User DN and Group DN are required")
+            return r[bool].ok(value=True)
 
     # =========================================================================
     # TRANSFORMER - LDAP to DBT data transformation
@@ -445,16 +445,6 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 self._logger_instance = FlextLogger(__name__)
             return self._logger_instance
 
-        def _post_init_log(self) -> None:
-            self.logger.info("Initialized LDAP DBT transformer")
-
-        @staticmethod
-        def normalize_attributes(
-            entry: FlextLdapModels.Ldif.Entry,
-        ) -> Mapping[str, list[str]]:
-            """Normalize entry attributes to Mapping[str, list[str]]."""
-            return _entry_attrs_mapping(entry)
-
         @staticmethod
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
@@ -465,61 +455,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             except ValidationError:
                 return [str(oc_val)]
 
-        def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
-            """Check if entry is a user entry."""
-            object_classes = self._get_object_classes(entry)
-            user_classes = [
-                "person",
-                "user",
-                "inetOrgPerson",
-                "organizationalPerson",
-            ]
-            return any(cls in object_classes for cls in user_classes)
-
-        def _is_group_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
-            """Check if entry is a group entry."""
-            object_classes = self._get_object_classes(entry)
-            group_classes = [
-                "group",
-                "groupOfNames",
-                "groupOfUniqueNames",
-                "posixGroup",
-            ]
-            return any(cls in object_classes for cls in group_classes)
-
-        def transform_users(
-            self,
-            entries: list[FlextLdapModels.Ldif.Entry],
-        ) -> list[FlextDbtLdapModels.UserDimension]:
-            """Transform LDAP entries to user dimensions."""
-            self.logger.info(
-                "Transforming %d LDAP entries to user dimensions",
-                len(entries),
-            )
-            user_dims: list[FlextDbtLdapModels.UserDimension] = []
-            for entry in entries:
-                if self._is_user_entry(entry):
-                    try:
-                        user_dims.append(
-                            FlextDbtLdapModels.UserDimension.from_ldap_entry(
-                                entry,
-                            ),
-                        )
-                    except (
-                        ValueError,
-                        TypeError,
-                        KeyError,
-                        AttributeError,
-                        OSError,
-                        RuntimeError,
-                        ImportError,
-                    ):
-                        self.logger.exception(
-                            "Failed to transform user entry: %s",
-                            str(entry.dn) if entry.dn is not None else "",
-                        )
-            self.logger.info("Transformed %d user dimensions", len(user_dims))
-            return user_dims
+        @staticmethod
+        def normalize_attributes(
+            entry: FlextLdapModels.Ldif.Entry,
+        ) -> Mapping[str, list[str]]:
+            """Normalize entry attributes to Mapping[str, list[str]]."""
+            return _entry_attrs_mapping(entry)
 
         def transform_groups(
             self,
@@ -594,6 +535,40 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             )
             return membership_facts
 
+        def transform_users(
+            self,
+            entries: list[FlextLdapModels.Ldif.Entry],
+        ) -> list[FlextDbtLdapModels.UserDimension]:
+            """Transform LDAP entries to user dimensions."""
+            self.logger.info(
+                "Transforming %d LDAP entries to user dimensions",
+                len(entries),
+            )
+            user_dims: list[FlextDbtLdapModels.UserDimension] = []
+            for entry in entries:
+                if self._is_user_entry(entry):
+                    try:
+                        user_dims.append(
+                            FlextDbtLdapModels.UserDimension.from_ldap_entry(
+                                entry,
+                            ),
+                        )
+                    except (
+                        ValueError,
+                        TypeError,
+                        KeyError,
+                        AttributeError,
+                        OSError,
+                        RuntimeError,
+                        ImportError,
+                    ):
+                        self.logger.exception(
+                            "Failed to transform user entry: %s",
+                            str(entry.dn) if entry.dn is not None else "",
+                        )
+            self.logger.info("Transformed %d user dimensions", len(user_dims))
+            return user_dims
+
         def _extract_group_memberships(
             self,
             group_entry: FlextLdapModels.Ldif.Entry,
@@ -632,6 +607,31 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     for group_dn in attrs["memberOf"]
                 )
             return memberships
+
+        def _is_group_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
+            """Check if entry is a group entry."""
+            object_classes = self._get_object_classes(entry)
+            group_classes = [
+                "group",
+                "groupOfNames",
+                "groupOfUniqueNames",
+                "posixGroup",
+            ]
+            return any(cls in object_classes for cls in group_classes)
+
+        def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
+            """Check if entry is a user entry."""
+            object_classes = self._get_object_classes(entry)
+            user_classes = [
+                "person",
+                "user",
+                "inetOrgPerson",
+                "organizationalPerson",
+            ]
+            return any(cls in object_classes for cls in user_classes)
+
+        def _post_init_log(self) -> None:
+            self.logger.info("Initialized LDAP DBT transformer")
 
 
 # Short aliases
