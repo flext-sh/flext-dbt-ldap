@@ -146,7 +146,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             """Annotated type factories."""
 
             @staticmethod
-            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type[E]:
+            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> object:
                 """Create coerced enum type (Annotated wrapper)."""
                 return Annotated[
                     enum_cls,

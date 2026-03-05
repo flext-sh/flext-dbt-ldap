@@ -325,15 +325,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             return {
                 "user_id": self.user_id,
                 "common_name": self.common_name,
-                "email": self.email,
-                "display_name": self.display_name,
-                "department": self.department,
-                "manager_dn": self.manager_dn,
-                "employee_number": self.employee_number,
-                "phone": self.phone,
+                "email": self.email or "",
+                "display_name": self.display_name or "",
+                "department": self.department or "",
+                "manager_dn": self.manager_dn or "",
+                "employee_number": self.employee_number or "",
+                "phone": self.phone or "",
                 "is_active": self.is_active,
-                "created_date": self.created_date,
-                "modified_date": self.modified_date,
+                "created_date": self.created_date or "",
+                "modified_date": self.modified_date or "",
             }
 
     class GroupDimension(FlextModels.Entity):
@@ -390,12 +390,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             return {
                 "group_id": self.group_id,
                 "common_name": self.common_name,
-                "description": self.description,
-                "group_type": self.group_type,
+                "description": self.description or "",
+                "group_type": self.group_type or "",
                 "member_count": self.member_count,
                 "is_active": self.is_active,
-                "created_date": self.created_date,
-                "modified_date": self.modified_date,
+                "created_date": self.created_date or "",
+                "modified_date": self.modified_date or "",
             }
 
     class MembershipFact(FlextModels.Entity):
@@ -421,8 +421,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 "group_dn": self.group_dn,
                 "membership_type": self.membership_type,
                 "is_primary": self.is_primary,
-                "effective_date": self.effective_date,
-                "expiry_date": self.expiry_date,
+                "effective_date": self.effective_date or "",
+                "expiry_date": self.expiry_date or "",
             }
 
     # =========================================================================
@@ -516,7 +516,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     ):
                         self.logger.exception(
                             "Failed to transform user entry: %s",
-                            entry.dn,
+                            str(entry.dn) if entry.dn is not None else "",
                         )
             self.logger.info("Transformed %d user dimensions", len(user_dims))
             return user_dims
@@ -550,7 +550,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     ):
                         self.logger.exception(
                             "Failed to transform group entry: %s",
-                            entry.dn,
+                            str(entry.dn) if entry.dn is not None else "",
                         )
             self.logger.info("Transformed %d group dimensions", len(group_dims))
             return group_dims
@@ -586,7 +586,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 ):
                     self.logger.exception(
                         "Failed to transform memberships for entry: %s",
-                        entry.dn,
+                        str(entry.dn) if entry.dn is not None else "",
                     )
             self.logger.info(
                 "Transformed %d membership facts",

@@ -21,7 +21,7 @@ from flext_ldap import (
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import _entry_attrs_mapping, m
+from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
@@ -71,8 +71,8 @@ class FlextDbtLdapClient:
             host=config.ldap_host,
             port=config.ldap_port,
             use_tls=config.ldap_use_tls,
-            bind_dn=ldap_bind_dn,
-            bind_password=ldap_bind_password,
+            bind_dn=ldap_bind_dn or "",
+            bind_password=ldap_bind_password or "",
         )
         connection = FlextLdapConnection(config=ldap_settings)
         operations = FlextLdapOperations(connection=connection)
@@ -110,7 +110,7 @@ class FlextDbtLdapClient:
                     len(result.value) if result.value else 0,
                 )
             else:
-                logger.error("LDAP extraction failed: %s", result.error)
+                logger.error("LDAP extraction failed: %s", result.error or "")
                 return r[list[FlextLdapModels.Ldif.Entry]].fail(
                     f"LDAP extraction failed: {result.error}",
                 )
@@ -143,7 +143,7 @@ class FlextDbtLdapClient:
             for entry in entries:
                 if entry.dn if hasattr(entry, "dn") else "":
                     valid_dns += 1
-                attrs = _entry_attrs_mapping(entry)
+                attrs = m.DbtLdap.normalize_attributes(entry)
                 if all(attr in attrs and attrs[attr] for attr in required_attributes):
                     valid_entries += 1
             quality_score = (
@@ -189,14 +189,14 @@ class FlextDbtLdapClient:
             logger.info(
                 "Running DBT transformations on %d LDAP entries, models=%s",
                 len(entries),
-                model_names,
+                ", ".join(model_names) if model_names else "",
             )
             _ = self._prepare_ldap_data_for_dbt(entries)
             model_list = list(model_names) if model_names else None
             dbt_result = self.dbt_manager.run_models(models=model_list)
 
             if dbt_result.is_failure:
-                logger.error("DBT transformation failed: %s", dbt_result.error)
+                logger.error("DBT transformation failed: %s", dbt_result.error or "")
                 return r[m.DbtRunStatus].fail(
                     f"DBT transformation failed: {dbt_result.error}",
                 )
@@ -275,8 +275,9 @@ class FlextDbtLdapClient:
             ]
             prepared_data[table_name] = table_data
         logger.debug(
-            "Prepared LDAP data for DBT: %s",
-            {k: len(v) for k, v in prepared_data.items()},
+            "Prepared LDAP data for DBT",
+            tables=len(prepared_data),
+            total_records=sum(len(v) for v in prepared_data.values()),
         )
         return prepared_data
 
@@ -286,7 +287,7 @@ class FlextDbtLdapClient:
         schema_name: str,
     ) -> bool:
         """Check if LDAP entry matches schema type."""
-        raw = _entry_attrs_mapping(entry)
+        raw = m.DbtLdap.normalize_attributes(entry)
         object_classes: list[str] = [str(x) for x in raw.get("objectClass", [])]
         schema_mapping: dict[str, list[str]] = {
             c.LdapEntityTypes.USERS: c.LdapSchemaMapping.USERS_CLASSES,

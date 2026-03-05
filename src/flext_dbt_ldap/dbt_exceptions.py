@@ -50,10 +50,10 @@ class _DbtLdapContextMixin:
 
     @staticmethod
     def _build_context(
-        **fields: t.MetadataValue,
+        **fields: t.MetadataValue | None,
     ) -> Mapping[str, t.MetadataValue]:
         """Build context dictionary from keyword arguments."""
-        return {k: v for k, v in fields.items() if v is not None}
+        return {key: value for key, value in fields.items() if value is not None}
 
 
 class FlextDbtLdapModelError(_DbtLdapContextMixin, FlextExceptions.BaseError):

@@ -15,6 +15,7 @@ from typing import override
 
 from flext_core import FlextLogger, r
 from flext_meltano import FlextMeltanoDbtService
+from pydantic import TypeAdapter, ValidationError
 
 from flext_dbt_ldap.constants import c
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
@@ -22,6 +23,7 @@ from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = FlextLogger(__name__)
+_SYNC_BOOKMARKS_ADAPTER = TypeAdapter(dict[str, str])
 
 
 class FlextDbtLdapService:
@@ -69,12 +71,10 @@ class FlextDbtLdapService:
         if not isinstance(payload, dict):
             return {}
 
-        bookmarks: dict[str, str] = {
-            key: value
-            for key, value in payload.items()
-            if isinstance(key, str) and isinstance(value, str)
-        }
-        return bookmarks
+        try:
+            return _SYNC_BOOKMARKS_ADAPTER.validate_python(payload)
+        except ValidationError:
+            return {}
 
     def _persist_sync_state(self) -> None:
         self._sync_state_file.parent.mkdir(parents=True, exist_ok=True)
@@ -179,7 +179,7 @@ class FlextDbtLdapService:
                     successful=True,
                 )
             else:
-                logger.error("User sync failed: %s", result.error)
+                logger.error("User sync failed: %s", result.error or "")
             return result
         except (
             ValueError,
@@ -225,7 +225,7 @@ class FlextDbtLdapService:
                 logger.info("Group sync completed successfully")
                 self._update_bookmark("groups", current_bookmark, successful=True)
             else:
-                logger.error("Group sync failed: %s", result.error)
+                logger.error("Group sync failed: %s", result.error or "")
             return result
         except (
             ValueError,
@@ -257,7 +257,7 @@ class FlextDbtLdapService:
             if result.is_success:
                 logger.info("Membership sync completed successfully")
             else:
-                logger.error("Membership sync failed: %s", result.error)
+                logger.error("Membership sync failed: %s", result.error or "")
             return result
         except (
             ValueError,
@@ -322,7 +322,7 @@ class FlextDbtLdapService:
         try:
             logger.info(
                 "Validating warehouse data quality for models: %s",
-                model_names,
+                ", ".join(model_names) if model_names else "",
             )
             model_list = list(model_names) if model_names else None
             test_result = self._dbt_service.run_models(models=model_list)
@@ -332,7 +332,7 @@ class FlextDbtLdapService:
                 return r[m.ValidationMetrics].ok(
                     m.ValidationMetrics(validation_passed=True),
                 )
-            logger.error("Data quality validation failed: %s", test_result.error)
+            logger.error("Data quality validation failed: %s", test_result.error or "")
             return r[m.ValidationMetrics].fail(
                 test_result.error or "DBT tests failed",
             )
@@ -356,7 +356,9 @@ class FlextDbtLdapService:
     ) -> r[m.DbtRunStatus]:
         """Run DBT models."""
         try:
-            logger.info("Running DBT models: %s", model_names)
+            logger.info(
+                "Running DBT models: %s", ", ".join(model_names) if model_names else ""
+            )
             model_list = list(model_names) if model_names else None
             run_result = self._dbt_service.run_models(models=model_list)
 
@@ -368,7 +370,7 @@ class FlextDbtLdapService:
                         models_run=model_list or [],
                     ),
                 )
-            logger.error("DBT model execution failed: %s", run_result.error)
+            logger.error("DBT model execution failed: %s", run_result.error or "")
             return r[m.DbtRunStatus].fail(
                 run_result.error or "DBT model execution failed",
             )
