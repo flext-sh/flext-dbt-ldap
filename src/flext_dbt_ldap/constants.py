@@ -222,5 +222,4 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
 
 c = FlextDbtLdapConstants
-
 __all__ = ["FlextDbtLdapConstants", "c"]

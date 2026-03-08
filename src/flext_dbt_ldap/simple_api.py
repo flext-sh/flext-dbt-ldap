@@ -8,10 +8,7 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import (
-    FlextService,
-    r,
-)
+from flext_core import FlextService, r
 
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
@@ -30,10 +27,6 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         self._config = self._dbt_ldap_config
         self._client: FlextDbtLdapClient | None = None
         self._service: FlextDbtLdapService | None = None
-
-    # =============================================================================
-    # CLIENT AND SERVICE MANAGEMENT
-    # =============================================================================
 
     @property
     def client(self) -> FlextDbtLdapClient:
@@ -61,10 +54,6 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         """Create a new FlextDbtLdap instance (factory method)."""
         return cls()
 
-    # =============================================================================
-    # FACTORY METHODS
-    # =============================================================================
-
     def create_client(self) -> r[FlextDbtLdapClient]:
         """Create DBT LDAP client with current configuration."""
         try:
@@ -83,27 +72,16 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         ) as e:
             return r[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
 
-    # =============================================================================
-    # CONFIGURATION
-    # =============================================================================
-
     def create_config(
-        self,
-        ldap_host: str = "localhost",
-        ldap_port: int = 389,
-        ldap_base_dn: str = "",
+        self, ldap_host: str = "localhost", ldap_port: int = 389, ldap_base_dn: str = ""
     ) -> r[FlextDbtLdapSettings]:
         """Create DBT LDAP configuration with sensible defaults."""
         try:
             self.logger.info(
-                "Creating DBT LDAP config: host=%s, port=%d",
-                ldap_host,
-                ldap_port,
+                "Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port
             )
             config = FlextDbtLdapSettings(
-                ldap_host=ldap_host,
-                ldap_port=ldap_port,
-                ldap_base_dn=ldap_base_dn,
+                ldap_host=ldap_host, ldap_port=ldap_port, ldap_base_dn=ldap_base_dn
             )
             return r[FlextDbtLdapSettings].ok(config)
         except (
@@ -118,22 +96,15 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             return r[FlextDbtLdapSettings].fail(f"Config creation failed: {e}")
 
     def create_group_dimension(
-        self,
-        group_id: str,
-        common_name: str,
-        description: str | None = None,
+        self, group_id: str, common_name: str, description: str | None = None
     ) -> r[m.GroupDimension]:
         """Create group dimension with required fields."""
         try:
             self.logger.debug(
-                "Creating group dimension: group_id=%s, name=%s",
-                group_id,
-                common_name,
+                "Creating group dimension: group_id=%s, name=%s", group_id, common_name
             )
             group = m.GroupDimension(
-                group_id=group_id,
-                common_name=common_name,
-                description=description,
+                group_id=group_id, common_name=common_name, description=description
             )
             return r[m.GroupDimension].ok(group)
         except (
@@ -145,9 +116,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[m.GroupDimension].fail(
-                f"Group dimension creation failed: {e}",
-            )
+            return r[m.GroupDimension].fail(f"Group dimension creation failed: {e}")
 
     def create_service(self) -> r[FlextDbtLdapService]:
         """Create DBT LDAP service with current configuration."""
@@ -164,36 +133,23 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[FlextDbtLdapService].fail(
-                f"Service creation failed: {e}",
-            )
-
-    # =============================================================================
-    # PIPELINE METHODS
-    # =============================================================================
+            return r[FlextDbtLdapService].fail(f"Service creation failed: {e}")
 
     def create_simple_pipeline(
-        self,
-        ldap_host: str = "localhost",
-        ldap_port: int = 389,
-        ldap_base_dn: str = "",
+        self, ldap_host: str = "localhost", ldap_port: int = 389, ldap_base_dn: str = ""
     ) -> r[FlextDbtLdapService]:
         """Create complete DBT LDAP pipeline with minimal configuration."""
         try:
             self.logger.info(
-                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities",
+                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities"
             )
             config_result = self.create_config(
-                ldap_host=ldap_host,
-                ldap_port=ldap_port,
-                ldap_base_dn=ldap_base_dn,
+                ldap_host=ldap_host, ldap_port=ldap_port, ldap_base_dn=ldap_base_dn
             )
             if config_result.is_failure:
                 return r[FlextDbtLdapService].fail(
-                    f"Config creation failed: {config_result.error}",
+                    f"Config creation failed: {config_result.error}"
                 )
-
-            # Use FlextDbtLdapUtilities for DBT project configuration
             ldap_sources = [
                 m.DbtSourceTable(name="users"),
                 m.DbtSourceTable(name="groups"),
@@ -212,7 +168,6 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                     if project_config_result.value
                     else "unknown",
                 )
-
             return self.create_service()
         except (
             ValueError,
@@ -223,9 +178,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[FlextDbtLdapService].fail(
-                f"Pipeline creation failed: {e}",
-            )
+            return r[FlextDbtLdapService].fail(f"Pipeline creation failed: {e}")
 
     def create_transformer(self) -> r[m.DbtLdap]:
         """Create LDAP data transformer."""
@@ -242,31 +195,18 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[m.DbtLdap].fail(
-                f"Transformer creation failed: {e}",
-            )
-
-    # =============================================================================
-    # MODEL FACTORY METHODS
-    # =============================================================================
+            return r[m.DbtLdap].fail(f"Transformer creation failed: {e}")
 
     def create_user_dimension(
-        self,
-        user_id: str,
-        common_name: str,
-        email: str | None = None,
+        self, user_id: str, common_name: str, email: str | None = None
     ) -> r[m.UserDimension]:
         """Create user dimension with required fields."""
         try:
             self.logger.debug(
-                "Creating user dimension: user_id=%s, name=%s",
-                user_id,
-                common_name,
+                "Creating user dimension: user_id=%s, name=%s", user_id, common_name
             )
             user = m.UserDimension(
-                user_id=user_id,
-                common_name=common_name,
-                email=email,
+                user_id=user_id, common_name=common_name, email=email
             )
             return r[m.UserDimension].ok(user)
         except (
@@ -278,9 +218,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[m.UserDimension].fail(
-                f"User dimension creation failed: {e}",
-            )
+            return r[m.UserDimension].fail(f"User dimension creation failed: {e}")
 
     @override
     def execute(self) -> r[FlextDbtLdapSettings]:
@@ -288,11 +226,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         client_result = self.create_client()
         if client_result.is_failure:
             return r[FlextDbtLdapSettings].fail(
-                f"Failed to create client: {client_result.error}",
+                f"Failed to create client: {client_result.error}"
             )
         return r[FlextDbtLdapSettings].ok(self.config)
 
 
-__all__ = [
-    "FlextDbtLdap",
-]
+__all__ = ["FlextDbtLdap"]

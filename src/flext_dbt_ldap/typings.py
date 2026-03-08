@@ -27,13 +27,13 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
         """DBT LDAP transformation type contracts."""
 
         type DataValidation = dict[str, str | list[str] | bool]
-        """Data validation configuration contract."""
+        "Data validation configuration contract."
 
     class DbtLdap:
         """DBT LDAP settings type contracts."""
 
         type SettingsDict = dict[str, bool | float | str | None]
-        """DBT LDAP logging settings configuration contract."""
+        "DBT LDAP logging settings configuration contract."
 
     class Project:
         """DBT LDAP-specific project types."""
@@ -55,13 +55,8 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
             "directory-dbt",
             "ldap-data-warehouse",
         ]
-        """DBT LDAP project type literal."""
+        "DBT LDAP project type literal."
 
 
-# Alias for simplified usage
 t = FlextDbtLdapTypes
-
-__all__ = [
-    "FlextDbtLdapTypes",
-    "t",
-]
+__all__ = ["FlextDbtLdapTypes", "t"]

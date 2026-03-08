@@ -26,10 +26,7 @@ class FlextDbtLdapIntegration:
         try:
             logger.info("Processing LDAP entries for DBT using flext-ldap delegation")
             entry_count = len(df)
-            logger.info(
-                "Processing %d LDAP entries via flext-ldap API",
-                entry_count,
-            )
+            logger.info("Processing %d LDAP entries via flext-ldap API", entry_count)
             return df
         except (
             ValueError,
@@ -44,18 +41,14 @@ class FlextDbtLdapIntegration:
             return df
 
     @staticmethod
-    def validate_ldap_data_quality(
-        df: p.DbtLdap.DataFrameLike,
-    ) -> m.ValidationMetrics:
+    def validate_ldap_data_quality(df: p.DbtLdap.DataFrameLike) -> m.ValidationMetrics:
         """Validate LDAP data quality using flext-ldap generic validation."""
         try:
             logger.info("Validating LDAP data quality for DBT")
             entry_count = len(df)
             logger.info("Validating %d LDAP entries", entry_count)
             return m.ValidationMetrics(
-                total_entries=entry_count,
-                valid_dns=entry_count,
-                quality_score=1.0,
+                total_entries=entry_count, valid_dns=entry_count, quality_score=1.0
             )
         except (
             ValueError,
@@ -72,7 +65,6 @@ class FlextDbtLdapIntegration:
 
 process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_dbt
 validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
-
 __all__: list[str] = [
     "FlextDbtLdapIntegration",
     "process_ldap_entries_for_dbt",

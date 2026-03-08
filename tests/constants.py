@@ -3,12 +3,9 @@
 from __future__ import annotations
 
 
-# Project-specific test constants namespace
 class TestsFlextDbtLdapConstants:
     """Constants for flext-dbt-ldap tests."""
 
 
 __all__ = ["TestsFlextDbtLdapConstants", "c"]
-
-# Alias for convenience
 c = TestsFlextDbtLdapConstants

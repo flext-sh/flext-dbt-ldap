@@ -10,8 +10,4 @@ from __future__ import annotations
 from flext_core import FlextLogger
 
 logger = FlextLogger(__name__)
-
-
-__all__: list[str] = [
-    "FlextDbtLdapSettings",
-]
+__all__: list[str] = ["FlextDbtLdapSettings"]

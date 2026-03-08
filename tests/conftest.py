@@ -19,20 +19,15 @@ from flext_tests import FlextTestsDocker
 from flext_dbt_ldap import t
 
 
-# Import shared fixtures from docker directory
 @pytest.fixture(scope="session")
 def shared_ldap_container(flext_docker: FlextTestsDocker) -> str:
     """Managed LDAP container using centralized FlextTestsDocker with docker-compose."""
-    # Use centralized docker-compose file for OpenLDAP
     compose_file = pathlib.Path(
-        "~/flext/docker/docker-compose.openldap.yml",
+        "~/flext/docker/docker-compose.openldap.yml"
     ).expanduser()
-
-    # Start OpenLDAP stack using docker-compose
     start_result = flext_docker.start_compose_stack(str(compose_file))
     if start_result.is_failure:
         pytest.skip(f"OpenLDAP container failed to start: {start_result.error}")
-
     return "flext-openldap-test"
 
 
@@ -47,7 +42,6 @@ def shared_ldap_config() -> dict[str, t.ContainerValue]:
     }
 
 
-# Test environment setup
 @pytest.fixture(autouse=True)
 def set_test_environment() -> Generator[None]:
     """Set test environment variables."""
@@ -57,14 +51,12 @@ def set_test_environment() -> Generator[None]:
     os.environ["DBT_PROFILES_DIR"] = temp_dir
     os.environ["LDAP_TEST_MODE"] = "true"
     yield
-    # Cleanup
     _ = os.environ.pop("FLEXT_ENV", None)
     _ = os.environ.pop("FLEXT_LOG_LEVEL", None)
     _ = os.environ.pop("DBT_PROFILES_DIR", None)
     _ = os.environ.pop("LDAP_TEST_MODE", None)
 
 
-# dbt LDAP configuration fixtures
 @pytest.fixture
 def dbt_ldap_profile() -> dict[str, t.ContainerValue]:
     """Dbt LDAP profile configuration for testing."""
@@ -78,8 +70,7 @@ def dbt_ldap_profile() -> dict[str, t.ContainerValue]:
         "test": {
             "outputs": {
                 "default": {
-                    "type": "postgres",  # Using postgres as target for
-                    # transformed LDAP data
+                    "type": "postgres",
                     "host": "localhost",
                     "port": 5432,
                     "database": "ldap_warehouse",
@@ -89,7 +80,7 @@ def dbt_ldap_profile() -> dict[str, t.ContainerValue]:
                     "threads": 4,
                     "keepalives_idle": 0,
                     "search_path": "ldap_transformed",
-                },
+                }
             },
             "target": "default",
         },
@@ -131,20 +122,18 @@ def dbt_ldap_project_config() -> dict[str, t.ContainerValue]:
     }
 
 
-# LDAP source fixtures
 @pytest.fixture
 def ldap_source_config(
     shared_ldap_config: dict[str, t.ContainerValue],
 ) -> dict[str, t.ContainerValue]:
     """LDAP source configuration for testing using shared container."""
-    # Suppress unused parameter warning - fixture is used for side effects
     _ = shared_ldap_config
     return {
         "server": "localhost",
-        "port": 3390,  # Use shared container port
-        "base_dn": "dc=flext,dc=local",  # Use shared container domain
-        "bind_dn": "cn=REDACTED_LDAP_BIND_PASSWORD,dc=flext,dc=local",  # Use shared container REDACTED_LDAP_BIND_PASSWORD DN
-        "bind_password": "REDACTED_LDAP_BIND_PASSWORD123",  # Use shared container password
+        "port": 3390,
+        "base_dn": "dc=flext,dc=local",
+        "bind_dn": "cn=REDACTED_LDAP_BIND_PASSWORD,dc=flext,dc=local",
+        "bind_password": "REDACTED_LDAP_BIND_PASSWORD123",
         "use_ssl": False,
         "use_tls": False,
         "timeout": 30,
@@ -201,163 +190,31 @@ def sample_ldap_entries() -> list[dict[str, t.ContainerValue]]:
     ]
 
 
-# dbt LDAP model definitions
 @pytest.fixture
 def dbt_ldap_models() -> dict[str, str]:
     """Dbt LDAP model SQL definitions for testing."""
     return {
-        "staging_ldap_users": """
-
-          {{ config(materialized='view') }}
-          SELECT
-              {{ ldap_extract_attribute('dn') }} as user_dn,
-              {{ ldap_extract_attribute('cn', 0) }} as username,
-              {{ ldap_extract_attribute('uid', 0) }} as user_id,
-              {{ ldap_extract_attribute('mail', 0) }} as email,
-              {{ ldap_extract_attribute('givenName', 0) }} as first_name,
-              {{ ldap_extract_attribute('sn', 0) }} as last_name,
-              {{ ldap_extract_attribute('employeeNumber', 0) }} as employee_number,
-              {{ ldap_extract_attribute('departmentNumber', 0) }} as department,
-              {{ ldap_extract_attribute('title', 0) }} as job_title,
-              {{ ldap_extract_attribute('telephoneNumber', 0) }} as phone,
-              CURRENT_TIMESTAMP as extracted_at
-          FROM {{ source('ldap_raw', 'users') }}
-          WHERE {{ ldap_filter_object_class('inetOrgPerson') }}
-      """,
-        "dim_users": """
-
-          {{ config(
-              materialized='table',
-              ldap={'validate_dn': true, 'normalize_attributes': true}
-          ) }}
-          SELECT
-              user_dn,
-              username,
-              user_id,
-              LOWER(email) as email_normalized,
-              TRIM(first_name || ' ' || last_name) as full_name,
-              first_name,
-              last_name,
-              employee_number,
-              department,
-              job_title,
-              phone,
-              {{ ldap_parse_dn_component('user_dn', 'ou') }} as organizational_unit,
-              {{ ldap_validate_email('email') }} as email_valid,
-              extracted_at,
-              CURRENT_TIMESTAMP as dbt_updated_at
-          FROM {{ ref('staging_ldap_users') }}
-          WHERE email IS NOT NULL
-      """,
-        "staging_ldap_groups": """
-
-          {{ config(materialized='view') }}
-          SELECT
-              {{ ldap_extract_attribute('dn') }} as group_dn,
-              {{ ldap_extract_attribute('cn', 0) }} as group_name,
-              {{ ldap_extract_attribute('description', 0) }} as group_description,
-              {{ ldap_extract_multi_attribute('member') }} as members,
-              CURRENT_TIMESTAMP as extracted_at
-          FROM {{ source('ldap_raw', 'groups') }}
-          WHERE {{ ldap_filter_object_class('groupOfNames') }}
-      """,
-        "dim_groups": """
-
-          {{ config(materialized='table') }}
-          SELECT
-              group_dn,
-              group_name,
-              group_description,
-              {{ ldap_count_members('members') }} as member_count,
-              extracted_at,
-              CURRENT_TIMESTAMP as dbt_updated_at
-          FROM {{ ref('staging_ldap_groups') }}
-      """,
-        "fact_group_memberships": """
-
-          {{ config(
-              materialized='incremental',
-              unique_key=['group_dn', 'member_dn']
-          ) }}
-          SELECT
-              g.group_dn,
-              g.group_name,
-              {{ ldap_unnest_members('g.members') }} as member_dn,
-              u.user_id,
-              u.username,
-              g.extracted_at,
-              CURRENT_TIMESTAMP as dbt_updated_at
-          FROM {{ ref('staging_ldap_groups') }} g
-          CROSS JOIN LATERAL {{ ldap_split_members('g.members') }} AS member_dn
-          LEFT JOIN {{ ref('dim_users') }} u
-              ON u.user_dn = member_dn
-          {% if is_incremental() %}
-              WHERE g.extracted_at > (SELECT MAX(extracted_at) FROM {{ this }})
-          {% endif %}
-      """,
+        "staging_ldap_users": "\n\n          {{ config(materialized='view') }}\n          SELECT\n              {{ ldap_extract_attribute('dn') }} as user_dn,\n              {{ ldap_extract_attribute('cn', 0) }} as username,\n              {{ ldap_extract_attribute('uid', 0) }} as user_id,\n              {{ ldap_extract_attribute('mail', 0) }} as email,\n              {{ ldap_extract_attribute('givenName', 0) }} as first_name,\n              {{ ldap_extract_attribute('sn', 0) }} as last_name,\n              {{ ldap_extract_attribute('employeeNumber', 0) }} as employee_number,\n              {{ ldap_extract_attribute('departmentNumber', 0) }} as department,\n              {{ ldap_extract_attribute('title', 0) }} as job_title,\n              {{ ldap_extract_attribute('telephoneNumber', 0) }} as phone,\n              CURRENT_TIMESTAMP as extracted_at\n          FROM {{ source('ldap_raw', 'users') }}\n          WHERE {{ ldap_filter_object_class('inetOrgPerson') }}\n      ",
+        "dim_users": "\n\n          {{ config(\n              materialized='table',\n              ldap={'validate_dn': true, 'normalize_attributes': true}\n          ) }}\n          SELECT\n              user_dn,\n              username,\n              user_id,\n              LOWER(email) as email_normalized,\n              TRIM(first_name || ' ' || last_name) as full_name,\n              first_name,\n              last_name,\n              employee_number,\n              department,\n              job_title,\n              phone,\n              {{ ldap_parse_dn_component('user_dn', 'ou') }} as organizational_unit,\n              {{ ldap_validate_email('email') }} as email_valid,\n              extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_users') }}\n          WHERE email IS NOT NULL\n      ",
+        "staging_ldap_groups": "\n\n          {{ config(materialized='view') }}\n          SELECT\n              {{ ldap_extract_attribute('dn') }} as group_dn,\n              {{ ldap_extract_attribute('cn', 0) }} as group_name,\n              {{ ldap_extract_attribute('description', 0) }} as group_description,\n              {{ ldap_extract_multi_attribute('member') }} as members,\n              CURRENT_TIMESTAMP as extracted_at\n          FROM {{ source('ldap_raw', 'groups') }}\n          WHERE {{ ldap_filter_object_class('groupOfNames') }}\n      ",
+        "dim_groups": "\n\n          {{ config(materialized='table') }}\n          SELECT\n              group_dn,\n              group_name,\n              group_description,\n              {{ ldap_count_members('members') }} as member_count,\n              extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_groups') }}\n      ",
+        "fact_group_memberships": "\n\n          {{ config(\n              materialized='incremental',\n              unique_key=['group_dn', 'member_dn']\n          ) }}\n          SELECT\n              g.group_dn,\n              g.group_name,\n              {{ ldap_unnest_members('g.members') }} as member_dn,\n              u.user_id,\n              u.username,\n              g.extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_groups') }} g\n          CROSS JOIN LATERAL {{ ldap_split_members('g.members') }} AS member_dn\n          LEFT JOIN {{ ref('dim_users') }} u\n              ON u.user_dn = member_dn\n          {% if is_incremental() %}\n              WHERE g.extracted_at > (SELECT MAX(extracted_at) FROM {{ this }})\n          {% endif %}\n      ",
     }
 
 
-# dbt LDAP macro definitions
 @pytest.fixture
 def dbt_ldap_macros() -> dict[str, str]:
     """Dbt LDAP macro definitions for testing."""
     return {
-        "ldap_extract_attribute": """
-
-          {% macro ldap_extract_attribute(attribute_name, index=None) -%}
-              {% if index is not none %}
-                  JSON_EXTRACT_PATH_TEXT(
-                      attributes, '{{ attribute_name }}', '{{ index }}'
-                  )
-              {% else %}
-                  JSON_EXTRACT_PATH_TEXT(attributes, '{{ attribute_name }}')
-              {% endif %}
-          {%- endmacro %}
-      """,
-        "ldap_filter_object_class": """
-
-          {% macro ldap_filter_object_class(object_class) -%}
-              JSON_EXTRACT_PATH_TEXT(attributes, 'objectClass')
-              LIKE '%{{ object_class }}%'
-          {%- endmacro %}
-      """,
-        "ldap_parse_dn_component": """
-
-          {% macro ldap_parse_dn_component(dn_field, component) -%}
-              REGEXP_EXTRACT({{ dn_field }}, '{{ component }}=([^,]+)', 1)
-          {%- endmacro %}
-      """,
-        "ldap_validate_email": r"""
-
-          {% macro ldap_validate_email(email_field) -%}
-              CASE
-                  WHEN {{ email_field }}
-                  ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
-                  THEN true
-                  ELSE false
-              END
-          {%- endmacro %}
-      """,
-        "ldap_extract_multi_attribute": """
-
-          {% macro ldap_extract_multi_attribute(attribute_name) -%}
-              JSON_EXTRACT_PATH_TEXT(attributes, '{{ attribute_name }}')
-          {%- endmacro %}
-      """,
-        "ldap_count_members": """
-
-          {% macro ldap_count_members(members_field) -%}
-              CASE
-                  WHEN {{ members_field }} IS NULL THEN 0
-                  ELSE JSON_ARRAY_LENGTH({{ members_field }}::json)
-              END
-          {%- endmacro %}
-      """,
+        "ldap_extract_attribute": "\n\n          {% macro ldap_extract_attribute(attribute_name, index=None) -%}\n              {% if index is not none %}\n                  JSON_EXTRACT_PATH_TEXT(\n                      attributes, '{{ attribute_name }}', '{{ index }}'\n                  )\n              {% else %}\n                  JSON_EXTRACT_PATH_TEXT(attributes, '{{ attribute_name }}')\n              {% endif %}\n          {%- endmacro %}\n      ",
+        "ldap_filter_object_class": "\n\n          {% macro ldap_filter_object_class(object_class) -%}\n              JSON_EXTRACT_PATH_TEXT(attributes, 'objectClass')\n              LIKE '%{{ object_class }}%'\n          {%- endmacro %}\n      ",
+        "ldap_parse_dn_component": "\n\n          {% macro ldap_parse_dn_component(dn_field, component) -%}\n              REGEXP_EXTRACT({{ dn_field }}, '{{ component }}=([^,]+)', 1)\n          {%- endmacro %}\n      ",
+        "ldap_validate_email": "\n\n          {% macro ldap_validate_email(email_field) -%}\n              CASE\n                  WHEN {{ email_field }}\n                  ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'\n                  THEN true\n                  ELSE false\n              END\n          {%- endmacro %}\n      ",
+        "ldap_extract_multi_attribute": "\n\n          {% macro ldap_extract_multi_attribute(attribute_name) -%}\n              JSON_EXTRACT_PATH_TEXT(attributes, '{{ attribute_name }}')\n          {%- endmacro %}\n      ",
+        "ldap_count_members": "\n\n          {% macro ldap_count_members(members_field) -%}\n              CASE\n                  WHEN {{ members_field }} IS NULL THEN 0\n                  ELSE JSON_ARRAY_LENGTH({{ members_field }}::json)\n              END\n          {%- endmacro %}\n      ",
     }
 
 
-# dbt LDAP source definitions
 @pytest.fixture
 def dbt_ldap_sources() -> dict[str, t.ContainerValue]:
     """Dbt LDAP source definitions for testing."""
@@ -392,7 +249,7 @@ def dbt_ldap_sources() -> dict[str, t.ContainerValue]:
                             {
                                 "name": "ldap_valid_user_dn",
                                 "description": "Validate user DN format",
-                            },
+                            }
                         ],
                     },
                     {
@@ -412,59 +269,32 @@ def dbt_ldap_sources() -> dict[str, t.ContainerValue]:
                         ],
                     },
                 ],
-            },
+            }
         ],
     }
 
 
-# LDAP test fixtures
 @pytest.fixture
 def dbt_ldap_tests() -> dict[str, str]:
     """Dbt LDAP test definitions for testing."""
     return {
-        "test_ldap_valid_user_dn": """
-
-          SELECT dn
-          FROM {{ source('ldap_raw', 'users') }}
-          WHERE dn !~ '^cn=.+,ou=.+,dc=.+,dc=.+'
-      """,
-        "test_unique_email_addresses": """
-
-          SELECT email_normalized, COUNT(*)
-          FROM {{ ref('dim_users') }}
-          WHERE email_normalized IS NOT NULL
-          GROUP BY email_normalized
-          HAVING COUNT(*) > 1
-      """,
-        "test_valid_group_memberships": """
-
-          SELECT member_dn
-          FROM {{ ref('fact_group_memberships') }}
-          WHERE member_dn NOT IN (
-              SELECT user_dn FROM {{ ref('dim_users') }}
-          )
-      """,
-        "test_ldap_attribute_consistency": """
-
-          SELECT dn
-          FROM {{ source('ldap_raw', 'users') }}
-          WHERE JSON_EXTRACT_PATH_TEXT(attributes, 'objectClass') IS NULL
-          OR JSON_EXTRACT_PATH_TEXT(attributes, 'cn') IS NULL
-      """,
+        "test_ldap_valid_user_dn": "\n\n          SELECT dn\n          FROM {{ source('ldap_raw', 'users') }}\n          WHERE dn !~ '^cn=.+,ou=.+,dc=.+,dc=.+'\n      ",
+        "test_unique_email_addresses": "\n\n          SELECT email_normalized, COUNT(*)\n          FROM {{ ref('dim_users') }}\n          WHERE email_normalized IS NOT NULL\n          GROUP BY email_normalized\n          HAVING COUNT(*) > 1\n      ",
+        "test_valid_group_memberships": "\n\n          SELECT member_dn\n          FROM {{ ref('fact_group_memberships') }}\n          WHERE member_dn NOT IN (\n              SELECT user_dn FROM {{ ref('dim_users') }}\n          )\n      ",
+        "test_ldap_attribute_consistency": "\n\n          SELECT dn\n          FROM {{ source('ldap_raw', 'users') }}\n          WHERE JSON_EXTRACT_PATH_TEXT(attributes, 'objectClass') IS NULL\n          OR JSON_EXTRACT_PATH_TEXT(attributes, 'cn') IS NULL\n      ",
     }
 
 
-# LDAP validation fixtures
 @pytest.fixture
 def ldap_validation_rules() -> dict[str, t.ContainerValue]:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
-            "pattern": r"^(Union[cn, uid])=.+,(Union[ou, dc])=.+",
+            "pattern": "^(Union[cn, uid])=.+,(Union[ou, dc])=.+",
             "description": "Valid Distinguished Name format",
         },
         "email_format": {
-            "pattern": r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
+            "pattern": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
             "description": "Valid email address format",
         },
         "required_attributes": {
@@ -478,7 +308,6 @@ def ldap_validation_rules() -> dict[str, t.ContainerValue]:
     }
 
 
-# Performance test fixtures
 @pytest.fixture
 def ldap_performance_config() -> dict[str, t.ContainerValue]:
     """LDAP performance test configuration."""
@@ -488,11 +317,10 @@ def ldap_performance_config() -> dict[str, t.ContainerValue]:
         "nested_group_levels": 5,
         "concurrent_queries": 10,
         "memory_threshold": "1GB",
-        "processing_time_threshold": 180,  # 3 minutes
+        "processing_time_threshold": 180,
     }
 
 
-# Pytest markers for test categorization
 def pytest_configure(config: pytest.Config) -> None:
     """Configure pytest markers."""
     config.addinivalue_line("markers", "unit: Unit tests")
@@ -506,7 +334,6 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line("markers", "slow: Slow tests")
 
 
-# Mock services
 class MockLdapDbtAdapter:
     """Mock LDAP dbt adapter."""
 
@@ -518,12 +345,9 @@ class MockLdapDbtAdapter:
         self.compiled_models: dict[str, t.ContainerValue] = {}
 
     def extract_ldap_data(
-        self,
-        _base_dn: str,
-        _search_filter: str,
+        self, _base_dn: str, _search_filter: str
     ) -> list[dict[str, t.ContainerValue]]:
         """Extract LDAP data for dbt processing."""
-        # Mock LDAP extraction using shared container domain
         return [
             {
                 "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
@@ -533,7 +357,7 @@ class MockLdapDbtAdapter:
                     "objectClass": "inetOrgPerson",
                 },
                 "extracted_at": "2023-01-01T12:00:00Z",
-            },
+            }
         ]
 
     def split(self, dn: str) -> bool:
@@ -541,8 +365,7 @@ class MockLdapDbtAdapter:
         return bool(re.match(r"^(?:cn|uid)=.+(?:,(?:ou|dc)=.+)+", dn))
 
     def parse_ldap_attributes(
-        self,
-        attributes: dict[str, t.ContainerValue],
+        self, attributes: dict[str, t.ContainerValue]
     ) -> dict[str, str | None]:
         """Parse LDAP attributes for dbt models."""
         parsed: dict[str, str | None] = {}
@@ -554,16 +377,12 @@ class MockLdapDbtAdapter:
         return parsed
 
     def transform_ldap_to_relational(
-        self,
-        ldap_data: list[dict[str, t.ContainerValue]],
+        self, ldap_data: list[dict[str, t.ContainerValue]]
     ) -> list[dict[str, t.ContainerValue]]:
         """Transform LDAP data to relational format."""
         transformed: list[dict[str, t.ContainerValue]] = []
         for entry in ldap_data:
-            flat_entry = {
-                "dn": entry["dn"],
-                "extracted_at": entry["extracted_at"],
-            }
+            flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
             attrs = entry.get("attributes")
             if isinstance(attrs, dict):
                 flat_entry.update(self.parse_ldap_attributes(attrs))
@@ -598,13 +417,9 @@ class MockLdapConnection:
         return True
 
     def search(
-        self,
-        base_dn: str,
-        _search_filter: str,
-        _attributes: list[str] | None = None,
+        self, base_dn: str, _search_filter: str, _attributes: list[str] | None = None
     ) -> list[dict[str, t.ContainerValue]]:
         """Search LDAP directory."""
-        # Mock search results using shared container domain
         if "people" in base_dn or "users" in base_dn:
             return [
                 {
@@ -614,7 +429,7 @@ class MockLdapConnection:
                         "mail": ["john.doe@internal.invalid"],
                         "objectClass": ["inetOrgPerson"],
                     },
-                },
+                }
             ]
         if "groups" in base_dn:
             return [
@@ -625,7 +440,7 @@ class MockLdapConnection:
                         "member": ["cn=john.doe,ou=people,dc=flext,dc=local"],
                         "objectClass": ["groupOfNames"],
                     },
-                },
+                }
             ]
         return []
 

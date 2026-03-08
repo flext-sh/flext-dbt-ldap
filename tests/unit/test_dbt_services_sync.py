@@ -22,27 +22,22 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
     tmp_path: Path,
 ) -> None:
     state_file = tmp_path / "sync-state.json"
-    state_file.write_text(
-        json.dumps({"users": "20250101000000Z"}),
-        encoding="utf-8",
-    )
-
+    state_file.write_text(json.dumps({"users": "20250101000000Z"}), encoding="utf-8")
     service = object.__new__(FlextDbtLdapService)
     service.config = FlextDbtLdapSettings(ldap_base_dn="dc=example,dc=com")
     service.client = Mock()
     service.client.run_full_pipeline.return_value = r[m.DbtLdapPipelineResult].ok(
-        m.DbtLdapPipelineResult(extracted_entries=1),
+        m.DbtLdapPipelineResult(extracted_entries=1)
     )
     service._sync_state_file = state_file
     service._sync_bookmarks = service._load_sync_state()
     service._bookmark_now = lambda: "20260101000000Z"
-
     result = service.sync_users_to_warehouse(incremental=True)
-
     assert result.is_success
     call_kwargs = service.client.run_full_pipeline.call_args.kwargs
-    assert call_kwargs["search_filter"] == (
-        "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
+    assert (
+        call_kwargs["search_filter"]
+        == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
     )
     persisted_state = json.loads(state_file.read_text(encoding="utf-8"))
     assert persisted_state["users"] == "20260101000000Z"

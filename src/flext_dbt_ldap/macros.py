@@ -61,7 +61,6 @@ class FlextDbtLdapMacros:
 
             """
             try:
-                # Very simple DN parsing: split by commas, then by '='
                 parts = [p.strip() for p in dn.split(",") if "=" in p]
                 for part in parts:
                     key, value = part.split("=", 1)
@@ -95,7 +94,6 @@ class FlextDbtLdapMacros:
 
             """
             try:
-                # Basic passthrough; customize if needed
                 return timestamp
             except (
                 ValueError,
@@ -121,10 +119,9 @@ class FlextDbtLdapMacros:
 
             """
             converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(
-                timestamp,
+                timestamp
             )
             if converted:
-                # Extract date part (assuming ISO format)
                 return converted.split("T")[0] if "T" in converted else converted[:10]
             return None
 
@@ -153,7 +150,7 @@ class FlextDbtLdapMacros:
 
         """
         return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(
-            timestamp,
+            timestamp
         )
 
     @staticmethod
@@ -184,12 +181,10 @@ class FlextDbtLdapMacros:
         User ID or None if not found
 
         """
-        # Try different common user ID attributes
         for attr in ["uid", "cn", "samaccountname"]:
             user_id = FlextDbtLdapMacros._DNParser.parse_dn_component(dn, attr)
             if user_id:
                 return user_id
-
         return None
 
     @staticmethod
@@ -217,10 +212,8 @@ class FlextDbtLdapMacros:
 
         """
         if user_account_control is None:
-            return True  # Assume active if not specified
-
-        # Check if account is disabled (bit 1)
-        return not bool(user_account_control & 0x0002)
+            return True
+        return not bool(user_account_control & 2)
 
     @staticmethod
     def normalize_ldap_attribute(value: str | list[str] | None) -> str:
@@ -256,6 +249,4 @@ class FlextDbtLdapMacros:
         return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, component)
 
 
-__all__: list[str] = [
-    "FlextDbtLdapMacros",
-]
+__all__: list[str] = ["FlextDbtLdapMacros"]

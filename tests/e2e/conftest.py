@@ -23,8 +23,6 @@ from psycopg import sql
 from flext_dbt_ldap import t
 
 logger = FlextLogger(__name__)
-
-# Constants for test configuration
 POSTGRES_READY_MAX_RETRIES = 30
 
 
@@ -42,20 +40,14 @@ def project_root() -> Path:
 
 @pytest.fixture(scope="session")
 def postgres_container(
-    flext_docker: FlextTestsDocker,
-    project_root: Path,
+    flext_docker: FlextTestsDocker, project_root: Path
 ) -> Generator[None]:
     """Start PostgreSQL container for testing using FlextTestsDocker."""
     compose_file = project_root / "docker-compose.yml"
-    # Start containers
     logger.info("Starting PostgreSQL container using FlextTestsDocker...")
-
-    # Use FlextTestsDocker compose management (start_compose_stack when available)
     start_result = flext_docker.start_compose_stack(str(compose_file))
-
     if start_result.is_failure:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
-    # Wait for PostgreSQL to be ready
     for i in range(POSTGRES_READY_MAX_RETRIES):
         try:
             conn = psycopg.connect(
@@ -72,13 +64,10 @@ def postgres_container(
             if i == POSTGRES_READY_MAX_RETRIES - 1:
                 raise
             logger.info(
-                "Waiting for PostgreSQL... (%s/%s)",
-                i + 1,
-                POSTGRES_READY_MAX_RETRIES,
+                "Waiting for PostgreSQL... (%s/%s)", i + 1, POSTGRES_READY_MAX_RETRIES
             )
             time.sleep(2)
     yield
-    # Stop containers using FlextTestsDocker
     logger.info("Stopping PostgreSQL container using FlextTestsDocker...")
 
     class _StopResult:
@@ -95,8 +84,7 @@ def postgres_container(
     )
     if stop_result.is_failure and stop_result.error:
         logger.warning(
-            "PostgreSQL container stop reported failure: %s",
-            stop_result.error,
+            "PostgreSQL container stop reported failure: %s", stop_result.error
         )
 
 
@@ -141,21 +129,15 @@ def run_dbt_command(
     }
     cmd = ["dbt", *command]
     if dbt_vars:
-        var_string = " ".join(f"{k}:{v}" for k, v in dbt_vars.items())
+        var_string = " ".join((f"{k}:{v}" for k, v in dbt_vars.items()))
         cmd.extend(["--vars", var_string])
     return subprocess.run(
-        cmd,
-        cwd=str(project_dir),
-        env=env,
-        capture_output=True,
-        text=True,
-        check=False,
+        cmd, cwd=str(project_dir), env=env, capture_output=True, text=True, check=False
     )
 
 
 def query_database(
-    conn: psycopg.Connection,
-    query: LiteralString,
+    conn: psycopg.Connection, query: LiteralString
 ) -> list[tuple[object, ...]]:
     """Execute query and return results."""
     with conn.cursor() as cur:
@@ -169,7 +151,7 @@ def table_exists(conn: psycopg.Connection, schema: str, table: str) -> bool:
     with conn.cursor() as cur:
         _ = cur.execute(
             sql.SQL(
-                "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = %s AND table_name = %s)",
+                "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = %s AND table_name = %s)"
             ),
             (schema, table),
         )
@@ -182,24 +164,19 @@ def count_rows(conn: psycopg.Connection, schema: str, table: str) -> int:
     with conn.cursor() as cur:
         _ = cur.execute(
             sql.SQL("SELECT COUNT(*) FROM {}.{}").format(
-                sql.Identifier(schema),
-                sql.Identifier(table),
-            ),
+                sql.Identifier(schema), sql.Identifier(table)
+            )
         )
         result = cur.fetchone()
         return int(result[0]) if result else 0
 
 
-def get_column_names(
-    conn: psycopg.Connection,
-    schema: str,
-    table: str,
-) -> list[str]:
+def get_column_names(conn: psycopg.Connection, schema: str, table: str) -> list[str]:
     """Get column names for table."""
     with conn.cursor() as cur:
         _ = cur.execute(
             sql.SQL(
-                "SELECT column_name FROM information_schema.columns WHERE table_schema = %s AND table_name = %s ORDER BY ordinal_position",
+                "SELECT column_name FROM information_schema.columns WHERE table_schema = %s AND table_name = %s ORDER BY ordinal_position"
             ),
             (schema, table),
         )
