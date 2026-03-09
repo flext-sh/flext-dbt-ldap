@@ -49,6 +49,8 @@ if TYPE_CHECKING:
         FlextDbtLdapUtilities as u,
     )
     from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
+
+# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdap": ("flext_dbt_ldap.simple_api", "FlextDbtLdap"),
     "FlextDbtLdapAuthenticationError": (
@@ -113,6 +115,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "validate_ldap_data_quality",
     ),
 }
+
 __all__ = [
     "VERSION",
     "FlextDbtLdap",
@@ -149,7 +152,7 @@ __all__ = [
 ]
 
 
-def __getattr__(name: str) -> Any:
+def __getattr__(name: str) -> Any:  # noqa: ANN401  # JUSTIFIED: Ruff (any-type) with PEP 562 dynamic module exports — https://docs.astral.sh/ruff/rules/any-type/
     """Lazy-load module attributes on first access (PEP 562)."""
     return lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
 
