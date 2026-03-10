@@ -39,7 +39,7 @@ class FlextDbtLdapService:
         """Initialize DBT LDAP service."""
         super().__init__()
         self.config: FlextDbtLdapSettings = (
-            config or FlextDbtLdapSettings.get_global_instance()
+            config or FlextDbtLdapSettings.get_global()
         )
         ldap_api = FlextDbtLdapClient.create_ldap_api(self.config)
         self.client = client or FlextDbtLdapClient(self.config, ldap_api=ldap_api)
