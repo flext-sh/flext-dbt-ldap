@@ -1,0 +1,38 @@
+src/flext_dbt_ldap/settings.py
+  d614ccaea3340c55 10-11,14-58
+src/flext_dbt_ldap/dbt_client.py
+  d614ccaea3340c55 89,109,123,158,196,206,208,240,243,251,256,258,268,289,300-301,313
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.10",
+  "base_commit_sha": "843a1714ee147ef94052a1d689eacf45cd505b33",
+  "prompts": {
+    "c963d31991094136": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_32797ed69ffeitiORv0NMoXDt9",
+        "model": "anthropic/claude-opus-4-6"
+      },
+      "human_author": "FLEXT Bot <team@flext.sh>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    },
+    "d614ccaea3340c55": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_327382033ffeZu3Fk28IGWRrGf",
+        "model": "anthropic/claude-haiku-4-5"
+      },
+      "human_author": "FLEXT Bot <team@flext.sh>",
+      "messages": [],
+      "total_additions": 85,
+      "total_deletions": 50,
+      "accepted_lines": 64,
+      "overriden_lines": 0
+    }
+  }
+}
