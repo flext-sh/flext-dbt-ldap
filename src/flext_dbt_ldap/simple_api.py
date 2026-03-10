@@ -23,7 +23,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
     def __init__(self, config: FlextDbtLdapSettings | None = None) -> None:
         """Initialize the unified DBT LDAP service."""
         super().__init__()
-        self._dbt_ldap_config: FlextDbtLdapSettings = config or FlextDbtLdapSettings()
+        self._dbt_ldap_config: FlextDbtLdapSettings = (
+            config if config is not None else FlextDbtLdapSettings()
+        )
         self._config = self._dbt_ldap_config
         self._client: FlextDbtLdapClient | None = None
         self._service: FlextDbtLdapService | None = None

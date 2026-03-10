@@ -46,7 +46,9 @@ class FlextDbtLdapClient:
 
         """
         super().__init__()
-        self.config: FlextDbtLdapSettings = config or FlextDbtLdapSettings.get_global()
+        self.config: FlextDbtLdapSettings = (
+            config if config is not None else FlextDbtLdapSettings.get_global()
+        )
         self._ldap_api: FlextLdap = ldap_api
         self._dbt_manager: FlextMeltanoDbtService | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
