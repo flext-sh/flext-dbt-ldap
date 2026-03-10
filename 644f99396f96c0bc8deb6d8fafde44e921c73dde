@@ -1,0 +1,27 @@
+src/flext_dbt_ldap/dbt_client.py
+  e93a413913b0ebf6 49-50
+src/flext_dbt_ldap/dbt_services.py
+  e93a413913b0ebf6 41-42
+src/flext_dbt_ldap/simple_api.py
+  e93a413913b0ebf6 26-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.10",
+  "base_commit_sha": "644f99396f96c0bc8deb6d8fafde44e921c73dde",
+  "prompts": {
+    "e93a413913b0ebf6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_326980a86ffekYMW057MlAO3fe",
+        "model": "anthropic/claude-haiku-4-5"
+      },
+      "human_author": "FLEXT Bot <team@flext.sh>",
+      "messages": [],
+      "total_additions": 9,
+      "total_deletions": 3,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
