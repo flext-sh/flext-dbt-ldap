@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from importlib.metadata import PackageMetadata, metadata
 
-from flext_core import FlextResult
+from flext_core import r
 
 
 class FlextDbtLdapVersion:
@@ -75,16 +75,16 @@ class FlextDbtLdapVersion:
         return self.version_info
 
 
-def _create_version() -> FlextResult[FlextDbtLdapVersion]:
+def _create_version() -> r[FlextDbtLdapVersion]:
     """Create version instance from package metadata.
 
     Returns:
-    FlextResult[FlextDbtLdapVersion]: Version instance or error
+    r[FlextDbtLdapVersion]: Version instance or error
 
     """
     try:
         version = FlextDbtLdapVersion()
-        return FlextResult[FlextDbtLdapVersion].ok(version)
+        return r[FlextDbtLdapVersion].ok(version)
     except (
         ValueError,
         TypeError,
@@ -94,7 +94,7 @@ def _create_version() -> FlextResult[FlextDbtLdapVersion]:
         RuntimeError,
         ImportError,
     ) as e:
-        return FlextResult[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
+        return r[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
 
 
 _version_result = _create_version()

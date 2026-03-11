@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import FlextModels, FlextResult, FlextSettings
+    from flext_core import FlextModels, FlextSettings, r
 
     from flext_dbt_ldap.__version__ import __version__, __version_info__
     from flext_dbt_ldap.constants import (
@@ -96,7 +96,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     ),
     "FlextDbtLdapVersion": ("flext_dbt_ldap.version", "FlextDbtLdapVersion"),
     "FlextModels": ("flext_core", "FlextModels"),
-    "FlextResult": ("flext_core", "FlextResult"),
+    "r": ("flext_core", "r"),
     "FlextSettings": ("flext_core", "FlextSettings"),
     "VERSION": ("flext_dbt_ldap.version", "VERSION"),
     "__version__": ("flext_dbt_ldap.__version__", "__version__"),
@@ -138,7 +138,6 @@ __all__ = [
     "FlextDbtLdapValidationError",
     "FlextDbtLdapVersion",
     "FlextModels",
-    "FlextResult",
     "FlextSettings",
     "__version__",
     "__version_info__",
@@ -146,6 +145,7 @@ __all__ = [
     "m",
     "p",
     "process_ldap_entries_for_dbt",
+    "r",
     "t",
     "u",
     "validate_ldap_data_quality",
