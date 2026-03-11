@@ -19,7 +19,7 @@ from pydantic import Field, TypeAdapter, ValidationError
 
 from flext_dbt_ldap.typings import t
 
-_MAPPING_ADAPTER = TypeAdapter(Mapping[str, object])
+_MAPPING_ADAPTER: TypeAdapter[Mapping[str, object]] = TypeAdapter(Mapping[str, object])
 _STRING_LIST_ADAPTER = TypeAdapter(list[str])
 
 
