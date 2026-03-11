@@ -9,14 +9,13 @@ from __future__ import annotations
 
 import os
 import subprocess
-import time
 from collections.abc import Generator
 from pathlib import Path
 from typing import LiteralString
 
 import psycopg
 import pytest
-from flext_core import FlextLogger
+from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import FlextTestsDocker
 from psycopg import sql
 
@@ -48,25 +47,24 @@ def postgres_container(
     start_result = flext_docker.start_compose_stack(str(compose_file))
     if start_result.is_failure:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
-    for i in range(POSTGRES_READY_MAX_RETRIES):
-        try:
-            conn = psycopg.connect(
-                host="localhost",
-                port=25432,
-                dbname="dbt_ldap_test",
-                user="dbt_user",
-                password="dbt_password",
-            )
-            conn.close()
-            logger.info("PostgreSQL is ready")
-            break
-        except (RuntimeError, ValueError, TypeError):
-            if i == POSTGRES_READY_MAX_RETRIES - 1:
-                raise
-            logger.info(
-                "Waiting for PostgreSQL... (%s/%s)", i + 1, POSTGRES_READY_MAX_RETRIES
-            )
-            time.sleep(2)
+
+    @d.retry(
+        max_attempts=POSTGRES_READY_MAX_RETRIES,
+        delay_seconds=2.0,
+        backoff_strategy="linear",
+    )
+    def _check_postgres_ready() -> None:
+        conn = psycopg.connect(
+            host="localhost",
+            port=25432,
+            dbname="dbt_ldap_test",
+            user="dbt_user",
+            password="dbt_password",
+        )
+        conn.close()
+
+    _check_postgres_ready()
+    logger.info("PostgreSQL is ready")
     yield
     logger.info("Stopping PostgreSQL container using FlextTestsDocker...")
 
