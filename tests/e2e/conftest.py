@@ -19,8 +19,6 @@ from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import FlextTestsDocker
 from psycopg import sql
 
-from flext_dbt_ldap import t
-
 logger = FlextLogger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
 
@@ -117,7 +115,7 @@ def run_dbt_command(
     command: list[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: dict[str, t.ContainerValue] | None = None,
+    dbt_vars: dict[str, object] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {

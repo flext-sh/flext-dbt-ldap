@@ -155,7 +155,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         sources: Annotated[
-            list[dict[str, t.ContainerValue]],
+            list[dict[str, object]],
             Field(default_factory=list),
         ]
 
@@ -164,7 +164,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         models: Annotated[
-            list[dict[str, t.ContainerValue]],
+            list[dict[str, object]],
             Field(default_factory=list),
         ]
 
@@ -173,7 +173,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         models: Annotated[
-            list[dict[str, t.ContainerValue]],
+            list[dict[str, object]],
             Field(default_factory=list),
         ]
         columns: dict[str, list[str]] = Field(default_factory=dict)
@@ -190,7 +190,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         name: str
         description: str = ""
         tables: Annotated[
-            list[dict[str, t.ContainerValue]],
+            list[dict[str, object]],
             Field(default_factory=list),
         ]
 
@@ -449,7 +449,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
-            oc_val: t.ContainerValue = raw.get("objectClass", [])
+            oc_val: object = raw.get("objectClass", [])
             try:
                 return _STRING_LIST_ADAPTER.validate_python(oc_val)
             except ValidationError:
