@@ -14,8 +14,6 @@ from typing import override
 
 from flext_core import FlextExceptions
 
-from flext_dbt_ldap.typings import t
-
 
 class FlextDbtLdapError(FlextExceptions.BaseError):
     """FlextDbtLdapError - base DBT LDAP error."""
@@ -50,8 +48,8 @@ class _DbtLdapContextMixin:
 
     @staticmethod
     def _build_context(
-        **fields: t.MetadataValue | None,
-    ) -> Mapping[str, t.MetadataValue]:
+        **fields: object | None,
+    ) -> Mapping[str, object]:
         """Build context dictionary from keyword arguments."""
         return {key: value for key, value in fields.items() if value is not None}
 
