@@ -314,7 +314,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 else None,
             )
 
-        def to_dbt_dict(self) -> Mapping[str, object
+        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -377,7 +377,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 else None,
             )
 
-        def to_dbt_dict(self) -> Mapping[str, object
+        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -408,7 +408,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def to_dbt_dict(self) -> Mapping[str, object
+        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,

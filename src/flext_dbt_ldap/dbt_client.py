@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
+from typing import Protocol
 
 from flext_core import FlextLogger, r
 from flext_ldap import (
@@ -26,6 +27,10 @@ from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
+
+
+class DbtManagerProtocol(Protocol):
+    def run_models(self, models: list[str] | None = None) -> r[t.Scalar]: ...
 
 
 class FlextDbtLdapClient:
@@ -50,11 +55,11 @@ class FlextDbtLdapClient:
             config if config is not None else FlextDbtLdapSettings.get_global()
         )
         self._ldap_api: FlextLdap = ldap_api
-        self._dbt_manager: FlextMeltanoDbtService | None = None
+        self._dbt_manager: DbtManagerProtocol | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
     @property
-    def dbt_manager(self) -> FlextMeltanoDbtService:
+    def dbt_manager(self) -> DbtManagerProtocol:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
             Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None
@@ -240,10 +245,10 @@ class FlextDbtLdapClient:
 
     def _map_entry_attributes(
         self, entry: dict[str, list[str]]
-    ) -> Mapping[str, object
+    ) -> Mapping[str, t.Scalar]:
         """Map LDAP entry attributes using configuration mapping."""
         dn_str = str(entry.get("dn", [""])[0]) if entry.get("dn") else ""
-        mapped_attrs: dict[str, object"dn": dn_str}
+        mapped_attrs: dict[str, t.Scalar] = {"dn": dn_str}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry:
                 values_obj = entry[ldap_attr]
@@ -268,14 +273,14 @@ class FlextDbtLdapClient:
 
     def _prepare_ldap_data_for_dbt(
         self, entries: list[dict[str, list[str]]]
-    ) -> Mapping[str, Sequence[Mapping[str, object
+    ) -> Mapping[str, Sequence[Mapping[str, t.Scalar]]]:
         """Prepare LDAP entries for DBT processing."""
-        prepared_data: dict[str, list[Mapping[str, object {}
+        prepared_data: dict[str, list[Mapping[str, t.Scalar]]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
-            table_data: list[Mapping[str, object[
+            table_data: list[Mapping[str, t.Scalar]] = [
                 self._map_entry_attributes(entry) for entry in schema_entries
             ]
             prepared_data[table_name] = table_data
