@@ -132,13 +132,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 )
 
         class Collection(FlextMeltanoUtilities.Collection):
-            """Collection utilities extending u.Collection via inheritance."""
+            """Collection utilities extending u via inheritance."""
 
         class Args(FlextMeltanoUtilities.Args):
             """Args utilities extending u.Args via inheritance."""
 
         class Model(FlextMeltanoUtilities.Model):
-            """Model utilities extending u.Model via inheritance."""
+            """Model utilities extending u via inheritance."""
 
         class Pydantic:
             """Annotated type factories."""
