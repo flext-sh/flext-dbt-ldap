@@ -135,7 +135,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             """Collection utilities extending u via inheritance."""
 
         class Args(FlextMeltanoUtilities.Args):
-            """Args utilities extending u.Args via inheritance."""
+            """Args utilities extending u via inheritance."""
 
         class Model(FlextMeltanoUtilities.Model):
             """Model utilities extending u via inheritance."""
