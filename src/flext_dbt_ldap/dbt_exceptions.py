@@ -12,7 +12,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import override
 
-from flext_core import FlextExceptions
+from flext_core import FlextExceptions, t
 
 
 class FlextDbtLdapError(FlextExceptions.BaseError):
@@ -48,7 +48,7 @@ class _DbtLdapContextMixin:
 
     @staticmethod
     def _build_context(
-        **fields: object | None,
+        **fields: t.Scalar | None,
     ) -> Mapping[str, object]:
         """Build context dictionary from keyword arguments."""
         return {key: value for key, value in fields.items() if value is not None}
