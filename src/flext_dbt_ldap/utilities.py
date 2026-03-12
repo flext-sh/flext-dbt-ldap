@@ -147,7 +147,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             def coerced_enum[E: StrEnum](enum_cls: type[E]) -> object:
                 """Create coerced enum type (Annotated wrapper)."""
                 return Annotated[
-                    enum_cls, BeforeValidator(u.Enum.coerce_validator(enum_cls))
+                    enum_cls, BeforeValidator(u.coerce_validator(enum_cls))
                 ]
 
     class LdapDataTransformation:
