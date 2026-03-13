@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import json
 from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
@@ -301,21 +300,17 @@ class FlextDbtLdapService:
         if not self._sync_state_file.exists():
             return {}
         try:
-            payload = json.loads(self._sync_state_file.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
+            raw_bytes = self._sync_state_file.read_bytes()
+            return _SYNC_BOOKMARKS_ADAPTER.validate_json(raw_bytes)
+        except (OSError, ValidationError, ValueError):
             logger.exception("Failed to read sync state file")
-            return {}
-        if not isinstance(payload, dict):
-            return {}
-        try:
-            return _SYNC_BOOKMARKS_ADAPTER.validate_python(payload)
-        except ValidationError:
             return {}
 
     def _persist_sync_state(self) -> None:
         self._sync_state_file.parent.mkdir(parents=True, exist_ok=True)
-        self._sync_state_file.write_text(
-            json.dumps(self._sync_bookmarks, indent=2, sort_keys=True), encoding="utf-8"
+        sorted_bookmarks = dict(sorted(self._sync_bookmarks.items()))
+        self._sync_state_file.write_bytes(
+            _SYNC_BOOKMARKS_ADAPTER.dump_json(sorted_bookmarks, indent=2)
         )
 
     def _resolve_sync_state_file(self) -> Path:
