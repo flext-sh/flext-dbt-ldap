@@ -72,7 +72,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Status of a DBT transformation run."""
 
         status: str = "pending"
-        models_run: list[str] = Field(default_factory=list)
+        models_run: Annotated[list[str], Field(default_factory=list)]
         entries_processed: int = 0
 
     class DbtLdapPipelineResult(FlextModels.Value):
@@ -93,14 +93,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         execution_time: float = 0.0
         rows_processed: int = 0
         memory_usage: float = 0.0
-        recommendations: list[str] = Field(default_factory=list)
+        recommendations: Annotated[list[str], Field(default_factory=list)]
 
     class ServiceStatus(FlextModels.Value):
         """Service status and capabilities."""
 
         status: str = "operational"
         service: str = ""
-        capabilities: list[str] = Field(default_factory=list)
+        capabilities: Annotated[list[str], Field(default_factory=list)]
 
     class AnalyticsReport(FlextModels.Value):
         """Analytics report data."""
@@ -118,18 +118,25 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         name: str
         version: str = "1.0.0"
         profile: str = ""
-        model_paths: list[str] = Field(default_factory=lambda: ["models"])
-        analysis_paths: list[str] = Field(default_factory=lambda: ["analyses"])
-        test_paths: list[str] = Field(default_factory=lambda: ["tests"])
-        seed_paths: list[str] = Field(default_factory=lambda: ["seeds"])
-        macro_paths: list[str] = Field(default_factory=lambda: ["macros"])
-        snapshot_paths: list[str] = Field(default_factory=lambda: ["snapshots"])
+        model_paths: Annotated[list[str], Field(default_factory=lambda: ["models"])]
+        analysis_paths: Annotated[
+            list[str], Field(default_factory=lambda: ["analyses"])
+        ]
+        test_paths: Annotated[list[str], Field(default_factory=lambda: ["tests"])]
+        seed_paths: Annotated[list[str], Field(default_factory=lambda: ["seeds"])]
+        macro_paths: Annotated[list[str], Field(default_factory=lambda: ["macros"])]
+        snapshot_paths: Annotated[
+            list[str], Field(default_factory=lambda: ["snapshots"])
+        ]
         target_path: str = "target"
-        clean_targets: list[str] = Field(
-            default_factory=lambda: ["target", "dbt_packages"],
-        )
+        clean_targets: Annotated[
+            list[str],
+            Field(
+                default_factory=lambda: ["target", "dbt_packages"],
+            ),
+        ]
         target_schema: str = "public"
-        tags: list[str] = Field(default_factory=list)
+        tags: Annotated[list[str], Field(default_factory=list)]
         materialized: str = "table"
 
     class DbtProfileConfig(FlextModels.Value):
@@ -176,13 +183,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             list[dict[str, object]],
             Field(default_factory=list),
         ]
-        columns: dict[str, list[str]] = Field(default_factory=dict)
+        columns: Annotated[dict[str, list[str]], Field(default_factory=dict)]
 
     class DbtSourceFreshness(FlextModels.Value):
         """DBT source freshness configuration."""
 
-        warn_after: dict[str, int] = Field(default_factory=dict)
-        error_after: dict[str, int] = Field(default_factory=dict)
+        warn_after: Annotated[dict[str, int], Field(default_factory=dict)]
+        error_after: Annotated[dict[str, int], Field(default_factory=dict)]
 
     class DbtSourceDefinition(FlextModels.Value):
         """Complete DBT source definition."""
@@ -204,13 +211,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     class ProjectStructureValidation(FlextModels.Value):
         """DBT project structure validation result."""
 
-        results: dict[str, bool] = Field(default_factory=dict)
+        results: Annotated[dict[str, bool], Field(default_factory=dict)]
 
     class OptimizationHints(FlextModels.Value):
         """Query optimization hints."""
 
         add_indexes: bool = False
-        index_columns: list[str] = Field(default_factory=list)
+        index_columns: Annotated[list[str], Field(default_factory=list)]
         partition_by: str = ""
         filter_early: bool = False
 
@@ -222,22 +229,22 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Transformation configuration."""
 
         source_table: str = ""
-        transformations: dict[str, str] = Field(default_factory=dict)
-        filters: list[str] = Field(default_factory=list)
+        transformations: Annotated[dict[str, str], Field(default_factory=dict)]
+        filters: Annotated[list[str], Field(default_factory=list)]
 
     class TransformationRule(FlextModels.Value):
         """Transformation rule definition."""
 
         name: str = ""
-        rules: dict[str, str] = Field(default_factory=dict)
+        rules: Annotated[dict[str, str], Field(default_factory=dict)]
 
     class DataValidationConfig(FlextModels.Value):
         """Data validation configuration."""
 
         min_quality_threshold: str = "0.8"
-        required_attributes: list[str] = Field(default_factory=list)
+        required_attributes: Annotated[list[str], Field(default_factory=list)]
         validate_dns: bool = True
-        columns: dict[str, list[str]] = Field(default_factory=dict)
+        columns: Annotated[dict[str, list[str]], Field(default_factory=dict)]
 
     # =========================================================================
     # LDAP MODELS
@@ -246,15 +253,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     class LdapSchema(FlextModels.Value):
         """LDAP schema configuration."""
 
-        object_classes: list[str] = Field(default_factory=list)
-        required_attributes: list[str] = Field(default_factory=list)
+        object_classes: Annotated[list[str], Field(default_factory=list)]
+        required_attributes: Annotated[list[str], Field(default_factory=list)]
 
     class LdapQuery(FlextModels.Value):
         """LDAP query configuration."""
 
         base_dn: str = ""
         filter_str: str = "(objectClass=*)"
-        attributes: list[str] = Field(default_factory=list)
+        attributes: Annotated[list[str], Field(default_factory=list)]
         scope: str = "SUBTREE"
 
     # =========================================================================
