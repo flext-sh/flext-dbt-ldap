@@ -34,7 +34,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
             """DBT LDAP domain protocols."""
 
             @runtime_checkable
-            class DbtProtocol(FlextProtocols.Service[m.DbtRunStatus], Protocol):
+            class Dbt(FlextProtocols.Service[m.DbtRunStatus], Protocol):
                 """Protocol for DBT operations with LDAP data."""
 
                 def compile_dbt_models(
@@ -74,7 +74,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class LdapIntegrationProtocol(
+            class LdapIntegration(
                 FlextProtocols.Service[m.DbtLdapPipelineResult], Protocol
             ):
                 """LDAP integration protocol for dbt LDAP operations."""
@@ -112,9 +112,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class ModelingProtocol(
-                FlextProtocols.Service[m.DbtModelDefinition], Protocol
-            ):
+            class Modeling(FlextProtocols.Service[m.DbtModelDefinition], Protocol):
                 """Protocol for LDAP data modeling operations."""
 
                 def create_group_dimension(
@@ -150,9 +148,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class TransformationProtocol(
-                FlextProtocols.Service[m.UserDimension], Protocol
-            ):
+            class Transformation(FlextProtocols.Service[m.UserDimension], Protocol):
                 """Protocol for LDAP data transformation operations."""
 
                 def apply_business_rules(
@@ -188,7 +184,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class MacroProtocol(FlextProtocols.Service[str], Protocol):
+            class Macro(FlextProtocols.Service[str], Protocol):
                 """Protocol for DBT macro operations with LDAP data."""
 
                 def create_ldap_snapshot_macro(
@@ -216,9 +212,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class QualityProtocol(
-                FlextProtocols.Service[m.ValidationMetrics], Protocol
-            ):
+            class Quality(FlextProtocols.Service[m.ValidationMetrics], Protocol):
                 """Protocol for LDAP data quality operations."""
 
                 def check_data_completeness(
@@ -254,9 +248,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class PerformanceProtocol(
-                FlextProtocols.Service[m.PerformanceAnalysis], Protocol
-            ):
+            class Performance(FlextProtocols.Service[m.PerformanceAnalysis], Protocol):
                 """Protocol for DBT LDAP performance optimization."""
 
                 def cache_ldap_extractions(
@@ -288,7 +280,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class MonitoringProtocol(FlextProtocols.Service[m.DbtRunStatus], Protocol):
+            class Monitoring(FlextProtocols.Service[m.DbtRunStatus], Protocol):
                 """Protocol for DBT LDAP monitoring operations."""
 
                 def create_monitoring_dashboard(

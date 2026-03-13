@@ -29,7 +29,7 @@ from flext_dbt_ldap.typings import t
 logger = FlextLogger(__name__)
 
 
-class DbtManagerProtocol(Protocol):
+class DbtManager(Protocol):
     def run_models(self, models: list[str] | None = None) -> r[t.Scalar]: ...
 
 
@@ -55,11 +55,11 @@ class FlextDbtLdapClient:
             config if config is not None else FlextDbtLdapSettings.get_global()
         )
         self._ldap_api: FlextLdap = ldap_api
-        self._dbt_manager: DbtManagerProtocol | None = None
+        self._dbt_manager: DbtManager | None = None
         logger.info("Initialized DBT LDAP client with config: %s", self.config)
 
     @property
-    def dbt_manager(self) -> DbtManagerProtocol:
+    def dbt_manager(self) -> DbtManager:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
             Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None
