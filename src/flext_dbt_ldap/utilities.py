@@ -60,6 +60,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 _ = ldap_sources
                 project_config = m.DbtProjectConfig(
                     name=project_name,
+                    model_paths=["models"],
+                    analysis_paths=["analyses"],
+                    test_paths=["tests"],
+                    seed_paths=["seeds"],
+                    macro_paths=["macros"],
+                    snapshot_paths=["snapshots"],
+                    clean_targets=["target", "dbt_packages"],
                     profile=f"{project_name}_profile",
                     target_schema=target_schema,
                     tags=["ldap", "transformation"],
@@ -131,14 +138,14 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     f"DBT project structure validation failed: {e}"
                 )
 
-        class Collection(FlextMeltanoUtilities.Collection):
-            """Collection utilities extending u via inheritance."""
+        class Collection:
+            """Collection helper namespace."""
 
-        class Args(FlextMeltanoUtilities.Args):
-            """Args utilities extending u via inheritance."""
+        class Args:
+            """Argument helper namespace."""
 
-        class Model(FlextMeltanoUtilities.Model):
-            """Model utilities extending u via inheritance."""
+        class Model:
+            """Model helper namespace."""
 
         class Pydantic:
             """Annotated type factories."""
@@ -208,6 +215,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     for col, col_tests in test_config.columns.items()
                 ]
                 tests = m.DbtTestConfig(
+                    columns={},
                     models=[
                         {
                             "name": model_name,
@@ -215,7 +223,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                             "tests": ["unique", "not_null"],
                             "columns": column_tests,
                         }
-                    ]
+                    ],
                 )
                 return r[m.DbtTestConfig].ok(tests)
             except (

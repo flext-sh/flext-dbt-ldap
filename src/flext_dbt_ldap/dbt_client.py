@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Protocol
 
 from flext_core import FlextLogger, r
 from flext_ldap import (
@@ -27,10 +26,6 @@ from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
-
-
-class DbtManager(Protocol):
-    def run_models(self, models: list[str] | None = None) -> r[t.Scalar]: ...
 
 
 class FlextDbtLdapClient:
@@ -55,11 +50,14 @@ class FlextDbtLdapClient:
             config if config is not None else FlextDbtLdapSettings.get_global()
         )
         self._ldap_api: FlextLdap = ldap_api
-        self._dbt_manager: DbtManager | None = None
-        logger.info("Initialized DBT LDAP client with config: %s", self.config)
+        self._dbt_manager: FlextMeltanoDbtService | None = None
+        logger.info(
+            "Initialized DBT LDAP client",
+            config=self.config.model_dump_json(),
+        )
 
     @property
-    def dbt_manager(self) -> DbtManager:
+    def dbt_manager(self) -> FlextMeltanoDbtService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
             Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None
@@ -77,12 +75,14 @@ class FlextDbtLdapClient:
             if config.ldap_bind_password
             else None
         )
-        ldap_settings = FlextLdapSettings(
-            host=config.ldap_host,
-            port=config.ldap_port,
-            use_tls=config.ldap_use_tls,
-            bind_dn=ldap_bind_dn or "",
-            bind_password=ldap_bind_password or "",
+        ldap_settings = FlextLdapSettings.get_global().model_copy(
+            update={
+                "host": config.ldap_host,
+                "port": config.ldap_port,
+                "use_tls": config.ldap_use_tls,
+                "bind_dn": ldap_bind_dn or "",
+                "bind_password": ldap_bind_password or "",
+            }
         )
         connection = FlextLdapConnection(config=ldap_settings)
         operations = FlextLdapOperations(connection=connection)
