@@ -71,7 +71,6 @@ if TYPE_CHECKING:
         TestsFlextDbtLdapUtilities as u,
     )
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),
     "MockLdapDbtAdapter": ("tests.conftest", "MockLdapDbtAdapter"),

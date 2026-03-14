@@ -33,7 +33,6 @@ if TYPE_CHECKING:
         table_exists,
     )
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "POSTGRES_READY_MAX_RETRIES": ("tests.e2e.conftest", "POSTGRES_READY_MAX_RETRIES"),
     "count_rows": ("tests.e2e.conftest", "count_rows"),

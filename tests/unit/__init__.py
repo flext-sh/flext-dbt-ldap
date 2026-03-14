@@ -23,7 +23,6 @@ if TYPE_CHECKING:
         test_version_properties,
     )
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
     "test_incremental_groups_sync_applies_bookmark_filter": (

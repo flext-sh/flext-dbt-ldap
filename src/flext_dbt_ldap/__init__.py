@@ -60,7 +60,6 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
     from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdap": ("flext_dbt_ldap.simple_api", "FlextDbtLdap"),
     "FlextDbtLdapAuthenticationError": (
