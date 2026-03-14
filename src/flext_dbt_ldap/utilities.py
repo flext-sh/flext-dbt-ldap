@@ -16,8 +16,7 @@ from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 from pydantic import BeforeValidator
 
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import m
+from flext_dbt_ldap import c, m
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
@@ -151,11 +150,10 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             """Annotated type factories."""
 
             @staticmethod
-            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> object:
+            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type[E]:
                 """Create coerced enum type (Annotated wrapper)."""
-                return Annotated[
-                    enum_cls, BeforeValidator(u.coerce_validator(enum_cls))
-                ]
+                _ = Annotated[enum_cls, BeforeValidator(u.coerce_validator(enum_cls))]
+                return enum_cls
 
     class LdapDataTransformation:
         """LDAP data transformation utilities."""

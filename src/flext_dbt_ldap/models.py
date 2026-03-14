@@ -19,7 +19,9 @@ from pydantic import Field, TypeAdapter, ValidationError
 
 from flext_dbt_ldap.typings import t
 
-_MAPPING_ADAPTER: TypeAdapter[Mapping[str, object]] = TypeAdapter(Mapping[str, object])
+_MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
+    Mapping[str, t.Serializable]
+)
 _STRING_LIST_ADAPTER = TypeAdapter(list[str])
 
 
@@ -162,7 +164,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         sources: Annotated[
-            list[dict[str, object]],
+            list[dict[str, t.Serializable]],
             Field(default_factory=list),
         ]
 
@@ -171,7 +173,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         models: Annotated[
-            list[dict[str, object]],
+            list[dict[str, t.Serializable]],
             Field(default_factory=list),
         ]
 
@@ -180,7 +182,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         version: str = "2"
         models: Annotated[
-            list[dict[str, object]],
+            list[dict[str, t.Serializable]],
             Field(default_factory=list),
         ]
         columns: Annotated[dict[str, list[str]], Field(default_factory=dict)]
@@ -197,7 +199,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         name: str
         description: str = ""
         tables: Annotated[
-            list[dict[str, object]],
+            list[dict[str, t.Serializable]],
             Field(default_factory=list),
         ]
 
@@ -456,7 +458,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
             """Extract object classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
-            oc_val: object = raw.get("objectClass", [])
+            oc_val = raw.get("objectClass", [])
             try:
                 return _STRING_LIST_ADAPTER.validate_python(oc_val)
             except ValidationError:
