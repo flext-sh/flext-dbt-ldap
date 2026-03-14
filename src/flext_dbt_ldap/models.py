@@ -9,46 +9,57 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import logging
-from typing import override
+from collections.abc import Mapping
+from typing import Annotated, override
 
-from flext_core import m as m_core, r
-from flext_core.utilities import u
-from flext_ldap import m as m_ldap
-from pydantic import BaseModel, ConfigDict, Field
+from flext_core import FlextLogger, FlextModels, r
+from flext_ldap import FlextLdapModels
+from flext_meltano import FlextMeltanoModels
+from pydantic import Field, TypeAdapter, ValidationError
 
 from flext_dbt_ldap.typings import t
 
-logger = logging.getLogger(__name__)
+_MAPPING_ADAPTER: TypeAdapter[Mapping[str, object]] = TypeAdapter(Mapping[str, object])
+_STRING_LIST_ADAPTER = TypeAdapter(list[str])
 
 
-class FlextDbtLdapBaseModel(BaseModel):
-    """Base model for FlextDbtLdap with standard Pydantic v2 configuration."""
+def _entry_attrs_mapping(
+    entry: FlextLdapModels.Ldif.Entry,
+) -> Mapping[str, list[str]]:
+    """Get Mapping[str, list[str]] from entry.attributes (Attributes or Mapping)."""
+    raw = entry.attributes
+    if raw is None:
+        return {}
+    mapping = raw.attributes if hasattr(raw, "attributes") else raw
+    try:
+        validated_mapping = _MAPPING_ADAPTER.validate_python(mapping)
+    except ValidationError:
+        return {}
+    out: dict[str, list[str]] = {}
+    for k, v in validated_mapping.items():
+        try:
+            out[k] = _STRING_LIST_ADAPTER.validate_python(v)
+        except ValidationError:
+            out[k] = [] if v is None else [str(v)]
+    return out
 
-    model_config = ConfigDict(
-        use_enum_values=True,
-        validate_default=True,
-        str_strip_whitespace=True,
-        extra="forbid",
-    )
 
+class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
+    """Unified DBT LDAP models collection with nested model classes.
 
-class FlextDbtLdapModels(m_core):
-    """Unified DBT LDAP models collection with nested model classes."""
-
-    def __init_subclass__(cls, **kwargs: t.JsonValue) -> None:
-        """Warn when FlextDbtLdapModels is subclassed directly."""
-        super().__init_subclass__(**kwargs)
-        u.Deprecation.warn_once(
-            f"subclass:{cls.__name__}",
-            "Subclassing FlextDbtLdapModels is deprecated. Use FlextModels.DbtLdap instead.",
-        )
+    Hierarchy:
+        FlextModels (flext-core)
+        ├── FlextMeltanoModels (flext-meltano) - Singer/Meltano patterns
+        └── FlextLdifModels (flext-ldif)
+            └── FlextLdapModels (flext-ldap)
+                └── FlextDbtLdapModels (this module)
+    """
 
     # =========================================================================
     # RESULT MODELS
     # =========================================================================
 
-    class ValidationMetrics(FlextDbtLdapBaseModel):
+    class ValidationMetrics(FlextModels.Value):
         """Validation metrics for LDAP data quality."""
 
         total_entries: int = 0
@@ -57,41 +68,41 @@ class FlextDbtLdapModels(m_core):
         quality_score: float = 0.0
         validation_passed: bool = False
 
-    class DbtRunStatus(FlextDbtLdapBaseModel):
+    class DbtRunStatus(FlextModels.Value):
         """Status of a DBT transformation run."""
 
         status: str = "pending"
-        models_run: list[str] = Field(default_factory=list)
+        models_run: Annotated[list[str], Field(default_factory=list)]
         entries_processed: int = 0
 
-    class PipelineResult(FlextDbtLdapBaseModel):
+    class DbtLdapPipelineResult(FlextModels.Value):
         """Result of a complete LDAP-to-DBT pipeline run."""
 
         extracted_entries: int = 0
 
-    class SyncResult(FlextDbtLdapBaseModel):
+    class SyncResult(FlextModels.Value):
         """Result of full data warehouse sync."""
 
         overall_success: bool = False
         successful_components: int = 0
         total_components: int = 0
 
-    class PerformanceAnalysis(FlextDbtLdapBaseModel):
+    class PerformanceAnalysis(FlextModels.Value):
         """Performance analysis metrics."""
 
         execution_time: float = 0.0
         rows_processed: int = 0
         memory_usage: float = 0.0
-        recommendations: list[str] = Field(default_factory=list)
+        recommendations: Annotated[list[str], Field(default_factory=list)]
 
-    class ServiceStatus(FlextDbtLdapBaseModel):
+    class ServiceStatus(FlextModels.Value):
         """Service status and capabilities."""
 
         status: str = "operational"
         service: str = ""
-        capabilities: list[str] = Field(default_factory=list)
+        capabilities: Annotated[list[str], Field(default_factory=list)]
 
-    class AnalyticsReport(FlextDbtLdapBaseModel):
+    class AnalyticsReport(FlextModels.Value):
         """Analytics report data."""
 
         report_type: str = "summary"
@@ -101,27 +112,34 @@ class FlextDbtLdapModels(m_core):
     # DBT CONFIGURATION MODELS
     # =========================================================================
 
-    class DbtProjectConfig(FlextDbtLdapBaseModel):
+    class DbtProjectConfig(FlextModels.Value):
         """DBT project configuration (dbt_project.yml)."""
 
         name: str
         version: str = "1.0.0"
         profile: str = ""
-        model_paths: list[str] = Field(default_factory=lambda: ["models"])
-        analysis_paths: list[str] = Field(default_factory=lambda: ["analyses"])
-        test_paths: list[str] = Field(default_factory=lambda: ["tests"])
-        seed_paths: list[str] = Field(default_factory=lambda: ["seeds"])
-        macro_paths: list[str] = Field(default_factory=lambda: ["macros"])
-        snapshot_paths: list[str] = Field(default_factory=lambda: ["snapshots"])
+        model_paths: Annotated[list[str], Field(default_factory=lambda: ["models"])]
+        analysis_paths: Annotated[
+            list[str], Field(default_factory=lambda: ["analyses"])
+        ]
+        test_paths: Annotated[list[str], Field(default_factory=lambda: ["tests"])]
+        seed_paths: Annotated[list[str], Field(default_factory=lambda: ["seeds"])]
+        macro_paths: Annotated[list[str], Field(default_factory=lambda: ["macros"])]
+        snapshot_paths: Annotated[
+            list[str], Field(default_factory=lambda: ["snapshots"])
+        ]
         target_path: str = "target"
-        clean_targets: list[str] = Field(
-            default_factory=lambda: ["target", "dbt_packages"],
-        )
+        clean_targets: Annotated[
+            list[str],
+            Field(
+                default_factory=lambda: ["target", "dbt_packages"],
+            ),
+        ]
         target_schema: str = "public"
-        tags: list[str] = Field(default_factory=list)
+        tags: Annotated[list[str], Field(default_factory=list)]
         materialized: str = "table"
 
-    class DbtProfileConfig(FlextDbtLdapBaseModel):
+    class DbtProfileConfig(FlextModels.Value):
         """DBT profile connection configuration."""
 
         type: str = "postgres"
@@ -133,61 +151,73 @@ class FlextDbtLdapModels(m_core):
         schema_name: str = "public"
         threads: int = 4
 
-    class DbtSourceTable(FlextDbtLdapBaseModel):
+    class DbtSourceTable(FlextModels.Value):
         """DBT source table definition."""
 
         name: str
         description: str = ""
 
-    class DbtSourceSchema(FlextDbtLdapBaseModel):
+    class DbtSourceSchema(FlextModels.Value):
         """DBT source schema definition."""
 
         version: str = "2"
-        sources: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        sources: Annotated[
+            list[dict[str, object]],
+            Field(default_factory=list),
+        ]
 
-    class DbtModelDefinition(FlextDbtLdapBaseModel):
+    class DbtModelDefinition(FlextModels.Value):
         """DBT model definition (schema.yml)."""
 
         version: str = "2"
-        models: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        models: Annotated[
+            list[dict[str, object]],
+            Field(default_factory=list),
+        ]
 
-    class DbtTestConfig(FlextDbtLdapBaseModel):
+    class DbtTestConfig(FlextModels.Value):
         """DBT test configuration."""
 
         version: str = "2"
-        models: list[dict[str, t.JsonValue]] = Field(default_factory=list)
-        columns: dict[str, list[str]] = Field(default_factory=dict)
+        models: Annotated[
+            list[dict[str, object]],
+            Field(default_factory=list),
+        ]
+        columns: Annotated[dict[str, list[str]], Field(default_factory=dict)]
 
-    class DbtSourceFreshness(FlextDbtLdapBaseModel):
+    class DbtSourceFreshness(FlextModels.Value):
         """DBT source freshness configuration."""
 
-        warn_after: dict[str, int] = Field(default_factory=dict)
-        error_after: dict[str, int] = Field(default_factory=dict)
+        warn_after: Annotated[dict[str, int], Field(default_factory=dict)]
+        error_after: Annotated[dict[str, int], Field(default_factory=dict)]
 
-    class DbtSourceDefinition(FlextDbtLdapBaseModel):
+    class DbtSourceDefinition(FlextModels.Value):
         """Complete DBT source definition."""
 
         name: str
         description: str = ""
-        tables: list[dict[str, t.JsonValue]] = Field(default_factory=list)
+        tables: Annotated[
+            list[dict[str, object]],
+            Field(default_factory=list),
+        ]
 
-    class DbtConfig(FlextDbtLdapBaseModel):
+    class DbtConfig(FlextModels.Value):
         """General DBT execution configuration."""
 
         target: str = "dev"
         profiles_dir: str = ""
         project_dir: str = ""
 
-    class ProjectStructureValidation(FlextDbtLdapBaseModel):
+    class ProjectStructureValidation(FlextModels.Value):
         """DBT project structure validation result."""
 
-        results: dict[str, bool] = Field(default_factory=dict)
+        results: Annotated[dict[str, bool], Field(default_factory=dict)]
 
-    class OptimizationHints(FlextDbtLdapBaseModel):
+    class OptimizationHints(FlextModels.Value):
         """Query optimization hints."""
 
         add_indexes: bool = False
-        index_columns: list[str] = Field(default_factory=list)
+        index_columns: Annotated[list[str], Field(default_factory=list)]
         partition_by: str = ""
         filter_early: bool = False
 
@@ -195,50 +225,50 @@ class FlextDbtLdapModels(m_core):
     # TRANSFORMATION MODELS
     # =========================================================================
 
-    class TransformationConfig(FlextDbtLdapBaseModel):
+    class TransformationConfig(FlextModels.Value):
         """Transformation configuration."""
 
         source_table: str = ""
-        transformations: dict[str, str] = Field(default_factory=dict)
-        filters: list[str] = Field(default_factory=list)
+        transformations: Annotated[dict[str, str], Field(default_factory=dict)]
+        filters: Annotated[list[str], Field(default_factory=list)]
 
-    class TransformationRule(FlextDbtLdapBaseModel):
+    class TransformationRule(FlextModels.Value):
         """Transformation rule definition."""
 
         name: str = ""
-        rules: dict[str, str] = Field(default_factory=dict)
+        rules: Annotated[dict[str, str], Field(default_factory=dict)]
 
-    class DataValidationConfig(FlextDbtLdapBaseModel):
+    class DataValidationConfig(FlextModels.Value):
         """Data validation configuration."""
 
         min_quality_threshold: str = "0.8"
-        required_attributes: list[str] = Field(default_factory=list)
+        required_attributes: Annotated[list[str], Field(default_factory=list)]
         validate_dns: bool = True
-        columns: dict[str, list[str]] = Field(default_factory=dict)
+        columns: Annotated[dict[str, list[str]], Field(default_factory=dict)]
 
     # =========================================================================
     # LDAP MODELS
     # =========================================================================
 
-    class LdapSchema(FlextDbtLdapBaseModel):
+    class LdapSchema(FlextModels.Value):
         """LDAP schema configuration."""
 
-        object_classes: list[str] = Field(default_factory=list)
-        required_attributes: list[str] = Field(default_factory=list)
+        object_classes: Annotated[list[str], Field(default_factory=list)]
+        required_attributes: Annotated[list[str], Field(default_factory=list)]
 
-    class LdapQuery(FlextDbtLdapBaseModel):
+    class LdapQuery(FlextModels.Value):
         """LDAP query configuration."""
 
         base_dn: str = ""
         filter_str: str = "(objectClass=*)"
-        attributes: list[str] = Field(default_factory=list)
+        attributes: Annotated[list[str], Field(default_factory=list)]
         scope: str = "SUBTREE"
 
     # =========================================================================
     # DOMAIN MODELS - LDAP data transformation entities
     # =========================================================================
 
-    class UserDimension(m_core.Entity):
+    class UserDimension(FlextModels.Entity):
         """User dimension model for DBT LDAP transformations."""
 
         user_id: str
@@ -256,7 +286,7 @@ class FlextDbtLdapModels(m_core):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: m_ldap.Ldif.Entry,
+            entry: FlextLdapModels.Ldif.Entry,
         ) -> FlextDbtLdapModels.UserDimension:
             """Create user dimension from LDAP entry."""
             attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
@@ -291,29 +321,29 @@ class FlextDbtLdapModels(m_core):
                 else None,
             )
 
-        def validate_business_rules(self) -> r[bool]:
-            """Validate user dimension business rules."""
-            if not self.user_id or not self.common_name:
-                return r[bool].fail("User ID and common name are required")
-            return r[bool].ok(True)
-
-        def to_dbt_dict(self) -> dict[str, t.JsonValue]:
+        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
                 "common_name": self.common_name,
-                "email": self.email,
-                "display_name": self.display_name,
-                "department": self.department,
-                "manager_dn": self.manager_dn,
-                "employee_number": self.employee_number,
-                "phone": self.phone,
+                "email": self.email or "",
+                "display_name": self.display_name or "",
+                "department": self.department or "",
+                "manager_dn": self.manager_dn or "",
+                "employee_number": self.employee_number or "",
+                "phone": self.phone or "",
                 "is_active": self.is_active,
-                "created_date": self.created_date,
-                "modified_date": self.modified_date,
+                "created_date": self.created_date or "",
+                "modified_date": self.modified_date or "",
             }
 
-    class GroupDimension(m_core.Entity):
+        def validate_business_rules(self) -> r[bool]:
+            """Validate user dimension business rules."""
+            if not self.user_id or not self.common_name:
+                return r[bool].fail("User ID and common name are required")
+            return r[bool].ok(value=True)
+
+    class GroupDimension(FlextModels.Entity):
         """Group dimension model for DBT LDAP transformations."""
 
         group_id: str
@@ -328,7 +358,7 @@ class FlextDbtLdapModels(m_core):
         @classmethod
         def from_ldap_entry(
             cls,
-            entry: m_ldap.Ldif.Entry,
+            entry: FlextLdapModels.Ldif.Entry,
         ) -> FlextDbtLdapModels.GroupDimension:
             """Create group dimension from LDAP entry."""
             attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
@@ -354,28 +384,28 @@ class FlextDbtLdapModels(m_core):
                 else None,
             )
 
+        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
+            """Convert to dictionary suitable for DBT processing."""
+            return {
+                "group_id": self.group_id,
+                "common_name": self.common_name,
+                "description": self.description or "",
+                "group_type": self.group_type or "",
+                "member_count": self.member_count,
+                "is_active": self.is_active,
+                "created_date": self.created_date or "",
+                "modified_date": self.modified_date or "",
+            }
+
         def validate_business_rules(self) -> r[bool]:
             """Validate group dimension business rules."""
             if not self.group_id or not self.common_name:
                 return r[bool].fail("Group ID and common name are required")
             if self.member_count < 0:
                 return r[bool].fail("Member count cannot be negative")
-            return r[bool].ok(True)
+            return r[bool].ok(value=True)
 
-        def to_dbt_dict(self) -> dict[str, t.JsonValue]:
-            """Convert to dictionary suitable for DBT processing."""
-            return {
-                "group_id": self.group_id,
-                "common_name": self.common_name,
-                "description": self.description,
-                "group_type": self.group_type,
-                "member_count": self.member_count,
-                "is_active": self.is_active,
-                "created_date": self.created_date,
-                "modified_date": self.modified_date,
-            }
-
-    class MembershipFact(m_core.Entity):
+    class MembershipFact(FlextModels.Entity):
         """Membership fact model for DBT LDAP transformations."""
 
         user_dn: str
@@ -385,22 +415,22 @@ class FlextDbtLdapModels(m_core):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def validate_business_rules(self) -> r[bool]:
-            """Validate membership fact business rules."""
-            if not self.user_dn or not self.group_dn:
-                return r[bool].fail("User DN and Group DN are required")
-            return r[bool].ok(True)
-
-        def to_dbt_dict(self) -> dict[str, t.JsonValue]:
+        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
                 "group_dn": self.group_dn,
                 "membership_type": self.membership_type,
                 "is_primary": self.is_primary,
-                "effective_date": self.effective_date,
-                "expiry_date": self.expiry_date,
+                "effective_date": self.effective_date or "",
+                "expiry_date": self.expiry_date or "",
             }
+
+        def validate_business_rules(self) -> r[bool]:
+            """Validate membership fact business rules."""
+            if not self.user_dn or not self.group_dn:
+                return r[bool].fail("User DN and Group DN are required")
+            return r[bool].ok(value=True)
 
     # =========================================================================
     # TRANSFORMER - LDAP to DBT data transformation
@@ -412,94 +442,43 @@ class FlextDbtLdapModels(m_core):
         @override
         def __init__(self) -> None:
             """Initialize LDAP transformer."""
-            logger.info("Initialized LDAP DBT transformer")
+            super().__init__()
+            self._logger_instance: FlextLogger | None = None
+
+        @property
+        def logger(self) -> FlextLogger:
+            """Lazy logger via FlextLogger."""
+            if self._logger_instance is None:
+                self._logger_instance = FlextLogger(__name__)
+            return self._logger_instance
+
+        @staticmethod
+        def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
+            """Extract object classes from entry attributes."""
+            raw = _entry_attrs_mapping(entry)
+            oc_val: object = raw.get("objectClass", [])
+            try:
+                return _STRING_LIST_ADAPTER.validate_python(oc_val)
+            except ValidationError:
+                return [str(oc_val)]
 
         @staticmethod
         def normalize_attributes(
-            entry: m_ldap.Ldif.Entry,
-        ) -> dict[str, list[str]]:
-            """Normalize entry attributes to dict[str, list[str]]."""
-            raw = entry.attributes
-            attrs: dict[str, list[str]] = {}
-            if isinstance(raw, dict):
-                for k, v in raw.items():
-                    if isinstance(v, list):
-                        attrs[k] = [str(x) for x in v]
-                    else:
-                        attrs[k] = [str(v)] if v is not None else []
-            return attrs
-
-        @staticmethod
-        def _get_object_classes(entry: m_ldap.Ldif.Entry) -> list[str]:
-            """Extract object classes from entry attributes."""
-            raw = entry.attributes
-            if not isinstance(raw, dict):
-                return []
-            oc_val = raw.get("objectClass", [])
-            if isinstance(oc_val, list):
-                return [str(x) for x in oc_val]
-            if oc_val is not None:
-                return [str(oc_val)]
-            return []
-
-        def _is_user_entry(self, entry: m_ldap.Ldif.Entry) -> bool:
-            """Check if entry is a user entry."""
-            object_classes = self._get_object_classes(entry)
-            user_classes = [
-                "person",
-                "user",
-                "inetOrgPerson",
-                "organizationalPerson",
-            ]
-            return any(cls in object_classes for cls in user_classes)
-
-        def _is_group_entry(self, entry: m_ldap.Ldif.Entry) -> bool:
-            """Check if entry is a group entry."""
-            object_classes = self._get_object_classes(entry)
-            group_classes = [
-                "group",
-                "groupOfNames",
-                "groupOfUniqueNames",
-                "posixGroup",
-            ]
-            return any(cls in object_classes for cls in group_classes)
-
-        def transform_users(
-            self,
-            entries: list[m_ldap.Ldif.Entry],
-        ) -> list[FlextDbtLdapModels.UserDimension]:
-            """Transform LDAP entries to user dimensions."""
-            logger.info(
-                "Transforming %d LDAP entries to user dimensions",
-                len(entries),
-            )
-            user_dims = []
-            for entry in entries:
-                if self._is_user_entry(entry):
-                    try:
-                        user_dims.append(
-                            FlextDbtLdapModels.UserDimension.from_ldap_entry(
-                                entry,
-                            ),
-                        )
-                    except Exception:
-                        logger.exception(
-                            "Failed to transform user entry: %s",
-                            entry.dn,
-                        )
-            logger.info("Transformed %d user dimensions", len(user_dims))
-            return user_dims
+            entry: FlextLdapModels.Ldif.Entry,
+        ) -> Mapping[str, list[str]]:
+            """Normalize entry attributes to Mapping[str, list[str]]."""
+            return _entry_attrs_mapping(entry)
 
         def transform_groups(
             self,
-            entries: list[m_ldap.Ldif.Entry],
+            entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions."""
-            logger.info(
+            self.logger.info(
                 "Transforming %d LDAP entries to group dimensions",
                 len(entries),
             )
-            group_dims = []
+            group_dims: list[FlextDbtLdapModels.GroupDimension] = []
             for entry in entries:
                 if self._is_group_entry(entry):
                     try:
@@ -508,20 +487,28 @@ class FlextDbtLdapModels(m_core):
                                 entry,
                             ),
                         )
-                    except Exception:
-                        logger.exception(
+                    except (
+                        ValueError,
+                        TypeError,
+                        KeyError,
+                        AttributeError,
+                        OSError,
+                        RuntimeError,
+                        ImportError,
+                    ):
+                        self.logger.exception(
                             "Failed to transform group entry: %s",
-                            entry.dn,
+                            str(entry.dn) if entry.dn is not None else "",
                         )
-            logger.info("Transformed %d group dimensions", len(group_dims))
+            self.logger.info("Transformed %d group dimensions", len(group_dims))
             return group_dims
 
         def transform_memberships(
             self,
-            entries: list[m_ldap.Ldif.Entry],
+            entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts."""
-            logger.info(
+            self.logger.info(
                 "Transforming %d LDAP entries to membership facts",
                 len(entries),
             )
@@ -536,20 +523,62 @@ class FlextDbtLdapModels(m_core):
                         membership_facts.extend(
                             self._extract_user_memberships(entry),
                         )
-                except Exception:
-                    logger.exception(
+                except (
+                    ValueError,
+                    TypeError,
+                    KeyError,
+                    AttributeError,
+                    OSError,
+                    RuntimeError,
+                    ImportError,
+                ):
+                    self.logger.exception(
                         "Failed to transform memberships for entry: %s",
-                        entry.dn,
+                        str(entry.dn) if entry.dn is not None else "",
                     )
-            logger.info(
+            self.logger.info(
                 "Transformed %d membership facts",
                 len(membership_facts),
             )
             return membership_facts
 
+        def transform_users(
+            self,
+            entries: list[FlextLdapModels.Ldif.Entry],
+        ) -> list[FlextDbtLdapModels.UserDimension]:
+            """Transform LDAP entries to user dimensions."""
+            self.logger.info(
+                "Transforming %d LDAP entries to user dimensions",
+                len(entries),
+            )
+            user_dims: list[FlextDbtLdapModels.UserDimension] = []
+            for entry in entries:
+                if self._is_user_entry(entry):
+                    try:
+                        user_dims.append(
+                            FlextDbtLdapModels.UserDimension.from_ldap_entry(
+                                entry,
+                            ),
+                        )
+                    except (
+                        ValueError,
+                        TypeError,
+                        KeyError,
+                        AttributeError,
+                        OSError,
+                        RuntimeError,
+                        ImportError,
+                    ):
+                        self.logger.exception(
+                            "Failed to transform user entry: %s",
+                            str(entry.dn) if entry.dn is not None else "",
+                        )
+            self.logger.info("Transformed %d user dimensions", len(user_dims))
+            return user_dims
+
         def _extract_group_memberships(
             self,
-            group_entry: m_ldap.Ldif.Entry,
+            group_entry: FlextLdapModels.Ldif.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
@@ -569,7 +598,7 @@ class FlextDbtLdapModels(m_core):
 
         def _extract_user_memberships(
             self,
-            user_entry: m_ldap.Ldif.Entry,
+            user_entry: FlextLdapModels.Ldif.Entry,
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
             memberships: list[FlextDbtLdapModels.MembershipFact] = []
@@ -586,14 +615,36 @@ class FlextDbtLdapModels(m_core):
                 )
             return memberships
 
+        def _is_group_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
+            """Check if entry is a group entry."""
+            object_classes = self._get_object_classes(entry)
+            group_classes = [
+                "group",
+                "groupOfNames",
+                "groupOfUniqueNames",
+                "posixGroup",
+            ]
+            return any(cls in object_classes for cls in group_classes)
+
+        def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
+            """Check if entry is a user entry."""
+            object_classes = self._get_object_classes(entry)
+            user_classes = [
+                "person",
+                "user",
+                "inetOrgPerson",
+                "organizationalPerson",
+            ]
+            return any(cls in object_classes for cls in user_classes)
+
+        def _post_init_log(self) -> None:
+            self.logger.info("Initialized LDAP DBT transformer")
+
 
 # Short aliases
 m = FlextDbtLdapModels
-m_dbt_ldap = FlextDbtLdapModels
 
 __all__: list[str] = [
-    "FlextDbtLdapBaseModel",
     "FlextDbtLdapModels",
     "m",
-    "m_dbt_ldap",
 ]

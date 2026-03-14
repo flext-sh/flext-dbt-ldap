@@ -265,7 +265,7 @@ std-workspace-sync: ## Sync with workspace standards
 std-workspace-validate: ## Validate workspace compliance
 	@echo "$(BLUE)🔍 Validating workspace compliance for $(PROJECT_NAME)...$(RESET)"
 	@test -f pyproject.toml || { echo "$(RED)❌ pyproject.toml missing$(RESET)"; exit 1; }
-	@test -f CLAUDE.md || echo "$(YELLOW)⚠️  CLAUDE.md missing$(RESET)"
+	@test -f AGENTS.md || echo "$(YELLOW)⚠️  AGENTS.md missing$(RESET)"
 	@test -f README.md || echo "$(YELLOW)⚠️  README.md missing$(RESET)"
 	@test -d src/ || { echo "$(RED)❌ src/ directory missing$(RESET)"; exit 1; }
 	@test -d tests/ || echo "$(YELLOW)⚠️  tests/ directory missing$(RESET)"

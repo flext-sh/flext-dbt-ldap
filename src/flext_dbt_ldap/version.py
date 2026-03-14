@@ -8,9 +8,8 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from importlib.metadata import PackageMetadata, metadata
-from typing import Final
 
-from flext_core import FlextResult
+from flext_core import r
 
 
 class FlextDbtLdapVersion:
@@ -18,14 +17,44 @@ class FlextDbtLdapVersion:
 
     def __init__(self) -> None:
         """Initialize version from package metadata."""
+        super().__init__()
         try:
             self._metadata: PackageMetadata = metadata("flext-dbt-ldap")
-        except Exception:
-            # Fallback for development/testing - use metadata() on a known package
-            # and override with our defaults
-            self._metadata = metadata(
-                "flext-dbt-ldap"
-            )  # Will use the installed package
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ):
+            self._metadata = metadata("flext-dbt-ldap")
+
+    @property
+    def author_name(self) -> str | None:
+        """Get author name."""
+        return self._metadata.get("Author")
+
+    @property
+    def description(self) -> str | None:
+        """Get package description."""
+        return self._metadata.get("Summary")
+
+    @property
+    def license(self) -> str | None:
+        """Get package license."""
+        return self._metadata.get("License")
+
+    @property
+    def maintainer_name(self) -> str | None:
+        """Get maintainer name."""
+        return self._metadata.get("Author")
+
+    @property
+    def url(self) -> str | None:
+        """Get package URL."""
+        return self._metadata.get("Home-Page")
 
     @property
     def version(self) -> str:
@@ -45,55 +74,32 @@ class FlextDbtLdapVersion:
         """Alias for version_info."""
         return self.version_info
 
-    @property
-    def author_name(self) -> str | None:
-        """Get author name."""
-        return self._metadata.get("Author")
 
-    @property
-    def maintainer_name(self) -> str | None:
-        """Get maintainer name."""
-        return self._metadata.get("Author")  # Same as author for now
-
-    @property
-    def description(self) -> str | None:
-        """Get package description."""
-        return self._metadata.get("Summary")
-
-    @property
-    def license(self) -> str | None:
-        """Get package license."""
-        return self._metadata.get("License")
-
-    @property
-    def url(self) -> str | None:
-        """Get package URL."""
-        return self._metadata.get("Home-Page")
-
-
-def _create_version() -> FlextResult[FlextDbtLdapVersion]:
+def _create_version() -> r[FlextDbtLdapVersion]:
     """Create version instance from package metadata.
 
     Returns:
-    FlextResult[FlextDbtLdapVersion]: Version instance or error
+    r[FlextDbtLdapVersion]: Version instance or error
 
     """
     try:
         version = FlextDbtLdapVersion()
-        return FlextResult[FlextDbtLdapVersion].ok(version)
-    except Exception as e:
-        return FlextResult[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
+        return r[FlextDbtLdapVersion].ok(version)
+    except (
+        ValueError,
+        TypeError,
+        KeyError,
+        AttributeError,
+        OSError,
+        RuntimeError,
+        ImportError,
+    ) as e:
+        return r[FlextDbtLdapVersion].fail(f"Version creation failed: {e}")
 
 
-# Global version instance
 _version_result = _create_version()
 if _version_result.is_failure:
     error_msg = f"Failed to initialize version: {_version_result.error}"
     raise RuntimeError(error_msg)
-
-VERSION: Final[FlextDbtLdapVersion] = _version_result.value
-
-__all__ = [
-    "VERSION",
-    "FlextDbtLdapVersion",
-]
+VERSION: FlextDbtLdapVersion = _version_result.value
+__all__ = ["VERSION", "FlextDbtLdapVersion"]

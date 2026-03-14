@@ -9,11 +9,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import override
 
-from flext_core import FlextExceptions
-
-from flext_dbt_ldap.typings import t
+from flext_core import FlextExceptions, t
 
 
 class FlextDbtLdapError(FlextExceptions.BaseError):
@@ -49,10 +48,10 @@ class _DbtLdapContextMixin:
 
     @staticmethod
     def _build_context(
-        **fields: t.MetadataAttributeValue,
-    ) -> dict[str, t.MetadataAttributeValue]:
+        **fields: t.Scalar | None,
+    ) -> Mapping[str, t.MetadataValue]:
         """Build context dictionary from keyword arguments."""
-        return {k: v for k, v in fields.items() if v is not None}
+        return {key: value for key, value in fields.items() if value is not None}
 
 
 class FlextDbtLdapModelError(_DbtLdapContextMixin, FlextExceptions.BaseError):
@@ -71,10 +70,7 @@ class FlextDbtLdapModelError(_DbtLdapContextMixin, FlextExceptions.BaseError):
         """Initialize LDAP DBT model error with context."""
         self.model_name = model_name
         self.model_type = model_type
-        context = self._build_context(
-            model_name=model_name,
-            model_type=model_type,
-        )
+        context = self._build_context(model_name=model_name, model_type=model_type)
         super().__init__(
             f"LDAP DBT model: {message}",
             error_code=error_code or "DBT_LDAP_MODEL_ERROR",
@@ -122,10 +118,7 @@ class FlextDbtLdapTestError(_DbtLdapContextMixin, FlextExceptions.BaseError):
         """Initialize LDAP DBT test error with context."""
         self.test_name = test_name
         self.model_name = model_name
-        context = self._build_context(
-            test_name=test_name,
-            model_name=model_name,
-        )
+        context = self._build_context(test_name=test_name, model_name=model_name)
         super().__init__(
             f"LDAP DBT test: {message}",
             error_code=error_code or "DBT_LDAP_TEST_ERROR",

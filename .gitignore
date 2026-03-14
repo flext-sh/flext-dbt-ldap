@@ -24,6 +24,8 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.mypy_cache/
+.flext-deps/
 
 # Virtual environments
 .env
@@ -77,12 +79,12 @@ logs/
 *backup*
 
 # Validation and test scripts outside proper directories
-**/validate*.sh
-**/validate*.py
+/validate*.sh
+/validate*.py
 **/validate*.yml
 **/validate*.yaml
-**/test*.sh
-**/test*.py
+/test*.sh
+/test*.py
 **/test*.yml
 **/test*.yaml
 
@@ -103,3 +105,7 @@ staging/
 # Claude AI files
 .claude/
 .github/*.rej
+
+# --- workspace-sync: required ignores (auto-managed) ---
+.reports/
+.venv/
