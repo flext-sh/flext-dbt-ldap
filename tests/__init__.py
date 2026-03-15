@@ -1,13 +1,7 @@
 # AUTO-GENERATED FILE — DO NOT EDIT MANUALLY.
 # Regenerate with: make codegen
 #
-"""FLEXT DBT LDAP Tests - Test infrastructure and utilities.
-
-Provides TestsFlextDbtLdap classes extending FlextTests and FlextDbtLdap for comprehensive testing.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
+"""Tests package."""
 
 from __future__ import annotations
 
@@ -18,6 +12,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core.typings import FlextTypes
 
+    from tests import e2e, unit
     from tests.conftest import (
         MockLdapConnection,
         MockLdapDbtAdapter,
@@ -90,6 +85,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "dbt_ldap_tests": ("tests.conftest", "dbt_ldap_tests"),
     "dbt_profiles_dir": ("tests.e2e.conftest", "dbt_profiles_dir"),
     "dbt_project_dir": ("tests.e2e.conftest", "dbt_project_dir"),
+    "e2e": ("tests.e2e", ""),
     "flext_docker": ("tests.e2e.conftest", "flext_docker"),
     "get_column_names": ("tests.e2e.conftest", "get_column_names"),
     "ldap_performance_config": ("tests.conftest", "ldap_performance_config"),
@@ -130,6 +126,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     ),
     "test_version_properties": ("tests.unit.test_version", "test_version_properties"),
     "u": ("tests.utilities", "TestsFlextDbtLdapUtilities"),
+    "unit": ("tests.unit", ""),
 }
 
 __all__ = [
@@ -151,6 +148,7 @@ __all__ = [
     "dbt_ldap_tests",
     "dbt_profiles_dir",
     "dbt_project_dir",
+    "e2e",
     "flext_docker",
     "get_column_names",
     "ldap_performance_config",
@@ -179,6 +177,7 @@ __all__ = [
     "test_version_metadata_integrity",
     "test_version_properties",
     "u",
+    "unit",
 ]
 
 
