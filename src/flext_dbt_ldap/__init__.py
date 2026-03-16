@@ -28,7 +28,6 @@ if TYPE_CHECKING:
         __version__,
         __version_info__,
     )
-    from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
     from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
     from flext_dbt_ldap.dbt_exceptions import (
         FlextDbtLdapAuthenticationError,
@@ -71,7 +70,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "flext_dbt_ldap.dbt_exceptions",
         "FlextDbtLdapConnectionError",
     ),
-    "FlextDbtLdapConstants": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
     "FlextDbtLdapError": ("flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapError"),
     "FlextDbtLdapIntegration": (
         "flext_dbt_ldap.ldap_integration",
@@ -120,7 +118,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__url__": ("flext_dbt_ldap.__version__", "__url__"),
     "__version__": ("flext_dbt_ldap.__version__", "__version__"),
     "__version_info__": ("flext_dbt_ldap.__version__", "__version_info__"),
-    "c": ("flext_dbt_ldap.constants", "c"),
     "logger": ("flext_dbt_ldap.settings", "logger"),
     "m": ("flext_dbt_ldap.models", "m"),
     "p": ("flext_dbt_ldap.protocols", "p"),
@@ -143,7 +140,6 @@ __all__ = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
     "FlextDbtLdapConnectionError",
-    "FlextDbtLdapConstants",
     "FlextDbtLdapError",
     "FlextDbtLdapIntegration",
     "FlextDbtLdapMacroError",
@@ -170,7 +166,6 @@ __all__ = [
     "__url__",
     "__version__",
     "__version_info__",
-    "c",
     "logger",
     "m",
     "p",

@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from enum import StrEnum
+from enum import StrEnum, unique, unique
 from typing import ClassVar, Final, Literal
 
 from flext_core import FlextConstants
@@ -179,14 +179,15 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         ENABLE_AUDIT_LOGGING: Final[bool] = True
         AUDIT_LOG_FILE: Final[str] = "flext_dbt_ldap_audit.log"
 
+    @unique
     class LdapOperations(StrEnum):
         """LDAP operation types.
-
+    
         DRY Pattern:
             StrEnum is the single source of truth. Use LdapOperations.SEARCH.value
             or LdapOperations.SEARCH directly - no base strings needed.
         """
-
+    
         SEARCH = "search"
         BIND = "bind"
         UNBIND = "unbind"
@@ -194,14 +195,15 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         MODIFY = "modify"
         DELETE = "delete"
 
+    @unique
     class DbtCommands(StrEnum):
         """DBT command types.
-
+    
         DRY Pattern:
             StrEnum is the single source of truth. Use DbtCommands.RUN.value
             or DbtCommands.RUN directly - no base strings needed.
         """
-
+    
         RUN = "run"
         TEST = "test"
         BUILD = "build"
@@ -222,5 +224,24 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
 
 __all__ = ["FlextDbtLdapConstants", "c"]
+
+
+    @unique
+    class DbtLdapProjectType(StrEnum):
+        LIBRARY = "library"
+        APPLICATION = "application"
+        SERVICE = "service"
+        DBT_LDAP = "dbt-ldap"
+        LDAP_TRANSFORM = "ldap-transform"
+        DIRECTORY_ANALYTICS = "directory-analytics"
+        LDAP_DBT_MODELS = "ldap-dbt-models"
+        DBT_LDAP_PROJECT = "dbt-ldap-project"
+        LDAP_DIMENSIONAL = "ldap-dimensional"
+        DIRECTORY_WAREHOUSE = "directory-warehouse"
+        LDAP_ETL = "ldap-etl"
+        DBT_LDAP_PIPELINE = "dbt-ldap-pipeline"
+        LDAP_ANALYTICS = "ldap-analytics"
+        DIRECTORY_DBT = "directory-dbt"
+        LDAP_DATA_WAREHOUSE = "ldap-data-warehouse"
 
 c = FlextDbtLdapConstants

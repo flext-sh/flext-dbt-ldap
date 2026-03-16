@@ -10,10 +10,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Literal
-
 from flext_ldap import FlextLdapTypes
 from flext_meltano import FlextMeltanoTypes
+
+from flext_dbt_ldap import c
 
 
 class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
@@ -38,23 +38,7 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     class Project:
         """DBT LDAP-specific project types."""
 
-        type DbtLdapProjectType = Literal[
-            "library",
-            "application",
-            "service",
-            "dbt-ldap",
-            "ldap-transform",
-            "directory-analytics",
-            "ldap-dbt-models",
-            "dbt-ldap-project",
-            "ldap-dimensional",
-            "directory-warehouse",
-            "ldap-etl",
-            "dbt-ldap-pipeline",
-            "ldap-analytics",
-            "directory-dbt",
-            "ldap-data-warehouse",
-        ]
+        type DbtLdapProjectType = c.DbtLdapProjectType
         "DBT LDAP project type literal."
 
 
