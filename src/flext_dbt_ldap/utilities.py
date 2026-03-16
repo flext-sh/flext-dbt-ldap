@@ -569,5 +569,6 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 return r[str].fail(f"Query optimization failed: {e}")
 
 
-u = FlextDbtLdapUtilities
 __all__ = ["FlextDbtLdapUtilities", "u"]
+
+u = FlextDbtLdapUtilities

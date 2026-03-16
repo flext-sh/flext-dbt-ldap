@@ -8,4 +8,5 @@ class TestsFlextDbtLdapConstants:
 
 
 __all__ = ["TestsFlextDbtLdapConstants", "c"]
+
 c = TestsFlextDbtLdapConstants

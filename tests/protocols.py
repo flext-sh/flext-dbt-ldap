@@ -33,6 +33,6 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
             """DbtLdap-specific test protocols."""
 
 
-p = TestsFlextDbtLdapProtocols
-p = TestsFlextDbtLdapProtocols
 __all__ = ["TestsFlextDbtLdapProtocols", "p"]
+
+p = TestsFlextDbtLdapProtocols

@@ -221,5 +221,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     "DBT target literal - no corresponding StrEnum."
 
 
-c = FlextDbtLdapConstants
 __all__ = ["FlextDbtLdapConstants", "c"]
+
+c = FlextDbtLdapConstants

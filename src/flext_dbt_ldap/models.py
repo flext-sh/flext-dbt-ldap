@@ -644,9 +644,10 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
 
 # Short aliases
-m = FlextDbtLdapModels
 
 __all__: list[str] = [
     "FlextDbtLdapModels",
     "m",
 ]
+
+m = FlextDbtLdapModels

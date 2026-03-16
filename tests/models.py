@@ -13,3 +13,5 @@ from flext_tests import FlextTestsModels
 
 class TestsFlextDbtLdapModels(FlextTestsModels):
     """Test models for flextdbtldap."""
+
+m = TestsFlextDbtLdapModels

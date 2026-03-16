@@ -308,5 +308,6 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
 
-p = FlextDbtLdapProtocols
 __all__ = ["FlextDbtLdapProtocols", "p"]
+
+p = FlextDbtLdapProtocols
