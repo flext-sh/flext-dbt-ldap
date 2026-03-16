@@ -48,7 +48,7 @@ if TYPE_CHECKING:
         run_dbt_command,
         table_exists,
     )
-    from tests.models import TestsFlextDbtLdapModels, TestsFlextDbtLdapModels as m
+    from tests.models import TestsFlextDbtLdapModels, m
     from tests.protocols import TestsFlextDbtLdapProtocols, p
     from tests.typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
     from tests.unit.test_dbt_services_sync import (
@@ -61,10 +61,7 @@ if TYPE_CHECKING:
         test_version_metadata_integrity,
         test_version_properties,
     )
-    from tests.utilities import (
-        TestsFlextDbtLdapUtilities,
-        TestsFlextDbtLdapUtilities as u,
-    )
+    from tests.utilities import TestsFlextDbtLdapUtilities, u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),
@@ -92,7 +89,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "ldap_source_config": ("tests.conftest", "ldap_source_config"),
     "ldap_validation_rules": ("tests.conftest", "ldap_validation_rules"),
     "logger": ("tests.e2e.conftest", "logger"),
-    "m": ("tests.models", "TestsFlextDbtLdapModels"),
+    "m": ("tests.models", "m"),
     "mock_ldap_connection": ("tests.conftest", "mock_ldap_connection"),
     "mock_ldap_dbt_adapter": ("tests.conftest", "mock_ldap_dbt_adapter"),
     "p": ("tests.protocols", "p"),
@@ -125,7 +122,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "test_version_metadata_integrity",
     ),
     "test_version_properties": ("tests.unit.test_version", "test_version_properties"),
-    "u": ("tests.utilities", "TestsFlextDbtLdapUtilities"),
+    "u": ("tests.utilities", "u"),
     "unit": ("tests.unit", ""),
 }
 

@@ -14,4 +14,5 @@ from flext_tests import FlextTestsUtilities
 class TestsFlextDbtLdapUtilities(FlextTestsUtilities):
     """Test utilities for flextdbtldap."""
 
+
 u = TestsFlextDbtLdapUtilities
