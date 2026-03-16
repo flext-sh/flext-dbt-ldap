@@ -445,7 +445,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def __init__(self) -> None:
             """Initialize LDAP transformer."""
             super().__init__()
-            self._logger_instance: p.StructlogLogger | None = None
+            self._logger_instance: p.Logger | None = None
 
         @property
         def logger(self) -> FlextLogger:
