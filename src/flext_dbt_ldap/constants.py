@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from enum import StrEnum, unique, unique
+from enum import StrEnum, unique
 from typing import ClassVar, Final, Literal
 
 from flext_core import FlextConstants
@@ -182,12 +182,12 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     @unique
     class LdapOperations(StrEnum):
         """LDAP operation types.
-    
+
         DRY Pattern:
             StrEnum is the single source of truth. Use LdapOperations.SEARCH.value
             or LdapOperations.SEARCH directly - no base strings needed.
         """
-    
+
         SEARCH = "search"
         BIND = "bind"
         UNBIND = "unbind"
@@ -198,12 +198,12 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     @unique
     class DbtCommands(StrEnum):
         """DBT command types.
-    
+
         DRY Pattern:
             StrEnum is the single source of truth. Use DbtCommands.RUN.value
             or DbtCommands.RUN directly - no base strings needed.
         """
-    
+
         RUN = "run"
         TEST = "test"
         BUILD = "build"
@@ -221,10 +221,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     "DBT log level literal - no corresponding StrEnum."
     type DbtTargetLiteral = Literal["dev", "staging", "prod"]
     "DBT target literal - no corresponding StrEnum."
-
-
-__all__ = ["FlextDbtLdapConstants", "c"]
-
 
     @unique
     class DbtLdapProjectType(StrEnum):
@@ -244,4 +240,7 @@ __all__ = ["FlextDbtLdapConstants", "c"]
         DIRECTORY_DBT = "directory-dbt"
         LDAP_DATA_WAREHOUSE = "ldap-data-warehouse"
 
+
 c = FlextDbtLdapConstants
+
+__all__ = ["FlextDbtLdapConstants", "c"]
