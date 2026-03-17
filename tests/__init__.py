@@ -12,8 +12,8 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core.typings import FlextTypes
 
-    from tests import e2e, unit
-    from tests.conftest import (
+    from . import e2e as e2e, unit as unit
+    from .conftest import (
         MockLdapConnection,
         MockLdapDbtAdapter,
         dbt_ldap_macros,
@@ -33,8 +33,8 @@ if TYPE_CHECKING:
         shared_ldap_config,
         shared_ldap_container,
     )
-    from tests.constants import TestsFlextDbtLdapConstants, c
-    from tests.e2e.conftest import (
+    from .constants import TestsFlextDbtLdapConstants, c
+    from .e2e.conftest import (
         count_rows,
         db_connection,
         dbt_profiles_dir,
@@ -48,20 +48,20 @@ if TYPE_CHECKING:
         run_dbt_command,
         table_exists,
     )
-    from tests.models import TestsFlextDbtLdapModels, m
-    from tests.protocols import TestsFlextDbtLdapProtocols, p
-    from tests.typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
-    from tests.unit.test_dbt_services_sync import (
+    from .models import TestsFlextDbtLdapModels, m
+    from .protocols import TestsFlextDbtLdapProtocols, p
+    from .typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
+    from .unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
-    from tests.unit.test_version import (
+    from .unit.test_version import (
         test_dunder_alignment,
         test_incremental_groups_sync_applies_bookmark_filter,
         test_incremental_users_sync_applies_bookmark_filter,
         test_version_metadata_integrity,
         test_version_properties,
     )
-    from tests.utilities import TestsFlextDbtLdapUtilities, u
+    from .utilities import TestsFlextDbtLdapUtilities, u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),

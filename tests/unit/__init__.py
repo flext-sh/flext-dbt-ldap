@@ -12,10 +12,10 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core.typings import FlextTypes
 
-    from tests.unit.test_dbt_services_sync import (
+    from .test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
-    from tests.unit.test_version import (
+    from .test_version import (
         test_dunder_alignment,
         test_incremental_groups_sync_applies_bookmark_filter,
         test_incremental_users_sync_applies_bookmark_filter,
