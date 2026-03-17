@@ -58,7 +58,6 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.simple_api import FlextDbtLdap
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
-    from flext_dbt_ldap.version import VERSION, FlextDbtLdapVersion
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdap": ("flext_dbt_ldap.simple_api", "FlextDbtLdap"),
@@ -109,8 +108,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "flext_dbt_ldap.dbt_exceptions",
         "FlextDbtLdapValidationError",
     ),
-    "FlextDbtLdapVersion": ("flext_dbt_ldap.version", "FlextDbtLdapVersion"),
-    "VERSION": ("flext_dbt_ldap.version", "VERSION"),
     "__all__": ("flext_dbt_ldap.__version__", "__all__"),
     "__author__": ("flext_dbt_ldap.__version__", "__author__"),
     "__author_email__": ("flext_dbt_ldap.__version__", "__author_email__"),
@@ -138,7 +135,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
 }
 
 __all__ = [
-    "VERSION",
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
@@ -160,7 +156,6 @@ __all__ = [
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapValidationError",
-    "FlextDbtLdapVersion",
     "__all__",
     "__author__",
     "__author_email__",

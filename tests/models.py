@@ -16,3 +16,8 @@ class TestsFlextDbtLdapModels(FlextTestsModels):
 
 
 m = TestsFlextDbtLdapModels
+
+__all__ = [
+    "TestsFlextDbtLdapModels",
+    "m",
+]

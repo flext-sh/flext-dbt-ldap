@@ -224,6 +224,8 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
     @unique
     class DbtLdapProjectType(StrEnum):
+        """Project-type identifiers for dbt LDAP packages."""
+
         LIBRARY = "library"
         APPLICATION = "application"
         SERVICE = "service"
