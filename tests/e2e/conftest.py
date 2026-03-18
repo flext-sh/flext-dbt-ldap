@@ -16,6 +16,7 @@ from typing import LiteralString
 import psycopg
 import pytest
 from flext_core import FlextDecorators as d, FlextLogger
+from flext_tests.docker import tk
 from psycopg import sql
 
 logger = FlextLogger(__name__)
