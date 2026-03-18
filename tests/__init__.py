@@ -50,7 +50,7 @@ if TYPE_CHECKING:
     )
     from .models import TestsFlextDbtLdapModels, m
     from .protocols import TestsFlextDbtLdapProtocols, p
-    from .typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
+    from .typings import TestsFlextDbtLdapTypes, t
     from .unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
@@ -102,7 +102,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "set_test_environment": ("tests.conftest", "set_test_environment"),
     "shared_ldap_config": ("tests.conftest", "shared_ldap_config"),
     "shared_ldap_container": ("tests.conftest", "shared_ldap_container"),
-    "t": ("tests.typings", "TestsFlextDbtLdapTypes"),
+    "t": ("tests.typings", "t"),
     "table_exists": ("tests.e2e.conftest", "table_exists"),
     "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
     "test_incremental_groups_sync_applies_bookmark_filter": (
