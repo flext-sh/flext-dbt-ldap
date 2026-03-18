@@ -13,3 +13,7 @@ from flext_tests import FlextTestsTypes
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes):
     """Test type aliases for flextdbtldap."""
+
+
+t = TestsFlextDbtLdapTypes
+__all__ = ["TestsFlextDbtLdapTypes", "t"]

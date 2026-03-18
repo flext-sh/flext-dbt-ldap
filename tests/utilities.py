@@ -16,3 +16,4 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities):
 
 
 u = TestsFlextDbtLdapUtilities
+__all__ = ["TestsFlextDbtLdapUtilities", "u"]
