@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import Annotated, override
 
 from flext_core import FlextLogger, FlextModels, r
@@ -445,7 +445,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def __init__(self) -> None:
             """Initialize LDAP transformer."""
             super().__init__()
-            self._logger_instance: p.Logger | None = None
+            self._logger_instance: FlextLogger | None = None
 
         @property
         def logger(self) -> FlextLogger:
@@ -476,34 +476,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.GroupDimension]:
             """Transform LDAP entries to group dimensions."""
-            self.logger.info(
-                "Transforming %d LDAP entries to group dimensions",
-                len(entries),
+            return self._transform_entries_to_dimensions(
+                entries=entries,
+                is_entry_target=self._is_group_entry,
+                build_dimension=FlextDbtLdapModels.GroupDimension.from_ldap_entry,
+                transform_label="group dimensions",
+                failure_label="group entry",
             )
-            group_dims: list[FlextDbtLdapModels.GroupDimension] = []
-            for entry in entries:
-                if self._is_group_entry(entry):
-                    try:
-                        group_dims.append(
-                            FlextDbtLdapModels.GroupDimension.from_ldap_entry(
-                                entry,
-                            ),
-                        )
-                    except (
-                        ValueError,
-                        TypeError,
-                        KeyError,
-                        AttributeError,
-                        OSError,
-                        RuntimeError,
-                        ImportError,
-                    ):
-                        self.logger.exception(
-                            "Failed to transform group entry: %s",
-                            str(entry.dn) if entry.dn is not None else "",
-                        )
-            self.logger.info("Transformed %d group dimensions", len(group_dims))
-            return group_dims
 
         def transform_memberships(
             self,
@@ -511,8 +490,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         ) -> list[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts."""
             self.logger.info(
-                "Transforming %d LDAP entries to membership facts",
-                len(entries),
+                f"Transforming {len(entries)} LDAP entries to membership facts"
             )
             membership_facts: list[FlextDbtLdapModels.MembershipFact] = []
             for entry in entries:
@@ -535,13 +513,10 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     ImportError,
                 ):
                     self.logger.exception(
-                        "Failed to transform memberships for entry: %s",
-                        str(entry.dn) if entry.dn is not None else "",
+                        "Failed to transform memberships for entry: "
+                        f"{str(entry.dn) if entry.dn is not None else ''}"
                     )
-            self.logger.info(
-                "Transformed %d membership facts",
-                len(membership_facts),
-            )
+            self.logger.info(f"Transformed {len(membership_facts)} membership facts")
             return membership_facts
 
         def transform_users(
@@ -549,34 +524,47 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entries: list[FlextLdapModels.Ldif.Entry],
         ) -> list[FlextDbtLdapModels.UserDimension]:
             """Transform LDAP entries to user dimensions."""
-            self.logger.info(
-                "Transforming %d LDAP entries to user dimensions",
-                len(entries),
+            return self._transform_entries_to_dimensions(
+                entries=entries,
+                is_entry_target=self._is_user_entry,
+                build_dimension=FlextDbtLdapModels.UserDimension.from_ldap_entry,
+                transform_label="user dimensions",
+                failure_label="user entry",
             )
-            user_dims: list[FlextDbtLdapModels.UserDimension] = []
+
+        def _transform_entries_to_dimensions[TDimension](
+            self,
+            *,
+            entries: list[FlextLdapModels.Ldif.Entry],
+            is_entry_target: Callable[[FlextLdapModels.Ldif.Entry], bool],
+            build_dimension: Callable[[FlextLdapModels.Ldif.Entry], TDimension],
+            transform_label: str,
+            failure_label: str,
+        ) -> list[TDimension]:
+            self.logger.info(
+                f"Transforming {len(entries)} LDAP entries to {transform_label}"
+            )
+            dimensions: list[TDimension] = []
             for entry in entries:
-                if self._is_user_entry(entry):
-                    try:
-                        user_dims.append(
-                            FlextDbtLdapModels.UserDimension.from_ldap_entry(
-                                entry,
-                            ),
-                        )
-                    except (
-                        ValueError,
-                        TypeError,
-                        KeyError,
-                        AttributeError,
-                        OSError,
-                        RuntimeError,
-                        ImportError,
-                    ):
-                        self.logger.exception(
-                            "Failed to transform user entry: %s",
-                            str(entry.dn) if entry.dn is not None else "",
-                        )
-            self.logger.info("Transformed %d user dimensions", len(user_dims))
-            return user_dims
+                if not is_entry_target(entry):
+                    continue
+                try:
+                    dimensions.append(build_dimension(entry))
+                except (
+                    ValueError,
+                    TypeError,
+                    KeyError,
+                    AttributeError,
+                    OSError,
+                    RuntimeError,
+                    ImportError,
+                ):
+                    entry_dn = str(entry.dn) if entry.dn is not None else ""
+                    self.logger.exception(
+                        f"Failed to transform {failure_label}: {entry_dn}"
+                    )
+            self.logger.info(f"Transformed {len(dimensions)} {transform_label}")
+            return dimensions
 
         def _extract_group_memberships(
             self,

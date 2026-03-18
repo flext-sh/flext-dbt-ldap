@@ -23,9 +23,9 @@ POSTGRES_READY_MAX_RETRIES = 30
 
 
 @pytest.fixture(scope="session")
-def flext_docker() -> FlextTestsDocker:
-    """Get FlextTestsDocker unified management instance."""
-    return FlextTestsDocker()
+def flext_docker() -> tk:
+    """Get tk unified management instance."""
+    return tk()
 
 
 @pytest.fixture(scope="session")
@@ -35,12 +35,10 @@ def project_root() -> Path:
 
 
 @pytest.fixture(scope="session")
-def postgres_container(
-    flext_docker: FlextTestsDocker, project_root: Path
-) -> Generator[None]:
-    """Start PostgreSQL container for testing using FlextTestsDocker."""
+def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
+    """Start PostgreSQL container for testing using tk."""
     compose_file = project_root / "docker-compose.yml"
-    logger.info("Starting PostgreSQL container using FlextTestsDocker...")
+    logger.info("Starting PostgreSQL container using tk...")
     start_result = flext_docker.start_compose_stack(str(compose_file))
     if start_result.is_failure:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
@@ -63,7 +61,7 @@ def postgres_container(
     _check_postgres_ready()
     logger.info("PostgreSQL is ready")
     yield
-    logger.info("Stopping PostgreSQL container using FlextTestsDocker...")
+    logger.info("Stopping PostgreSQL container using tk...")
 
     class _StopResult:
         is_failure: bool = False

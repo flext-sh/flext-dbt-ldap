@@ -11,7 +11,7 @@ from __future__ import annotations
 from flext_tests import m
 
 
-class TestsFlextDbtLdapModels(FlextTestsModels):
+class TestsFlextDbtLdapModels(m):
     """Test models for flextdbtldap."""
 
 

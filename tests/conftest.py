@@ -11,14 +11,17 @@ import os
 import pathlib
 import re
 import tempfile
-from collections.abc import Generator
+from collections.abc import Generator, Mapping
+from typing import TypeIs
 
 import pytest
+from flext_tests import td, tk
+from pydantic import TypeAdapter, ValidationError
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_container(flext_docker: FlextTestsDocker) -> str:
-    """Managed LDAP container using centralized FlextTestsDocker with docker-compose."""
+def shared_ldap_container(flext_docker: tk) -> str:
+    """Managed LDAP container using centralized tk with docker-compose."""
     compose_file = pathlib.Path(
         "~/flext/docker/docker-compose.openldap.yml"
     ).expanduser()
@@ -85,24 +88,13 @@ def dbt_ldap_profile() -> dict[str, object]:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> dict[str, object]:
+def dbt_ldap_project_config() -> Mapping[str, object]:
     """Dbt LDAP project configuration for testing."""
-    return {
-        "name": "flext_dbt_ldap_test",
-        "version": "0.9.0",
-        "profile": "test",
-        "model-paths": ["models"],
-        "analysis-paths": ["analyses"],
-        "test-paths": ["tests"],
-        "seed-paths": ["seeds"],
-        "macro-paths": ["macros"],
-        "snapshot-paths": ["snapshots"],
-        "docs-paths": ["docs"],
-        "asset-paths": ["assets"],
-        "target-path": "target",
-        "clean-targets": ["target", "dbt_packages"],
-        "require-dbt-version": ">=1.8.0",
-        "model_config": {
+    return td.build_dbt_project_config(
+        name="flext_dbt_ldap_test",
+        version="0.9.0",
+        profile="test",
+        model_config={
             "materialized": "table",
             "ldap": {
                 "enable_ldap_functions": True,
@@ -110,13 +102,13 @@ def dbt_ldap_project_config() -> dict[str, object]:
                 "base_dn": "dc=test,dc=com",
             },
         },
-        "vars": {
+        variables={
             "ldap_base_dn": "dc=test,dc=com",
             "ldap_users_ou": "ou=users",
             "ldap_groups_ou": "ou=groups",
             "enable_ldap_validation": True,
         },
-    }
+    )
 
 
 @pytest.fixture
@@ -357,12 +349,23 @@ class MockLdapDbtAdapter:
             }
         ]
 
+    @staticmethod
+    def _is_ldap_attribute_map(
+        value: object,
+    ) -> TypeIs[Mapping[str, str | list[str] | None]]:
+        adapter = TypeAdapter(dict[str, str | list[str] | None])
+        try:
+            _ = adapter.validate_python(value)
+            return True
+        except ValidationError:
+            return False
+
     def split(self, dn: str) -> bool:
         """Validate DN format."""
         return bool(re.match(r"^(?:cn|uid)=.+(?:,(?:ou|dc)=.+)+", dn))
 
     def parse_ldap_attributes(
-        self, attributes: dict[str, object]
+        self, attributes: Mapping[str, str | list[str] | None]
     ) -> dict[str, str | None]:
         """Parse LDAP attributes for dbt models."""
         parsed: dict[str, str | None] = {}
@@ -381,7 +384,7 @@ class MockLdapDbtAdapter:
         for entry in ldap_data:
             flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
             attrs = entry.get("attributes")
-            if isinstance(attrs, dict):
+            if self._is_ldap_attribute_map(attrs):
                 flat_entry.update(self.parse_ldap_attributes(attrs))
             transformed.append(flat_entry)
         return transformed
