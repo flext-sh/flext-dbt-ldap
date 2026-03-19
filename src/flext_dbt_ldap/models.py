@@ -17,7 +17,7 @@ from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import Field, TypeAdapter, ValidationError
 
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap import t
 
 _MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
     Mapping[str, t.Serializable]

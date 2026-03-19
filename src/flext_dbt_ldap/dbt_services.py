@@ -16,9 +16,8 @@ from flext_core import FlextLogger, r
 from flext_meltano import FlextMeltanoDbtService
 from pydantic import TypeAdapter, ValidationError
 
-from flext_dbt_ldap.constants import c
+from flext_dbt_ldap import c, m
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
-from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = FlextLogger(__name__)

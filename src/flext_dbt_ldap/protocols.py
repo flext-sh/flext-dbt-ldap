@@ -13,7 +13,7 @@ from flext_core import FlextProtocols, t
 from flext_ldap import FlextLdapProtocols
 from flext_meltano import FlextMeltanoProtocols
 
-from flext_dbt_ldap.models import m
+from flext_dbt_ldap import m
 
 
 class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):

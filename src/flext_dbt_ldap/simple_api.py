@@ -10,9 +10,9 @@ from typing import override
 
 from flext_core import FlextService, r
 
+from flext_dbt_ldap import m
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
-from flext_dbt_ldap.models import m
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_dbt_ldap.utilities import FlextDbtLdapUtilities
 
