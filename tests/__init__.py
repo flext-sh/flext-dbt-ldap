@@ -33,7 +33,7 @@ if TYPE_CHECKING:
         shared_ldap_config,
         shared_ldap_container,
     )
-    from .constants import TestsFlextDbtLdapConstants, c
+    from .constants import TestsFlextDbtLdapConstants, TestsFlextDbtLdapConstants as c
     from .e2e.conftest import (
         count_rows,
         db_connection,
@@ -48,9 +48,9 @@ if TYPE_CHECKING:
         run_dbt_command,
         table_exists,
     )
-    from .models import TestsFlextDbtLdapModels, m
-    from .protocols import TestsFlextDbtLdapProtocols, p
-    from .typings import TestsFlextDbtLdapTypes, t
+    from .models import TestsFlextDbtLdapModels, TestsFlextDbtLdapModels as m
+    from .protocols import TestsFlextDbtLdapProtocols, TestsFlextDbtLdapProtocols as p
+    from .typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
     from .unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
@@ -61,7 +61,7 @@ if TYPE_CHECKING:
         test_version_metadata_integrity,
         test_version_properties,
     )
-    from .utilities import TestsFlextDbtLdapUtilities, u
+    from .utilities import TestsFlextDbtLdapUtilities, TestsFlextDbtLdapUtilities as u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),
@@ -71,7 +71,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "TestsFlextDbtLdapProtocols": ("tests.protocols", "TestsFlextDbtLdapProtocols"),
     "TestsFlextDbtLdapTypes": ("tests.typings", "TestsFlextDbtLdapTypes"),
     "TestsFlextDbtLdapUtilities": ("tests.utilities", "TestsFlextDbtLdapUtilities"),
-    "c": ("tests.constants", "c"),
+    "c": ("tests.constants", "TestsFlextDbtLdapConstants"),
     "count_rows": ("tests.e2e.conftest", "count_rows"),
     "db_connection": ("tests.e2e.conftest", "db_connection"),
     "dbt_ldap_macros": ("tests.conftest", "dbt_ldap_macros"),
@@ -89,10 +89,10 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "ldap_source_config": ("tests.conftest", "ldap_source_config"),
     "ldap_validation_rules": ("tests.conftest", "ldap_validation_rules"),
     "logger": ("tests.e2e.conftest", "logger"),
-    "m": ("tests.models", "m"),
+    "m": ("tests.models", "TestsFlextDbtLdapModels"),
     "mock_ldap_connection": ("tests.conftest", "mock_ldap_connection"),
     "mock_ldap_dbt_adapter": ("tests.conftest", "mock_ldap_dbt_adapter"),
-    "p": ("tests.protocols", "p"),
+    "p": ("tests.protocols", "TestsFlextDbtLdapProtocols"),
     "postgres_container": ("tests.e2e.conftest", "postgres_container"),
     "project_root": ("tests.e2e.conftest", "project_root"),
     "pytest_configure": ("tests.conftest", "pytest_configure"),
@@ -102,7 +102,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "set_test_environment": ("tests.conftest", "set_test_environment"),
     "shared_ldap_config": ("tests.conftest", "shared_ldap_config"),
     "shared_ldap_container": ("tests.conftest", "shared_ldap_container"),
-    "t": ("tests.typings", "t"),
+    "t": ("tests.typings", "TestsFlextDbtLdapTypes"),
     "table_exists": ("tests.e2e.conftest", "table_exists"),
     "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
     "test_incremental_groups_sync_applies_bookmark_filter": (
@@ -122,7 +122,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "test_version_metadata_integrity",
     ),
     "test_version_properties": ("tests.unit.test_version", "test_version_properties"),
-    "u": ("tests.utilities", "u"),
+    "u": ("tests.utilities", "TestsFlextDbtLdapUtilities"),
     "unit": ("tests.unit", ""),
 }
 
