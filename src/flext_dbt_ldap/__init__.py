@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import d, e, h, r, x
+    from flext_core import d, e, h, r, s, x
     from flext_core.typings import FlextTypes
 
     from flext_dbt_ldap.__version__ import (
@@ -46,10 +46,7 @@ if TYPE_CHECKING:
         FlextDbtLdapTimeoutError,
         FlextDbtLdapValidationError,
     )
-    from flext_dbt_ldap.dbt_services import (
-        FlextDbtLdapService,
-        FlextDbtLdapService as s,
-    )
+    from flext_dbt_ldap.dbt_services import FlextDbtLdapService
     from flext_dbt_ldap.ldap_integration import (
         FlextDbtLdapIntegration,
         process_ldap_entries_for_dbt,
@@ -139,7 +136,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "process_ldap_entries_for_dbt",
     ),
     "r": ("flext_core", "r"),
-    "s": ("flext_dbt_ldap.dbt_services", "FlextDbtLdapService"),
+    "s": ("flext_core", "s"),
     "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
     "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
     "validate_ldap_data_quality": (
