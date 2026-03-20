@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import d, e, h, r, s, x
+    from flext_core import d, e, h, r, x
     from flext_core.typings import FlextTypes
 
     from flext_dbt_ldap.__version__ import (
@@ -29,7 +29,10 @@ if TYPE_CHECKING:
         __version__,
         __version_info__,
     )
-    from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
+    from flext_dbt_ldap.constants import (
+        FlextDbtLdapConstants,
+        FlextDbtLdapConstants as c,
+    )
     from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
     from flext_dbt_ldap.dbt_exceptions import (
         FlextDbtLdapAuthenticationError,
@@ -43,19 +46,28 @@ if TYPE_CHECKING:
         FlextDbtLdapTimeoutError,
         FlextDbtLdapValidationError,
     )
-    from flext_dbt_ldap.dbt_services import FlextDbtLdapService
+    from flext_dbt_ldap.dbt_services import (
+        FlextDbtLdapService,
+        FlextDbtLdapService as s,
+    )
     from flext_dbt_ldap.ldap_integration import (
         FlextDbtLdapIntegration,
         process_ldap_entries_for_dbt,
         validate_ldap_data_quality,
     )
     from flext_dbt_ldap.macros import FlextDbtLdapMacros
-    from flext_dbt_ldap.models import FlextDbtLdapModels, m
-    from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
+    from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
+    from flext_dbt_ldap.protocols import (
+        FlextDbtLdapProtocols,
+        FlextDbtLdapProtocols as p,
+    )
     from flext_dbt_ldap.settings import FlextDbtLdapSettings, logger
     from flext_dbt_ldap.simple_api import FlextDbtLdap
-    from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
-    from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
+    from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
+    from flext_dbt_ldap.utilities import (
+        FlextDbtLdapUtilities,
+        FlextDbtLdapUtilities as u,
+    )
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdap": ("flext_dbt_ldap.simple_api", "FlextDbtLdap"),
@@ -115,21 +127,21 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__url__": ("flext_dbt_ldap.__version__", "__url__"),
     "__version__": ("flext_dbt_ldap.__version__", "__version__"),
     "__version_info__": ("flext_dbt_ldap.__version__", "__version_info__"),
-    "c": ("flext_dbt_ldap.constants", "c"),
+    "c": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
     "d": ("flext_core", "d"),
     "e": ("flext_core", "e"),
     "h": ("flext_core", "h"),
     "logger": ("flext_dbt_ldap.settings", "logger"),
-    "m": ("flext_dbt_ldap.models", "m"),
-    "p": ("flext_dbt_ldap.protocols", "p"),
+    "m": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
+    "p": ("flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"),
     "process_ldap_entries_for_dbt": (
         "flext_dbt_ldap.ldap_integration",
         "process_ldap_entries_for_dbt",
     ),
     "r": ("flext_core", "r"),
-    "s": ("flext_core", "s"),
-    "t": ("flext_dbt_ldap.typings", "t"),
-    "u": ("flext_dbt_ldap.utilities", "u"),
+    "s": ("flext_dbt_ldap.dbt_services", "FlextDbtLdapService"),
+    "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
+    "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
     "validate_ldap_data_quality": (
         "flext_dbt_ldap.ldap_integration",
         "validate_ldap_data_quality",
