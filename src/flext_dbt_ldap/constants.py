@@ -26,7 +26,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
             DEFAULT_HOST: Final[str] = FlextConstants.Platform.DEFAULT_HOST
             DEFAULT_PORT: Final[int] = 389
-            DEFAULT_TIMEOUT: Final[int] = FlextConstants.Network.DEFAULT_TIMEOUT
+            DEFAULT_TIMEOUT: Final[int] = FlextConstants.DEFAULT_TIMEOUT_SECONDS
 
         class Ldaps:
             """Secure LDAP connection settings."""
