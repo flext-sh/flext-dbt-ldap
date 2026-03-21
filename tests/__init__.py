@@ -35,6 +35,7 @@ if TYPE_CHECKING:
     )
     from .constants import TestsFlextDbtLdapConstants, TestsFlextDbtLdapConstants as c
     from .e2e.conftest import (
+        POSTGRES_READY_MAX_RETRIES,
         count_rows,
         db_connection,
         dbt_profiles_dir,
@@ -66,6 +67,7 @@ if TYPE_CHECKING:
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),
     "MockLdapDbtAdapter": ("tests.conftest", "MockLdapDbtAdapter"),
+    "POSTGRES_READY_MAX_RETRIES": ("tests.e2e.conftest", "POSTGRES_READY_MAX_RETRIES"),
     "TestsFlextDbtLdapConstants": ("tests.constants", "TestsFlextDbtLdapConstants"),
     "TestsFlextDbtLdapModels": ("tests.models", "TestsFlextDbtLdapModels"),
     "TestsFlextDbtLdapProtocols": ("tests.protocols", "TestsFlextDbtLdapProtocols"),
@@ -127,6 +129,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
 }
 
 __all__ = [
+    "POSTGRES_READY_MAX_RETRIES",
     "MockLdapConnection",
     "MockLdapDbtAdapter",
     "TestsFlextDbtLdapConstants",
