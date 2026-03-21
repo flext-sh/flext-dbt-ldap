@@ -24,7 +24,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         """Initialize the unified DBT LDAP service."""
         super().__init__()
         self._dbt_ldap_config: FlextDbtLdapSettings = (
-            config if config is not None else FlextDbtLdapSettings()
+            config if config is not None else FlextDbtLdapSettings.model_validate({})
         )
         self._config = self._dbt_ldap_config
         self._client: FlextDbtLdapClient | None = None
@@ -82,9 +82,11 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             self.logger.info(
                 "Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port
             )
-            config = FlextDbtLdapSettings(
-                ldap_host=ldap_host, ldap_port=ldap_port, ldap_base_dn=ldap_base_dn
-            )
+            config = FlextDbtLdapSettings.model_validate({
+                "ldap_host": ldap_host,
+                "ldap_port": ldap_port,
+                "ldap_base_dn": ldap_base_dn,
+            })
             return r[FlextDbtLdapSettings].ok(config)
         except (
             ValueError,

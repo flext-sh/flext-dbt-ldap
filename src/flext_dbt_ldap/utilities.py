@@ -9,14 +9,14 @@ from __future__ import annotations
 from collections.abc import Mapping
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, cast
 
 from flext_core import FlextContainer, r
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 from pydantic import BeforeValidator
 
-from flext_dbt_ldap import c, m
+from flext_dbt_ldap import c, m, t
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
@@ -204,24 +204,23 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.DbtTestConfig]:
             """Generate DBT data tests for LDAP transformation models."""
             try:
-                column_tests = [
+                column_tests: list[dict[str, t.Serializable]] = [
                     {
                         "name": col,
                         "description": f"Tests for {col} column",
-                        "tests": col_tests,
+                        "tests": cast("t.Serializable", col_tests),
                     }
                     for col, col_tests in test_config.columns.items()
                 ]
+                model_entry: dict[str, t.Serializable] = {
+                    "name": model_name,
+                    "description": f"Data tests for {model_name} LDAP model",
+                    "tests": ["unique", "not_null"],
+                    "columns": cast("list[t.Serializable]", column_tests),
+                }
                 tests = m.DbtTestConfig(
                     columns={},
-                    models=[
-                        {
-                            "name": model_name,
-                            "description": f"Data tests for {model_name} LDAP model",
-                            "tests": ["unique", "not_null"],
-                            "columns": column_tests,
-                        }
-                    ],
+                    models=[model_entry],
                 )
                 return r[m.DbtTestConfig].ok(tests)
             except (
@@ -258,21 +257,17 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         "description": f"LDAP {attr} attribute",
                         "data_type": data_type,
                     })
-                source_schema = m.DbtSourceSchema(
-                    sources=[
-                        {
-                            "name": "ldap",
-                            "description": "LDAP directory data source",
-                            "tables": [
-                                {
-                                    "name": source_name,
-                                    "description": f"LDAP {source_name} data",
-                                    "columns": columns,
-                                }
-                            ],
-                        }
-                    ]
-                )
+                table_entry: dict[str, t.Serializable] = {
+                    "name": source_name,
+                    "description": f"LDAP {source_name} data",
+                    "columns": cast("list[t.Serializable]", columns),
+                }
+                source_entry: dict[str, t.Serializable] = {
+                    "name": "ldap",
+                    "description": "LDAP directory data source",
+                    "tables": [table_entry],
+                }
+                source_schema = m.DbtSourceSchema(sources=[source_entry])
                 return r[m.DbtSourceSchema].ok(source_schema)
             except (
                 ValueError,

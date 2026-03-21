@@ -26,7 +26,9 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
     state_file = tmp_path / "sync-state.json"
     state_file.write_bytes(_BOOKMARKS_ADAPTER.dump_json({"users": "20250101000000Z"}))
     service = object.__new__(FlextDbtLdapService)
-    service.config = FlextDbtLdapSettings(ldap_base_dn="dc=example,dc=com")
+    service.config = FlextDbtLdapSettings.model_validate({
+        "ldap_base_dn": "dc=example,dc=com"
+    })
     service.client = Mock()
     service.client.run_full_pipeline.return_value = r[m.DbtLdapPipelineResult].ok(
         m.DbtLdapPipelineResult(extracted_entries=1)

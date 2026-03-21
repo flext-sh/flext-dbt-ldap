@@ -153,6 +153,7 @@ python_version = "3.13"
 # [MANAGED] pydantic-mypy
 explicit_package_bases = true
 ignore_missing_imports = true
+mypy_path = "src"
 namespace_packages = true
 [tool.pydantic-mypy]
 init_forbid_extra = true
@@ -525,6 +526,9 @@ indent-style = "space"
 line-ending = "lf"
 quote-style = "double"
 [tool.pyright]
+exclude = [
+  "docs",
+]
 extraPaths = [
   "src",
 ]

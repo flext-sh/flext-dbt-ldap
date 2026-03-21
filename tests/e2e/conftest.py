@@ -68,14 +68,11 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
         is_failure: bool = False
         error: str | None = None
 
-    def _default_stop(_path: str) -> _StopResult:
-        return _StopResult()
-
-    stop_result = (
-        flext_docker.stop_compose_stack
-        if hasattr(flext_docker, "stop_compose_stack")
-        else _default_stop(str(compose_file))
-    )
+    if hasattr(flext_docker, "stop_compose_stack"):
+        stop_fn = getattr(flext_docker, "stop_compose_stack")
+        stop_result: _StopResult = stop_fn(str(compose_file))
+    else:
+        stop_result = _StopResult()
     if stop_result.is_failure and stop_result.error:
         logger.warning(
             "PostgreSQL container stop reported failure: %s", stop_result.error
