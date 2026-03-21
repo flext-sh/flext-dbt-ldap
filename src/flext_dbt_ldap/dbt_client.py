@@ -11,13 +11,11 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from flext_core import FlextLogger, r
-from flext_ldap import (
-    FlextLdap,
-    FlextLdapConnection,
-    FlextLdapModels,
-    FlextLdapOperations,
-    FlextLdapSettings,
-)
+from flext_ldap.api import FlextLdap
+from flext_ldap.models import FlextLdapModels
+from flext_ldap.services.connection import FlextLdapConnection
+from flext_ldap.services.operations import FlextLdapOperations
+from flext_ldap.settings import FlextLdapSettings
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap import c, m, t
