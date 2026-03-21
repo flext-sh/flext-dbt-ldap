@@ -34,7 +34,7 @@ if TYPE_CHECKING:
         shared_ldap_container,
     )
     from .constants import TestsFlextDbtLdapConstants, TestsFlextDbtLdapConstants as c
-    from .e2e import (
+    from .e2e.conftest import (
         count_rows,
         db_connection,
         dbt_profiles_dir,
@@ -51,11 +51,13 @@ if TYPE_CHECKING:
     from .models import TestsFlextDbtLdapModels, TestsFlextDbtLdapModels as m
     from .protocols import TestsFlextDbtLdapProtocols, TestsFlextDbtLdapProtocols as p
     from .typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
-    from .unit import (
+    from .unit.test_dbt_services_sync import (
+        test_sync_users_uses_incremental_bookmark_and_persists_state,
+    )
+    from .unit.test_version import (
         test_dunder_alignment,
         test_incremental_groups_sync_applies_bookmark_filter,
         test_incremental_users_sync_applies_bookmark_filter,
-        test_sync_users_uses_incremental_bookmark_and_persists_state,
         test_version_metadata_integrity,
         test_version_properties,
     )
@@ -70,56 +72,56 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "TestsFlextDbtLdapTypes": ("tests.typings", "TestsFlextDbtLdapTypes"),
     "TestsFlextDbtLdapUtilities": ("tests.utilities", "TestsFlextDbtLdapUtilities"),
     "c": ("tests.constants", "TestsFlextDbtLdapConstants"),
-    "count_rows": ("tests.e2e", "count_rows"),
-    "db_connection": ("tests.e2e", "db_connection"),
+    "count_rows": ("tests.e2e.conftest", "count_rows"),
+    "db_connection": ("tests.e2e.conftest", "db_connection"),
     "dbt_ldap_macros": ("tests.conftest", "dbt_ldap_macros"),
     "dbt_ldap_models": ("tests.conftest", "dbt_ldap_models"),
     "dbt_ldap_profile": ("tests.conftest", "dbt_ldap_profile"),
     "dbt_ldap_project_config": ("tests.conftest", "dbt_ldap_project_config"),
     "dbt_ldap_sources": ("tests.conftest", "dbt_ldap_sources"),
     "dbt_ldap_tests": ("tests.conftest", "dbt_ldap_tests"),
-    "dbt_profiles_dir": ("tests.e2e", "dbt_profiles_dir"),
-    "dbt_project_dir": ("tests.e2e", "dbt_project_dir"),
+    "dbt_profiles_dir": ("tests.e2e.conftest", "dbt_profiles_dir"),
+    "dbt_project_dir": ("tests.e2e.conftest", "dbt_project_dir"),
     "e2e": ("tests.e2e", ""),
-    "flext_docker": ("tests.e2e", "flext_docker"),
-    "get_column_names": ("tests.e2e", "get_column_names"),
+    "flext_docker": ("tests.e2e.conftest", "flext_docker"),
+    "get_column_names": ("tests.e2e.conftest", "get_column_names"),
     "ldap_performance_config": ("tests.conftest", "ldap_performance_config"),
     "ldap_source_config": ("tests.conftest", "ldap_source_config"),
     "ldap_validation_rules": ("tests.conftest", "ldap_validation_rules"),
-    "logger": ("tests.e2e", "logger"),
+    "logger": ("tests.e2e.conftest", "logger"),
     "m": ("tests.models", "TestsFlextDbtLdapModels"),
     "mock_ldap_connection": ("tests.conftest", "mock_ldap_connection"),
     "mock_ldap_dbt_adapter": ("tests.conftest", "mock_ldap_dbt_adapter"),
     "p": ("tests.protocols", "TestsFlextDbtLdapProtocols"),
-    "postgres_container": ("tests.e2e", "postgres_container"),
-    "project_root": ("tests.e2e", "project_root"),
+    "postgres_container": ("tests.e2e.conftest", "postgres_container"),
+    "project_root": ("tests.e2e.conftest", "project_root"),
     "pytest_configure": ("tests.conftest", "pytest_configure"),
-    "query_database": ("tests.e2e", "query_database"),
-    "run_dbt_command": ("tests.e2e", "run_dbt_command"),
+    "query_database": ("tests.e2e.conftest", "query_database"),
+    "run_dbt_command": ("tests.e2e.conftest", "run_dbt_command"),
     "sample_ldap_entries": ("tests.conftest", "sample_ldap_entries"),
     "set_test_environment": ("tests.conftest", "set_test_environment"),
     "shared_ldap_config": ("tests.conftest", "shared_ldap_config"),
     "shared_ldap_container": ("tests.conftest", "shared_ldap_container"),
     "t": ("tests.typings", "TestsFlextDbtLdapTypes"),
-    "table_exists": ("tests.e2e", "table_exists"),
-    "test_dunder_alignment": ("tests.unit", "test_dunder_alignment"),
+    "table_exists": ("tests.e2e.conftest", "table_exists"),
+    "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
     "test_incremental_groups_sync_applies_bookmark_filter": (
-        "tests.unit",
+        "tests.unit.test_version",
         "test_incremental_groups_sync_applies_bookmark_filter",
     ),
     "test_incremental_users_sync_applies_bookmark_filter": (
-        "tests.unit",
+        "tests.unit.test_version",
         "test_incremental_users_sync_applies_bookmark_filter",
     ),
     "test_sync_users_uses_incremental_bookmark_and_persists_state": (
-        "tests.unit",
+        "tests.unit.test_dbt_services_sync",
         "test_sync_users_uses_incremental_bookmark_and_persists_state",
     ),
     "test_version_metadata_integrity": (
-        "tests.unit",
+        "tests.unit.test_version",
         "test_version_metadata_integrity",
     ),
-    "test_version_properties": ("tests.unit", "test_version_properties"),
+    "test_version_properties": ("tests.unit.test_version", "test_version_properties"),
     "u": ("tests.utilities", "TestsFlextDbtLdapUtilities"),
     "unit": ("tests.unit", ""),
 }
