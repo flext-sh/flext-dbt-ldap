@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated, cast
+from typing import Annotated
 
 from flext_core import FlextContainer, r
 from flext_ldap import FlextLdapUtilities
@@ -208,15 +208,16 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     {
                         "name": col,
                         "description": f"Tests for {col} column",
-                        "tests": cast("t.Serializable", col_tests),
+                        "tests": col_tests,
                     }
                     for col, col_tests in test_config.columns.items()
                 ]
+                serializable_columns: list[t.Serializable] = list(column_tests)
                 model_entry: dict[str, t.Serializable] = {
                     "name": model_name,
                     "description": f"Data tests for {model_name} LDAP model",
                     "tests": ["unique", "not_null"],
-                    "columns": cast("list[t.Serializable]", column_tests),
+                    "columns": serializable_columns,
                 }
                 tests = m.DbtTestConfig(
                     columns={},
@@ -257,10 +258,11 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         "description": f"LDAP {attr} attribute",
                         "data_type": data_type,
                     })
+                serializable_cols: list[t.Serializable] = list(columns)
                 table_entry: dict[str, t.Serializable] = {
                     "name": source_name,
                     "description": f"LDAP {source_name} data",
-                    "columns": cast("list[t.Serializable]", columns),
+                    "columns": serializable_cols,
                 }
                 source_entry: dict[str, t.Serializable] = {
                     "name": "ldap",
