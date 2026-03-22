@@ -1,6 +1,7 @@
-"""Module skeleton for TestsFlextDbtLdapUtilities.
+"""Test utilities for flext-dbt-ldap.
 
-Test utilities for flextdbtldap.
+Provides FlextDbtLdapTestUtilities, combining FlextTestsUtilities with
+FlextDbtLdapUtilities for test-specific utility definitions.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -8,12 +9,20 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tests import u
+from flext_tests import FlextTestsUtilities
+
+from flext_dbt_ldap import FlextDbtLdapUtilities
 
 
-class TestsFlextDbtLdapUtilities(u):
-    """Test utilities for flextdbtldap."""
+class FlextDbtLdapTestUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
+    """Test utilities combining FlextTestsUtilities with flext-dbt-ldap utilities."""
+
+    class DbtLdap(FlextDbtLdapUtilities.DbtLdap):
+        """DbtLdap test utilities namespace."""
+
+        class Tests:
+            """Internal tests declarations."""
 
 
-u = TestsFlextDbtLdapUtilities
-__all__ = ["TestsFlextDbtLdapUtilities", "u"]
+u = FlextDbtLdapTestUtilities
+__all__ = ["FlextDbtLdapTestUtilities", "u"]

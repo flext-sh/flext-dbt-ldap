@@ -1,6 +1,7 @@
-"""Module skeleton for TestsFlextDbtLdapModels.
+"""Test models for flext-dbt-ldap.
 
-Test models for flextdbtldap.
+Provides FlextDbtLdapTestModels, combining FlextTestsModels with
+FlextDbtLdapModels for test-specific model definitions.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -8,16 +9,18 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tests import m
+from flext_tests import FlextTestsModels
+
+from flext_dbt_ldap import FlextDbtLdapModels
 
 
-class TestsFlextDbtLdapModels(m):
-    """Test models for flextdbtldap."""
+class FlextDbtLdapTestModels(FlextTestsModels, FlextDbtLdapModels):
+    """Test models combining FlextTestsModels with flext-dbt-ldap models."""
 
 
-m = TestsFlextDbtLdapModels
+m = FlextDbtLdapTestModels
 
 __all__ = [
-    "TestsFlextDbtLdapModels",
+    "FlextDbtLdapTestModels",
     "m",
 ]

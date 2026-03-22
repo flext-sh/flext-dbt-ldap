@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from flext_tests import FlextTestsConstants
 
-class TestsFlextDbtLdapConstants:
+
+class FlextDbtLdapTestConstants(FlextTestsConstants):
     """Constants for flext-dbt-ldap tests."""
 
 
-__all__ = ["TestsFlextDbtLdapConstants", "c"]
-
-c = TestsFlextDbtLdapConstants
+c = FlextDbtLdapTestConstants
+__all__ = ["FlextDbtLdapTestConstants", "c"]
