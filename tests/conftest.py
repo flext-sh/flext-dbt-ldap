@@ -18,6 +18,8 @@ import pytest
 from flext_tests import td, tk
 from pydantic import TypeAdapter, ValidationError
 
+from tests import t
+
 
 @pytest.fixture(scope="session")
 def shared_ldap_container(flext_docker: tk) -> str:
@@ -32,7 +34,7 @@ def shared_ldap_container(flext_docker: tk) -> str:
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_config() -> dict[str, object]:
+def shared_ldap_config() -> dict[str, t.NormalizedValue]:
     """Shared LDAP configuration for tests."""
     return {
         "server_url": "ldap://localhost:3390",
@@ -58,7 +60,7 @@ def set_test_environment() -> Generator[None]:
 
 
 @pytest.fixture
-def dbt_ldap_profile() -> dict[str, object]:
+def dbt_ldap_profile() -> dict[str, t.NormalizedValue]:
     """Dbt LDAP profile configuration for testing."""
     return {
         "config": {
@@ -88,7 +90,7 @@ def dbt_ldap_profile() -> dict[str, object]:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> Mapping[str, object]:
+def dbt_ldap_project_config() -> Mapping[str, t.NormalizedValue]:
     """Dbt LDAP project configuration for testing."""
     return td.build_dbt_project_config(
         name="flext_dbt_ldap_test",
@@ -113,8 +115,8 @@ def dbt_ldap_project_config() -> Mapping[str, object]:
 
 @pytest.fixture
 def ldap_source_config(
-    shared_ldap_config: dict[str, object],
-) -> dict[str, object]:
+    shared_ldap_config: dict[str, t.NormalizedValue],
+) -> dict[str, t.NormalizedValue]:
     """LDAP source configuration for testing using shared container."""
     _ = shared_ldap_config
     return {
@@ -131,7 +133,7 @@ def ldap_source_config(
 
 
 @pytest.fixture
-def sample_ldap_entries() -> list[dict[str, object]]:
+def sample_ldap_entries() -> list[dict[str, t.NormalizedValue]]:
     """Sample LDAP entries for testing using shared container domain."""
     return [
         {
@@ -205,7 +207,7 @@ def dbt_ldap_macros() -> dict[str, str]:
 
 
 @pytest.fixture
-def dbt_ldap_sources() -> dict[str, object]:
+def dbt_ldap_sources() -> dict[str, t.NormalizedValue]:
     """Dbt LDAP source definitions for testing."""
     return {
         "version": 2,
@@ -275,7 +277,7 @@ def dbt_ldap_tests() -> dict[str, str]:
 
 
 @pytest.fixture
-def ldap_validation_rules() -> dict[str, object]:
+def ldap_validation_rules() -> dict[str, t.NormalizedValue]:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
@@ -298,7 +300,7 @@ def ldap_validation_rules() -> dict[str, object]:
 
 
 @pytest.fixture
-def ldap_performance_config() -> dict[str, object]:
+def ldap_performance_config() -> dict[str, t.NormalizedValue]:
     """LDAP performance test configuration."""
     return {
         "large_directory_entries": 10000,
@@ -326,16 +328,16 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLdapDbtAdapter:
     """Mock LDAP dbt adapter."""
 
-    def __init__(self, config: dict[str, object]) -> None:
+    def __init__(self, config: dict[str, t.NormalizedValue]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.ldap_entries: dict[str, object] = {}
-        self.compiled_models: dict[str, object] = {}
+        self.ldap_entries: dict[str, t.NormalizedValue] = {}
+        self.compiled_models: dict[str, t.NormalizedValue] = {}
 
     def extract_ldap_data(
         self, _base_dn: str, _search_filter: str
-    ) -> list[dict[str, object]]:
+    ) -> list[dict[str, t.NormalizedValue]]:
         """Extract LDAP data for dbt processing."""
         return [
             {
@@ -351,7 +353,7 @@ class MockLdapDbtAdapter:
 
     @staticmethod
     def _is_ldap_attribute_map(
-        value: object,
+        value: t.NormalizedValue,
     ) -> TypeIs[Mapping[str, str | list[str] | None]]:
         adapter = TypeAdapter(dict[str, str | list[str] | None])
         try:
@@ -377,10 +379,10 @@ class MockLdapDbtAdapter:
         return parsed
 
     def transform_ldap_to_relational(
-        self, ldap_data: list[dict[str, object]]
-    ) -> list[dict[str, object]]:
+        self, ldap_data: list[dict[str, t.NormalizedValue]]
+    ) -> list[dict[str, t.NormalizedValue]]:
         """Transform LDAP data to relational format."""
-        transformed: list[dict[str, object]] = []
+        transformed: list[dict[str, t.NormalizedValue]] = []
         for entry in ldap_data:
             flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
             attrs = entry.get("attributes")
@@ -399,12 +401,12 @@ def mock_ldap_dbt_adapter() -> type[MockLdapDbtAdapter]:
 class MockLdapConnection:
     """Mock LDAP connection."""
 
-    def __init__(self, config: dict[str, object]) -> None:
+    def __init__(self, config: dict[str, t.NormalizedValue]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
         self.connected = False
-        self.entries: list[dict[str, object]] = []
+        self.entries: list[dict[str, t.NormalizedValue]] = []
 
     def connect(self) -> bool:
         """Connect to LDAP server."""
@@ -418,7 +420,7 @@ class MockLdapConnection:
 
     def search(
         self, base_dn: str, _search_filter: str, _attributes: list[str] | None = None
-    ) -> list[dict[str, object]]:
+    ) -> list[dict[str, t.NormalizedValue]]:
         """Search LDAP directory."""
         if "people" in base_dn or "users" in base_dn:
             return [

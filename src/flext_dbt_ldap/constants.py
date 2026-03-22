@@ -41,7 +41,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         ALLOWED_TARGETS: ClassVar[list[str]] = ["dev", "staging", "prod"]
 
     class LdapSchemaMapping:
-        """LDAP object class to schema type mappings."""
+        """LDAP t.NormalizedValue class to schema type mappings."""
 
         USERS_CLASSES: Final[list[str]] = ["person", "user", "inetOrgPerson"]
         GROUPS_CLASSES: Final[list[str]] = [

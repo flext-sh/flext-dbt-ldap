@@ -456,7 +456,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
         @staticmethod
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> list[str]:
-            """Extract object classes from entry attributes."""
+            """Extract t.NormalizedValue classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
             oc_val = raw.get("objectClass", [])
             try:

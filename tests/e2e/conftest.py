@@ -19,6 +19,8 @@ from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import tk
 from psycopg import sql
 
+from tests import t
+
 logger = FlextLogger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
 
@@ -110,7 +112,7 @@ def run_dbt_command(
     command: list[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: dict[str, object] | None = None,
+    dbt_vars: dict[str, t.NormalizedValue] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
@@ -129,7 +131,7 @@ def run_dbt_command(
 
 def query_database(
     conn: psycopg.Connection, query: LiteralString
-) -> list[tuple[object, ...]]:
+) -> list[tuple[t.NormalizedValue, ...]]:
     """Execute query and return results."""
     with conn.cursor() as cur:
         _ = cur.execute(sql.SQL(query))
