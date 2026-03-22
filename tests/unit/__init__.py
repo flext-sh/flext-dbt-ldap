@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core.typings import FlextTypes
+    from flext_core import FlextTypes
 
     from .test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
