@@ -13,8 +13,8 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
-    from . import e2e as e2e, unit as unit
-    from .conftest import (
+    from tests import e2e, unit
+    from tests.conftest import (
         MockLdapConnection,
         MockLdapDbtAdapter,
         dbt_ldap_macros,
@@ -34,8 +34,11 @@ if TYPE_CHECKING:
         shared_ldap_config,
         shared_ldap_container,
     )
-    from .constants import FlextDbtLdapTestConstants, FlextDbtLdapTestConstants as c
-    from .e2e.conftest import (
+    from tests.constants import (
+        FlextDbtLdapTestConstants,
+        FlextDbtLdapTestConstants as c,
+    )
+    from tests.e2e.conftest import (
         POSTGRES_READY_MAX_RETRIES,
         count_rows,
         db_connection,
@@ -50,20 +53,26 @@ if TYPE_CHECKING:
         run_dbt_command,
         table_exists,
     )
-    from .models import FlextDbtLdapTestModels, FlextDbtLdapTestModels as m
-    from .protocols import FlextDbtLdapTestProtocols, FlextDbtLdapTestProtocols as p
-    from .typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
-    from .unit.test_dbt_services_sync import (
+    from tests.models import FlextDbtLdapTestModels, FlextDbtLdapTestModels as m
+    from tests.protocols import (
+        FlextDbtLdapTestProtocols,
+        FlextDbtLdapTestProtocols as p,
+    )
+    from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
+    from tests.unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
-    from .unit.test_version import (
+    from tests.unit.test_version import (
         test_dunder_alignment,
         test_incremental_groups_sync_applies_bookmark_filter,
         test_incremental_users_sync_applies_bookmark_filter,
         test_version_metadata_integrity,
         test_version_properties,
     )
-    from .utilities import FlextDbtLdapTestUtilities, FlextDbtLdapTestUtilities as u
+    from tests.utilities import (
+        FlextDbtLdapTestUtilities,
+        FlextDbtLdapTestUtilities as u,
+    )
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextDbtLdapTestConstants": ("tests.constants", "FlextDbtLdapTestConstants"),

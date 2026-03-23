@@ -17,7 +17,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core import FlextTypes
 
-    from .conftest import (
+    from tests.e2e.conftest import (
         POSTGRES_READY_MAX_RETRIES,
         count_rows,
         db_connection,
