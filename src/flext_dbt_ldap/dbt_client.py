@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from pathlib import Path
 
 from flext_core import FlextLogger, r
@@ -248,7 +248,7 @@ class FlextDbtLdapClient:
     ) -> Mapping[str, t.Scalar]:
         """Map LDAP entry attributes using configuration mapping."""
         dn_str = str(entry.get("dn", [""])[0]) if entry.get("dn") else ""
-        mapped_attrs: Mapping[str, t.Scalar] = {"dn": dn_str}
+        mapped_attrs: MutableMapping[str, t.Scalar] = {"dn": dn_str}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry:
                 values_obj = entry[ldap_attr]
@@ -277,7 +277,7 @@ class FlextDbtLdapClient:
         self, entries: Sequence[Mapping[str, Sequence[str]]]
     ) -> Mapping[str, Sequence[Mapping[str, t.Scalar]]]:
         """Prepare LDAP entries for DBT processing."""
-        prepared_data: Mapping[str, Sequence[Mapping[str, t.Scalar]]] = {}
+        prepared_data: MutableMapping[str, Sequence[Mapping[str, t.Scalar]]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)

@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -118,7 +118,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     "macros_dir": project_path / "macros",
                     "tests_dir": project_path / "tests",
                 }
-                results: Mapping[str, bool] = {}
+                results: MutableMapping[str, bool] = {}
                 for name, path in required_files.items():
                     results[name] = path.exists()
                 return r[m.ProjectStructureValidation].ok(
@@ -164,7 +164,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:
-                select_clauses: Sequence[str] = []
+                select_clauses: list[str] = []
                 for column, transformation in transformations.items():
                     if transformation == "identity":
                         select_clauses.append(f"    {column}")
@@ -243,7 +243,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.DbtSourceSchema]:
             """Generate DBT source schema for LDAP attributes."""
             try:
-                columns: Sequence[Mapping[str, str]] = []
+                columns: list[Mapping[str, str]] = []
                 for attr in ldap_attributes:
                     if attr.lower() in {"createtimestamp", "modifytimestamp"}:
                         data_type = "timestamp"
@@ -492,7 +492,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.PerformanceAnalysis]:
             """Analyze performance of LDAP transformation models."""
             try:
-                recommendations: Sequence[str] = []
+                recommendations: list[str] = []
                 if (
                     model_stats.execution_time
                     > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD
