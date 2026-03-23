@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import override
 
 from flext_core import FlextExceptions
@@ -129,7 +129,7 @@ class FlextDbtLdapTestError(_DbtLdapContextMixin, FlextExceptions.BaseError):
         )
 
 
-__all__: list[str] = [
+__all__: Sequence[str] = [
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapError",

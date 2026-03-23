@@ -91,7 +91,7 @@ class FlextDbtLdapClient:
         search_base: str | None = None,
         search_filter: str = "(objectClass=*)",
         attributes: Sequence[str] | None = None,
-    ) -> r[list[dict[str, list[str]]]]:
+    ) -> r[Sequence[Mapping[str, Sequence[str]]]]:
         """Extract LDAP entries for DBT processing."""
         try:
             logger.info(
@@ -111,7 +111,7 @@ class FlextDbtLdapClient:
                 )
             else:
                 logger.error("LDAP extraction failed: %s", result.error or "")
-                return r[list[dict[str, list[str]]]].fail(
+                return r[Sequence[Mapping[str, Sequence[str]]]].fail(
                     f"LDAP extraction failed: {result.error}"
                 )
             return result
@@ -125,7 +125,9 @@ class FlextDbtLdapClient:
             ImportError,
         ) as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return r[list[dict[str, list[str]]]].fail(f"LDAP extraction error: {e}")
+            return r[Sequence[Mapping[str, Sequence[str]]]].fail(
+                f"LDAP extraction error: {e}"
+            )
 
     def run_full_pipeline(
         self,
@@ -160,7 +162,7 @@ class FlextDbtLdapClient:
 
     def transform_with_dbt(
         self,
-        entries: list[dict[str, list[str]]],
+        entries: Sequence[Mapping[str, Sequence[str]]],
         model_names: Sequence[str] | None = None,
     ) -> r[m.DbtRunStatus]:
         """Transform LDAP data using DBT models."""
@@ -198,7 +200,7 @@ class FlextDbtLdapClient:
             return r[m.DbtRunStatus].fail(f"DBT transformation error: {e}")
 
     def validate_ldap_data(
-        self, entries: list[dict[str, list[str]]]
+        self, entries: Sequence[Mapping[str, Sequence[str]]]
     ) -> r[m.ValidationMetrics]:
         """Validate LDAP data quality for DBT processing."""
         try:
@@ -242,11 +244,11 @@ class FlextDbtLdapClient:
             return r[m.ValidationMetrics].fail(f"LDAP validation error: {e}")
 
     def _map_entry_attributes(
-        self, entry: dict[str, list[str]]
+        self, entry: Mapping[str, Sequence[str]]
     ) -> Mapping[str, t.Scalar]:
         """Map LDAP entry attributes using configuration mapping."""
         dn_str = str(entry.get("dn", [""])[0]) if entry.get("dn") else ""
-        mapped_attrs: dict[str, t.Scalar] = {"dn": dn_str}
+        mapped_attrs: Mapping[str, t.Scalar] = {"dn": dn_str}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
             if ldap_attr in entry:
                 values_obj = entry[ldap_attr]
@@ -258,10 +260,12 @@ class FlextDbtLdapClient:
                 mapped_attrs[attr] = first_value
         return mapped_attrs
 
-    def _matches_schema(self, entry: dict[str, list[str]], schema_name: str) -> bool:
+    def _matches_schema(
+        self, entry: Mapping[str, Sequence[str]], schema_name: str
+    ) -> bool:
         """Check if LDAP entry matches schema type."""
-        object_classes: list[str] = [str(x) for x in entry.get("objectClass", [])]
-        schema_mapping: dict[str, list[str]] = {
+        object_classes: Sequence[str] = [str(x) for x in entry.get("objectClass", [])]
+        schema_mapping: Mapping[str, Sequence[str]] = {
             c.LdapEntityTypes.USERS: c.LdapSchemaMapping.USERS_CLASSES,
             c.LdapEntityTypes.GROUPS: c.LdapSchemaMapping.GROUPS_CLASSES,
             c.LdapEntityTypes.ORG_UNITS: c.LdapSchemaMapping.ORG_UNITS_CLASSES,
@@ -270,15 +274,15 @@ class FlextDbtLdapClient:
         return any(cls in object_classes for cls in expected_classes)
 
     def _prepare_ldap_data_for_dbt(
-        self, entries: list[dict[str, list[str]]]
+        self, entries: Sequence[Mapping[str, Sequence[str]]]
     ) -> Mapping[str, Sequence[Mapping[str, t.Scalar]]]:
         """Prepare LDAP entries for DBT processing."""
-        prepared_data: dict[str, list[Mapping[str, t.Scalar]]] = {}
+        prepared_data: Mapping[str, Sequence[Mapping[str, t.Scalar]]] = {}
         for schema_name, table_name in self.config.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
-            table_data: list[Mapping[str, t.Scalar]] = [
+            table_data: Sequence[Mapping[str, t.Scalar]] = [
                 self._map_entry_attributes(entry) for entry in schema_entries
             ]
             prepared_data[table_name] = table_data
@@ -291,7 +295,7 @@ class FlextDbtLdapClient:
 
     def _search_entries_sync(
         self, *, base_dn: str, search_filter: str, attributes: Sequence[str] | None
-    ) -> r[list[dict[str, list[str]]]]:
+    ) -> r[Sequence[Mapping[str, Sequence[str]]]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
             search_options = FlextLdapModels.Ldap.SearchOptions(
@@ -302,8 +306,8 @@ class FlextDbtLdapClient:
             result = self._ldap_api.search(search_options=search_options)
             if result.is_success and result.value:
                 entries = result.value.entries
-                return r[list[dict[str, list[str]]]].ok(entries)
-            return r[list[dict[str, list[str]]]].fail(
+                return r[Sequence[Mapping[str, Sequence[str]]]].ok(entries)
+            return r[Sequence[Mapping[str, Sequence[str]]]].fail(
                 result.error or "Search returned no results"
             )
         except (
@@ -315,7 +319,9 @@ class FlextDbtLdapClient:
             RuntimeError,
             ImportError,
         ) as e:
-            return r[list[dict[str, list[str]]]].fail(f"LDAP search failed: {e}")
+            return r[Sequence[Mapping[str, Sequence[str]]]].fail(
+                f"LDAP search failed: {e}"
+            )
 
 
-__all__: list[str] = ["FlextDbtLdapClient"]
+__all__: Sequence[str] = ["FlextDbtLdapClient"]

@@ -10,6 +10,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
+
 from flext_ldap import FlextLdapTypes
 from flext_meltano import FlextMeltanoTypes
 
@@ -26,13 +28,13 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     class DbtTransformation:
         """DBT LDAP transformation type contracts."""
 
-        type DataValidation = dict[str, str | list[str] | bool]
+        type DataValidation = Mapping[str, str | Sequence[str] | bool]
         "Data validation configuration contract."
 
     class DbtLdap:
         """DBT LDAP settings type contracts."""
 
-        type SettingsDict = dict[str, bool | float | str | None]
+        type SettingsDict = Mapping[str, bool | float | str | None]
         "DBT LDAP logging settings configuration contract."
 
     class Project:

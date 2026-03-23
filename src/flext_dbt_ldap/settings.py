@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from typing import Annotated
 
 from flext_core import FlextLogger, FlextSettings
@@ -53,7 +54,7 @@ class FlextDbtLdapSettings(FlextSettings):
         ),
     ]
     required_attributes: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list, description="Required LDAP attributes for validation"
         ),
@@ -61,7 +62,7 @@ class FlextDbtLdapSettings(FlextSettings):
 
     # Attribute mapping
     ldap_attribute_mapping: Annotated[
-        dict[str, str],
+        Mapping[str, str],
         Field(
             default_factory=dict,
             description="Mapping of LDAP attributes to DBT model attributes",
@@ -70,11 +71,11 @@ class FlextDbtLdapSettings(FlextSettings):
 
     # Schema mapping
     ldap_schema_mapping: Annotated[
-        dict[str, str],
+        Mapping[str, str],
         Field(
             default_factory=dict, description="Mapping of LDAP schemas to DBT tables"
         ),
     ]
 
 
-__all__: list[str] = ["FlextDbtLdapSettings"]
+__all__: Sequence[str] = ["FlextDbtLdapSettings"]

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 import subprocess
-from collections.abc import Generator
+from collections.abc import Generator, Mapping, Sequence
 from pathlib import Path
 from typing import LiteralString
 
@@ -109,10 +109,10 @@ def dbt_profiles_dir(project_root: Path) -> Path:
 
 
 def run_dbt_command(
-    command: list[str],
+    command: Sequence[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: dict[str, t.NormalizedValue] | None = None,
+    dbt_vars: Mapping[str, t.NormalizedValue] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
@@ -131,7 +131,7 @@ def run_dbt_command(
 
 def query_database(
     conn: psycopg.Connection, query: LiteralString
-) -> list[tuple[t.NormalizedValue, ...]]:
+) -> Sequence[tuple[t.NormalizedValue, ...]]:
     """Execute query and return results."""
     with conn.cursor() as cur:
         _ = cur.execute(sql.SQL(query))
@@ -164,7 +164,9 @@ def count_rows(conn: psycopg.Connection, schema: str, table: str) -> int:
         return int(result[0]) if result else 0
 
 
-def get_column_names(conn: psycopg.Connection, schema: str, table: str) -> list[str]:
+def get_column_names(
+    conn: psycopg.Connection, schema: str, table: str
+) -> Sequence[str]:
     """Get column names for table."""
     with conn.cursor() as cur:
         _ = cur.execute(

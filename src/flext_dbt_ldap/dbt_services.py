@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import override
@@ -21,7 +21,7 @@ from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = FlextLogger(__name__)
-_SYNC_BOOKMARKS_ADAPTER = TypeAdapter(dict[str, str])
+_SYNC_BOOKMARKS_ADAPTER = TypeAdapter(Mapping[str, str])
 
 
 class FlextDbtLdapService:
@@ -295,7 +295,7 @@ class FlextDbtLdapService:
             return base_filter
         return f"(&{base_filter}(modifyTimestamp>={bookmark}))"
 
-    def _load_sync_state(self) -> dict[str, str]:
+    def _load_sync_state(self) -> Mapping[str, str]:
         if not self._sync_state_file.exists():
             return {}
         try:
@@ -353,4 +353,4 @@ class FlextDbtLdapService:
             logger.exception("Failed to persist bookmark state")
 
 
-__all__: list[str] = ["FlextDbtLdapService"]
+__all__: Sequence[str] = ["FlextDbtLdapService"]

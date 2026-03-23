@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -51,7 +51,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         @staticmethod
         def create_dbt_project_config(
             project_name: str,
-            ldap_sources: list[m.DbtSourceTable],
+            ldap_sources: Sequence[m.DbtSourceTable],
             target_schema: str = "ldap_transformed",
         ) -> r[m.DbtProjectConfig]:
             """Create DBT project configuration for LDAP data transformation."""
@@ -118,7 +118,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     "macros_dir": project_path / "macros",
                     "tests_dir": project_path / "tests",
                 }
-                results: dict[str, bool] = {}
+                results: Mapping[str, bool] = {}
                 for name, path in required_files.items():
                     results[name] = path.exists()
                 return r[m.ProjectStructureValidation].ok(
@@ -164,7 +164,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:
-                select_clauses: list[str] = []
+                select_clauses: Sequence[str] = []
                 for column, transformation in transformations.items():
                     if transformation == "identity":
                         select_clauses.append(f"    {column}")
@@ -204,7 +204,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.DbtTestConfig]:
             """Generate DBT data tests for LDAP transformation models."""
             try:
-                column_tests: list[dict[str, t.Serializable]] = [
+                column_tests: Sequence[Mapping[str, t.Serializable]] = [
                     {
                         "name": col,
                         "description": f"Tests for {col} column",
@@ -212,8 +212,8 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     }
                     for col, col_tests in test_config.columns.items()
                 ]
-                serializable_columns: list[t.Serializable] = list(column_tests)
-                model_entry: dict[str, t.Serializable] = {
+                serializable_columns: Sequence[t.Serializable] = list(column_tests)
+                model_entry: Mapping[str, t.Serializable] = {
                     "name": model_name,
                     "description": f"Data tests for {model_name} LDAP model",
                     "tests": ["unique", "not_null"],
@@ -239,11 +239,11 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
         @staticmethod
         def generate_ldap_source_schema(
-            ldap_attributes: list[str], source_name: str = "ldap_users"
+            ldap_attributes: Sequence[str], source_name: str = "ldap_users"
         ) -> r[m.DbtSourceSchema]:
             """Generate DBT source schema for LDAP attributes."""
             try:
-                columns: list[dict[str, str]] = []
+                columns: Sequence[Mapping[str, str]] = []
                 for attr in ldap_attributes:
                     if attr.lower() in {"createtimestamp", "modifytimestamp"}:
                         data_type = "timestamp"
@@ -258,13 +258,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         "description": f"LDAP {attr} attribute",
                         "data_type": data_type,
                     })
-                serializable_cols: list[t.Serializable] = list(columns)
-                table_entry: dict[str, t.Serializable] = {
+                serializable_cols: Sequence[t.Serializable] = list(columns)
+                table_entry: Mapping[str, t.Serializable] = {
                     "name": source_name,
                     "description": f"LDAP {source_name} data",
                     "columns": serializable_cols,
                 }
-                source_entry: dict[str, t.Serializable] = {
+                source_entry: Mapping[str, t.Serializable] = {
                     "name": "ldap",
                     "description": "LDAP directory data source",
                     "tables": [table_entry],
@@ -492,7 +492,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.PerformanceAnalysis]:
             """Analyze performance of LDAP transformation models."""
             try:
-                recommendations: list[str] = []
+                recommendations: Sequence[str] = []
                 if (
                     model_stats.execution_time
                     > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD

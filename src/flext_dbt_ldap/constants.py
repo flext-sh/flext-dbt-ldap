@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from enum import StrEnum, unique
 from typing import ClassVar, Final, Literal
 
@@ -38,18 +39,18 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
         DEFAULT_PROFILES_DIR = "./profiles"
         DEFAULT_TARGET = "dev"
-        ALLOWED_TARGETS: ClassVar[list[str]] = ["dev", "staging", "prod"]
+        ALLOWED_TARGETS: ClassVar[Sequence[str]] = ["dev", "staging", "prod"]
 
     class LdapSchemaMapping:
         """LDAP t.NormalizedValue class to schema type mappings."""
 
-        USERS_CLASSES: Final[list[str]] = ["person", "user", "inetOrgPerson"]
-        GROUPS_CLASSES: Final[list[str]] = [
+        USERS_CLASSES: Final[Sequence[str]] = ["person", "user", "inetOrgPerson"]
+        GROUPS_CLASSES: Final[Sequence[str]] = [
             "group",
             "groupOfNames",
             "groupOfUniqueNames",
         ]
-        ORG_UNITS_CLASSES: Final[list[str]] = ["organizationalUnit", "organization"]
+        ORG_UNITS_CLASSES: Final[Sequence[str]] = ["organizationalUnit", "organization"]
 
     class LdapEntityTypes:
         """LDAP entity type identifiers."""
@@ -74,7 +75,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         UNIQUE_MEMBER: Final[str] = "uniqueMember"
         SAM_ACCOUNT_NAME: Final[str] = "samaccountname"
         OBJECT_CLASS: Final[str] = "objectClass"
-        USER_ID_ATTRIBUTES: Final[list[str]] = ["uid", "cn", "samaccountname"]
+        USER_ID_ATTRIBUTES: Final[Sequence[str]] = ["uid", "cn", "samaccountname"]
 
     class DbtModels:
         """DBT model names for LDAP transformations."""
