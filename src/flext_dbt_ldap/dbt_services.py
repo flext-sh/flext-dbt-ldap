@@ -56,7 +56,8 @@ class FlextDbtLdapService:
         """Generate analytics report from warehouse data."""
         try:
             FlextDbtLdapService._logger.info(
-                "Generating analytics report: %s", report_type,
+                "Generating analytics report: %s",
+                report_type,
             )
             report = m.AnalyticsReport(
                 report_type=report_type,
@@ -96,7 +97,8 @@ class FlextDbtLdapService:
                     m.DbtRunStatus(status="completed", models_run=model_list or []),
                 )
             FlextDbtLdapService._logger.error(
-                "DBT model execution failed: %s", run_result.error or "",
+                "DBT model execution failed: %s",
+                run_result.error or "",
             )
             return r[m.DbtRunStatus].fail(
                 run_result.error or "DBT model execution failed",
@@ -165,7 +167,8 @@ class FlextDbtLdapService:
         """Synchronize LDAP groups to data warehouse."""
         try:
             FlextDbtLdapService._logger.info(
-                "Starting group sync to warehouse, incremental=%s", incremental,
+                "Starting group sync to warehouse, incremental=%s",
+                incremental,
             )
             current_bookmark = self._bookmark_now()
             group_filter = "(objectClass=group)"
@@ -190,7 +193,8 @@ class FlextDbtLdapService:
                 self._update_bookmark("groups", current_bookmark, successful=True)
             else:
                 FlextDbtLdapService._logger.error(
-                    "Group sync failed: %s", result.error or "",
+                    "Group sync failed: %s",
+                    result.error or "",
                 )
             return result
         except (
@@ -225,7 +229,8 @@ class FlextDbtLdapService:
                 )
             else:
                 FlextDbtLdapService._logger.error(
-                    "Membership sync failed: %s", result.error or "",
+                    "Membership sync failed: %s",
+                    result.error or "",
                 )
             return result
         except (
@@ -251,7 +256,8 @@ class FlextDbtLdapService:
         """Synchronize LDAP users to data warehouse."""
         try:
             FlextDbtLdapService._logger.info(
-                "Starting user sync to warehouse, incremental=%s", incremental,
+                "Starting user sync to warehouse, incremental=%s",
+                incremental,
             )
             current_bookmark = self._bookmark_now()
             user_filter = "(objectClass=person)"
@@ -287,7 +293,8 @@ class FlextDbtLdapService:
                 )
             else:
                 FlextDbtLdapService._logger.error(
-                    "User sync failed: %s", result.error or "",
+                    "User sync failed: %s",
+                    result.error or "",
                 )
             return result
         except (
@@ -322,7 +329,8 @@ class FlextDbtLdapService:
                     m.ValidationMetrics(validation_passed=True),
                 )
             FlextDbtLdapService._logger.error(
-                "Data quality validation failed: %s", test_result.error or "",
+                "Data quality validation failed: %s",
+                test_result.error or "",
             )
             return r[m.ValidationMetrics].fail(test_result.error or "DBT tests failed")
         except (
@@ -362,7 +370,8 @@ class FlextDbtLdapService:
         sorted_bookmarks = dict(sorted(self._sync_bookmarks.items()))
         self._sync_state_file.write_bytes(
             FlextDbtLdapService._SYNC_BOOKMARKS_ADAPTER.dump_json(
-                sorted_bookmarks, indent=2,
+                sorted_bookmarks,
+                indent=2,
             ),
         )
 
@@ -388,7 +397,8 @@ class FlextDbtLdapService:
         previous_bookmark = self._sync_bookmarks.get(sync_key)
         if previous_bookmark is None:
             FlextDbtLdapService._logger.info(
-                "No previous bookmark for %s; running full sync", sync_key,
+                "No previous bookmark for %s; running full sync",
+                sync_key,
             )
             return False
         if previous_bookmark >= current_bookmark:
