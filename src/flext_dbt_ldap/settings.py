@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Annotated
 
 from flext_core import FlextLogger, FlextSettings, FlextTypes as t
@@ -53,7 +54,7 @@ class FlextDbtLdapSettings(FlextSettings):
         ),
     ]
     required_attributes: Annotated[
-        t.StrSequence,
+        Sequence[str],
         Field(
             default_factory=list, description="Required LDAP attributes for validation"
         ),
@@ -77,4 +78,4 @@ class FlextDbtLdapSettings(FlextSettings):
     ]
 
 
-__all__: t.StrSequence = ["FlextDbtLdapSettings"]
+__all__: Sequence[str] = ["FlextDbtLdapSettings"]

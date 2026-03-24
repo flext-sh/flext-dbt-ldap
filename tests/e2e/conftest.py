@@ -109,7 +109,7 @@ def dbt_profiles_dir(project_root: Path) -> Path:
 
 
 def run_dbt_command(
-    command: t.StrSequence,
+    command: Sequence[str],
     project_dir: Path,
     profiles_dir: Path,
     dbt_vars: t.ContainerMapping | None = None,
@@ -166,7 +166,7 @@ def count_rows(conn: psycopg.Connection, schema: str, table: str) -> int:
 
 def get_column_names(
     conn: psycopg.Connection, schema: str, table: str
-) -> t.StrSequence:
+) -> Sequence[str]:
     """Get column names for table."""
     with conn.cursor() as cur:
         _ = cur.execute(

@@ -160,7 +160,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
         @staticmethod
         def create_ldap_transformation_model(
-            model_name: str, source_table: str, transformations: t.StrMapping
+            model_name: str, source_table: str, transformations: Mapping[str, str]
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:
@@ -239,11 +239,11 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
         @staticmethod
         def generate_ldap_source_schema(
-            ldap_attributes: t.StrSequence, source_name: str = "ldap_users"
+            ldap_attributes: Sequence[str], source_name: str = "ldap_users"
         ) -> r[m.DbtSourceSchema]:
             """Generate DBT source schema for LDAP attributes."""
             try:
-                columns: list[t.StrMapping] = []
+                columns: list[Mapping[str, str]] = []
                 for attr in ldap_attributes:
                     if attr.lower() in {"createtimestamp", "modifytimestamp"}:
                         data_type = "timestamp"
