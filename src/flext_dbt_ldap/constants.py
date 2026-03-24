@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from enum import StrEnum, unique
-from typing import ClassVar, Final, Literal
+from typing import ClassVar, Final
 
 from flext_core import t
 from flext_ldap import FlextLdapConstants
@@ -210,22 +210,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         SEED = "seed"
         SNAPSHOT = "snapshot"
         DOCS = "docs"
-
-    type LdapOperationLiteral = Literal[
-        "search",
-        "bind",
-        "unbind",
-        "add",
-        "modify",
-        "delete",
-    ]
-    "LDAP operation literal - matches LdapOperations StrEnum values."
-    type DbtCommandLiteral = Literal["run", "test", "build", "seed", "snapshot", "docs"]
-    "DBT command literal - matches DbtCommands StrEnum values."
-    type DbtLogLevelLiteral = Literal["debug", "info", "warn", "error", "none"]
-    "DBT log level literal - no corresponding StrEnum."
-    type DbtTargetLiteral = Literal["dev", "staging", "prod"]
-    "DBT target literal - no corresponding StrEnum."
 
     @unique
     class DbtLdapProjectType(StrEnum):
