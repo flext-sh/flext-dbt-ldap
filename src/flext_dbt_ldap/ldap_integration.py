@@ -47,7 +47,9 @@ class FlextDbtLdapIntegration:
             entry_count = len(df)
             logger.info("Validating %d LDAP entries", entry_count)
             return m.ValidationMetrics(
-                total_entries=entry_count, valid_dns=entry_count, quality_score=1.0
+                total_entries=entry_count,
+                valid_dns=entry_count,
+                quality_score=1.0,
             )
         except (
             ValueError,

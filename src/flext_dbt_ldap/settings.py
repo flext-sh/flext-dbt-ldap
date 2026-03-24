@@ -20,26 +20,31 @@ class FlextDbtLdapSettings(FlextSettings):
 
     # LDAP connection settings
     ldap_host: Annotated[
-        str, Field(default="localhost", description="LDAP server hostname")
+        str,
+        Field(default="localhost", description="LDAP server hostname"),
     ]
     ldap_port: Annotated[int, Field(default=389, description="LDAP server port")]
     ldap_use_tls: Annotated[
-        bool, Field(default=False, description="Use TLS for LDAP connection")
+        bool,
+        Field(default=False, description="Use TLS for LDAP connection"),
     ]
     ldap_bind_dn: Annotated[
         SecretStr | None,
         Field(default=None, description="LDAP bind DN for authentication"),
     ]
     ldap_bind_password: Annotated[
-        SecretStr | None, Field(default=None, description="LDAP bind password")
+        SecretStr | None,
+        Field(default=None, description="LDAP bind password"),
     ]
     ldap_base_dn: Annotated[
-        str, Field(default="dc=example,dc=com", description="LDAP base DN for searches")
+        str,
+        Field(default="dc=example,dc=com", description="LDAP base DN for searches"),
     ]
 
     # DBT project settings
     dbt_project_dir: Annotated[
-        str, Field(default=".", description="Path to DBT project directory")
+        str,
+        Field(default=".", description="Path to DBT project directory"),
     ]
 
     # Data quality settings
@@ -55,7 +60,8 @@ class FlextDbtLdapSettings(FlextSettings):
     required_attributes: Annotated[
         t.StrSequence,
         Field(
-            default_factory=list, description="Required LDAP attributes for validation"
+            default_factory=list,
+            description="Required LDAP attributes for validation",
         ),
     ]
 
@@ -72,7 +78,8 @@ class FlextDbtLdapSettings(FlextSettings):
     ldap_schema_mapping: Annotated[
         t.StrMapping,
         Field(
-            default_factory=dict, description="Mapping of LDAP schemas to DBT tables"
+            default_factory=dict,
+            description="Mapping of LDAP schemas to DBT tables",
         ),
     ]
 

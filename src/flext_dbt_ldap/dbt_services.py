@@ -48,13 +48,15 @@ class FlextDbtLdapService:
         logger.info("Initialized DBT LDAP service")
 
     def generate_analytics_report(
-        self, report_type: str = "summary"
+        self,
+        report_type: str = "summary",
     ) -> r[m.AnalyticsReport]:
         """Generate analytics report from warehouse data."""
         try:
             logger.info("Generating analytics report: %s", report_type)
             report = m.AnalyticsReport(
-                report_type=report_type, generated_at="2025-01-01T00:00:00Z"
+                report_type=report_type,
+                generated_at="2025-01-01T00:00:00Z",
             )
             logger.info("Analytics report generated successfully")
             return r[m.AnalyticsReport].ok(report)
@@ -71,23 +73,25 @@ class FlextDbtLdapService:
             return r[m.AnalyticsReport].fail(f"Report generation error: {e}")
 
     def run_dbt_models(
-        self, model_names: t.StrSequence | None = None
+        self,
+        model_names: t.StrSequence | None = None,
     ) -> r[m.DbtRunStatus]:
         """Run DBT models."""
         try:
             logger.info(
-                "Running DBT models: %s", ", ".join(model_names) if model_names else ""
+                "Running DBT models: %s",
+                ", ".join(model_names) if model_names else "",
             )
             model_list = list(model_names) if model_names else None
             run_result = self._dbt_service.run_models(models=model_list)
             if run_result.is_success:
                 logger.info("DBT models executed successfully")
                 return r[m.DbtRunStatus].ok(
-                    m.DbtRunStatus(status="completed", models_run=model_list or [])
+                    m.DbtRunStatus(status="completed", models_run=model_list or []),
                 )
             logger.error("DBT model execution failed: %s", run_result.error or "")
             return r[m.DbtRunStatus].fail(
-                run_result.error or "DBT model execution failed"
+                run_result.error or "DBT model execution failed",
             )
         except (
             ValueError,
@@ -102,7 +106,10 @@ class FlextDbtLdapService:
             return r[m.DbtRunStatus].fail(f"DBT model execution error: {e}")
 
     def run_full_data_warehouse_sync(
-        self, search_base: str | None = None, *, incremental: bool = False
+        self,
+        search_base: str | None = None,
+        *,
+        incremental: bool = False,
     ) -> r[m.SyncResult]:
         """Run complete LDAP to data warehouse synchronization."""
         logger.info(
@@ -112,7 +119,8 @@ class FlextDbtLdapService:
         )
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
-            search_base, incremental=incremental
+            search_base,
+            incremental=incremental,
         )
         membership_result = self.sync_memberships_to_warehouse(search_base)
         successful_syncs = [
@@ -137,7 +145,10 @@ class FlextDbtLdapService:
         return r[m.SyncResult].fail("Some components failed in full sync")
 
     def sync_groups_to_warehouse(
-        self, search_base: str | None = None, *, incremental: bool = False
+        self,
+        search_base: str | None = None,
+        *,
+        incremental: bool = False,
     ) -> r[m.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse."""
         try:
@@ -151,7 +162,8 @@ class FlextDbtLdapService:
             )
             if run_incremental:
                 group_filter = self._build_incremental_filter(
-                    group_filter, self._sync_bookmarks.get("groups")
+                    group_filter,
+                    self._sync_bookmarks.get("groups"),
                 )
             result = self.client.run_full_pipeline(
                 search_base=search_base,
@@ -178,7 +190,8 @@ class FlextDbtLdapService:
             return r[m.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
-        self, search_base: str | None = None
+        self,
+        search_base: str | None = None,
     ) -> r[m.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse."""
         try:
@@ -208,7 +221,10 @@ class FlextDbtLdapService:
             return r[m.DbtLdapPipelineResult].fail(f"Membership sync error: {e}")
 
     def sync_users_to_warehouse(
-        self, search_base: str | None = None, *, incremental: bool = False
+        self,
+        search_base: str | None = None,
+        *,
+        incremental: bool = False,
     ) -> r[m.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse."""
         try:
@@ -222,7 +238,8 @@ class FlextDbtLdapService:
             )
             if run_incremental:
                 user_filter = self._build_incremental_filter(
-                    user_filter, self._sync_bookmarks.get(c.LdapEntityTypes.USERS)
+                    user_filter,
+                    self._sync_bookmarks.get(c.LdapEntityTypes.USERS),
                 )
             result = self.client.run_full_pipeline(
                 search_base=search_base,
@@ -240,7 +257,9 @@ class FlextDbtLdapService:
             if result.is_success:
                 logger.info("User sync completed successfully")
                 self._update_bookmark(
-                    c.LdapEntityTypes.USERS, current_bookmark, successful=True
+                    c.LdapEntityTypes.USERS,
+                    current_bookmark,
+                    successful=True,
                 )
             else:
                 logger.error("User sync failed: %s", result.error or "")
@@ -258,7 +277,8 @@ class FlextDbtLdapService:
             return r[m.DbtLdapPipelineResult].fail(f"User sync error: {e}")
 
     def validate_warehouse_data_quality(
-        self, model_names: t.StrSequence | None = None
+        self,
+        model_names: t.StrSequence | None = None,
     ) -> r[m.ValidationMetrics]:
         """Validate data quality in the warehouse."""
         try:
@@ -271,7 +291,7 @@ class FlextDbtLdapService:
             if test_result.is_success:
                 logger.info("Data quality validation completed successfully")
                 return r[m.ValidationMetrics].ok(
-                    m.ValidationMetrics(validation_passed=True)
+                    m.ValidationMetrics(validation_passed=True),
                 )
             logger.error("Data quality validation failed: %s", test_result.error or "")
             return r[m.ValidationMetrics].fail(test_result.error or "DBT tests failed")
@@ -309,7 +329,7 @@ class FlextDbtLdapService:
         self._sync_state_file.parent.mkdir(parents=True, exist_ok=True)
         sorted_bookmarks = dict(sorted(self._sync_bookmarks.items()))
         self._sync_state_file.write_bytes(
-            _SYNC_BOOKMARKS_ADAPTER.dump_json(sorted_bookmarks, indent=2)
+            _SYNC_BOOKMARKS_ADAPTER.dump_json(sorted_bookmarks, indent=2),
         )
 
     def _resolve_sync_state_file(self) -> Path:
@@ -323,7 +343,11 @@ class FlextDbtLdapService:
         return Path(self.config.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
 
     def _should_run_incremental(
-        self, sync_key: str, *, requested_incremental: bool, current_bookmark: str
+        self,
+        sync_key: str,
+        *,
+        requested_incremental: bool,
+        current_bookmark: str,
     ) -> bool:
         if not requested_incremental:
             return False
@@ -342,7 +366,11 @@ class FlextDbtLdapService:
         return True
 
     def _update_bookmark(
-        self, sync_key: str, bookmark: str, *, successful: bool
+        self,
+        sync_key: str,
+        bookmark: str,
+        *,
+        successful: bool,
     ) -> None:
         if not successful:
             return

@@ -67,14 +67,16 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
                 def validate_dbt_project(
-                    self, project_path: str
+                    self,
+                    project_path: str,
                 ) -> FlextMeltanoProtocols.Result[bool]:
                     """Validate DBT project configuration."""
                     ...
 
             @runtime_checkable
             class LdapIntegration(
-                FlextMeltanoProtocols.Service[m.DbtLdapPipelineResult], Protocol
+                FlextMeltanoProtocols.Service[m.DbtLdapPipelineResult],
+                Protocol,
             ):
                 """LDAP integration protocol for dbt LDAP operations."""
 
@@ -112,7 +114,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class Modeling(
-                FlextMeltanoProtocols.Service[m.DbtModelDefinition], Protocol
+                FlextMeltanoProtocols.Service[m.DbtModelDefinition],
+                Protocol,
             ):
                 """Protocol for LDAP data modeling operations."""
 
@@ -150,7 +153,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class Transformation(
-                FlextMeltanoProtocols.Service[m.UserDimension], Protocol
+                FlextMeltanoProtocols.Service[m.UserDimension],
+                Protocol,
             ):
                 """Protocol for LDAP data transformation operations."""
 
@@ -191,25 +195,29 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                 """Protocol for DBT macro operations with LDAP data."""
 
                 def create_ldap_snapshot_macro(
-                    self, snapshot_config: m.DbtConfig
+                    self,
+                    snapshot_config: m.DbtConfig,
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Create DBT snapshot macro for LDAP data versioning."""
                     ...
 
                 def create_ldap_test_macro(
-                    self, test_config: m.DbtTestConfig
+                    self,
+                    test_config: m.DbtTestConfig,
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Create DBT test macro for LDAP data validation."""
                     ...
 
                 def generate_ldap_source_macro(
-                    self, source_config: m.DbtSourceDefinition
+                    self,
+                    source_config: m.DbtSourceDefinition,
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Generate DBT macro for LDAP data sources."""
                     ...
 
                 def generate_ldap_transformation_macro(
-                    self, transformation_config: m.TransformationConfig
+                    self,
+                    transformation_config: m.TransformationConfig,
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Generate DBT transformation macro for LDAP data."""
                     ...
@@ -252,7 +260,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
             @runtime_checkable
             class Performance(
-                FlextMeltanoProtocols.Service[m.PerformanceAnalysis], Protocol
+                FlextMeltanoProtocols.Service[m.PerformanceAnalysis],
+                Protocol,
             ):
                 """Protocol for DBT LDAP performance optimization."""
 
@@ -265,7 +274,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
                 def monitor_dbt_performance(
-                    self, run_results: m.DbtRunStatus
+                    self,
+                    run_results: m.DbtRunStatus,
                 ) -> FlextMeltanoProtocols.Result[m.PerformanceAnalysis]:
                     """Monitor DBT performance."""
                     ...
@@ -279,7 +289,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
                 def optimize_ldap_queries(
-                    self, query_config: m.LdapQuery
+                    self,
+                    query_config: m.LdapQuery,
                 ) -> FlextMeltanoProtocols.Result[m.LdapQuery]:
                     """Optimize LDAP queries for DBT data extraction."""
                     ...
@@ -289,7 +300,8 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                 """Protocol for DBT LDAP monitoring operations."""
 
                 def create_monitoring_dashboard(
-                    self, dashboard_config: m.DbtConfig
+                    self,
+                    dashboard_config: m.DbtConfig,
                 ) -> FlextMeltanoProtocols.Result[m.DbtRunStatus]:
                     """Create monitoring dashboard."""
                     ...
@@ -301,13 +313,16 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
                 def monitor_ldap_data_freshness(
-                    self, freshness_config: m.DbtSourceFreshness
+                    self,
+                    freshness_config: m.DbtSourceFreshness,
                 ) -> FlextMeltanoProtocols.Result[m.DbtSourceFreshness]:
                     """Monitor LDAP data freshness."""
                     ...
 
                 def track_dbt_run_metrics(
-                    self, run_id: str, metrics: m.PerformanceAnalysis
+                    self,
+                    run_id: str,
+                    metrics: m.PerformanceAnalysis,
                 ) -> FlextMeltanoProtocols.Result[bool]:
                     """Track DBT run metrics."""
                     ...

@@ -25,7 +25,7 @@ from tests import t
 def shared_ldap_container(flext_docker: tk) -> str:
     """Managed LDAP container using centralized tk with docker-compose."""
     compose_file = pathlib.Path(
-        "~/flext/docker/docker-compose.openldap.yml"
+        "~/flext/docker/docker-compose.openldap.yml",
     ).expanduser()
     start_result = flext_docker.start_compose_stack(str(compose_file))
     if start_result.is_failure:
@@ -82,7 +82,7 @@ def dbt_ldap_profile() -> t.ContainerMapping:
                     "threads": 4,
                     "keepalives_idle": 0,
                     "search_path": "ldap_transformed",
-                }
+                },
             },
             "target": "default",
         },
@@ -240,7 +240,7 @@ def dbt_ldap_sources() -> t.ContainerMapping:
                             {
                                 "name": "ldap_valid_user_dn",
                                 "description": "Validate user DN format",
-                            }
+                            },
                         ],
                     },
                     {
@@ -260,7 +260,7 @@ def dbt_ldap_sources() -> t.ContainerMapping:
                         ],
                     },
                 ],
-            }
+            },
         ],
     }
 
@@ -336,7 +336,9 @@ class MockLdapDbtAdapter:
         self.compiled_models: t.ContainerMapping = {}
 
     def extract_ldap_data(
-        self, _base_dn: str, _search_filter: str
+        self,
+        _base_dn: str,
+        _search_filter: str,
     ) -> Sequence[t.ContainerMapping]:
         """Extract LDAP data for dbt processing."""
         return [
@@ -348,7 +350,7 @@ class MockLdapDbtAdapter:
                     "objectClass": "inetOrgPerson",
                 },
                 "extracted_at": "2023-01-01T12:00:00Z",
-            }
+            },
         ]
 
     @staticmethod
@@ -367,7 +369,8 @@ class MockLdapDbtAdapter:
         return bool(re.match(r"^(?:cn|uid)=.+(?:,(?:ou|dc)=.+)+", dn))
 
     def parse_ldap_attributes(
-        self, attributes: Mapping[str, str | t.StrSequence | None]
+        self,
+        attributes: Mapping[str, str | t.StrSequence | None],
     ) -> Mapping[str, str | None]:
         """Parse LDAP attributes for dbt models."""
         parsed: Mapping[str, str | None] = {}
@@ -379,7 +382,8 @@ class MockLdapDbtAdapter:
         return parsed
 
     def transform_ldap_to_relational(
-        self, ldap_data: Sequence[t.ContainerMapping]
+        self,
+        ldap_data: Sequence[t.ContainerMapping],
     ) -> Sequence[t.ContainerMapping]:
         """Transform LDAP data to relational format."""
         transformed: Sequence[t.ContainerMapping] = []
@@ -434,7 +438,7 @@ class MockLdapConnection:
                         "mail": ["john.doe@internal.invalid"],
                         "objectClass": ["inetOrgPerson"],
                     },
-                }
+                },
             ]
         if "groups" in base_dn:
             return [
@@ -445,7 +449,7 @@ class MockLdapConnection:
                         "member": ["cn=john.doe,ou=people,dc=flext,dc=local"],
                         "objectClass": ["groupOfNames"],
                     },
-                }
+                },
             ]
         return []
 

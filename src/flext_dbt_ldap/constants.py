@@ -212,7 +212,12 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         DOCS = "docs"
 
     type LdapOperationLiteral = Literal[
-        "search", "bind", "unbind", "add", "modify", "delete"
+        "search",
+        "bind",
+        "unbind",
+        "add",
+        "modify",
+        "delete",
     ]
     "LDAP operation literal - matches LdapOperations StrEnum values."
     type DbtCommandLiteral = Literal["run", "test", "build", "seed", "snapshot", "docs"]

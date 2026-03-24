@@ -75,12 +75,17 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             return r[FlextDbtLdapClient].fail(f"Client creation failed: {e}")
 
     def create_config(
-        self, ldap_host: str = "localhost", ldap_port: int = 389, ldap_base_dn: str = ""
+        self,
+        ldap_host: str = "localhost",
+        ldap_port: int = 389,
+        ldap_base_dn: str = "",
     ) -> r[FlextDbtLdapSettings]:
         """Create DBT LDAP configuration with sensible defaults."""
         try:
             self.logger.info(
-                "Creating DBT LDAP config: host=%s, port=%d", ldap_host, ldap_port
+                "Creating DBT LDAP config: host=%s, port=%d",
+                ldap_host,
+                ldap_port,
             )
             config = FlextDbtLdapSettings.model_validate({
                 "ldap_host": ldap_host,
@@ -100,15 +105,22 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             return r[FlextDbtLdapSettings].fail(f"Config creation failed: {e}")
 
     def create_group_dimension(
-        self, group_id: str, common_name: str, description: str | None = None
+        self,
+        group_id: str,
+        common_name: str,
+        description: str | None = None,
     ) -> r[m.GroupDimension]:
         """Create group dimension with required fields."""
         try:
             self.logger.debug(
-                "Creating group dimension: group_id=%s, name=%s", group_id, common_name
+                "Creating group dimension: group_id=%s, name=%s",
+                group_id,
+                common_name,
             )
             group = m.GroupDimension(
-                group_id=group_id, common_name=common_name, description=description
+                group_id=group_id,
+                common_name=common_name,
+                description=description,
             )
             return r[m.GroupDimension].ok(group)
         except (
@@ -140,19 +152,24 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             return r[FlextDbtLdapService].fail(f"Service creation failed: {e}")
 
     def create_simple_pipeline(
-        self, ldap_host: str = "localhost", ldap_port: int = 389, ldap_base_dn: str = ""
+        self,
+        ldap_host: str = "localhost",
+        ldap_port: int = 389,
+        ldap_base_dn: str = "",
     ) -> r[FlextDbtLdapService]:
         """Create complete DBT LDAP pipeline with minimal configuration."""
         try:
             self.logger.info(
-                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities"
+                "Creating simple DBT LDAP pipeline using FlextDbtLdapUtilities",
             )
             config_result = self.create_config(
-                ldap_host=ldap_host, ldap_port=ldap_port, ldap_base_dn=ldap_base_dn
+                ldap_host=ldap_host,
+                ldap_port=ldap_port,
+                ldap_base_dn=ldap_base_dn,
             )
             if config_result.is_failure:
                 return r[FlextDbtLdapService].fail(
-                    f"Config creation failed: {config_result.error}"
+                    f"Config creation failed: {config_result.error}",
                 )
             ldap_sources = [
                 m.DbtSourceTable(name="users"),
@@ -202,15 +219,22 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             return r[m.DbtLdap].fail(f"Transformer creation failed: {e}")
 
     def create_user_dimension(
-        self, user_id: str, common_name: str, email: str | None = None
+        self,
+        user_id: str,
+        common_name: str,
+        email: str | None = None,
     ) -> r[m.UserDimension]:
         """Create user dimension with required fields."""
         try:
             self.logger.debug(
-                "Creating user dimension: user_id=%s, name=%s", user_id, common_name
+                "Creating user dimension: user_id=%s, name=%s",
+                user_id,
+                common_name,
             )
             user = m.UserDimension(
-                user_id=user_id, common_name=common_name, email=email
+                user_id=user_id,
+                common_name=common_name,
+                email=email,
             )
             return r[m.UserDimension].ok(user)
         except (
@@ -230,7 +254,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         client_result = self.create_client()
         if client_result.is_failure:
             return r[FlextDbtLdapSettings].fail(
-                f"Failed to create client: {client_result.error}"
+                f"Failed to create client: {client_result.error}",
             )
         return r[FlextDbtLdapSettings].ok(self.config)
 

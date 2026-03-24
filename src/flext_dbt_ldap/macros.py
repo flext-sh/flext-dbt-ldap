@@ -121,7 +121,7 @@ class FlextDbtLdapMacros:
 
             """
             converted = FlextDbtLdapMacros._TimestampConverter.convert_ldap_timestamp(
-                timestamp
+                timestamp,
             )
             if converted:
                 return converted.split("T")[0] if "T" in converted else converted[:10]
@@ -152,7 +152,7 @@ class FlextDbtLdapMacros:
 
         """
         return FlextDbtLdapMacros._TimestampConverter.extract_date_from_timestamp(
-            timestamp
+            timestamp,
         )
 
     @staticmethod

@@ -32,7 +32,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     """
 
     _MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
-        Mapping[str, t.Serializable]
+        Mapping[str, t.Serializable],
     )
     _STRING_LIST_ADAPTER: TypeAdapter[t.StrSequence] = TypeAdapter(t.StrSequence)
 
@@ -47,7 +47,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         mapping = raw.attributes if hasattr(raw, "attributes") else raw
         try:
             validated_mapping = FlextDbtLdapModels._MAPPING_ADAPTER.validate_python(
-                mapping
+                mapping,
             )
         except ValidationError:
             return {}
@@ -124,13 +124,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         profile: str = ""
         model_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["models"])]
         analysis_paths: Annotated[
-            t.StrSequence, Field(default_factory=lambda: ["analyses"])
+            t.StrSequence,
+            Field(default_factory=lambda: ["analyses"]),
         ]
         test_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["tests"])]
         seed_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["seeds"])]
         macro_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["macros"])]
         snapshot_paths: Annotated[
-            t.StrSequence, Field(default_factory=lambda: ["snapshots"])
+            t.StrSequence,
+            Field(default_factory=lambda: ["snapshots"]),
         ]
         target_path: str = "target"
         clean_targets: Annotated[
@@ -492,7 +494,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         ) -> Sequence[FlextDbtLdapModels.MembershipFact]:
             """Transform LDAP entries to membership facts."""
             self.logger.info(
-                f"Transforming {len(entries)} LDAP entries to membership facts"
+                f"Transforming {len(entries)} LDAP entries to membership facts",
             )
             membership_facts: list[FlextDbtLdapModels.MembershipFact] = []
             for entry in entries:
@@ -516,7 +518,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 ):
                     self.logger.exception(
                         "Failed to transform memberships for entry: "
-                        f"{str(entry.dn) if entry.dn is not None else ''}"
+                        f"{str(entry.dn) if entry.dn is not None else ''}",
                     )
             self.logger.info(f"Transformed {len(membership_facts)} membership facts")
             return membership_facts
@@ -544,7 +546,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             failure_label: str,
         ) -> Sequence[TDimension]:
             self.logger.info(
-                f"Transforming {len(entries)} LDAP entries to {transform_label}"
+                f"Transforming {len(entries)} LDAP entries to {transform_label}",
             )
             dimensions: list[TDimension] = []
             for entry in entries:
@@ -563,7 +565,9 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 ):
                     entry_dn = str(entry.dn) if entry.dn is not None else ""
                     self.logger.exception(
-                        f"Failed to transform {failure_label}: {entry_dn}"
+                        "Failed to transform %s: %s",
+                        failure_label,
+                        entry_dn,
                     )
             self.logger.info(f"Transformed {len(dimensions)} {transform_label}")
             return dimensions

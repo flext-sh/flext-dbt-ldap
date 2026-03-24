@@ -42,7 +42,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     "ldap_source_configuration",
                     "transformation_optimization",
                 ],
-            )
+            ),
         )
 
     class DbtLdap:
@@ -81,12 +81,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.DbtProjectConfig].fail(
-                    f"DBT project config creation failed: {e}"
+                    f"DBT project config creation failed: {e}",
                 )
 
         @staticmethod
         def generate_dbt_profiles(
-            profile_name: str, connection_config: m.DbtProfileConfig
+            profile_name: str,
+            connection_config: m.DbtProfileConfig,
         ) -> r[m.DbtProfileConfig]:
             """Generate DBT profiles configuration for LDAP data sources."""
             try:
@@ -102,7 +103,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.DbtProfileConfig].fail(
-                    f"DBT profiles generation failed: {e}"
+                    f"DBT profiles generation failed: {e}",
                 )
 
         @staticmethod
@@ -122,7 +123,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 for name, path in required_files.items():
                     results[name] = path.exists()
                 return r[m.ProjectStructureValidation].ok(
-                    m.ProjectStructureValidation(results=results)
+                    m.ProjectStructureValidation(results=results),
                 )
             except (
                 ValueError,
@@ -134,7 +135,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.ProjectStructureValidation].fail(
-                    f"DBT project structure validation failed: {e}"
+                    f"DBT project structure validation failed: {e}",
                 )
 
         class Collection:
@@ -160,7 +161,9 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
         @staticmethod
         def create_ldap_transformation_model(
-            model_name: str, source_table: str, transformations: t.StrMapping
+            model_name: str,
+            source_table: str,
+            transformations: t.StrMapping,
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:
@@ -200,7 +203,8 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
         @staticmethod
         def generate_ldap_data_tests(
-            model_name: str, test_config: m.DbtTestConfig
+            model_name: str,
+            test_config: m.DbtTestConfig,
         ) -> r[m.DbtTestConfig]:
             """Generate DBT data tests for LDAP transformation models."""
             try:
@@ -234,12 +238,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.DbtTestConfig].fail(
-                    f"LDAP data tests generation failed: {e}"
+                    f"LDAP data tests generation failed: {e}",
                 )
 
         @staticmethod
         def generate_ldap_source_schema(
-            ldap_attributes: t.StrSequence, source_name: str = "ldap_users"
+            ldap_attributes: t.StrSequence,
+            source_name: str = "ldap_users",
         ) -> r[m.DbtSourceSchema]:
             """Generate DBT source schema for LDAP attributes."""
             try:
@@ -281,7 +286,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.DbtSourceSchema].fail(
-                    f"LDAP source schema generation failed: {e}"
+                    f"LDAP source schema generation failed: {e}",
                 )
 
     class MacroManagement:
@@ -397,8 +402,8 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                                     "description": "Last modification timestamp",
                                 },
                             ],
-                        }
-                    ]
+                        },
+                    ],
                 )
                 return r[m.DbtModelDefinition].ok(group_schema)
             except (
@@ -411,7 +416,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.DbtModelDefinition].fail(
-                    f"Group schema generation failed: {e}"
+                    f"Group schema generation failed: {e}",
                 )
 
         @staticmethod
@@ -466,8 +471,8 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                                     "tests": ["not_null"],
                                 },
                             ],
-                        }
-                    ]
+                        },
+                    ],
                 )
                 return r[m.DbtModelDefinition].ok(user_schema)
             except (
@@ -480,7 +485,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.DbtModelDefinition].fail(
-                    f"User schema generation failed: {e}"
+                    f"User schema generation failed: {e}",
                 )
 
     class TransformationOptimization:
@@ -488,7 +493,8 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
         @classmethod
         def analyze_transformation_performance(
-            cls, model_stats: m.PerformanceAnalysis
+            cls,
+            model_stats: m.PerformanceAnalysis,
         ) -> r[m.PerformanceAnalysis]:
             """Analyze performance of LDAP transformation models."""
             try:
@@ -498,21 +504,21 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD
                 ):
                     recommendations.append(
-                        "Consider adding indexes or partitioning for large datasets"
+                        "Consider adding indexes or partitioning for large datasets",
                     )
                 if (
                     model_stats.memory_usage
                     > c.TransformationOptimization.PERFORMANCE_MEMORY_USAGE_THRESHOLD
                 ):
                     recommendations.append(
-                        "Consider processing data in smaller batches"
+                        "Consider processing data in smaller batches",
                     )
                 if (
                     model_stats.rows_processed
                     > c.TransformationOptimization.PERFORMANCE_ROWS_PROCESSED_THRESHOLD
                 ):
                     recommendations.append(
-                        "Consider incremental processing for large datasets"
+                        "Consider incremental processing for large datasets",
                     )
                 analysis = m.PerformanceAnalysis(
                     execution_time=model_stats.execution_time,
@@ -531,12 +537,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 ImportError,
             ) as e:
                 return r[m.PerformanceAnalysis].fail(
-                    f"Performance analysis failed: {e}"
+                    f"Performance analysis failed: {e}",
                 )
 
         @staticmethod
         def optimize_ldap_query(
-            base_query: str, optimization_hints: m.OptimizationHints
+            base_query: str,
+            optimization_hints: m.OptimizationHints,
         ) -> r[str]:
             """Optimize DBT SQL query for LDAP data processing."""
             try:
