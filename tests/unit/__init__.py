@@ -24,25 +24,25 @@ if TYPE_CHECKING:
         test_version_properties,
     )
 
-_LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
-    "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
-    "test_incremental_groups_sync_applies_bookmark_filter": (
+_LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
+    "test_dunder_alignment": ["tests.unit.test_version", "test_dunder_alignment"],
+    "test_incremental_groups_sync_applies_bookmark_filter": [
         "tests.unit.test_version",
         "test_incremental_groups_sync_applies_bookmark_filter",
-    ),
-    "test_incremental_users_sync_applies_bookmark_filter": (
+    ],
+    "test_incremental_users_sync_applies_bookmark_filter": [
         "tests.unit.test_version",
         "test_incremental_users_sync_applies_bookmark_filter",
-    ),
-    "test_sync_users_uses_incremental_bookmark_and_persists_state": (
+    ],
+    "test_sync_users_uses_incremental_bookmark_and_persists_state": [
         "tests.unit.test_dbt_services_sync",
         "test_sync_users_uses_incremental_bookmark_and_persists_state",
-    ),
-    "test_version_metadata_integrity": (
+    ],
+    "test_version_metadata_integrity": [
         "tests.unit.test_version",
         "test_version_metadata_integrity",
-    ),
-    "test_version_properties": ("tests.unit.test_version", "test_version_properties"),
+    ],
+    "test_version_properties": ["tests.unit.test_version", "test_version_properties"],
 }
 
 __all__ = [
