@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import MutableMapping, Sequence
+from collections.abc import MutableMapping
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import override
@@ -16,7 +16,7 @@ from flext_core import FlextLogger, r
 from flext_meltano import FlextMeltanoDbtService
 from pydantic import TypeAdapter, ValidationError
 
-from flext_dbt_ldap import c, m
+from flext_dbt_ldap import c, m, t
 from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
@@ -71,7 +71,7 @@ class FlextDbtLdapService:
             return r[m.AnalyticsReport].fail(f"Report generation error: {e}")
 
     def run_dbt_models(
-        self, model_names: Sequence[str] | None = None
+        self, model_names: t.StrSequence | None = None
     ) -> r[m.DbtRunStatus]:
         """Run DBT models."""
         try:
@@ -258,7 +258,7 @@ class FlextDbtLdapService:
             return r[m.DbtLdapPipelineResult].fail(f"User sync error: {e}")
 
     def validate_warehouse_data_quality(
-        self, model_names: Sequence[str] | None = None
+        self, model_names: t.StrSequence | None = None
     ) -> r[m.ValidationMetrics]:
         """Validate data quality in the warehouse."""
         try:
@@ -353,4 +353,4 @@ class FlextDbtLdapService:
             logger.exception("Failed to persist bookmark state")
 
 
-__all__: Sequence[str] = ["FlextDbtLdapService"]
+__all__: t.StrSequence = ["FlextDbtLdapService"]

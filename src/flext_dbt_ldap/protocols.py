@@ -39,7 +39,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
 
                 def compile_dbt_models(
                     self,
-                    models: Sequence[str] | None = None,
+                    models: t.StrSequence | None = None,
                     config: m.DbtConfig | None = None,
                 ) -> FlextMeltanoProtocols.Result[m.DbtRunStatus]:
                     """Compile DBT models for LDAP data processing."""

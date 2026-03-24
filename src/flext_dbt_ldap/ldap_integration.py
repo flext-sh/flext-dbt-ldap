@@ -7,11 +7,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-
 from flext_core import FlextLogger
 
-from flext_dbt_ldap import m, p
+from flext_dbt_ldap import m, p, t
 
 logger = FlextLogger(__name__)
 
@@ -66,7 +64,7 @@ class FlextDbtLdapIntegration:
 
 process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_dbt
 validate_ldap_data_quality = FlextDbtLdapIntegration.validate_ldap_data_quality
-__all__: Sequence[str] = [
+__all__: t.StrSequence = [
     "FlextDbtLdapIntegration",
     "process_ldap_entries_for_dbt",
     "validate_ldap_data_quality",

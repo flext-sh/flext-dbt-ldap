@@ -7,13 +7,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-
 from flext_core import FlextLogger
 from pydantic import TypeAdapter, ValidationError
 
+from flext_dbt_ldap import t
+
 logger = FlextLogger(__name__)
-_STRING_LIST_ADAPTER = TypeAdapter(Sequence[str])
+_STRING_LIST_ADAPTER = TypeAdapter(t.StrSequence)
 
 
 class FlextDbtLdapMacros:
@@ -218,7 +218,7 @@ class FlextDbtLdapMacros:
         return not bool(user_account_control & 2)
 
     @staticmethod
-    def normalize_ldap_attribute(value: str | Sequence[str] | None) -> str:
+    def normalize_ldap_attribute(value: str | t.StrSequence | None) -> str:
         """Normalize LDAP attribute value for DBT processing.
 
         Args:
@@ -251,4 +251,4 @@ class FlextDbtLdapMacros:
         return FlextDbtLdapMacros._DNParser.parse_dn_component(dn, component)
 
 
-__all__: Sequence[str] = ["FlextDbtLdapMacros"]
+__all__: t.StrSequence = ["FlextDbtLdapMacros"]
