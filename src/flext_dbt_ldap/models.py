@@ -22,13 +22,13 @@ from flext_dbt_ldap import t
 _MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
     Mapping[str, t.Serializable]
 )
-_STRING_LIST_ADAPTER = TypeAdapter(Sequence[str])
+_STRING_LIST_ADAPTER = TypeAdapter(t.StrSequence)
 
 
 def _entry_attrs_mapping(
     entry: FlextLdapModels.Ldif.Entry,
-) -> Mapping[str, Sequence[str]]:
-    """Get Mapping[str, Sequence[str]] from entry.attributes (Attributes or Mapping)."""
+) -> Mapping[str, t.StrSequence]:
+    """Get Mapping[str, t.StrSequence] from entry.attributes (Attributes or Mapping)."""
     raw = entry.attributes
     if raw is None:
         return {}
@@ -37,7 +37,7 @@ def _entry_attrs_mapping(
         validated_mapping = _MAPPING_ADAPTER.validate_python(mapping)
     except ValidationError:
         return {}
-    out: MutableMapping[str, Sequence[str]] = {}
+    out: MutableMapping[str, t.StrSequence] = {}
     for k, v in validated_mapping.items():
         try:
             out[k] = _STRING_LIST_ADAPTER.validate_python(v)
@@ -74,7 +74,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Status of a DBT transformation run."""
 
         status: str = "pending"
-        models_run: Annotated[Sequence[str], Field(default_factory=list)]
+        models_run: Annotated[t.StrSequence, Field(default_factory=list)]
         entries_processed: int = 0
 
     class DbtLdapPipelineResult(FlextModels.Value):
@@ -95,14 +95,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         execution_time: float = 0.0
         rows_processed: int = 0
         memory_usage: float = 0.0
-        recommendations: Annotated[Sequence[str], Field(default_factory=list)]
+        recommendations: Annotated[t.StrSequence, Field(default_factory=list)]
 
     class ServiceStatus(FlextModels.Value):
         """Service status and capabilities."""
 
         status: str = "operational"
         service: str = ""
-        capabilities: Annotated[Sequence[str], Field(default_factory=list)]
+        capabilities: Annotated[t.StrSequence, Field(default_factory=list)]
 
     class AnalyticsReport(FlextModels.Value):
         """Analytics report data."""
@@ -120,25 +120,25 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         name: str
         version: str = "1.0.0"
         profile: str = ""
-        model_paths: Annotated[Sequence[str], Field(default_factory=lambda: ["models"])]
+        model_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["models"])]
         analysis_paths: Annotated[
-            Sequence[str], Field(default_factory=lambda: ["analyses"])
+            t.StrSequence, Field(default_factory=lambda: ["analyses"])
         ]
-        test_paths: Annotated[Sequence[str], Field(default_factory=lambda: ["tests"])]
-        seed_paths: Annotated[Sequence[str], Field(default_factory=lambda: ["seeds"])]
-        macro_paths: Annotated[Sequence[str], Field(default_factory=lambda: ["macros"])]
+        test_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["tests"])]
+        seed_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["seeds"])]
+        macro_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["macros"])]
         snapshot_paths: Annotated[
-            Sequence[str], Field(default_factory=lambda: ["snapshots"])
+            t.StrSequence, Field(default_factory=lambda: ["snapshots"])
         ]
         target_path: str = "target"
         clean_targets: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=lambda: ["target", "dbt_packages"],
             ),
         ]
         target_schema: str = "public"
-        tags: Annotated[Sequence[str], Field(default_factory=list)]
+        tags: Annotated[t.StrSequence, Field(default_factory=list)]
         materialized: str = "table"
 
     class DbtProfileConfig(FlextModels.Value):
@@ -185,7 +185,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             Sequence[Mapping[str, t.Serializable]],
             Field(default_factory=list),
         ]
-        columns: Annotated[Mapping[str, Sequence[str]], Field(default_factory=dict)]
+        columns: Annotated[Mapping[str, t.StrSequence], Field(default_factory=dict)]
 
     class DbtSourceFreshness(FlextModels.Value):
         """DBT source freshness configuration."""
@@ -219,7 +219,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Query optimization hints."""
 
         add_indexes: bool = False
-        index_columns: Annotated[Sequence[str], Field(default_factory=list)]
+        index_columns: Annotated[t.StrSequence, Field(default_factory=list)]
         partition_by: str = ""
         filter_early: bool = False
 
@@ -231,22 +231,22 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Transformation configuration."""
 
         source_table: str = ""
-        transformations: Annotated[Mapping[str, str], Field(default_factory=dict)]
-        filters: Annotated[Sequence[str], Field(default_factory=list)]
+        transformations: Annotated[t.StrMapping, Field(default_factory=dict)]
+        filters: Annotated[t.StrSequence, Field(default_factory=list)]
 
     class TransformationRule(FlextModels.Value):
         """Transformation rule definition."""
 
         name: str = ""
-        rules: Annotated[Mapping[str, str], Field(default_factory=dict)]
+        rules: Annotated[t.StrMapping, Field(default_factory=dict)]
 
     class DataValidationConfig(FlextModels.Value):
         """Data validation configuration."""
 
         min_quality_threshold: str = "0.8"
-        required_attributes: Annotated[Sequence[str], Field(default_factory=list)]
+        required_attributes: Annotated[t.StrSequence, Field(default_factory=list)]
         validate_dns: bool = True
-        columns: Annotated[Mapping[str, Sequence[str]], Field(default_factory=dict)]
+        columns: Annotated[Mapping[str, t.StrSequence], Field(default_factory=dict)]
 
     # =========================================================================
     # LDAP MODELS
@@ -255,15 +255,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     class LdapSchema(FlextModels.Value):
         """LDAP schema configuration."""
 
-        object_classes: Annotated[Sequence[str], Field(default_factory=list)]
-        required_attributes: Annotated[Sequence[str], Field(default_factory=list)]
+        object_classes: Annotated[t.StrSequence, Field(default_factory=list)]
+        required_attributes: Annotated[t.StrSequence, Field(default_factory=list)]
 
     class LdapQuery(FlextModels.Value):
         """LDAP query configuration."""
 
         base_dn: str = ""
         filter_str: str = "(objectClass=*)"
-        attributes: Annotated[Sequence[str], Field(default_factory=list)]
+        attributes: Annotated[t.StrSequence, Field(default_factory=list)]
         scope: str = "SUBTREE"
 
     # =========================================================================
@@ -323,7 +323,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 else None,
             )
 
-        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
+        def to_dbt_dict(self) -> t.ConfigurationMapping:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_id": self.user_id,
@@ -386,7 +386,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 else None,
             )
 
-        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
+        def to_dbt_dict(self) -> t.ConfigurationMapping:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "group_id": self.group_id,
@@ -417,7 +417,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         effective_date: str | None = None
         expiry_date: str | None = None
 
-        def to_dbt_dict(self) -> Mapping[str, t.Scalar]:
+        def to_dbt_dict(self) -> t.ConfigurationMapping:
             """Convert to dictionary suitable for DBT processing."""
             return {
                 "user_dn": self.user_dn,
@@ -455,7 +455,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             return self._logger_instance
 
         @staticmethod
-        def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> Sequence[str]:
+        def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> t.StrSequence:
             """Extract t.NormalizedValue classes from entry attributes."""
             raw = _entry_attrs_mapping(entry)
             oc_val = raw.get("objectClass", [])
@@ -467,8 +467,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         @staticmethod
         def normalize_attributes(
             entry: FlextLdapModels.Ldif.Entry,
-        ) -> Mapping[str, Sequence[str]]:
-            """Normalize entry attributes to Mapping[str, Sequence[str]]."""
+        ) -> Mapping[str, t.StrSequence]:
+            """Normalize entry attributes to Mapping[str, t.StrSequence]."""
             return _entry_attrs_mapping(entry)
 
         def transform_groups(
@@ -633,7 +633,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
 # Short aliases
 
-__all__: Sequence[str] = [
+__all__: t.StrSequence = [
     "FlextDbtLdapModels",
     "m",
 ]

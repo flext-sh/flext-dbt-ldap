@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -18,7 +17,7 @@ from flext_dbt_ldap import m
 from flext_dbt_ldap.dbt_services import FlextDbtLdapService
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
-_BOOKMARKS_ADAPTER: TypeAdapter[Mapping[str, str]] = TypeAdapter(Mapping[str, str])
+_BOOKMARKS_ADAPTER: TypeAdapter[t.StrMapping] = TypeAdapter(t.StrMapping)
 
 
 def test_sync_users_uses_incremental_bookmark_and_persists_state(
