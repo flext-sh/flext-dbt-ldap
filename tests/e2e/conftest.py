@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 import subprocess
-from collections.abc import Generator, Mapping, Sequence
+from collections.abc import Generator, Sequence
 from pathlib import Path
 from typing import LiteralString
 
@@ -112,7 +112,7 @@ def run_dbt_command(
     command: Sequence[str],
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: Mapping[str, t.NormalizedValue] | None = None,
+    dbt_vars: t.ContainerMapping | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Run dbt command with proper configuration."""
     env = {
