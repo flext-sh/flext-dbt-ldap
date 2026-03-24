@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, MutableMapping, Sequence
+from collections.abc import Callable, Mapping, MutableMapping, MutableSequence, Sequence
 from typing import Annotated, override
 
 from flext_core import FlextLogger, r
@@ -496,7 +496,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             self.logger.info(
                 f"Transforming {len(entries)} LDAP entries to membership facts",
             )
-            membership_facts: list[FlextDbtLdapModels.MembershipFact] = []
+            membership_facts: MutableSequence[FlextDbtLdapModels.MembershipFact] = []
             for entry in entries:
                 try:
                     if self._is_group_entry(entry):
@@ -548,7 +548,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             self.logger.info(
                 f"Transforming {len(entries)} LDAP entries to {transform_label}",
             )
-            dimensions: list[TDimension] = []
+            dimensions: MutableSequence[TDimension] = []
             for entry in entries:
                 if not is_entry_target(entry):
                     continue
@@ -577,7 +577,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             group_entry: FlextLdapModels.Ldif.Entry,
         ) -> Sequence[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a group entry."""
-            memberships: list[FlextDbtLdapModels.MembershipFact] = []
+            memberships: MutableSequence[FlextDbtLdapModels.MembershipFact] = []
             attrs = self.normalize_attributes(group_entry)
             group_dn = str(group_entry.dn) if group_entry.dn is not None else ""
             for attr in ("member", "uniqueMember", "memberUid"):
@@ -597,7 +597,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             user_entry: FlextLdapModels.Ldif.Entry,
         ) -> Sequence[FlextDbtLdapModels.MembershipFact]:
             """Extract memberships from a user entry."""
-            memberships: list[FlextDbtLdapModels.MembershipFact] = []
+            memberships: MutableSequence[FlextDbtLdapModels.MembershipFact] = []
             attrs = self.normalize_attributes(user_entry)
             user_dn = str(user_entry.dn) if user_entry.dn is not None else ""
             if "memberOf" in attrs:

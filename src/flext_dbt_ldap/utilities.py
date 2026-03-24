@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -167,7 +167,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:
-                select_clauses: list[str] = []
+                select_clauses: MutableSequence[str] = []
                 for column, transformation in transformations.items():
                     if transformation == "identity":
                         select_clauses.append(f"    {column}")
@@ -248,7 +248,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.DbtSourceSchema]:
             """Generate DBT source schema for LDAP attributes."""
             try:
-                columns: list[t.StrMapping] = []
+                columns: MutableSequence[t.StrMapping] = []
                 for attr in ldap_attributes:
                     if attr.lower() in {"createtimestamp", "modifytimestamp"}:
                         data_type = "timestamp"
@@ -498,7 +498,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.PerformanceAnalysis]:
             """Analyze performance of LDAP transformation models."""
             try:
-                recommendations: list[str] = []
+                recommendations: MutableSequence[str] = []
                 if (
                     model_stats.execution_time
                     > c.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD
