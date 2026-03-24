@@ -12,9 +12,10 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
-from flext_core import c
 from flext_ldap import FlextLdapTypes
 from flext_meltano import FlextMeltanoTypes
+
+from flext_dbt_ldap.constants import FlextDbtLdapConstants
 
 
 class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
@@ -27,7 +28,7 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     class DbtTransformation:
         """DBT LDAP transformation type contracts."""
 
-        type DataValidation = Mapping[str, str | t.StrSequence | bool]
+        type DataValidation = Mapping[str, str | FlextMeltanoTypes.StrSequence | bool]
         "Data validation configuration contract."
 
     class DbtLdap:
@@ -39,7 +40,7 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     class Project:
         """DBT LDAP-specific project types."""
 
-        type DbtLdapProjectType = c.DbtLdapProjectType
+        type DbtLdapProjectType = FlextDbtLdapConstants.DbtLdapProjectType
         "DBT LDAP project type literal."
 
 

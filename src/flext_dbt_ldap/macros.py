@@ -13,7 +13,7 @@ from pydantic import TypeAdapter, ValidationError
 from flext_dbt_ldap import t
 
 logger = FlextLogger(__name__)
-_STRING_LIST_ADAPTER = TypeAdapter(t.StrSequence)
+_STRING_LIST_ADAPTER: TypeAdapter[t.StrSequence] = TypeAdapter(t.StrSequence)
 
 
 class FlextDbtLdapMacros:
@@ -231,7 +231,7 @@ class FlextDbtLdapMacros:
         if value is None:
             return ""
         try:
-            values = _STRING_LIST_ADAPTER.validate_python(value)
+            values: t.StrSequence = _STRING_LIST_ADAPTER.validate_python(value)
         except ValidationError:
             return str(value)
         return str(values[0]) if values else ""

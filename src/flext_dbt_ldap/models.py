@@ -12,38 +12,12 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, MutableMapping, Sequence
 from typing import Annotated, override
 
-from flext_core import FlextLogger, FlextModels, r
+from flext_core import FlextLogger, r
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import Field, TypeAdapter, ValidationError
 
 from flext_dbt_ldap import t
-
-_MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
-    Mapping[str, t.Serializable]
-)
-_STRING_LIST_ADAPTER = TypeAdapter(t.StrSequence)
-
-
-def _entry_attrs_mapping(
-    entry: FlextLdapModels.Ldif.Entry,
-) -> Mapping[str, t.StrSequence]:
-    """Get Mapping[str, t.StrSequence] from entry.attributes (Attributes or Mapping)."""
-    raw = entry.attributes
-    if raw is None:
-        return {}
-    mapping = raw.attributes if hasattr(raw, "attributes") else raw
-    try:
-        validated_mapping = _MAPPING_ADAPTER.validate_python(mapping)
-    except ValidationError:
-        return {}
-    out: MutableMapping[str, t.StrSequence] = {}
-    for k, v in validated_mapping.items():
-        try:
-            out[k] = _STRING_LIST_ADAPTER.validate_python(v)
-        except ValidationError:
-            out[k] = [] if v is None else [str(v)]
-    return out
 
 
 class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
@@ -57,11 +31,39 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 └── FlextDbtLdapModels (this module)
     """
 
+    _MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
+        Mapping[str, t.Serializable]
+    )
+    _STRING_LIST_ADAPTER: TypeAdapter[t.StrSequence] = TypeAdapter(t.StrSequence)
+
+    @staticmethod
+    def _entry_attrs_mapping(
+        entry: FlextLdapModels.Ldif.Entry,
+    ) -> Mapping[str, t.StrSequence]:
+        """Get Mapping[str, t.StrSequence] from entry.attributes (Attributes or Mapping)."""
+        raw = entry.attributes
+        if raw is None:
+            return {}
+        mapping = raw.attributes if hasattr(raw, "attributes") else raw
+        try:
+            validated_mapping = FlextDbtLdapModels._MAPPING_ADAPTER.validate_python(
+                mapping
+            )
+        except ValidationError:
+            return {}
+        out: MutableMapping[str, t.StrSequence] = {}
+        for k, v in validated_mapping.items():
+            try:
+                out[k] = FlextDbtLdapModels._STRING_LIST_ADAPTER.validate_python(v)
+            except ValidationError:
+                out[k] = [] if v is None else [str(v)]
+        return out
+
     # =========================================================================
     # RESULT MODELS
     # =========================================================================
 
-    class ValidationMetrics(FlextModels.Value):
+    class ValidationMetrics(FlextMeltanoModels.Value):
         """Validation metrics for LDAP data quality."""
 
         total_entries: int = 0
@@ -70,26 +72,26 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         quality_score: float = 0.0
         validation_passed: bool = False
 
-    class DbtRunStatus(FlextModels.Value):
+    class DbtRunStatus(FlextMeltanoModels.Value):
         """Status of a DBT transformation run."""
 
         status: str = "pending"
         models_run: Annotated[t.StrSequence, Field(default_factory=list)]
         entries_processed: int = 0
 
-    class DbtLdapPipelineResult(FlextModels.Value):
+    class DbtLdapPipelineResult(FlextMeltanoModels.Value):
         """Result of a complete LDAP-to-DBT pipeline run."""
 
         extracted_entries: int = 0
 
-    class SyncResult(FlextModels.Value):
+    class SyncResult(FlextMeltanoModels.Value):
         """Result of full data warehouse sync."""
 
         overall_success: bool = False
         successful_components: int = 0
         total_components: int = 0
 
-    class PerformanceAnalysis(FlextModels.Value):
+    class PerformanceAnalysis(FlextMeltanoModels.Value):
         """Performance analysis metrics."""
 
         execution_time: float = 0.0
@@ -97,14 +99,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         memory_usage: float = 0.0
         recommendations: Annotated[t.StrSequence, Field(default_factory=list)]
 
-    class ServiceStatus(FlextModels.Value):
+    class ServiceStatus(FlextMeltanoModels.Value):
         """Service status and capabilities."""
 
         status: str = "operational"
         service: str = ""
         capabilities: Annotated[t.StrSequence, Field(default_factory=list)]
 
-    class AnalyticsReport(FlextModels.Value):
+    class AnalyticsReport(FlextMeltanoModels.Value):
         """Analytics report data."""
 
         report_type: str = "summary"
@@ -114,7 +116,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # DBT CONFIGURATION MODELS
     # =========================================================================
 
-    class DbtProjectConfig(FlextModels.Value):
+    class DbtProjectConfig(FlextMeltanoModels.Value):
         """DBT project configuration (dbt_project.yml)."""
 
         name: str
@@ -141,7 +143,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         tags: Annotated[t.StrSequence, Field(default_factory=list)]
         materialized: str = "table"
 
-    class DbtProfileConfig(FlextModels.Value):
+    class DbtProfileConfig(FlextMeltanoModels.Value):
         """DBT profile connection configuration."""
 
         type: str = "postgres"
@@ -153,13 +155,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         schema_name: str = "public"
         threads: int = 4
 
-    class DbtSourceTable(FlextModels.Value):
+    class DbtSourceTable(FlextMeltanoModels.Value):
         """DBT source table definition."""
 
         name: str
         description: str = ""
 
-    class DbtSourceSchema(FlextModels.Value):
+    class DbtSourceSchema(FlextMeltanoModels.Value):
         """DBT source schema definition."""
 
         version: str = "2"
@@ -168,7 +170,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             Field(default_factory=list),
         ]
 
-    class DbtModelDefinition(FlextModels.Value):
+    class DbtModelDefinition(FlextMeltanoModels.Value):
         """DBT model definition (schema.yml)."""
 
         version: str = "2"
@@ -177,7 +179,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             Field(default_factory=list),
         ]
 
-    class DbtTestConfig(FlextModels.Value):
+    class DbtTestConfig(FlextMeltanoModels.Value):
         """DBT test configuration."""
 
         version: str = "2"
@@ -187,13 +189,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         ]
         columns: Annotated[Mapping[str, t.StrSequence], Field(default_factory=dict)]
 
-    class DbtSourceFreshness(FlextModels.Value):
+    class DbtSourceFreshness(FlextMeltanoModels.Value):
         """DBT source freshness configuration."""
 
         warn_after: Annotated[Mapping[str, int], Field(default_factory=dict)]
         error_after: Annotated[Mapping[str, int], Field(default_factory=dict)]
 
-    class DbtSourceDefinition(FlextModels.Value):
+    class DbtSourceDefinition(FlextMeltanoModels.Value):
         """Complete DBT source definition."""
 
         name: str
@@ -203,19 +205,19 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             Field(default_factory=list),
         ]
 
-    class DbtConfig(FlextModels.Value):
+    class DbtConfig(FlextMeltanoModels.Value):
         """General DBT execution configuration."""
 
         target: str = "dev"
         profiles_dir: str = ""
         project_dir: str = ""
 
-    class ProjectStructureValidation(FlextModels.Value):
+    class ProjectStructureValidation(FlextMeltanoModels.Value):
         """DBT project structure validation result."""
 
         results: Annotated[Mapping[str, bool], Field(default_factory=dict)]
 
-    class OptimizationHints(FlextModels.Value):
+    class OptimizationHints(FlextMeltanoModels.Value):
         """Query optimization hints."""
 
         add_indexes: bool = False
@@ -227,20 +229,20 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # TRANSFORMATION MODELS
     # =========================================================================
 
-    class TransformationConfig(FlextModels.Value):
+    class TransformationConfig(FlextMeltanoModels.Value):
         """Transformation configuration."""
 
         source_table: str = ""
         transformations: Annotated[t.StrMapping, Field(default_factory=dict)]
         filters: Annotated[t.StrSequence, Field(default_factory=list)]
 
-    class TransformationRule(FlextModels.Value):
+    class TransformationRule(FlextMeltanoModels.Value):
         """Transformation rule definition."""
 
         name: str = ""
         rules: Annotated[t.StrMapping, Field(default_factory=dict)]
 
-    class DataValidationConfig(FlextModels.Value):
+    class DataValidationConfig(FlextMeltanoModels.Value):
         """Data validation configuration."""
 
         min_quality_threshold: str = "0.8"
@@ -252,13 +254,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # LDAP MODELS
     # =========================================================================
 
-    class LdapSchema(FlextModels.Value):
+    class LdapSchema(FlextMeltanoModels.Value):
         """LDAP schema configuration."""
 
         object_classes: Annotated[t.StrSequence, Field(default_factory=list)]
         required_attributes: Annotated[t.StrSequence, Field(default_factory=list)]
 
-    class LdapQuery(FlextModels.Value):
+    class LdapQuery(FlextMeltanoModels.Value):
         """LDAP query configuration."""
 
         base_dn: str = ""
@@ -270,7 +272,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     # DOMAIN MODELS - LDAP data transformation entities
     # =========================================================================
 
-    class UserDimension(FlextModels.Entity):
+    class UserDimension(FlextMeltanoModels.Entity):
         """User dimension model for DBT LDAP transformations."""
 
         user_id: str
@@ -345,7 +347,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 return r[bool].fail("User ID and common name are required")
             return r[bool].ok(value=True)
 
-    class GroupDimension(FlextModels.Entity):
+    class GroupDimension(FlextMeltanoModels.Entity):
         """Group dimension model for DBT LDAP transformations."""
 
         group_id: str
@@ -407,7 +409,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 return r[bool].fail("Member count cannot be negative")
             return r[bool].ok(value=True)
 
-    class MembershipFact(FlextModels.Entity):
+    class MembershipFact(FlextMeltanoModels.Entity):
         """Membership fact model for DBT LDAP transformations."""
 
         user_dn: str
@@ -457,10 +459,10 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         @staticmethod
         def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> t.StrSequence:
             """Extract t.NormalizedValue classes from entry attributes."""
-            raw = _entry_attrs_mapping(entry)
+            raw = FlextDbtLdapModels._entry_attrs_mapping(entry)
             oc_val = raw.get("objectClass", [])
             try:
-                return _STRING_LIST_ADAPTER.validate_python(oc_val)
+                return FlextDbtLdapModels._STRING_LIST_ADAPTER.validate_python(oc_val)
             except ValidationError:
                 return [str(oc_val)]
 
@@ -469,7 +471,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entry: FlextLdapModels.Ldif.Entry,
         ) -> Mapping[str, t.StrSequence]:
             """Normalize entry attributes to Mapping[str, t.StrSequence]."""
-            return _entry_attrs_mapping(entry)
+            return FlextDbtLdapModels._entry_attrs_mapping(entry)
 
         def transform_groups(
             self,

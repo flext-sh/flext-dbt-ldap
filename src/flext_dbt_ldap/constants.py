@@ -10,7 +10,7 @@ from __future__ import annotations
 from enum import StrEnum, unique
 from typing import ClassVar, Final, Literal
 
-from flext_core import FlextConstants, t
+from flext_core import t
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
 
@@ -24,9 +24,9 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         class Ldap:
             """Standard LDAP connection settings."""
 
-            DEFAULT_HOST: Final[str] = FlextConstants.DEFAULT_HOST
+            DEFAULT_HOST: Final[str] = FlextMeltanoConstants.DEFAULT_HOST
             DEFAULT_PORT: Final[int] = 389
-            DEFAULT_TIMEOUT: Final[int] = FlextConstants.DEFAULT_TIMEOUT_SECONDS
+            DEFAULT_TIMEOUT: Final[int] = FlextMeltanoConstants.DEFAULT_TIMEOUT_SECONDS
 
         class Ldaps:
             """Secure LDAP connection settings."""
@@ -88,8 +88,8 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     class DbtProcessing:
         """DBT LDAP transformation configuration."""
 
-        DEFAULT_BATCH_SIZE = FlextConstants.DEFAULT_SIZE
-        MAX_BATCH_SIZE = FlextConstants.MAX_ITEMS
+        DEFAULT_BATCH_SIZE = FlextMeltanoConstants.DEFAULT_SIZE
+        MAX_BATCH_SIZE = FlextMeltanoConstants.MAX_ITEMS
 
     class TransformationOptimization:
         """Transformation optimization performance thresholds."""
@@ -101,8 +101,8 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     class DbtLogging:
         """DBT LDAP-specific logging constants."""
 
-        DEFAULT_LEVEL: Final[str] = FlextConstants.DEFAULT_LEVEL
-        AUDIT_LOG_LEVEL: Final[str] = FlextConstants.LogLevel.INFO
+        DEFAULT_LEVEL: Final[str] = FlextMeltanoConstants.DEFAULT_LEVEL
+        AUDIT_LOG_LEVEL: Final[str] = FlextMeltanoConstants.LogLevel.INFO
         LOG_DBT_OPERATIONS: Final[bool] = True
         LOG_DBT_MODELS: Final[bool] = True
         LOG_DBT_TESTS: Final[bool] = True

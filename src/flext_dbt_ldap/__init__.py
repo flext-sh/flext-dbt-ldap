@@ -16,7 +16,8 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes, d, e, h, r, s, x
+    from flext_core import FlextTypes
+    from flext_ldap import d, e, h, r, s, x
 
     from flext_dbt_ldap.__version__ import (
         __all__,
@@ -125,9 +126,9 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "__version__": ("flext_dbt_ldap.__version__", "__version__"),
     "__version_info__": ("flext_dbt_ldap.__version__", "__version_info__"),
     "c": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
-    "d": ("flext_core", "d"),
-    "e": ("flext_core", "e"),
-    "h": ("flext_core", "h"),
+    "d": ("flext_ldap", "d"),
+    "e": ("flext_ldap", "e"),
+    "h": ("flext_ldap", "h"),
     "logger": ("flext_dbt_ldap.settings", "logger"),
     "m": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
     "p": ("flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"),
@@ -135,15 +136,15 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
         "flext_dbt_ldap.ldap_integration",
         "process_ldap_entries_for_dbt",
     ),
-    "r": ("flext_core", "r"),
-    "s": ("flext_core", "s"),
+    "r": ("flext_ldap", "r"),
+    "s": ("flext_ldap", "s"),
     "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
     "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
     "validate_ldap_data_quality": (
         "flext_dbt_ldap.ldap_integration",
         "validate_ldap_data_quality",
     ),
-    "x": ("flext_core", "x"),
+    "x": ("flext_ldap", "x"),
 }
 
 __all__ = [
