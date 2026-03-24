@@ -26,7 +26,7 @@ class FlextDbtLdapService:
 
     _logger = FlextLogger(__name__)
     _SYNC_BOOKMARKS_ADAPTER: ClassVar[TypeAdapter[dict[str, str]]] = TypeAdapter(
-        dict[str, str]
+        dict[str, str],
     )
 
     @override
@@ -56,7 +56,7 @@ class FlextDbtLdapService:
         """Generate analytics report from warehouse data."""
         try:
             FlextDbtLdapService._logger.info(
-                "Generating analytics report: %s", report_type
+                "Generating analytics report: %s", report_type,
             )
             report = m.AnalyticsReport(
                 report_type=report_type,
@@ -74,7 +74,7 @@ class FlextDbtLdapService:
             ImportError,
         ) as e:
             FlextDbtLdapService._logger.exception(
-                "Unexpected error during report generation"
+                "Unexpected error during report generation",
             )
             return r[m.AnalyticsReport].fail(f"Report generation error: {e}")
 
@@ -96,7 +96,7 @@ class FlextDbtLdapService:
                     m.DbtRunStatus(status="completed", models_run=model_list or []),
                 )
             FlextDbtLdapService._logger.error(
-                "DBT model execution failed: %s", run_result.error or ""
+                "DBT model execution failed: %s", run_result.error or "",
             )
             return r[m.DbtRunStatus].fail(
                 run_result.error or "DBT model execution failed",
@@ -111,7 +111,7 @@ class FlextDbtLdapService:
             ImportError,
         ) as e:
             FlextDbtLdapService._logger.exception(
-                "Unexpected error during DBT model execution"
+                "Unexpected error during DBT model execution",
             )
             return r[m.DbtRunStatus].fail(f"DBT model execution error: {e}")
 
@@ -146,7 +146,7 @@ class FlextDbtLdapService:
         )
         if overall_success:
             FlextDbtLdapService._logger.info(
-                "Full data warehouse sync completed successfully"
+                "Full data warehouse sync completed successfully",
             )
             return r[m.SyncResult].ok(sync_result)
         FlextDbtLdapService._logger.warning(
@@ -165,7 +165,7 @@ class FlextDbtLdapService:
         """Synchronize LDAP groups to data warehouse."""
         try:
             FlextDbtLdapService._logger.info(
-                "Starting group sync to warehouse, incremental=%s", incremental
+                "Starting group sync to warehouse, incremental=%s", incremental,
             )
             current_bookmark = self._bookmark_now()
             group_filter = "(objectClass=group)"
@@ -190,7 +190,7 @@ class FlextDbtLdapService:
                 self._update_bookmark("groups", current_bookmark, successful=True)
             else:
                 FlextDbtLdapService._logger.error(
-                    "Group sync failed: %s", result.error or ""
+                    "Group sync failed: %s", result.error or "",
                 )
             return result
         except (
@@ -221,11 +221,11 @@ class FlextDbtLdapService:
             )
             if result.is_success:
                 FlextDbtLdapService._logger.info(
-                    "Membership sync completed successfully"
+                    "Membership sync completed successfully",
                 )
             else:
                 FlextDbtLdapService._logger.error(
-                    "Membership sync failed: %s", result.error or ""
+                    "Membership sync failed: %s", result.error or "",
                 )
             return result
         except (
@@ -238,7 +238,7 @@ class FlextDbtLdapService:
             ImportError,
         ) as e:
             FlextDbtLdapService._logger.exception(
-                "Unexpected error during membership sync"
+                "Unexpected error during membership sync",
             )
             return r[m.DbtLdapPipelineResult].fail(f"Membership sync error: {e}")
 
@@ -251,7 +251,7 @@ class FlextDbtLdapService:
         """Synchronize LDAP users to data warehouse."""
         try:
             FlextDbtLdapService._logger.info(
-                "Starting user sync to warehouse, incremental=%s", incremental
+                "Starting user sync to warehouse, incremental=%s", incremental,
             )
             current_bookmark = self._bookmark_now()
             user_filter = "(objectClass=person)"
@@ -287,7 +287,7 @@ class FlextDbtLdapService:
                 )
             else:
                 FlextDbtLdapService._logger.error(
-                    "User sync failed: %s", result.error or ""
+                    "User sync failed: %s", result.error or "",
                 )
             return result
         except (
@@ -316,13 +316,13 @@ class FlextDbtLdapService:
             test_result = self._dbt_service.run_models(models=model_list)
             if test_result.is_success:
                 FlextDbtLdapService._logger.info(
-                    "Data quality validation completed successfully"
+                    "Data quality validation completed successfully",
                 )
                 return r[m.ValidationMetrics].ok(
                     m.ValidationMetrics(validation_passed=True),
                 )
             FlextDbtLdapService._logger.error(
-                "Data quality validation failed: %s", test_result.error or ""
+                "Data quality validation failed: %s", test_result.error or "",
             )
             return r[m.ValidationMetrics].fail(test_result.error or "DBT tests failed")
         except (
@@ -335,7 +335,7 @@ class FlextDbtLdapService:
             ImportError,
         ) as e:
             FlextDbtLdapService._logger.exception(
-                "Unexpected error during data quality validation"
+                "Unexpected error during data quality validation",
             )
             return r[m.ValidationMetrics].fail(f"Data quality validation error: {e}")
 
@@ -362,7 +362,7 @@ class FlextDbtLdapService:
         sorted_bookmarks = dict(sorted(self._sync_bookmarks.items()))
         self._sync_state_file.write_bytes(
             FlextDbtLdapService._SYNC_BOOKMARKS_ADAPTER.dump_json(
-                sorted_bookmarks, indent=2
+                sorted_bookmarks, indent=2,
             ),
         )
 
@@ -388,7 +388,7 @@ class FlextDbtLdapService:
         previous_bookmark = self._sync_bookmarks.get(sync_key)
         if previous_bookmark is None:
             FlextDbtLdapService._logger.info(
-                "No previous bookmark for %s; running full sync", sync_key
+                "No previous bookmark for %s; running full sync", sync_key,
             )
             return False
         if previous_bookmark >= current_bookmark:
