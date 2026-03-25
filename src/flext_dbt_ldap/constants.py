@@ -8,11 +8,13 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from enum import StrEnum, unique
-from typing import ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar, Final
 
-from flext_core import t
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
+
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):

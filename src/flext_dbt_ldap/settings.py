@@ -9,8 +9,10 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from flext_core import FlextLogger, FlextSettings, FlextTypes as t
+from flext_core import FlextLogger, FlextSettings
 from pydantic import Field, SecretStr
+
+from flext_dbt_ldap import t
 
 logger = FlextLogger(__name__)
 
