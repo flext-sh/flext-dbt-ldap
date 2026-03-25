@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, MutableMapping, MutableSequence, Sequence
-from typing import Annotated, override
+from typing import override
 
 from flext_core import FlextLogger, r
 from flext_ldap import FlextLdapModels
@@ -161,7 +161,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """DBT source schema definition."""
 
             version: str = "2"
-            sources: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            sources: Sequence[Mapping[str, t.Serializable]] = Field(
                 default_factory=list
             )
 
@@ -169,7 +169,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """DBT model definition (schema.yml)."""
 
             version: str = "2"
-            models: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            models: Sequence[Mapping[str, t.Serializable]] = Field(
                 default_factory=list
             )
 
@@ -177,25 +177,25 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """DBT test configuration."""
 
             version: str = "2"
-            models: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            models: Sequence[Mapping[str, t.Serializable]] = Field(
                 default_factory=list
             )
-            columns: Annotated[Mapping[str, t.StrSequence]] = Field(
+            columns: Mapping[str, t.StrSequence] = Field(
                 default_factory=dict
             )
 
         class DbtSourceFreshness(FlextMeltanoModels.Value):
             """DBT source freshness configuration."""
 
-            warn_after: Annotated[Mapping[str, int]] = Field(default_factory=dict)
-            error_after: Annotated[Mapping[str, int]] = Field(default_factory=dict)
+            warn_after: Mapping[str, int] = Field(default_factory=dict)
+            error_after: Mapping[str, int] = Field(default_factory=dict)
 
         class DbtSourceDefinition(FlextMeltanoModels.Value):
             """Complete DBT source definition."""
 
             name: str
             description: str = ""
-            tables: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            tables: Sequence[Mapping[str, t.Serializable]] = Field(
                 default_factory=list
             )
 
@@ -209,7 +209,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         class ProjectStructureValidation(FlextMeltanoModels.Value):
             """DBT project structure validation result."""
 
-            results: Annotated[Mapping[str, bool]] = Field(default_factory=dict)
+            results: Mapping[str, bool] = Field(default_factory=dict)
 
         class OptimizationHints(FlextMeltanoModels.Value):
             """Query optimization hints."""
@@ -242,7 +242,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             min_quality_threshold: str = "0.8"
             required_attributes: t.StrSequence = Field(default_factory=list)
             validate_dns: bool = True
-            columns: Annotated[Mapping[str, t.StrSequence]] = Field(
+            columns: Mapping[str, t.StrSequence] = Field(
                 default_factory=dict
             )
 

@@ -9,7 +9,6 @@ from __future__ import annotations
 from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated
 
 from flext_core import FlextContainer, r
 from flext_ldap import FlextLdapUtilities
@@ -153,7 +152,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             @staticmethod
             def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type[E]:
                 """Create coerced enum type (Annotated wrapper)."""
-                _ = Annotated[enum_cls, BeforeValidator(u.coerce_validator(enum_cls))]
+                _ = BeforeValidator(u.coerce_validator(enum_cls))
                 return enum_cls
 
         class LdapDataTransformation:

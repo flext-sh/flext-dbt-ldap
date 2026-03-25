@@ -13,8 +13,10 @@ from collections.abc import Generator, Sequence
 from pathlib import Path
 from typing import LiteralString
 
-import psycopg
 import pytest
+
+psycopg = pytest.importorskip("psycopg", reason="psycopg not installed")
+
 from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import tk
 from psycopg import sql

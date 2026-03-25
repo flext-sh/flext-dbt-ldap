@@ -42,7 +42,7 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
         class Project:
             """DBT LDAP-specific project types."""
 
-            type DbtLdapProjectType = FlextDbtLdapConstants.DbtLdapProjectType
+            type DbtLdapProjectType = FlextDbtLdapConstants.DbtLdap.DbtLdapProjectType
             "DBT LDAP project type literal."
 
 
