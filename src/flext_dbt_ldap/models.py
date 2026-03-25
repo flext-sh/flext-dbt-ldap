@@ -76,7 +76,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Status of a DBT transformation run."""
 
         status: str = "pending"
-        models_run: Annotated[t.StrSequence, Field(default_factory=list)]
+        models_run: t.StrSequence = Field(default_factory=list)
         entries_processed: int = 0
 
     class DbtLdapPipelineResult(FlextMeltanoModels.Value):
@@ -97,14 +97,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         execution_time: float = 0.0
         rows_processed: int = 0
         memory_usage: float = 0.0
-        recommendations: Annotated[t.StrSequence, Field(default_factory=list)]
+        recommendations: t.StrSequence = Field(default_factory=list)
 
     class ServiceStatus(FlextMeltanoModels.Value):
         """Service status and capabilities."""
 
         status: str = "operational"
         service: str = ""
-        capabilities: Annotated[t.StrSequence, Field(default_factory=list)]
+        capabilities: t.StrSequence = Field(default_factory=list)
 
     class AnalyticsReport(FlextMeltanoModels.Value):
         """Analytics report data."""
@@ -122,27 +122,18 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         name: str
         version: str = "1.0.0"
         profile: str = ""
-        model_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["models"])]
-        analysis_paths: Annotated[
-            t.StrSequence,
-            Field(default_factory=lambda: ["analyses"]),
-        ]
-        test_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["tests"])]
-        seed_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["seeds"])]
-        macro_paths: Annotated[t.StrSequence, Field(default_factory=lambda: ["macros"])]
-        snapshot_paths: Annotated[
-            t.StrSequence,
-            Field(default_factory=lambda: ["snapshots"]),
-        ]
+        model_paths: t.StrSequence = Field(default_factory=lambda: ["models"])
+        analysis_paths: t.StrSequence = Field(default_factory=lambda: ["analyses"])
+        test_paths: t.StrSequence = Field(default_factory=lambda: ["tests"])
+        seed_paths: t.StrSequence = Field(default_factory=lambda: ["seeds"])
+        macro_paths: t.StrSequence = Field(default_factory=lambda: ["macros"])
+        snapshot_paths: t.StrSequence = Field(default_factory=lambda: ["snapshots"])
         target_path: str = "target"
-        clean_targets: Annotated[
-            t.StrSequence,
-            Field(
-                default_factory=lambda: ["target", "dbt_packages"],
-            ),
-        ]
+        clean_targets: t.StrSequence = Field(
+            default_factory=lambda: ["target", "dbt_packages"]
+        )
         target_schema: str = "public"
-        tags: Annotated[t.StrSequence, Field(default_factory=list)]
+        tags: t.StrSequence = Field(default_factory=list)
         materialized: str = "table"
 
     class DbtProfileConfig(FlextMeltanoModels.Value):
@@ -167,45 +158,41 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """DBT source schema definition."""
 
         version: str = "2"
-        sources: Annotated[
-            Sequence[Mapping[str, t.Serializable]],
-            Field(default_factory=list),
-        ]
+        sources: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            default_factory=list
+        )
 
     class DbtModelDefinition(FlextMeltanoModels.Value):
         """DBT model definition (schema.yml)."""
 
         version: str = "2"
-        models: Annotated[
-            Sequence[Mapping[str, t.Serializable]],
-            Field(default_factory=list),
-        ]
+        models: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            default_factory=list
+        )
 
     class DbtTestConfig(FlextMeltanoModels.Value):
         """DBT test configuration."""
 
         version: str = "2"
-        models: Annotated[
-            Sequence[Mapping[str, t.Serializable]],
-            Field(default_factory=list),
-        ]
-        columns: Annotated[Mapping[str, t.StrSequence], Field(default_factory=dict)]
+        models: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            default_factory=list
+        )
+        columns: Annotated[Mapping[str, t.StrSequence]] = Field(default_factory=dict)
 
     class DbtSourceFreshness(FlextMeltanoModels.Value):
         """DBT source freshness configuration."""
 
-        warn_after: Annotated[Mapping[str, int], Field(default_factory=dict)]
-        error_after: Annotated[Mapping[str, int], Field(default_factory=dict)]
+        warn_after: Annotated[Mapping[str, int]] = Field(default_factory=dict)
+        error_after: Annotated[Mapping[str, int]] = Field(default_factory=dict)
 
     class DbtSourceDefinition(FlextMeltanoModels.Value):
         """Complete DBT source definition."""
 
         name: str
         description: str = ""
-        tables: Annotated[
-            Sequence[Mapping[str, t.Serializable]],
-            Field(default_factory=list),
-        ]
+        tables: Annotated[Sequence[Mapping[str, t.Serializable]]] = Field(
+            default_factory=list
+        )
 
     class DbtConfig(FlextMeltanoModels.Value):
         """General DBT execution configuration."""
@@ -217,13 +204,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     class ProjectStructureValidation(FlextMeltanoModels.Value):
         """DBT project structure validation result."""
 
-        results: Annotated[Mapping[str, bool], Field(default_factory=dict)]
+        results: Annotated[Mapping[str, bool]] = Field(default_factory=dict)
 
     class OptimizationHints(FlextMeltanoModels.Value):
         """Query optimization hints."""
 
         add_indexes: bool = False
-        index_columns: Annotated[t.StrSequence, Field(default_factory=list)]
+        index_columns: t.StrSequence = Field(default_factory=list)
         partition_by: str = ""
         filter_early: bool = False
 
@@ -235,22 +222,22 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """Transformation configuration."""
 
         source_table: str = ""
-        transformations: Annotated[t.StrMapping, Field(default_factory=dict)]
-        filters: Annotated[t.StrSequence, Field(default_factory=list)]
+        transformations: t.StrMapping = Field(default_factory=dict)
+        filters: t.StrSequence = Field(default_factory=list)
 
     class TransformationRule(FlextMeltanoModels.Value):
         """Transformation rule definition."""
 
         name: str = ""
-        rules: Annotated[t.StrMapping, Field(default_factory=dict)]
+        rules: t.StrMapping = Field(default_factory=dict)
 
     class DataValidationConfig(FlextMeltanoModels.Value):
         """Data validation configuration."""
 
         min_quality_threshold: str = "0.8"
-        required_attributes: Annotated[t.StrSequence, Field(default_factory=list)]
+        required_attributes: t.StrSequence = Field(default_factory=list)
         validate_dns: bool = True
-        columns: Annotated[Mapping[str, t.StrSequence], Field(default_factory=dict)]
+        columns: Annotated[Mapping[str, t.StrSequence]] = Field(default_factory=dict)
 
     # =========================================================================
     # LDAP MODELS
@@ -259,15 +246,15 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     class LdapSchema(FlextMeltanoModels.Value):
         """LDAP schema configuration."""
 
-        object_classes: Annotated[t.StrSequence, Field(default_factory=list)]
-        required_attributes: Annotated[t.StrSequence, Field(default_factory=list)]
+        object_classes: t.StrSequence = Field(default_factory=list)
+        required_attributes: t.StrSequence = Field(default_factory=list)
 
     class LdapQuery(FlextMeltanoModels.Value):
         """LDAP query configuration."""
 
         base_dn: str = ""
         filter_str: str = "(objectClass=*)"
-        attributes: Annotated[t.StrSequence, Field(default_factory=list)]
+        attributes: t.StrSequence = Field(default_factory=list)
         scope: str = "SUBTREE"
 
     # =========================================================================

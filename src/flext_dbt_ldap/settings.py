@@ -60,28 +60,25 @@ class FlextDbtLdapSettings(FlextSettings):
     required_attributes: Annotated[
         t.StrSequence,
         Field(
-            default_factory=list,
             description="Required LDAP attributes for validation",
         ),
-    ]
+    ] = Field(default_factory=list)
 
     # Attribute mapping
     ldap_attribute_mapping: Annotated[
         t.StrMapping,
         Field(
-            default_factory=dict,
             description="Mapping of LDAP attributes to DBT model attributes",
         ),
-    ]
+    ] = Field(default_factory=dict)
 
     # Schema mapping
     ldap_schema_mapping: Annotated[
         t.StrMapping,
         Field(
-            default_factory=dict,
             description="Mapping of LDAP schemas to DBT tables",
         ),
-    ]
+    ] = Field(default_factory=dict)
 
 
 __all__: t.StrSequence = ["FlextDbtLdapSettings"]

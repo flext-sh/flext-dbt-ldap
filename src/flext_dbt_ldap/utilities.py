@@ -167,12 +167,12 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[str]:
             """Create DBT model SQL for LDAP data transformation."""
             try:
-                select_clauses: MutableSequence[str] = []
-                for column, transformation in transformations.items():
-                    if transformation == "identity":
-                        select_clauses.append(f"    {column}")
-                    else:
-                        select_clauses.append(f"    {transformation} as {column}")
+                select_clauses: Sequence[str] = [
+                    f"    {column}"
+                    if transformation == "identity"
+                    else f"    {transformation} as {column}"
+                    for column, transformation in transformations.items()
+                ]
                 model_sql = "".join([
                     "{{\n",
                     "    config(\n",
@@ -248,21 +248,22 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         ) -> r[m.DbtSourceSchema]:
             """Generate DBT source schema for LDAP attributes."""
             try:
-                columns: MutableSequence[t.StrMapping] = []
-                for attr in ldap_attributes:
-                    if attr.lower() in {"createtimestamp", "modifytimestamp"}:
-                        data_type = "timestamp"
-                    elif attr.lower() in {"memberof", "objectclass"}:
-                        data_type = "text[]"
-                    elif attr.lower() in {"uidnumber", "gidnumber"}:
-                        data_type = "integer"
-                    else:
-                        data_type = "text"
-                    columns.append({
+                columns: Sequence[t.StrMapping] = [
+                    {
                         "name": attr.lower().replace("-", "_"),
                         "description": f"LDAP {attr} attribute",
-                        "data_type": data_type,
-                    })
+                        "data_type": (
+                            "timestamp"
+                            if attr.lower() in {"createtimestamp", "modifytimestamp"}
+                            else "text[]"
+                            if attr.lower() in {"memberof", "objectclass"}
+                            else "integer"
+                            if attr.lower() in {"uidnumber", "gidnumber"}
+                            else "text"
+                        ),
+                    }
+                    for attr in ldap_attributes
+                ]
                 serializable_cols: Sequence[t.Serializable] = list(columns)
                 table_entry: Mapping[str, t.Serializable] = {
                     "name": source_name,
