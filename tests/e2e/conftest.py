@@ -14,14 +14,13 @@ from pathlib import Path
 from typing import LiteralString
 
 import pytest
-
-psycopg = pytest.importorskip("psycopg", reason="psycopg not installed")
-
 from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import tk
 from psycopg import sql
 
 from tests import t
+
+psycopg = pytest.importorskip("psycopg", reason="psycopg not installed")
 
 logger = FlextLogger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30

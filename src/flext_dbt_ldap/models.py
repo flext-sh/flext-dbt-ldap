@@ -169,20 +169,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """DBT model definition (schema.yml)."""
 
             version: str = "2"
-            models: Sequence[Mapping[str, t.Serializable]] = Field(
-                default_factory=list
-            )
+            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
 
         class DbtTestConfig(FlextMeltanoModels.Value):
             """DBT test configuration."""
 
             version: str = "2"
-            models: Sequence[Mapping[str, t.Serializable]] = Field(
-                default_factory=list
-            )
-            columns: Mapping[str, t.StrSequence] = Field(
-                default_factory=dict
-            )
+            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
+            columns: Mapping[str, t.StrSequence] = Field(default_factory=dict)
 
         class DbtSourceFreshness(FlextMeltanoModels.Value):
             """DBT source freshness configuration."""
@@ -195,9 +189,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
             name: str
             description: str = ""
-            tables: Sequence[Mapping[str, t.Serializable]] = Field(
-                default_factory=list
-            )
+            tables: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
 
         class DbtConfig(FlextMeltanoModels.Value):
             """General DBT execution configuration."""
@@ -242,9 +234,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             min_quality_threshold: str = "0.8"
             required_attributes: t.StrSequence = Field(default_factory=list)
             validate_dns: bool = True
-            columns: Mapping[str, t.StrSequence] = Field(
-                default_factory=dict
-            )
+            columns: Mapping[str, t.StrSequence] = Field(default_factory=dict)
 
         # =========================================================================
         # LDAP MODELS
