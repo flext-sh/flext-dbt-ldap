@@ -31,8 +31,10 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
         "ldap_base_dn": "dc=example,dc=com",
     })
     service.client = Mock()
-    service.client.run_full_pipeline.return_value = r[m.DbtLdapPipelineResult].ok(
-        m.DbtLdapPipelineResult(extracted_entries=1),
+    service.client.run_full_pipeline.return_value = r[
+        m.DbtLdap.DbtLdapPipelineResult
+    ].ok(
+        m.DbtLdap.DbtLdapPipelineResult(extracted_entries=1),
     )
     service._sync_state_file = state_file
     service._sync_bookmarks = service._load_sync_state()

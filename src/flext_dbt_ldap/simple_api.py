@@ -109,7 +109,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         group_id: str,
         common_name: str,
         description: str | None = None,
-    ) -> r[m.GroupDimension]:
+    ) -> r[m.DbtLdap.GroupDimension]:
         """Create group dimension with required fields."""
         try:
             self.logger.debug(
@@ -117,12 +117,12 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 group_id,
                 common_name,
             )
-            group = m.GroupDimension(
+            group = m.DbtLdap.GroupDimension(
                 group_id=group_id,
                 common_name=common_name,
                 description=description,
             )
-            return r[m.GroupDimension].ok(group)
+            return r[m.DbtLdap.GroupDimension].ok(group)
         except (
             ValueError,
             TypeError,
@@ -132,7 +132,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[m.GroupDimension].fail(f"Group dimension creation failed: {e}")
+            return r[m.DbtLdap.GroupDimension].fail(
+                f"Group dimension creation failed: {e}"
+            )
 
     def create_service(self) -> r[FlextDbtLdapService]:
         """Create DBT LDAP service with current configuration."""
@@ -172,8 +174,8 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                     f"Config creation failed: {config_result.error}",
                 )
             ldap_sources = [
-                m.DbtSourceTable(name="users"),
-                m.DbtSourceTable(name="groups"),
+                m.DbtLdap.DbtSourceTable(name="users"),
+                m.DbtLdap.DbtSourceTable(name="groups"),
             ]
             project_config_result = (
                 FlextDbtLdapUtilities.DbtLdap.create_dbt_project_config(
@@ -223,7 +225,7 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
         user_id: str,
         common_name: str,
         email: str | None = None,
-    ) -> r[m.UserDimension]:
+    ) -> r[m.DbtLdap.UserDimension]:
         """Create user dimension with required fields."""
         try:
             self.logger.debug(
@@ -231,12 +233,12 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
                 user_id,
                 common_name,
             )
-            user = m.UserDimension(
+            user = m.DbtLdap.UserDimension(
                 user_id=user_id,
                 common_name=common_name,
                 email=email,
             )
-            return r[m.UserDimension].ok(user)
+            return r[m.DbtLdap.UserDimension].ok(user)
         except (
             ValueError,
             TypeError,
@@ -246,7 +248,9 @@ class FlextDbtLdap(FlextService[FlextDbtLdapSettings]):
             RuntimeError,
             ImportError,
         ) as e:
-            return r[m.UserDimension].fail(f"User dimension creation failed: {e}")
+            return r[m.DbtLdap.UserDimension].fail(
+                f"User dimension creation failed: {e}"
+            )
 
     @override
     def execute(self) -> r[FlextDbtLdapSettings]:

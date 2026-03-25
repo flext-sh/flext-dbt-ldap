@@ -25,23 +25,25 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     This module only contains Literal types and type variables.
     """
 
-    class DbtTransformation:
-        """DBT LDAP transformation type contracts."""
-
-        type DataValidation = Mapping[str, str | FlextMeltanoTypes.StrSequence | bool]
-        "Data validation configuration contract."
-
     class DbtLdap:
         """DBT LDAP settings type contracts."""
 
         type SettingsDict = Mapping[str, bool | float | str | None]
         "DBT LDAP logging settings configuration contract."
 
-    class Project:
-        """DBT LDAP-specific project types."""
+        class DbtTransformation:
+            """DBT LDAP transformation type contracts."""
 
-        type DbtLdapProjectType = FlextDbtLdapConstants.DbtLdapProjectType
-        "DBT LDAP project type literal."
+            type DataValidation = Mapping[
+                str, str | FlextMeltanoTypes.StrSequence | bool
+            ]
+            "Data validation configuration contract."
+
+        class Project:
+            """DBT LDAP-specific project types."""
+
+            type DbtLdapProjectType = FlextDbtLdapConstants.DbtLdapProjectType
+            "DBT LDAP project type literal."
 
 
 t = FlextDbtLdapTypes

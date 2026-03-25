@@ -40,13 +40,15 @@ class FlextDbtLdapIntegration:
             return df
 
     @staticmethod
-    def validate_ldap_data_quality(df: p.DbtLdap.DataFrameLike) -> m.ValidationMetrics:
+    def validate_ldap_data_quality(
+        df: p.DbtLdap.DataFrameLike,
+    ) -> m.DbtLdap.ValidationMetrics:
         """Validate LDAP data quality using flext-ldap generic validation."""
         try:
             logger.info("Validating LDAP data quality for DBT")
             entry_count = len(df)
             logger.info("Validating %d LDAP entries", entry_count)
-            return m.ValidationMetrics(
+            return m.DbtLdap.ValidationMetrics(
                 total_entries=entry_count,
                 valid_dns=entry_count,
                 quality_score=1.0,
@@ -61,7 +63,7 @@ class FlextDbtLdapIntegration:
             ImportError,
         ):
             logger.exception("Failed to validate LDAP data quality")
-            return m.ValidationMetrics()
+            return m.DbtLdap.ValidationMetrics()
 
 
 process_ldap_entries_for_dbt = FlextDbtLdapIntegration.process_ldap_entries_for_dbt
