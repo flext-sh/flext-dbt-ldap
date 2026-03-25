@@ -373,7 +373,7 @@ class MockLdapDbtAdapter:
         attributes: Mapping[str, str | t.StrSequence | None],
     ) -> Mapping[str, str | None]:
         """Parse LDAP attributes for dbt models."""
-        parsed: Mapping[str, str | None] = {}
+        parsed: dict[str, str | None] = {}
         for key, value in attributes.items():
             if isinstance(value, list):
                 parsed[key] = str(value[0]) if value else None
@@ -386,7 +386,7 @@ class MockLdapDbtAdapter:
         ldap_data: Sequence[t.ContainerMapping],
     ) -> Sequence[t.ContainerMapping]:
         """Transform LDAP data to relational format."""
-        transformed: Sequence[t.ContainerMapping] = []
+        transformed: list[t.ContainerMapping] = []
         for entry in ldap_data:
             flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
             attrs = entry.get("attributes")

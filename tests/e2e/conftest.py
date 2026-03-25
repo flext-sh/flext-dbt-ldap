@@ -11,16 +11,17 @@ import os
 import subprocess
 from collections.abc import Generator, Sequence
 from pathlib import Path
+from types import ModuleType
 from typing import LiteralString
 
 import pytest
 from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import tk
-from psycopg import sql
 
 from tests import t
 
-psycopg = pytest.importorskip("psycopg", reason="psycopg not installed")
+psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
+sql: ModuleType = psycopg.sql
 
 logger = FlextLogger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
