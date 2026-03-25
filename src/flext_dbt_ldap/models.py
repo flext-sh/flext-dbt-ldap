@@ -162,20 +162,20 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
             version: str = "2"
             sources: Sequence[Mapping[str, t.Serializable]] = Field(
-                default_factory=lambda: []
+                default_factory=list
             )
 
         class DbtModelDefinition(FlextMeltanoModels.Value):
             """DBT model definition (schema.yml)."""
 
             version: str = "2"
-            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=lambda: [])
+            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
 
         class DbtTestConfig(FlextMeltanoModels.Value):
             """DBT test configuration."""
 
             version: str = "2"
-            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=lambda: [])
+            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
             columns: Mapping[str, t.StrSequence] = Field(default_factory=dict)
 
         class DbtSourceFreshness(FlextMeltanoModels.Value):
@@ -189,7 +189,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
             name: str
             description: str = ""
-            tables: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=lambda: [])
+            tables: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
 
         class DbtConfig(FlextMeltanoModels.Value):
             """General DBT execution configuration."""
