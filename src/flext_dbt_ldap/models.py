@@ -10,14 +10,16 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, MutableMapping, MutableSequence, Sequence
-from typing import override
 
-from flext_core import FlextLogger, r
+from flext_core import FlextLogger
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
-from pydantic import Field, TypeAdapter, ValidationError
+from pydantic import Field, model_validator
 
-from flext_dbt_ldap import t
+from flext_dbt_ldap import c, t
+from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+
+logger = FlextLogger(__name__)
 
 
 class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
@@ -31,32 +33,36 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 └── FlextDbtLdapModels (this module)
     """
 
-    _MAPPING_ADAPTER: TypeAdapter[Mapping[str, t.Serializable]] = TypeAdapter(
-        Mapping[str, t.Serializable],
-    )
-    _STRING_LIST_ADAPTER: TypeAdapter[t.StrSequence] = TypeAdapter(t.StrSequence)
+    @staticmethod
+    def _get_attr(
+        attrs: Mapping[str, t.StrSequence],
+        key: str,
+        default: str | None = None,
+    ) -> str | None:
+        """Extract first value from multi-valued LDAP attribute.
+
+        Single helper replaces the repetitive
+        ``attrs.get("X", [None])[0] if "X" in attrs else None`` pattern.
+        """
+        values = attrs.get(key)
+        if values:
+            return str(values[0])
+        return default
 
     @staticmethod
     def _entry_attrs_mapping(
         entry: FlextLdapModels.Ldif.Entry,
     ) -> Mapping[str, t.StrSequence]:
-        """Get Mapping[str, t.StrSequence] from entry.attributes (Attributes or Mapping)."""
+        """Get Mapping[str, t.StrSequence] from entry.attributes."""
         raw = entry.attributes
         if raw is None:
             return {}
         mapping = raw.attributes if hasattr(raw, "attributes") else raw
-        try:
-            validated_mapping = FlextDbtLdapModels._MAPPING_ADAPTER.validate_python(
-                mapping,
-            )
-        except ValidationError:
+        if not isinstance(mapping, Mapping):
             return {}
         out: MutableMapping[str, t.StrSequence] = {}
-        for k, v in validated_mapping.items():
-            try:
-                out[k] = FlextDbtLdapModels._STRING_LIST_ADAPTER.validate_python(v)
-            except ValidationError:
-                out[k] = [] if v is None else [str(v)]
+        for k, values in mapping.items():
+            out[str(k)] = [str(item) for item in values] if values else []
         return out
 
     class DbtLdap:
@@ -162,20 +168,24 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
             version: str = "2"
             sources: Sequence[Mapping[str, t.Serializable]] = Field(
-                default_factory=list
+                default_factory=lambda: list[Mapping[str, t.Serializable]]()
             )
 
         class DbtModelDefinition(FlextMeltanoModels.Value):
             """DBT model definition (schema.yml)."""
 
             version: str = "2"
-            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
+            models: Sequence[Mapping[str, t.Serializable]] = Field(
+                default_factory=lambda: list[Mapping[str, t.Serializable]]()
+            )
 
         class DbtTestConfig(FlextMeltanoModels.Value):
             """DBT test configuration."""
 
             version: str = "2"
-            models: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
+            models: Sequence[Mapping[str, t.Serializable]] = Field(
+                default_factory=lambda: list[Mapping[str, t.Serializable]]()
+            )
             columns: Mapping[str, t.StrSequence] = Field(default_factory=dict)
 
         class DbtSourceFreshness(FlextMeltanoModels.Value):
@@ -189,7 +199,9 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
             name: str
             description: str = ""
-            tables: Sequence[Mapping[str, t.Serializable]] = Field(default_factory=list)
+            tables: Sequence[Mapping[str, t.Serializable]] = Field(
+                default_factory=lambda: list[Mapping[str, t.Serializable]]()
+            )
 
         class DbtConfig(FlextMeltanoModels.Value):
             """General DBT execution configuration."""
@@ -255,23 +267,45 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             scope: str = "SUBTREE"
 
         # =========================================================================
-        # DOMAIN MODELS - LDAP data transformation entities
+        # DOMAIN MODEL MRO CHAIN
         # =========================================================================
 
-        class UserDimension(FlextMeltanoModels.Entity):
-            """User dimension model for DBT LDAP transformations."""
+        class _DbtSerializable(FlextMeltanoModels.Entity):
+            """Base for all DBT-serializable models — DRY to_dbt_dict."""
+
+            def to_dbt_dict(self) -> t.ConfigurationMapping:
+                """Convert to DBT dict — None values become empty strings."""
+                data = self.model_dump()
+                return {k: v if v is not None else "" for k, v in data.items()}
+
+        class _DbtDimensionBase(_DbtSerializable):
+            """Shared fields for dimension models (users, groups)."""
+
+            common_name: str
+            is_active: bool = True
+            created_date: str | None = None
+            modified_date: str | None = None
+
+        class UserDimension(_DbtDimensionBase):
+            """User dimension — validated at construction via model_validator."""
 
             user_id: str
-            common_name: str
             email: str | None = None
             display_name: str | None = None
             department: str | None = None
             manager_dn: str | None = None
             employee_number: str | None = None
             phone: str | None = None
-            is_active: bool = True
-            created_date: str | None = None
-            modified_date: str | None = None
+
+            @model_validator(mode="after")
+            def _check_required_fields(
+                self,
+            ) -> FlextDbtLdapModels.DbtLdap.UserDimension:
+                """Validate user dimension business rules at construction."""
+                if not self.user_id or not self.common_name:
+                    msg = "User ID and common name are required"
+                    raise ValueError(msg)
+                return self
 
             @classmethod
             def from_ldap_entry(
@@ -279,71 +313,45 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 entry: FlextLdapModels.Ldif.Entry,
             ) -> FlextDbtLdapModels.DbtLdap.UserDimension:
                 """Create user dimension from LDAP entry."""
-                attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
+                attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
+                get_attr = FlextDbtLdapModels._get_attr
                 return cls(
-                    user_id=attrs.get("uid", [""])[0] if "uid" in attrs else "",
-                    common_name=attrs.get("cn", [""])[0] if "cn" in attrs else "",
-                    email=attrs.get("mail", [None])[0] if "mail" in attrs else None,
-                    display_name=attrs.get("displayName", [None])[0]
-                    if "displayName" in attrs
-                    else None,
-                    department=attrs.get("department", [None])[0]
-                    if "department" in attrs
-                    else None,
-                    manager_dn=attrs.get("manager", [None])[0]
-                    if "manager" in attrs
-                    else None,
-                    employee_number=attrs.get("employeeNumber", [None])[0]
-                    if "employeeNumber" in attrs
-                    else None,
-                    phone=attrs.get("telephoneNumber", [None])[0]
-                    if "telephoneNumber" in attrs
-                    else None,
+                    user_id=get_attr(attrs, "uid", "") or "",
+                    common_name=get_attr(attrs, "cn", "") or "",
+                    email=get_attr(attrs, "mail"),
+                    display_name=get_attr(attrs, "displayName"),
+                    department=get_attr(attrs, "department"),
+                    manager_dn=get_attr(attrs, "manager"),
+                    employee_number=get_attr(attrs, "employeeNumber"),
+                    phone=get_attr(attrs, "telephoneNumber"),
                     is_active=not (
                         "userAccountControl" in attrs
                         and "2" in str(attrs["userAccountControl"][0])
                     ),
-                    created_date=attrs.get("createTimestamp", [None])[0]
-                    if "createTimestamp" in attrs
-                    else None,
-                    modified_date=attrs.get("modifyTimestamp", [None])[0]
-                    if "modifyTimestamp" in attrs
-                    else None,
+                    created_date=get_attr(attrs, "createTimestamp"),
+                    modified_date=get_attr(attrs, "modifyTimestamp"),
                 )
 
-            def to_dbt_dict(self) -> t.ConfigurationMapping:
-                """Convert to dictionary suitable for DBT processing."""
-                return {
-                    "user_id": self.user_id,
-                    "common_name": self.common_name,
-                    "email": self.email or "",
-                    "display_name": self.display_name or "",
-                    "department": self.department or "",
-                    "manager_dn": self.manager_dn or "",
-                    "employee_number": self.employee_number or "",
-                    "phone": self.phone or "",
-                    "is_active": self.is_active,
-                    "created_date": self.created_date or "",
-                    "modified_date": self.modified_date or "",
-                }
-
-            def validate_business_rules(self) -> r[bool]:
-                """Validate user dimension business rules."""
-                if not self.user_id or not self.common_name:
-                    return r[bool].fail("User ID and common name are required")
-                return r[bool].ok(value=True)
-
-        class GroupDimension(FlextMeltanoModels.Entity):
-            """Group dimension model for DBT LDAP transformations."""
+        class GroupDimension(_DbtDimensionBase):
+            """Group dimension — validated at construction via model_validator."""
 
             group_id: str
-            common_name: str
             description: str | None = None
             group_type: str | None = None
             member_count: int = 0
-            is_active: bool = True
-            created_date: str | None = None
-            modified_date: str | None = None
+
+            @model_validator(mode="after")
+            def _check_required_fields(
+                self,
+            ) -> FlextDbtLdapModels.DbtLdap.GroupDimension:
+                """Validate group dimension business rules at construction."""
+                if not self.group_id or not self.common_name:
+                    msg = "Group ID and common name are required"
+                    raise ValueError(msg)
+                if self.member_count < 0:
+                    msg = "Member count cannot be negative"
+                    raise ValueError(msg)
+                return self
 
             @classmethod
             def from_ldap_entry(
@@ -351,52 +359,24 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 entry: FlextLdapModels.Ldif.Entry,
             ) -> FlextDbtLdapModels.DbtLdap.GroupDimension:
                 """Create group dimension from LDAP entry."""
-                attrs = FlextDbtLdapModels.DbtLdap.normalize_attributes(entry)
+                attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
+                get_attr = FlextDbtLdapModels._get_attr
                 member_count = len(attrs.get("member", [])) + len(
                     attrs.get("uniqueMember", []),
                 )
                 return cls(
-                    group_id=attrs.get("cn", [""])[0] if "cn" in attrs else "",
-                    common_name=attrs.get("cn", [""])[0] if "cn" in attrs else "",
-                    description=attrs.get("description", [None])[0]
-                    if "description" in attrs
-                    else None,
-                    group_type=attrs.get("groupType", [None])[0]
-                    if "groupType" in attrs
-                    else None,
+                    group_id=get_attr(attrs, "cn", "") or "",
+                    common_name=get_attr(attrs, "cn", "") or "",
+                    description=get_attr(attrs, "description"),
+                    group_type=get_attr(attrs, "groupType"),
                     member_count=member_count,
                     is_active=True,
-                    created_date=attrs.get("createTimestamp", [None])[0]
-                    if "createTimestamp" in attrs
-                    else None,
-                    modified_date=attrs.get("modifyTimestamp", [None])[0]
-                    if "modifyTimestamp" in attrs
-                    else None,
+                    created_date=get_attr(attrs, "createTimestamp"),
+                    modified_date=get_attr(attrs, "modifyTimestamp"),
                 )
 
-            def to_dbt_dict(self) -> t.ConfigurationMapping:
-                """Convert to dictionary suitable for DBT processing."""
-                return {
-                    "group_id": self.group_id,
-                    "common_name": self.common_name,
-                    "description": self.description or "",
-                    "group_type": self.group_type or "",
-                    "member_count": self.member_count,
-                    "is_active": self.is_active,
-                    "created_date": self.created_date or "",
-                    "modified_date": self.modified_date or "",
-                }
-
-            def validate_business_rules(self) -> r[bool]:
-                """Validate group dimension business rules."""
-                if not self.group_id or not self.common_name:
-                    return r[bool].fail("Group ID and common name are required")
-                if self.member_count < 0:
-                    return r[bool].fail("Member count cannot be negative")
-                return r[bool].ok(value=True)
-
-        class MembershipFact(FlextMeltanoModels.Entity):
-            """Membership fact model for DBT LDAP transformations."""
+        class MembershipFact(_DbtSerializable):
+            """Membership fact — validated at construction via model_validator."""
 
             user_dn: str
             group_dn: str
@@ -405,49 +385,25 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             effective_date: str | None = None
             expiry_date: str | None = None
 
-            def to_dbt_dict(self) -> t.ConfigurationMapping:
-                """Convert to dictionary suitable for DBT processing."""
-                return {
-                    "user_dn": self.user_dn,
-                    "group_dn": self.group_dn,
-                    "membership_type": self.membership_type,
-                    "is_primary": self.is_primary,
-                    "effective_date": self.effective_date or "",
-                    "expiry_date": self.expiry_date or "",
-                }
-
-            def validate_business_rules(self) -> r[bool]:
-                """Validate membership fact business rules."""
+            @model_validator(mode="after")
+            def _check_required_fields(
+                self,
+            ) -> FlextDbtLdapModels.DbtLdap.MembershipFact:
+                """Validate membership fact business rules at construction."""
                 if not self.user_dn or not self.group_dn:
-                    return r[bool].fail("User DN and Group DN are required")
-                return r[bool].ok(value=True)
+                    msg = "User DN and Group DN are required"
+                    raise ValueError(msg)
+                return self
 
         # =========================================================================
-        # TRANSFORMER METHODS
+        # TRANSFORMER METHODS (use module-level logger, no instance state)
         # =========================================================================
-
-        @override
-        def __init__(self) -> None:
-            """Initialize LDAP transformer."""
-            super().__init__()
-            self._logger_instance: FlextLogger | None = None
-
-        @property
-        def logger(self) -> FlextLogger:
-            """Lazy logger via FlextLogger."""
-            if self._logger_instance is None:
-                self._logger_instance = FlextLogger(__name__)
-            return self._logger_instance
 
         @staticmethod
-        def _get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> t.StrSequence:
-            """Extract t.NormalizedValue classes from entry attributes."""
+        def get_object_classes(entry: FlextLdapModels.Ldif.Entry) -> t.StrSequence:
+            """Extract object classes from entry attributes."""
             raw = FlextDbtLdapModels._entry_attrs_mapping(entry)
-            oc_val = raw.get("objectClass", [])
-            try:
-                return FlextDbtLdapModels._STRING_LIST_ADAPTER.validate_python(oc_val)
-            except ValidationError:
-                return [str(oc_val)]
+            return raw.get("objectClass", [])
 
         @staticmethod
         def normalize_attributes(
@@ -474,7 +430,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             entries: Sequence[FlextLdapModels.Ldif.Entry],
         ) -> Sequence[FlextDbtLdapModels.DbtLdap.MembershipFact]:
             """Transform LDAP entries to membership facts."""
-            self.logger.info(
+            logger.info(
                 f"Transforming {len(entries)} LDAP entries to membership facts",
             )
             membership_facts: MutableSequence[
@@ -490,20 +446,12 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         membership_facts.extend(
                             self._extract_user_memberships(entry),
                         )
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ):
-                    self.logger.exception(
+                except SAFE_EXCEPTIONS:
+                    logger.exception(
                         "Failed to transform memberships for entry: "
                         f"{str(entry.dn) if entry.dn is not None else ''}",
                     )
-            self.logger.info(f"Transformed {len(membership_facts)} membership facts")
+            logger.info(f"Transformed {len(membership_facts)} membership facts")
             return membership_facts
 
         def transform_users(
@@ -528,7 +476,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             transform_label: str,
             failure_label: str,
         ) -> Sequence[TDimension]:
-            self.logger.info(
+            logger.info(
                 f"Transforming {len(entries)} LDAP entries to {transform_label}",
             )
             dimensions: MutableSequence[TDimension] = []
@@ -537,22 +485,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     continue
                 try:
                     dimensions.append(build_dimension(entry))
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ):
+                except SAFE_EXCEPTIONS:
                     entry_dn = str(entry.dn) if entry.dn is not None else ""
-                    self.logger.exception(
+                    logger.exception(
                         "Failed to transform %s: %s",
                         failure_label,
                         entry_dn,
                     )
-            self.logger.info(f"Transformed {len(dimensions)} {transform_label}")
+            logger.info(f"Transformed {len(dimensions)} {transform_label}")
             return dimensions
 
         def _extract_group_memberships(
@@ -594,30 +534,23 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 )
             return memberships
 
-        def _is_group_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
-            """Check if entry is a group entry."""
-            object_classes = self._get_object_classes(entry)
-            group_classes = [
-                "group",
-                "groupOfNames",
-                "groupOfUniqueNames",
-                "posixGroup",
-            ]
-            return any(cls in object_classes for cls in group_classes)
+        @staticmethod
+        def _is_group_entry(entry: FlextLdapModels.Ldif.Entry) -> bool:
+            """Check if entry is a group entry using canonical schema mapping."""
+            object_classes = FlextDbtLdapModels.DbtLdap.get_object_classes(entry)
+            return any(
+                cls in object_classes
+                for cls in c.DbtLdap.LdapSchemaMapping.GROUPS_CLASSES
+            )
 
-        def _is_user_entry(self, entry: FlextLdapModels.Ldif.Entry) -> bool:
-            """Check if entry is a user entry."""
-            object_classes = self._get_object_classes(entry)
-            user_classes = [
-                "person",
-                "user",
-                "inetOrgPerson",
-                "organizationalPerson",
-            ]
-            return any(cls in object_classes for cls in user_classes)
-
-        def _post_init_log(self) -> None:
-            self.logger.info("Initialized LDAP DBT transformer")
+        @staticmethod
+        def _is_user_entry(entry: FlextLdapModels.Ldif.Entry) -> bool:
+            """Check if entry is a user entry using canonical schema mapping."""
+            object_classes = FlextDbtLdapModels.DbtLdap.get_object_classes(entry)
+            return any(
+                cls in object_classes
+                for cls in c.DbtLdap.LdapSchemaMapping.USERS_CLASSES
+            )
 
 
 # Short aliases

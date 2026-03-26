@@ -357,7 +357,9 @@ class MockLdapDbtAdapter:
     def _is_ldap_attribute_map(
         value: t.NormalizedValue,
     ) -> TypeIs[Mapping[str, str | t.StrSequence | None]]:
-        adapter = TypeAdapter(Mapping[str, str | t.StrSequence | None])
+        adapter: TypeAdapter[Mapping[str, str | t.StrSequence | None]] = TypeAdapter(
+            Mapping[str, str | t.StrSequence | None]
+        )
         try:
             _ = adapter.validate_python(value)
             return True

@@ -15,8 +15,6 @@ from collections.abc import Mapping
 from flext_ldap import FlextLdapTypes
 from flext_meltano import FlextMeltanoTypes
 
-from flext_dbt_ldap.constants import FlextDbtLdapConstants
-
 
 class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     """DBT LDAP-specific type definitions extending FlextTypes.
@@ -38,12 +36,6 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
                 str, str | FlextMeltanoTypes.StrSequence | bool
             ]
             "Data validation configuration contract."
-
-        class Project:
-            """DBT LDAP-specific project types."""
-
-            type DbtLdapProjectType = FlextDbtLdapConstants.DbtLdap.DbtLdapProjectType
-            "DBT LDAP project type literal."
 
 
 t = FlextDbtLdapTypes

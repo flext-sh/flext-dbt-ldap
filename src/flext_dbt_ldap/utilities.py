@@ -7,24 +7,18 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
-from enum import StrEnum
 from pathlib import Path
 
-from flext_core import FlextContainer, r
+from flext_core import r
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
-from pydantic import BeforeValidator
 
 from flext_dbt_ldap import c, m, t
+from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
     """Unified DBT LDAP utilities service extending u."""
-
-    def __init__(self) -> None:
-        """Initialize FlextDbtLdapUtilities service."""
-        super().__init__()
-        self._container = FlextContainer.get_global()
 
     def execute(self) -> r[m.DbtLdap.ServiceStatus]:
         """Execute the main DBT LDAP service operation."""
@@ -70,15 +64,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     tags=["ldap", "transformation"],
                 )
                 return r[m.DbtLdap.DbtProjectConfig].ok(project_config)
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
+            except SAFE_EXCEPTIONS as e:
                 return r[m.DbtLdap.DbtProjectConfig].fail(
                     f"DBT project config creation failed: {e}",
                 )
@@ -92,15 +78,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             try:
                 _ = profile_name
                 return r[m.DbtLdap.DbtProfileConfig].ok(connection_config)
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
+            except SAFE_EXCEPTIONS as e:
                 return r[m.DbtLdap.DbtProfileConfig].fail(
                     f"DBT profiles generation failed: {e}",
                 )
@@ -124,36 +102,10 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 return r[m.DbtLdap.ProjectStructureValidation].ok(
                     m.DbtLdap.ProjectStructureValidation(results=results),
                 )
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
+            except SAFE_EXCEPTIONS as e:
                 return r[m.DbtLdap.ProjectStructureValidation].fail(
                     f"DBT project structure validation failed: {e}",
                 )
-
-        class Collection:
-            """Collection helper namespace."""
-
-        class Args:
-            """Argument helper namespace."""
-
-        class Model:
-            """Model helper namespace."""
-
-        class Pydantic:
-            """Annotated type factories."""
-
-            @staticmethod
-            def coerced_enum[E: StrEnum](enum_cls: type[E]) -> type[E]:
-                """Create coerced enum type (Annotated wrapper)."""
-                _ = BeforeValidator(u.coerce_validator(enum_cls))
-                return enum_cls
 
         class LdapDataTransformation:
             """LDAP data transformation utilities."""
@@ -189,15 +141,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         "    and objectclass is not null\n",
                     ])
                     return r[str].ok(model_sql)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[str].fail(
                         f"LDAP transformation model creation failed: {e}"
                     )
@@ -229,15 +173,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         models=[model_entry],
                     )
                     return r[m.DbtLdap.DbtTestConfig].ok(tests)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[m.DbtLdap.DbtTestConfig].fail(
                         f"LDAP data tests generation failed: {e}",
                     )
@@ -279,15 +215,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     }
                     source_schema = m.DbtLdap.DbtSourceSchema(sources=[source_entry])
                     return r[m.DbtLdap.DbtSourceSchema].ok(source_schema)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[m.DbtLdap.DbtSourceSchema].fail(
                         f"LDAP source schema generation failed: {e}",
                     )
@@ -320,15 +248,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         "{% endmacro %}",
                     ])
                     return r[str].ok(macro_sql)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"LDAP attribute macro creation failed: {e}")
 
             @staticmethod
@@ -339,15 +259,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 try:
                     macro_sql = f"-- Macro to normalize LDAP timestamps to standard format\n{{% macro {macro_name}(timestamp_column) %}}\n case\n when {{{{{{timestamp_column}}}}}} is null then null\n when length({{{{{{timestamp_column}}}}}}) = 14 then\n -- LDAP GeneralizedTime format: YYYYMMDDHHMMSSZ\n to_timestamp(\n substring({{{{{{timestamp_column}}}}}} from 1 for 14),\n 'YYYYMMDDHH24MISS'\n )\n else\n -- Try to parse as standard timestamp\n try_cast({{{{{{timestamp_column}}}}}} as timestamp)\n end\n{{% endmacro %}}"
                     return r[str].ok(macro_sql)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"LDAP normalization macro creation failed: {e}")
 
             @staticmethod
@@ -356,15 +268,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                 try:
                     macro_sql = f"""-- Macro to parse LDAP Distinguished Name (DN) components\n{{% macro {macro_name}(dn_column, component='cn') %}}\n    case\n        when {{{{{{dn_column}}}}}} is null then null\n        when position('{{{{{{component}}}}}}=' in lower({{{{{{dn_column}}}}}}) = 0 then null\n        else trim(both '"' from\n            split_part(\n                split_part(\n                    lower({{{{{{dn_column}}}}}}),\n                    '{{{{{{component}}}}}}=',\n                    2\n                ),\n                ',',\n                1\n            )\n        )\n    end\n{{% endmacro %}}"""
                     return r[str].ok(macro_sql)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"LDAP parsing macro creation failed: {e}")
 
         class SchemaGeneration:
@@ -415,15 +319,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         ],
                     )
                     return r[m.DbtLdap.DbtModelDefinition].ok(group_schema)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[m.DbtLdap.DbtModelDefinition].fail(
                         f"Group schema generation failed: {e}",
                     )
@@ -484,15 +380,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         ],
                     )
                     return r[m.DbtLdap.DbtModelDefinition].ok(user_schema)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[m.DbtLdap.DbtModelDefinition].fail(
                         f"User schema generation failed: {e}",
                     )
@@ -536,15 +424,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                         recommendations=recommendations,
                     )
                     return r[m.DbtLdap.PerformanceAnalysis].ok(analysis)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[m.DbtLdap.PerformanceAnalysis].fail(
                         f"Performance analysis failed: {e}",
                     )
@@ -568,15 +448,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                             "where 1=1\n    -- Apply filters early for performance",
                         )
                     return r[str].ok(optimized_query)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Query optimization failed: {e}")
 
 

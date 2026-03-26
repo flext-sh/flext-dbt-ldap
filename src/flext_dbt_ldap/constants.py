@@ -103,87 +103,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             PERFORMANCE_MEMORY_USAGE_THRESHOLD: Final[float] = 1024.0
             PERFORMANCE_ROWS_PROCESSED_THRESHOLD: Final[int] = 100000
 
-        class DbtLogging:
-            """DBT LDAP-specific logging constants."""
-
-            DEFAULT_LEVEL: Final[str] = FlextMeltanoConstants.DEFAULT_LEVEL
-            AUDIT_LOG_LEVEL: Final[str] = FlextMeltanoConstants.LogLevel.INFO
-            LOG_DBT_OPERATIONS: Final[bool] = True
-            LOG_DBT_MODELS: Final[bool] = True
-            LOG_DBT_TESTS: Final[bool] = True
-            LOG_DBT_SNAPSHOTS: Final[bool] = True
-            LOG_DBT_SEEDS: Final[bool] = True
-            LOG_DBT_MACROS: Final[bool] = True
-            LOG_DBT_HOOKS: Final[bool] = True
-            LOG_DBT_SOURCES: Final[bool] = True
-            LOG_DBT_EXPOSURES: Final[bool] = True
-            LOG_DBT_METRICS: Final[bool] = True
-            LOG_DBT_EXECUTION: Final[bool] = True
-            LOG_DBT_SQL: Final[bool] = False
-            LOG_DBT_RESULTS: Final[bool] = True
-            LOG_DBT_ERRORS: Final[bool] = True
-            LOG_DBT_WARNINGS: Final[bool] = True
-            LOG_DBT_PERFORMANCE: Final[bool] = True
-            LOG_DBT_TIMING: Final[bool] = True
-            LOG_DBT_MEMORY: Final[bool] = False
-            LOG_DBT_THROUGHPUT: Final[bool] = True
-            LOG_LDAP_INTEGRATION: Final[bool] = True
-            LOG_LDAP_CONNECTIONS: Final[bool] = True
-            LOG_LDAP_QUERIES: Final[bool] = False
-            LOG_LDAP_RESULTS: Final[bool] = True
-            LOG_LDAP_ERRORS: Final[bool] = True
-            LOG_LDAP_PERFORMANCE: Final[bool] = True
-            LOG_LDAP_TIMING: Final[bool] = True
-            LOG_LDAP_MEMORY: Final[bool] = False
-            LOG_LDAP_THROUGHPUT: Final[bool] = True
-            LOG_TRANSFORMATION_OPERATIONS: Final[bool] = True
-            LOG_TRANSFORMATION_SQL: Final[bool] = False
-            LOG_TRANSFORMATION_RESULTS: Final[bool] = True
-            LOG_TRANSFORMATION_ERRORS: Final[bool] = True
-            LOG_TRANSFORMATION_WARNINGS: Final[bool] = True
-            LOG_TRANSFORMATION_PERFORMANCE: Final[bool] = True
-            LOG_TRANSFORMATION_TIMING: Final[bool] = True
-            LOG_TRANSFORMATION_MEMORY: Final[bool] = False
-            LOG_TRANSFORMATION_THROUGHPUT: Final[bool] = True
-            LOG_DATA_QUALITY: Final[bool] = True
-            LOG_DATA_QUALITY_CHECKS: Final[bool] = True
-            LOG_DATA_QUALITY_ERRORS: Final[bool] = True
-            LOG_DATA_QUALITY_WARNINGS: Final[bool] = True
-            LOG_DATA_QUALITY_METRICS: Final[bool] = True
-            LOG_DATA_QUALITY_TIMING: Final[bool] = True
-            LOG_DATA_QUALITY_MEMORY: Final[bool] = False
-            LOG_DATA_QUALITY_THROUGHPUT: Final[bool] = True
-            LOG_SCHEMA_MAPPING: Final[bool] = True
-            LOG_ATTRIBUTE_MAPPING: Final[bool] = True
-            LOG_SCHEMA_VALIDATION: Final[bool] = True
-            LOG_SCHEMA_ERRORS: Final[bool] = True
-            LOG_SCHEMA_WARNINGS: Final[bool] = True
-            LOG_SCHEMA_PERFORMANCE: Final[bool] = True
-            LOG_SCHEMA_TIMING: Final[bool] = True
-            LOG_SCHEMA_MEMORY: Final[bool] = False
-            LOG_SCHEMA_THROUGHPUT: Final[bool] = True
-            TRACK_DBT_LDAP_PERFORMANCE: Final[bool] = True
-            DBT_LDAP_PERFORMANCE_THRESHOLD_WARNING: Final[float] = 1000.0
-            DBT_LDAP_PERFORMANCE_THRESHOLD_CRITICAL: Final[float] = 5000.0
-            INCLUDE_DBT_INFO_IN_LOGS: Final[bool] = True
-            INCLUDE_LDAP_INFO_IN_LOGS: Final[bool] = True
-            INCLUDE_TRANSFORMATION_INFO_IN_LOGS: Final[bool] = True
-            INCLUDE_DATA_QUALITY_INFO_IN_LOGS: Final[bool] = True
-            INCLUDE_SCHEMA_INFO_IN_LOGS: Final[bool] = True
-            INCLUDE_TIMING_IN_LOGS: Final[bool] = True
-            INCLUDE_MEMORY_IN_LOGS: Final[bool] = False
-            INCLUDE_THROUGHPUT_IN_LOGS: Final[bool] = True
-            MASK_SENSITIVE_DATA: Final[bool] = True
-            MASK_CREDENTIALS: Final[bool] = True
-            MASK_CONNECTION_STRINGS: Final[bool] = True
-            MASK_API_KEYS: Final[bool] = True
-            MASK_LDAP_PASSWORDS: Final[bool] = True
-            MASK_LDAP_DNS: Final[bool] = False
-            USE_STANDARD_TEMPLATES: Final[bool] = True
-            CUSTOM_LOG_FORMAT: Final[str | None] = None
-            ENABLE_AUDIT_LOGGING: Final[bool] = True
-            AUDIT_LOG_FILE: Final[str] = "flext_dbt_ldap_audit.log"
-
         @unique
         class LdapOperations(StrEnum):
             """LDAP operation types.
@@ -215,26 +134,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             SEED = "seed"
             SNAPSHOT = "snapshot"
             DOCS = "docs"
-
-        @unique
-        class DbtLdapProjectType(StrEnum):
-            """Project-type identifiers for dbt LDAP packages."""
-
-            LIBRARY = "library"
-            APPLICATION = "application"
-            SERVICE = "service"
-            DBT_LDAP = "dbt-ldap"
-            LDAP_TRANSFORM = "ldap-transform"
-            DIRECTORY_ANALYTICS = "directory-analytics"
-            LDAP_DBT_MODELS = "ldap-dbt-models"
-            DBT_LDAP_PROJECT = "dbt-ldap-project"
-            LDAP_DIMENSIONAL = "ldap-dimensional"
-            DIRECTORY_WAREHOUSE = "directory-warehouse"
-            LDAP_ETL = "ldap-etl"
-            DBT_LDAP_PIPELINE = "dbt-ldap-pipeline"
-            LDAP_ANALYTICS = "ldap-analytics"
-            DIRECTORY_DBT = "directory-dbt"
-            LDAP_DATA_WAREHOUSE = "ldap-data-warehouse"
 
 
 c = FlextDbtLdapConstants

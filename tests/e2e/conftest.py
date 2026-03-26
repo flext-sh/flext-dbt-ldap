@@ -18,7 +18,7 @@ import pytest
 from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import tk
 
-from tests import t
+from tests import p, t
 
 psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
 sql: ModuleType = psycopg.sql
@@ -85,7 +85,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
 
 
 @pytest.fixture
-def db_connection(__postgres_container: None, /) -> Generator[psycopg.Connection]:
+def db_connection(__postgres_container: None, /) -> Generator[p.DbConnection]:
     """Get database connection for testing."""
     conn = psycopg.connect(
         host="localhost",
@@ -138,7 +138,7 @@ def run_dbt_command(
 
 
 def query_database(
-    conn: psycopg.Connection,
+    conn: p.DbConnection,
     query: LiteralString,
 ) -> Sequence[tuple[t.NormalizedValue, ...]]:
     """Execute query and return results."""
@@ -148,7 +148,7 @@ def query_database(
         return list(result)
 
 
-def table_exists(conn: psycopg.Connection, schema: str, table: str) -> bool:
+def table_exists(conn: p.DbConnection, schema: str, table: str) -> bool:
     """Check if table exists in database."""
     with conn.cursor() as cur:
         _ = cur.execute(
@@ -161,7 +161,7 @@ def table_exists(conn: psycopg.Connection, schema: str, table: str) -> bool:
         return bool(result[0]) if result else False
 
 
-def count_rows(conn: psycopg.Connection, schema: str, table: str) -> int:
+def count_rows(conn: p.DbConnection, schema: str, table: str) -> int:
     """Count rows in table."""
     with conn.cursor() as cur:
         _ = cur.execute(
@@ -171,11 +171,11 @@ def count_rows(conn: psycopg.Connection, schema: str, table: str) -> int:
             ),
         )
         result = cur.fetchone()
-        return int(result[0]) if result else 0
+        return int(str(result[0])) if result else 0
 
 
 def get_column_names(
-    conn: psycopg.Connection,
+    conn: p.DbConnection,
     schema: str,
     table: str,
 ) -> t.StrSequence:
@@ -187,4 +187,4 @@ def get_column_names(
             ),
             (schema, table),
         )
-        return [row[0] for row in cur.fetchall()]
+        return [str(row[0]) for row in cur.fetchall()]

@@ -36,6 +36,7 @@ if TYPE_CHECKING:
     )
     from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
     from flext_dbt_ldap.dbt_exceptions import (
+        SAFE_EXCEPTIONS,
         FlextDbtLdapAuthenticationError,
         FlextDbtLdapConnectionError,
         FlextDbtLdapError,
@@ -48,11 +49,7 @@ if TYPE_CHECKING:
         FlextDbtLdapValidationError,
     )
     from flext_dbt_ldap.dbt_services import FlextDbtLdapService
-    from flext_dbt_ldap.ldap_integration import (
-        FlextDbtLdapIntegration,
-        process_ldap_entries_for_dbt,
-        validate_ldap_data_quality,
-    )
+    from flext_dbt_ldap.ldap_integration import FlextDbtLdapIntegration
     from flext_dbt_ldap.macros import FlextDbtLdapMacros
     from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
     from flext_dbt_ldap.protocols import (
@@ -116,6 +113,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "flext_dbt_ldap.dbt_exceptions",
         "FlextDbtLdapValidationError",
     ],
+    "SAFE_EXCEPTIONS": ["flext_dbt_ldap.dbt_exceptions", "SAFE_EXCEPTIONS"],
     "__all__": ["flext_dbt_ldap.__version__", "__all__"],
     "__author__": ["flext_dbt_ldap.__version__", "__author__"],
     "__author_email__": ["flext_dbt_ldap.__version__", "__author_email__"],
@@ -132,22 +130,15 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "logger": ["flext_dbt_ldap.settings", "logger"],
     "m": ["flext_dbt_ldap.models", "FlextDbtLdapModels"],
     "p": ["flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"],
-    "process_ldap_entries_for_dbt": [
-        "flext_dbt_ldap.ldap_integration",
-        "process_ldap_entries_for_dbt",
-    ],
     "r": ["flext_ldap", "r"],
     "s": ["flext_ldap", "s"],
     "t": ["flext_dbt_ldap.typings", "FlextDbtLdapTypes"],
     "u": ["flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"],
-    "validate_ldap_data_quality": [
-        "flext_dbt_ldap.ldap_integration",
-        "validate_ldap_data_quality",
-    ],
     "x": ["flext_ldap", "x"],
 }
 
 __all__ = [
+    "SAFE_EXCEPTIONS",
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
@@ -185,12 +176,10 @@ __all__ = [
     "logger",
     "m",
     "p",
-    "process_ldap_entries_for_dbt",
     "r",
     "s",
     "t",
     "u",
-    "validate_ldap_data_quality",
     "x",
 ]
 

@@ -8,60 +8,41 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping, Sequence
-from pathlib import Path
 
 from flext_core import FlextLogger, r
 from flext_ldap import (
-    FlextLdapConnection,
     FlextLdapModels,
-    FlextLdapOperations,
     FlextLdapSettings,
     ldap,
 )
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap import c, m, t
+from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = FlextLogger(__name__)
 
 
 class FlextDbtLdapClient:
-    """DBT client for LDAP data transformations.
+    """LDAP extraction and DBT transformation mixin.
 
-    Provides unified interface for LDAP data extraction, validation,
-    and DBT transformation operations.
+    Mixed into FlextDbtLdap via MRO. State set by facade __init__.
     """
 
-    def __init__(
-        self,
-        config: FlextDbtLdapSettings | None = None,
-        *,
-        ldap_api: ldap,
-    ) -> None:
-        """Initialize DBT LDAP client.
+    _dbt_ldap_config: FlextDbtLdapSettings
+    _ldap_api: ldap
+    _dbt_manager: FlextMeltanoDbtService | None
 
-        Args:
-        config: Configuration for LDAP and DBT operations
-        ldap_api: Injected ldap instance (mandatory)
-
-        """
-        super().__init__()
-        self.config: FlextDbtLdapSettings = (
-            config if config is not None else FlextDbtLdapSettings.get_global()
-        )
-        self._ldap_api: ldap = ldap_api
-        self._dbt_manager: FlextMeltanoDbtService | None = None
-        logger.info(
-            "Initialized DBT LDAP client",
-            config=self.config.model_dump_json(),
-        )
+    @property
+    def config(self) -> FlextDbtLdapSettings:
+        """Settings — overridden by facade via FlextService."""
+        return self._dbt_ldap_config
 
     @property
     def dbt_manager(self) -> FlextMeltanoDbtService:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
-            Path(self.config.dbt_project_dir) if self.config.dbt_project_dir else None
             self._dbt_manager = FlextMeltanoDbtService()
         return self._dbt_manager
 
@@ -85,9 +66,7 @@ class FlextDbtLdapClient:
                 "bind_password": ldap_bind_password or "",
             },
         )
-        connection = FlextLdapConnection(config=ldap_settings)
-        operations = FlextLdapOperations(connection=connection)
-        return ldap(connection=connection, operations=operations)
+        return ldap(config_overrides=ldap_settings.model_dump())
 
     def extract_ldap_entries(
         self,
@@ -118,15 +97,7 @@ class FlextDbtLdapClient:
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
+        except SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP extraction")
             return r[Sequence[Mapping[str, t.StrSequence]]].fail(
                 f"LDAP extraction error: {e}",
@@ -194,15 +165,7 @@ class FlextDbtLdapClient:
             )
             logger.info("DBT transformation completed successfully")
             return r[m.DbtLdap.DbtRunStatus].ok(result_data)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
+        except SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during DBT transformation")
             return r[m.DbtLdap.DbtRunStatus].fail(f"DBT transformation error: {e}")
 
@@ -239,15 +202,7 @@ class FlextDbtLdapClient:
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
             return r[m.DbtLdap.ValidationMetrics].ok(metrics)
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
+        except SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP validation")
             return r[m.DbtLdap.ValidationMetrics].fail(f"LDAP validation error: {e}")
 
@@ -326,15 +281,7 @@ class FlextDbtLdapClient:
             return r[Sequence[Mapping[str, t.StrSequence]]].fail(
                 result.error or "Search returned no results",
             )
-        except (
-            ValueError,
-            TypeError,
-            KeyError,
-            AttributeError,
-            OSError,
-            RuntimeError,
-            ImportError,
-        ) as e:
+        except SAFE_EXCEPTIONS as e:
             return r[Sequence[Mapping[str, t.StrSequence]]].fail(
                 f"LDAP search failed: {e}",
             )
