@@ -32,6 +32,7 @@ if TYPE_CHECKING:
         psycopg,
         query_database,
         run_dbt_command,
+        sql,
         table_exists,
     )
 
@@ -49,6 +50,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "psycopg": ["tests.e2e.conftest", "psycopg"],
     "query_database": ["tests.e2e.conftest", "query_database"],
     "run_dbt_command": ["tests.e2e.conftest", "run_dbt_command"],
+    "sql": ["tests.e2e.conftest", "sql"],
     "table_exists": ["tests.e2e.conftest", "table_exists"],
 }
 
@@ -66,6 +68,7 @@ __all__ = [
     "psycopg",
     "query_database",
     "run_dbt_command",
+    "sql",
     "table_exists",
 ]
 

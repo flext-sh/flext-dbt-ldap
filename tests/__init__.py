@@ -53,6 +53,7 @@ if TYPE_CHECKING:
         psycopg,
         query_database,
         run_dbt_command,
+        sql,
         table_exists,
     )
     from tests.models import FlextDbtLdapTestModels, FlextDbtLdapTestModels as m
@@ -122,6 +123,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "set_test_environment": ["tests.conftest", "set_test_environment"],
     "shared_ldap_config": ["tests.conftest", "shared_ldap_config"],
     "shared_ldap_container": ["tests.conftest", "shared_ldap_container"],
+    "sql": ["tests.e2e.conftest", "sql"],
     "t": ["tests.typings", "FlextDbtLdapTestTypes"],
     "table_exists": ["tests.e2e.conftest", "table_exists"],
     "test_dunder_alignment": ["tests.unit.test_version", "test_dunder_alignment"],
@@ -193,6 +195,7 @@ __all__ = [
     "set_test_environment",
     "shared_ldap_config",
     "shared_ldap_container",
+    "sql",
     "t",
     "table_exists",
     "test_dunder_alignment",
