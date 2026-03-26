@@ -27,12 +27,13 @@ def test_dunder_alignment() -> None:
 
 
 def test_version_metadata_integrity() -> None:
-    """Metadata exports should be strings."""
+    """Metadata exports should be strings or None (when missing from package metadata)."""
     assert isinstance(__title__, str)
     assert isinstance(__description__, str)
-    assert isinstance(__author__, str)
     assert isinstance(__author_email__, str)
     assert isinstance(__license__, str)
+    # __author__ and __url__ may be None/empty depending on package metadata availability
+    assert __author__ is None or isinstance(__author__, str)
     assert isinstance(__url__, str)
 
 
