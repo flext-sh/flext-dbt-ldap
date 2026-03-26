@@ -12,11 +12,11 @@ from pathlib import Path
 
 from flext_core import FlextLogger, r
 from flext_ldap import (
-    FlextLdap,
     FlextLdapConnection,
     FlextLdapModels,
     FlextLdapOperations,
     FlextLdapSettings,
+    ldap,
 )
 from flext_meltano import FlextMeltanoDbtService
 
@@ -37,20 +37,20 @@ class FlextDbtLdapClient:
         self,
         config: FlextDbtLdapSettings | None = None,
         *,
-        ldap_api: FlextLdap,
+        ldap_api: ldap,
     ) -> None:
         """Initialize DBT LDAP client.
 
         Args:
         config: Configuration for LDAP and DBT operations
-        ldap_api: Injected FlextLdap instance (mandatory)
+        ldap_api: Injected ldap instance (mandatory)
 
         """
         super().__init__()
         self.config: FlextDbtLdapSettings = (
             config if config is not None else FlextDbtLdapSettings.get_global()
         )
-        self._ldap_api: FlextLdap = ldap_api
+        self._ldap_api: ldap = ldap_api
         self._dbt_manager: FlextMeltanoDbtService | None = None
         logger.info(
             "Initialized DBT LDAP client",
@@ -66,8 +66,8 @@ class FlextDbtLdapClient:
         return self._dbt_manager
 
     @staticmethod
-    def create_ldap_api(config: FlextDbtLdapSettings) -> FlextLdap:
-        """Create a FlextLdap API instance from DBT LDAP settings."""
+    def create_ldap_api(config: FlextDbtLdapSettings) -> ldap:
+        """Create a ldap API instance from DBT LDAP settings."""
         ldap_bind_dn = (
             config.ldap_bind_dn.get_secret_value() if config.ldap_bind_dn else None
         )
@@ -87,7 +87,7 @@ class FlextDbtLdapClient:
         )
         connection = FlextLdapConnection(config=ldap_settings)
         operations = FlextLdapOperations(connection=connection)
-        return FlextLdap(connection=connection, operations=operations)
+        return ldap(connection=connection, operations=operations)
 
     def extract_ldap_entries(
         self,
