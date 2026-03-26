@@ -69,26 +69,53 @@ if TYPE_CHECKING:
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextDbtLdap": ["flext_dbt_ldap.simple_api", "FlextDbtLdap"],
-    "FlextDbtLdapAuthenticationError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapAuthenticationError"],
+    "FlextDbtLdapAuthenticationError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapAuthenticationError",
+    ],
     "FlextDbtLdapClient": ["flext_dbt_ldap.dbt_client", "FlextDbtLdapClient"],
-    "FlextDbtLdapConnectionError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapConnectionError"],
+    "FlextDbtLdapConnectionError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapConnectionError",
+    ],
     "FlextDbtLdapConstants": ["flext_dbt_ldap.constants", "FlextDbtLdapConstants"],
     "FlextDbtLdapError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapError"],
-    "FlextDbtLdapIntegration": ["flext_dbt_ldap.ldap_integration", "FlextDbtLdapIntegration"],
-    "FlextDbtLdapMacroError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapMacroError"],
+    "FlextDbtLdapIntegration": [
+        "flext_dbt_ldap.ldap_integration",
+        "FlextDbtLdapIntegration",
+    ],
+    "FlextDbtLdapMacroError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapMacroError",
+    ],
     "FlextDbtLdapMacros": ["flext_dbt_ldap.macros", "FlextDbtLdapMacros"],
-    "FlextDbtLdapModelError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapModelError"],
+    "FlextDbtLdapModelError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapModelError",
+    ],
     "FlextDbtLdapModels": ["flext_dbt_ldap.models", "FlextDbtLdapModels"],
-    "FlextDbtLdapProcessingError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapProcessingError"],
+    "FlextDbtLdapProcessingError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapProcessingError",
+    ],
     "FlextDbtLdapProtocols": ["flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"],
     "FlextDbtLdapService": ["flext_dbt_ldap.dbt_services", "FlextDbtLdapService"],
     "FlextDbtLdapSettings": ["flext_dbt_ldap.settings", "FlextDbtLdapSettings"],
-    "FlextDbtLdapSettingsurationError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapSettingsurationError"],
+    "FlextDbtLdapSettingsurationError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapSettingsurationError",
+    ],
     "FlextDbtLdapTestError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapTestError"],
-    "FlextDbtLdapTimeoutError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapTimeoutError"],
+    "FlextDbtLdapTimeoutError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapTimeoutError",
+    ],
     "FlextDbtLdapTypes": ["flext_dbt_ldap.typings", "FlextDbtLdapTypes"],
     "FlextDbtLdapUtilities": ["flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"],
-    "FlextDbtLdapValidationError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapValidationError"],
+    "FlextDbtLdapValidationError": [
+        "flext_dbt_ldap.dbt_exceptions",
+        "FlextDbtLdapValidationError",
+    ],
     "__all__": ["flext_dbt_ldap.__version__", "__all__"],
     "__author__": ["flext_dbt_ldap.__version__", "__author__"],
     "__author_email__": ["flext_dbt_ldap.__version__", "__author_email__"],
@@ -105,12 +132,18 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "logger": ["flext_dbt_ldap.settings", "logger"],
     "m": ["flext_dbt_ldap.models", "FlextDbtLdapModels"],
     "p": ["flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"],
-    "process_ldap_entries_for_dbt": ["flext_dbt_ldap.ldap_integration", "process_ldap_entries_for_dbt"],
+    "process_ldap_entries_for_dbt": [
+        "flext_dbt_ldap.ldap_integration",
+        "process_ldap_entries_for_dbt",
+    ],
     "r": ["flext_ldap", "r"],
     "s": ["flext_ldap", "s"],
     "t": ["flext_dbt_ldap.typings", "FlextDbtLdapTypes"],
     "u": ["flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"],
-    "validate_ldap_data_quality": ["flext_dbt_ldap.ldap_integration", "validate_ldap_data_quality"],
+    "validate_ldap_data_quality": [
+        "flext_dbt_ldap.ldap_integration",
+        "validate_ldap_data_quality",
+    ],
     "x": ["flext_ldap", "x"],
 }
 
