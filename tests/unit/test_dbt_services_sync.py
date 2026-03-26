@@ -30,17 +30,18 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
     service._dbt_ldap_config = FlextDbtLdapSettings.model_validate({
         "ldap_base_dn": "dc=example,dc=com",
     })
-    service.run_full_pipeline = Mock(
+    mock_pipeline = Mock(
         return_value=r[m.DbtLdap.DbtLdapPipelineResult].ok(
             m.DbtLdap.DbtLdapPipelineResult(extracted_entries=1),
         ),
     )
+    object.__setattr__(service, "run_full_pipeline", mock_pipeline)
     service._sync_state_file = state_file
     service._sync_bookmarks = service._load_sync_state()
     monkeypatch.setattr(service, "_bookmark_now", lambda: "20260101000000Z")
     result = service.sync_users_to_warehouse(incremental=True)
     assert result.is_success
-    call_kwargs = service.run_full_pipeline.call_args.kwargs
+    call_kwargs = mock_pipeline.call_args.kwargs
     assert (
         call_kwargs["search_filter"]
         == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"

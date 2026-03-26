@@ -24,7 +24,10 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     """
 
     class DbtLdap:
-        """DBT LDAP settings type contracts."""
+        """DBT LDAP domain type contracts."""
+
+        type LdapEntryMapping = Mapping[str, FlextMeltanoTypes.StrSequence]
+        "Single LDAP entry: attribute name → list of string values."
 
         type SettingsDict = Mapping[str, bool | float | str | None]
         "DBT LDAP logging settings configuration contract."

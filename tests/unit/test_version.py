@@ -43,30 +43,28 @@ def test_version_properties() -> None:
 
 
 def test_incremental_users_sync_applies_bookmark_filter() -> None:
-    client = Mock()
-    client.run_full_pipeline.return_value = Mock(is_success=True, error=None)
     service = object.__new__(FlextDbtLdapService)
-    service.client = client
-    service.config = Mock(ldap_base_dn="dc=example,dc=com")
+    mock_pipeline = Mock(return_value=Mock(is_success=True, error=None))
+    object.__setattr__(service, "run_full_pipeline", mock_pipeline)
+    service._dbt_ldap_config = Mock(ldap_base_dn="dc=example,dc=com")
     service._sync_bookmarks = {"users": "20250101000000Z"}
     service._sync_state_file = Mock()
     result = service.sync_users_to_warehouse(incremental=True)
     assert result.is_success
-    called_filter = client.run_full_pipeline.call_args.kwargs["search_filter"]
+    called_filter = mock_pipeline.call_args.kwargs["search_filter"]
     assert "modifyTimestamp>=20250101000000Z" in called_filter
     assert service._sync_bookmarks["users"] != "20250101000000Z"
 
 
 def test_incremental_groups_sync_applies_bookmark_filter() -> None:
-    client = Mock()
-    client.run_full_pipeline.return_value = Mock(is_success=True, error=None)
     service = object.__new__(FlextDbtLdapService)
-    service.client = client
-    service.config = Mock(ldap_base_dn="dc=example,dc=com")
+    mock_pipeline = Mock(return_value=Mock(is_success=True, error=None))
+    object.__setattr__(service, "run_full_pipeline", mock_pipeline)
+    service._dbt_ldap_config = Mock(ldap_base_dn="dc=example,dc=com")
     service._sync_bookmarks = {"groups": "20250101000000Z"}
     service._sync_state_file = Mock()
     result = service.sync_groups_to_warehouse(incremental=True)
     assert result.is_success
-    called_filter = client.run_full_pipeline.call_args.kwargs["search_filter"]
+    called_filter = mock_pipeline.call_args.kwargs["search_filter"]
     assert "modifyTimestamp>=20250101000000Z" in called_filter
     assert service._sync_bookmarks["groups"] != "20250101000000Z"

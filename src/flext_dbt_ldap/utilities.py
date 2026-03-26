@@ -190,14 +190,15 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                             "name": attr.lower().replace("-", "_"),
                             "description": f"LDAP {attr} attribute",
                             "data_type": (
-                                "timestamp"
+                                c.DbtLdap.DataTypes.TIMESTAMP
                                 if attr.lower()
-                                in {"createtimestamp", "modifytimestamp"}
-                                else "text[]"
-                                if attr.lower() in {"memberof", "objectclass"}
-                                else "integer"
-                                if attr.lower() in {"uidnumber", "gidnumber"}
-                                else "text"
+                                in set(c.DbtLdap.DataTypes.TIMESTAMP_ATTRS)
+                                else c.DbtLdap.DataTypes.TEXT_ARRAY
+                                if attr.lower() in set(c.DbtLdap.DataTypes.ARRAY_ATTRS)
+                                else c.DbtLdap.DataTypes.INTEGER
+                                if attr.lower()
+                                in set(c.DbtLdap.DataTypes.INTEGER_ATTRS)
+                                else c.DbtLdap.DataTypes.TEXT
                             ),
                         }
                         for attr in ldap_attributes

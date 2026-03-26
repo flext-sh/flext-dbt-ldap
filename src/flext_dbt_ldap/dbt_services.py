@@ -54,7 +54,7 @@ class FlextDbtLdapService(FlextDbtLdapClient):
             if run_result.is_success:
                 return r[m.DbtLdap.DbtRunStatus].ok(
                     m.DbtLdap.DbtRunStatus(
-                        status="completed", models_run=model_list or []
+                        status=c.DbtLdap.Statuses.COMPLETED, models_run=model_list or []
                     ),
                 )
             return r[m.DbtLdap.DbtRunStatus].fail(
@@ -99,7 +99,7 @@ class FlextDbtLdapService(FlextDbtLdapClient):
         """Synchronize LDAP groups to data warehouse."""
         try:
             bookmark = self._bookmark_now()
-            group_filter = "(objectClass=group)"
+            group_filter = c.DbtLdap.Filters.GROUP
             if self._should_run_incremental(
                 "groups",
                 requested_incremental=incremental,
@@ -112,8 +112,11 @@ class FlextDbtLdapService(FlextDbtLdapClient):
             result = self.run_full_pipeline(
                 search_base=search_base,
                 search_filter=group_filter,
-                attributes=["cn", "description", "member", "groupType"],
-                model_names=["stg_groups", "dim_groups"],
+                attributes=c.DbtLdap.SearchAttributes.GROUP,
+                model_names=[
+                    c.DbtLdap.DbtModels.STG_GROUPS,
+                    c.DbtLdap.DbtModels.DIM_GROUPS,
+                ],
             )
             if result.is_success:
                 self._update_bookmark("groups", bookmark, successful=True)
@@ -129,9 +132,9 @@ class FlextDbtLdapService(FlextDbtLdapClient):
         try:
             return self.run_full_pipeline(
                 search_base=search_base,
-                search_filter="(|(objectClass=person)(objectClass=group))",
-                attributes=["cn", "member", "memberOf", "uniqueMember"],
-                model_names=["fact_memberships"],
+                search_filter=c.DbtLdap.Filters.MEMBERSHIP,
+                attributes=c.DbtLdap.SearchAttributes.MEMBERSHIP,
+                model_names=[c.DbtLdap.DbtModels.FACT_MEMBERSHIPS],
             )
         except SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
@@ -147,7 +150,7 @@ class FlextDbtLdapService(FlextDbtLdapClient):
         """Synchronize LDAP users to data warehouse."""
         try:
             bookmark = self._bookmark_now()
-            user_filter = "(objectClass=person)"
+            user_filter = c.DbtLdap.Filters.USER
             if self._should_run_incremental(
                 c.DbtLdap.LdapEntityTypes.USERS,
                 requested_incremental=incremental,

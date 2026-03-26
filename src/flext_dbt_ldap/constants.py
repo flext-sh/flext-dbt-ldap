@@ -79,7 +79,43 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             UNIQUE_MEMBER: Final[str] = "uniqueMember"
             SAM_ACCOUNT_NAME: Final[str] = "samaccountname"
             OBJECT_CLASS: Final[str] = "objectClass"
+            EMPLOYEE_NUMBER: Final[str] = "employeeNumber"
+            TELEPHONE_NUMBER: Final[str] = "telephoneNumber"
+            USER_ACCOUNT_CONTROL: Final[str] = "userAccountControl"
+            CREATE_TIMESTAMP: Final[str] = "createTimestamp"
+            MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
+            MEMBER_UID: Final[str] = "memberUid"
+            DN: Final[str] = "dn"
             USER_ID_ATTRIBUTES: Final[t.StrSequence] = ["uid", "cn", "samaccountname"]
+            MEMBERSHIP_ATTRIBUTES: Final[t.StrSequence] = [
+                "member",
+                "uniqueMember",
+                "memberUid",
+            ]
+
+        class Filters:
+            """LDAP search filter strings."""
+
+            DEFAULT: Final[str] = "(objectClass=*)"
+            USER: Final[str] = "(objectClass=person)"
+            GROUP: Final[str] = "(objectClass=group)"
+            MEMBERSHIP: Final[str] = "(|(objectClass=person)(objectClass=group))"
+
+        class SearchAttributes:
+            """Standard attribute sets for LDAP search operations."""
+
+            GROUP: Final[t.StrSequence] = [
+                "cn",
+                "description",
+                "member",
+                "groupType",
+            ]
+            MEMBERSHIP: Final[t.StrSequence] = [
+                "cn",
+                "member",
+                "memberOf",
+                "uniqueMember",
+            ]
 
         class DbtModels:
             """DBT model names for LDAP transformations."""
@@ -89,6 +125,32 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             STG_GROUPS: Final[str] = "stg_groups"
             DIM_GROUPS: Final[str] = "dim_groups"
             FACT_MEMBERSHIPS: Final[str] = "fact_memberships"
+
+        class DataTypes:
+            """LDAP attribute to SQL data type mappings."""
+
+            TIMESTAMP_ATTRS: Final[t.StrSequence] = [
+                "createtimestamp",
+                "modifytimestamp",
+            ]
+            ARRAY_ATTRS: Final[t.StrSequence] = ["memberof", "objectclass"]
+            INTEGER_ATTRS: Final[t.StrSequence] = ["uidnumber", "gidnumber"]
+            TIMESTAMP: Final[str] = "timestamp"
+            TEXT_ARRAY: Final[str] = "text[]"
+            INTEGER: Final[str] = "integer"
+            TEXT: Final[str] = "text"
+
+        class MembershipTypes:
+            """Membership type identifiers."""
+
+            DIRECT: Final[str] = "direct"
+
+        class Statuses:
+            """Common status string constants."""
+
+            COMPLETED: Final[str] = "completed"
+            OPERATIONAL: Final[str] = "operational"
+            PENDING: Final[str] = "pending"
 
         class DbtProcessing:
             """DBT LDAP transformation configuration."""
