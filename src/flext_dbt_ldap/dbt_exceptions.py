@@ -36,8 +36,8 @@ class FlextDbtLdapValidationError(FlextExceptions.ValidationError):
     """FlextDbtLdapValidationError - validation error."""
 
 
-class FlextDbtLdapSettingsurationError(FlextExceptions.ConfigurationError):
-    """FlextDbtLdapSettingsurationError - configuration error."""
+class FlextDbtLdapConfigurationError(FlextExceptions.ConfigurationError):
+    """FlextDbtLdapConfigurationError - configuration error."""
 
 
 class FlextDbtLdapConnectionError(FlextDbtLdapError):
@@ -142,12 +142,12 @@ class FlextDbtLdapTestError(_DbtLdapContextMixin, FlextExceptions.BaseError):
 
 __all__: t.StrSequence = [
     "FlextDbtLdapAuthenticationError",
+    "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapError",
     "FlextDbtLdapMacroError",
     "FlextDbtLdapModelError",
     "FlextDbtLdapProcessingError",
-    "FlextDbtLdapSettingsurationError",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapValidationError",

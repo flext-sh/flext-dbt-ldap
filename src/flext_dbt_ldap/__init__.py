@@ -38,12 +38,12 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.dbt_exceptions import (
         SAFE_EXCEPTIONS,
         FlextDbtLdapAuthenticationError,
+        FlextDbtLdapConfigurationError,
         FlextDbtLdapConnectionError,
         FlextDbtLdapError,
         FlextDbtLdapMacroError,
         FlextDbtLdapModelError,
         FlextDbtLdapProcessingError,
-        FlextDbtLdapSettingsurationError,
         FlextDbtLdapTestError,
         FlextDbtLdapTimeoutError,
         FlextDbtLdapValidationError,
@@ -98,9 +98,9 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextDbtLdapProtocols": ["flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"],
     "FlextDbtLdapService": ["flext_dbt_ldap.dbt_services", "FlextDbtLdapService"],
     "FlextDbtLdapSettings": ["flext_dbt_ldap.settings", "FlextDbtLdapSettings"],
-    "FlextDbtLdapSettingsurationError": [
+    "FlextDbtLdapConfigurationError": [
         "flext_dbt_ldap.dbt_exceptions",
-        "FlextDbtLdapSettingsurationError",
+        "FlextDbtLdapConfigurationError",
     ],
     "FlextDbtLdapTestError": ["flext_dbt_ldap.dbt_exceptions", "FlextDbtLdapTestError"],
     "FlextDbtLdapTimeoutError": [
@@ -142,6 +142,7 @@ __all__ = [
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClient",
+    "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapConstants",
     "FlextDbtLdapError",
@@ -154,7 +155,6 @@ __all__ = [
     "FlextDbtLdapProtocols",
     "FlextDbtLdapService",
     "FlextDbtLdapSettings",
-    "FlextDbtLdapSettingsurationError",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapTypes",
