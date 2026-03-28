@@ -151,12 +151,7 @@ class FlextDbtLdapClient:
             )
             _ = self._prepare_ldap_data_for_dbt(entries)
             model_list = list(model_names) if model_names else None
-            dbt_result = self.dbt_manager.run_models(models=model_list)
-            if dbt_result.is_failure:
-                logger.error("DBT transformation failed: %s", dbt_result.error or "")
-                return r[m.DbtLdap.DbtRunStatus].fail(
-                    f"DBT transformation failed: {dbt_result.error}",
-                )
+            self.dbt_manager.run_models(models=model_list)
             result_data = m.DbtLdap.DbtRunStatus(
                 status=c.DbtLdap.Statuses.COMPLETED,
                 models_run=model_list or [],

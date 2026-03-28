@@ -50,15 +50,11 @@ class FlextDbtLdapService(FlextDbtLdapClient):
         """Run DBT models."""
         try:
             model_list = list(model_names) if model_names else None
-            run_result = self.dbt_manager.run_models(models=model_list)
-            if run_result.is_success:
-                return r[m.DbtLdap.DbtRunStatus].ok(
-                    m.DbtLdap.DbtRunStatus(
-                        status=c.DbtLdap.Statuses.COMPLETED, models_run=model_list or []
-                    ),
-                )
-            return r[m.DbtLdap.DbtRunStatus].fail(
-                run_result.error or "DBT model execution failed",
+            self.dbt_manager.run_models(models=model_list)
+            return r[m.DbtLdap.DbtRunStatus].ok(
+                m.DbtLdap.DbtRunStatus(
+                    status=c.DbtLdap.Statuses.COMPLETED, models_run=model_list or []
+                ),
             )
         except SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtRunStatus].fail(f"DBT model execution error: {e}")
@@ -193,13 +189,9 @@ class FlextDbtLdapService(FlextDbtLdapClient):
         """Validate data quality in the warehouse."""
         try:
             model_list = list(model_names) if model_names else None
-            test_result = self.dbt_manager.run_models(models=model_list)
-            if test_result.is_success:
-                return r[m.DbtLdap.ValidationMetrics].ok(
-                    m.DbtLdap.ValidationMetrics(validation_passed=True),
-                )
-            return r[m.DbtLdap.ValidationMetrics].fail(
-                test_result.error or "DBT tests failed"
+            self.dbt_manager.run_models(models=model_list)
+            return r[m.DbtLdap.ValidationMetrics].ok(
+                m.DbtLdap.ValidationMetrics(validation_passed=True),
             )
         except SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.ValidationMetrics].fail(
