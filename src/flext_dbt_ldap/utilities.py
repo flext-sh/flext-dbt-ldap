@@ -14,7 +14,7 @@ from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 
 from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):

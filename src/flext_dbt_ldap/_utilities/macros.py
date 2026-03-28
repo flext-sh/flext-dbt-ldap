@@ -1,8 +1,9 @@
-"""FLEXT DBT LDAP Macros.
+"""FLEXT DBT LDAP Utilities — macro helpers.
+
+Absorbed from macros.py into u.DbtLdap namespace.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -12,12 +13,12 @@ from collections.abc import Sequence
 from flext_core import FlextLogger
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapMacros:
+class FlextDbtLdapUtilitiesMacros:
     """Unified DBT LDAP macros collection."""
 
     @staticmethod
@@ -44,13 +45,15 @@ class FlextDbtLdapMacros:
     @staticmethod
     def extract_group_name_from_dn(dn: str) -> str | None:
         """Extract group name (cn) from DN."""
-        return FlextDbtLdapMacros.parse_dn_component(dn, c.DbtLdap.LdapAttributes.CN)
+        return FlextDbtLdapUtilitiesMacros.parse_dn_component(
+            dn, c.DbtLdap.LdapAttributes.CN
+        )
 
     @staticmethod
     def extract_user_id_from_dn(dn: str) -> str | None:
         """Extract user ID from DN (tries uid, cn, samaccountname)."""
         for attr in c.DbtLdap.LdapAttributes.USER_ID_ATTRIBUTES:
-            user_id = FlextDbtLdapMacros.parse_dn_component(dn, attr)
+            user_id = FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, attr)
             if user_id:
                 return user_id
         return None
@@ -98,4 +101,4 @@ class FlextDbtLdapMacros:
             return None
 
 
-__all__: t.StrSequence = ["FlextDbtLdapMacros"]
+__all__: t.StrSequence = ["FlextDbtLdapUtilitiesMacros"]

@@ -13,7 +13,7 @@ from flext_dbt_ldap.__version__ import (
     __title__,
     __url__,
 )
-from flext_dbt_ldap.dbt_services import FlextDbtLdapService
+from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync as FlextDbtLdapService
 
 
 def test_dunder_alignment() -> None:

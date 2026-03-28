@@ -17,7 +17,7 @@ from flext_meltano import FlextMeltanoModels
 from pydantic import Field, model_validator
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 

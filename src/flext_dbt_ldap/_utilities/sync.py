@@ -1,10 +1,9 @@
-"""FLEXT DBT LDAP Services — sync mixin.
+"""FLEXT DBT LDAP Utilities — warehouse sync mixin.
 
-Mixed into FlextDbtLdap via MRO. Not instantiated standalone.
+Absorbed from dbt_services.py into u.DbtLdap namespace.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -17,14 +16,14 @@ from pathlib import Path
 from flext_core import FlextLogger, r
 
 from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap.dbt_client import FlextDbtLdapClient
-from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
+from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapService(FlextDbtLdapClient):
-    """Warehouse sync mixin — composed into FlextDbtLdap via MRO."""
+class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
+    """Warehouse sync mixin -- composed into FlextDbtLdap via MRO."""
 
     _sync_state_file: Path
     _sync_bookmarks: MutableMapping[str, str]
@@ -255,4 +254,4 @@ class FlextDbtLdapService(FlextDbtLdapClient):
             logger.exception("Failed to persist bookmark state")
 
 
-__all__: t.StrSequence = ["FlextDbtLdapService"]
+__all__: t.StrSequence = ["FlextDbtLdapUtilitiesSync"]

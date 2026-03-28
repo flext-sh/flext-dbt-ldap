@@ -1,8 +1,9 @@
-"""DBT client for LDAP data transformations.
+"""FLEXT DBT LDAP Utilities — LDAP extraction and DBT transformation.
+
+Absorbed from dbt_client.py into u.DbtLdap namespace.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -17,13 +18,13 @@ from flext_ldap import (
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapClient:
+class FlextDbtLdapUtilitiesClient:
     """LDAP extraction and DBT transformation mixin.
 
     Mixed into FlextDbtLdap via MRO. State set by facade __init__.
@@ -35,7 +36,7 @@ class FlextDbtLdapClient:
 
     @property
     def config(self) -> FlextDbtLdapSettings:
-        """Settings — overridden by facade via FlextService."""
+        """Settings -- overridden by facade via FlextService."""
         return self._dbt_ldap_config
 
     @property
@@ -284,4 +285,4 @@ class FlextDbtLdapClient:
             )
 
 
-__all__: t.StrSequence = ["FlextDbtLdapClient"]
+__all__: t.StrSequence = ["FlextDbtLdapUtilitiesClient"]

@@ -16,7 +16,7 @@ import pytest
 from flext_core import r
 
 from flext_dbt_ldap import m
-from flext_dbt_ldap.dbt_services import FlextDbtLdapService
+from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync as FlextDbtLdapService
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 

@@ -1,8 +1,9 @@
-"""DBT-specific wrappers that delegate to generic flext-ldap functionality.
+"""FLEXT DBT LDAP Utilities — LDAP integration for DBT.
+
+Absorbed from ldap_integration.py into u.DbtLdap namespace.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -10,12 +11,12 @@ from __future__ import annotations
 from flext_core import FlextLogger
 
 from flext_dbt_ldap import m, p, t
-from flext_dbt_ldap.dbt_exceptions import SAFE_EXCEPTIONS
+from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapIntegration:
+class FlextDbtLdapUtilitiesIntegration:
     """Unified DBT LDAP integration service."""
 
     @staticmethod
@@ -52,5 +53,5 @@ class FlextDbtLdapIntegration:
 
 
 __all__: t.StrSequence = [
-    "FlextDbtLdapIntegration",
+    "FlextDbtLdapUtilitiesIntegration",
 ]

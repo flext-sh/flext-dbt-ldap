@@ -14,12 +14,12 @@ from typing import override
 from flext_core import FlextService, r
 
 from flext_dbt_ldap import m
-from flext_dbt_ldap.dbt_services import FlextDbtLdapService
+from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 
 class FlextDbtLdap(
-    FlextDbtLdapService,
+    FlextDbtLdapUtilitiesSync,
     FlextService[FlextDbtLdapSettings],
 ):
     """Unified DBT LDAP facade — MRO-composed from service mixins.
@@ -37,7 +37,7 @@ class FlextDbtLdap(
         super().__init__()
         self._ldap_api = self.create_ldap_api(self.config)
         self._dbt_manager = None
-        # FlextDbtLdapService state
+        # Sync mixin state
         self.transformer = m.DbtLdap()
         self._sync_state_file = self._resolve_sync_state_file()
         self._sync_bookmarks = self._load_sync_state()
