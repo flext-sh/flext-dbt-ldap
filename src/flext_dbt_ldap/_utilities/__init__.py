@@ -20,11 +20,9 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
-    from flext_dbt_ldap._utilities.simple_api import FlextDbtLdap
     from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync, logger
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
-    "FlextDbtLdap": ["flext_dbt_ldap._utilities.simple_api", "FlextDbtLdap"],
     "FlextDbtLdapUtilitiesClient": [
         "flext_dbt_ldap._utilities.client",
         "FlextDbtLdapUtilitiesClient",
@@ -45,7 +43,6 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
 }
 
 __all__ = [
-    "FlextDbtLdap",
     "FlextDbtLdapUtilitiesClient",
     "FlextDbtLdapUtilitiesIntegration",
     "FlextDbtLdapUtilitiesMacros",
