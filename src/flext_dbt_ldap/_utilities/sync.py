@@ -93,7 +93,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         """Synchronize LDAP groups to data warehouse."""
         try:
             bookmark = self._bookmark_now()
-            group_filter = c.Ldap.Filters.GROUP
+            group_filter = c.DbtLdap.Filters.GROUP
             if self._should_run_incremental(
                 "groups",
                 requested_incremental=incremental,
@@ -106,7 +106,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             result = self.run_full_pipeline(
                 search_base=search_base,
                 search_filter=group_filter,
-                attributes=c.Ldap.SearchAttributes.GROUP,
+                attributes=c.DbtLdap.SearchAttributes.GROUP,
                 model_names=[
                     c.DbtLdap.DbtModels.STG_GROUPS,
                     c.DbtLdap.DbtModels.DIM_GROUPS,
@@ -126,8 +126,8 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         try:
             return self.run_full_pipeline(
                 search_base=search_base,
-                search_filter=c.Ldap.Filters.MEMBERSHIP,
-                attributes=c.Ldap.SearchAttributes.MEMBERSHIP,
+                search_filter=c.DbtLdap.Filters.MEMBERSHIP,
+                attributes=c.DbtLdap.SearchAttributes.MEMBERSHIP,
                 model_names=[c.DbtLdap.DbtModels.FACT_MEMBERSHIPS],
             )
         except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
@@ -144,26 +144,26 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         """Synchronize LDAP users to data warehouse."""
         try:
             bookmark = self._bookmark_now()
-            user_filter = c.Ldap.Filters.USER
+            user_filter = c.DbtLdap.Filters.USER
             if self._should_run_incremental(
-                c.Ldap.EntityTypes.USERS,
+                c.DbtLdap.LdapEntityTypes.USERS,
                 requested_incremental=incremental,
                 current_bookmark=bookmark,
             ):
                 user_filter = self._build_incremental_filter(
                     user_filter,
-                    self._sync_bookmarks.get(c.Ldap.EntityTypes.USERS),
+                    self._sync_bookmarks.get(c.DbtLdap.LdapEntityTypes.USERS),
                 )
             result = self.run_full_pipeline(
                 search_base=search_base,
                 search_filter=user_filter,
                 attributes=[
-                    c.Ldap.LdapAttributeNames.UID,
-                    c.Ldap.LdapAttributeNames.CN,
-                    c.Ldap.LdapAttributeNames.MAIL,
-                    c.Ldap.LdapAttributeNames.DISPLAY_NAME,
-                    c.Ldap.LdapAttributeNames.DEPARTMENT,
-                    c.Ldap.LdapAttributeNames.MANAGER,
+                    c.DbtLdap.LdapAttributes.UID,
+                    c.DbtLdap.LdapAttributes.CN,
+                    c.DbtLdap.LdapAttributes.MAIL,
+                    c.DbtLdap.LdapAttributes.DISPLAY_NAME,
+                    c.DbtLdap.LdapAttributes.DEPARTMENT,
+                    c.DbtLdap.LdapAttributes.MANAGER,
                 ],
                 model_names=[
                     c.DbtLdap.DbtModels.STG_USERS,
@@ -172,7 +172,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             )
             if result.is_success:
                 self._update_bookmark(
-                    c.Ldap.EntityTypes.USERS,
+                    c.DbtLdap.LdapEntityTypes.USERS,
                     bookmark,
                     successful=True,
                 )

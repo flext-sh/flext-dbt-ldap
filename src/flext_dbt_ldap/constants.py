@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from enum import StrEnum, unique
 from typing import TYPE_CHECKING, ClassVar, Final
 
@@ -20,18 +21,105 @@ if TYPE_CHECKING:
 class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains.
 
-    LDAP-generic constants are inherited from c.Ldap via MRO:
+    LDAP protocol constants are inherited from c.Ldap via MRO:
     - c.Ldap.ConnectionDefaults (PORT, TIMEOUT)
-    - c.Ldap.LdapAttributeNames (UID, CN, MAIL, etc.)
-    - c.Ldap.Filters (USER, GROUP, MEMBERSHIP, ALL_ENTRIES_FILTER)
-    - c.Ldap.SearchAttributes (GROUP, MEMBERSHIP)
-    - c.Ldap.SchemaMapping (USERS_CLASSES, GROUPS_CLASSES, ORG_UNITS_CLASSES)
-    - c.Ldap.EntityTypes (USERS, GROUPS, ORG_UNITS)
+    - c.Ldap.LdapAttributeNames (DN, OBJECT_CLASS, COMMON_NAME — protocol-only)
+    - c.Ldap.Filters.ALL_ENTRIES_FILTER (protocol-level wildcard)
     - c.Ldap.OperationType / c.Ldap.LdapOperationNames
+
+    Domain-specific LDAP constants (attributes, filters, schema mappings, entity types)
+    live in c.DbtLdap.LdapAttributes, c.DbtLdap.Filters, etc.
     """
 
     class DbtLdap:
         """DBT-LDAP-specific constants (not available in parent c.Ldap)."""
+
+        class LdapAttributes:
+            """Project-specific LDAP attribute selections for dbt transformations.
+
+            LDAP attributes are dynamic (hundreds possible per schema).
+            These are this project's CONFIGURED attribute set, not universal constants.
+            """
+
+            UID: Final[str] = "uid"
+            CN: Final[str] = "cn"
+            MAIL: Final[str] = "mail"
+            DISPLAY_NAME: Final[str] = "displayName"
+            DEPARTMENT: Final[str] = "department"
+            MANAGER: Final[str] = "manager"
+            DESCRIPTION: Final[str] = "description"
+            MEMBER: Final[str] = "member"
+            GROUP_TYPE: Final[str] = "groupType"
+            MEMBER_OF: Final[str] = "memberOf"
+            UNIQUE_MEMBER: Final[str] = "uniqueMember"
+            SAM_ACCOUNT_NAME: Final[str] = "samaccountname"
+            OBJECT_CLASS: Final[str] = "objectClass"
+            EMPLOYEE_NUMBER: Final[str] = "employeeNumber"
+            TELEPHONE_NUMBER: Final[str] = "telephoneNumber"
+            USER_ACCOUNT_CONTROL: Final[str] = "userAccountControl"
+            CREATE_TIMESTAMP: Final[str] = "createTimestamp"
+            MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
+            MEMBER_UID: Final[str] = "memberUid"
+            DN: Final[str] = "dn"
+            USER_ID_ATTRIBUTES: ClassVar[Sequence[str]] = [
+                "uid",
+                "cn",
+                "samaccountname",
+            ]
+            MEMBERSHIP_ATTRIBUTES: ClassVar[Sequence[str]] = [
+                "member",
+                "uniqueMember",
+                "memberUid",
+            ]
+
+        class LdapSchemaMapping:
+            """Project-specific LDAP schema class mappings."""
+
+            USERS_CLASSES: ClassVar[Sequence[str]] = [
+                "person",
+                "user",
+                "inetOrgPerson",
+            ]
+            GROUPS_CLASSES: ClassVar[Sequence[str]] = [
+                "group",
+                "groupOfNames",
+                "groupOfUniqueNames",
+            ]
+            ORG_UNITS_CLASSES: ClassVar[Sequence[str]] = [
+                "organizationalUnit",
+                "organization",
+            ]
+
+        class LdapEntityTypes:
+            """Project-specific entity type identifiers."""
+
+            USERS: Final[str] = "users"
+            GROUPS: Final[str] = "groups"
+            ORG_UNITS: Final[str] = "org_units"
+
+        class Filters:
+            """Project-specific LDAP search filters."""
+
+            DEFAULT: Final[str] = "(objectClass=*)"
+            USER: Final[str] = "(objectClass=person)"
+            GROUP: Final[str] = "(objectClass=group)"
+            MEMBERSHIP: Final[str] = "(|(objectClass=person)(objectClass=group))"
+
+        class SearchAttributes:
+            """Project-specific attribute sets for LDAP searches."""
+
+            GROUP: ClassVar[Sequence[str]] = [
+                "cn",
+                "description",
+                "member",
+                "groupType",
+            ]
+            MEMBERSHIP: ClassVar[Sequence[str]] = [
+                "cn",
+                "member",
+                "memberOf",
+                "uniqueMember",
+            ]
 
         class Ldaps:
             """Secure LDAP connection settings."""

@@ -70,7 +70,7 @@ class FlextDbtLdapUtilitiesClient:
     def extract_ldap_entries(
         self,
         search_base: str | None = None,
-        search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
+        search_filter: str = c.DbtLdap.Filters.DEFAULT,
         attributes: t.StrSequence | None = None,
     ) -> r[Sequence[t.DbtLdap.LdapEntryMapping]]:
         """Extract LDAP entries for DBT processing."""
@@ -105,7 +105,7 @@ class FlextDbtLdapUtilitiesClient:
     def run_full_pipeline(
         self,
         search_base: str | None = None,
-        search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
+        search_filter: str = c.DbtLdap.Filters.DEFAULT,
         attributes: t.StrSequence | None = None,
         model_names: t.StrSequence | None = None,
     ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
@@ -175,7 +175,7 @@ class FlextDbtLdapUtilitiesClient:
             valid_dns = 0
             valid_entries = 0
             for entry in entries:
-                if entry.get(c.Ldap.LdapAttributeNames.DN):
+                if entry.get(c.DbtLdap.LdapAttributes.DN):
                     valid_dns += 1
                 if all(attr in entry and entry[attr] for attr in required_attributes):
                     valid_entries += 1
@@ -205,7 +205,7 @@ class FlextDbtLdapUtilitiesClient:
         entry: t.DbtLdap.LdapEntryMapping,
     ) -> t.ConfigurationMapping:
         """Map LDAP entry attributes using configuration mapping."""
-        dn_attr = c.Ldap.LdapAttributeNames.DN
+        dn_attr = c.DbtLdap.LdapAttributes.DN
         dn_str = str(entry.get(dn_attr, [""])[0]) if entry.get(dn_attr) else ""
         mapped_attrs: t.MutableConfigurationMapping = {dn_attr: dn_str}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
@@ -226,12 +226,12 @@ class FlextDbtLdapUtilitiesClient:
     ) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes: t.StrSequence = [
-            str(x) for x in entry.get(c.Ldap.LdapAttributeNames.OBJECT_CLASS, [])
+            str(x) for x in entry.get(c.DbtLdap.LdapAttributes.OBJECT_CLASS, [])
         ]
         schema_mapping: Mapping[str, t.StrSequence] = {
-            c.Ldap.EntityTypes.USERS: c.Ldap.SchemaMapping.USERS_CLASSES,
-            c.Ldap.EntityTypes.GROUPS: c.Ldap.SchemaMapping.GROUPS_CLASSES,
-            c.Ldap.EntityTypes.ORG_UNITS: c.Ldap.SchemaMapping.ORG_UNITS_CLASSES,
+            c.DbtLdap.LdapEntityTypes.USERS: c.DbtLdap.LdapSchemaMapping.USERS_CLASSES,
+            c.DbtLdap.LdapEntityTypes.GROUPS: c.DbtLdap.LdapSchemaMapping.GROUPS_CLASSES,
+            c.DbtLdap.LdapEntityTypes.ORG_UNITS: c.DbtLdap.LdapSchemaMapping.ORG_UNITS_CLASSES,
         }
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
