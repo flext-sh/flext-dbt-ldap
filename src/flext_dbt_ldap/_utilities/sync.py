@@ -212,7 +212,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                 self._sync_state_file.read_bytes(),
             )
             return data
-        except (OSError, json.JSONDecodeError, ValueError):
+        except (*c.Meltano.Singer.SAFE_EXCEPTIONS, json.JSONDecodeError):
             logger.exception("Failed to read sync state file")
             return {}
 
