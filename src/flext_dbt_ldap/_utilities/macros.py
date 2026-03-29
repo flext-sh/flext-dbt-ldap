@@ -13,7 +13,6 @@ from collections.abc import Sequence
 from flext_core import FlextLogger
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 
@@ -38,7 +37,7 @@ class FlextDbtLdapUtilitiesMacros:
                 if "T" in timestamp
                 else timestamp[:10]
             )
-        except SAFE_EXCEPTIONS:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS:
             logger.exception("Error extracting date from timestamp: %s", timestamp)
             return None
 
@@ -66,7 +65,7 @@ class FlextDbtLdapUtilitiesMacros:
             if len(parts) > 1:
                 return ",".join(parts[1:])
             return None
-        except SAFE_EXCEPTIONS:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS:
             logger.exception("Failed to get parent DN: %s", dn)
             return None
 
@@ -96,7 +95,7 @@ class FlextDbtLdapUtilitiesMacros:
                 if key.lower() == component.lower():
                     return value
             return None
-        except SAFE_EXCEPTIONS:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS:
             logger.exception("Failed to parse DN component: %s", dn)
             return None
 

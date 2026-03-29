@@ -17,7 +17,6 @@ from flext_core import FlextLogger, r
 
 from flext_dbt_ldap import c, m, t
 from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
-from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 
@@ -39,7 +38,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                 generated_at="2025-01-01T00:00:00Z",
             )
             return r[m.DbtLdap.AnalyticsReport].ok(report)
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.AnalyticsReport].fail(f"Report generation error: {e}")
 
     def run_dbt_models(
@@ -55,7 +54,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                     status=c.DbtLdap.Statuses.COMPLETED, models_run=model_list or []
                 ),
             )
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtRunStatus].fail(f"DBT model execution error: {e}")
 
     def run_full_data_warehouse_sync(
@@ -116,7 +115,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             if result.is_success:
                 self._update_bookmark("groups", bookmark, successful=True)
             return result
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
@@ -131,7 +130,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                 attributes=c.DbtLdap.SearchAttributes.MEMBERSHIP,
                 model_names=[c.DbtLdap.DbtModels.FACT_MEMBERSHIPS],
             )
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                 f"Membership sync error: {e}"
             )
@@ -178,7 +177,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                     successful=True,
                 )
             return result
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"User sync error: {e}")
 
     def validate_warehouse_data_quality(
@@ -192,7 +191,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             return r[m.DbtLdap.ValidationMetrics].ok(
                 m.DbtLdap.ValidationMetrics(validation_passed=True),
             )
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.ValidationMetrics].fail(
                 f"Data quality validation error: {e}"
             )

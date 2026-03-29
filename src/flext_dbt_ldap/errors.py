@@ -16,17 +16,6 @@ from flext_core import FlextExceptions
 
 from flext_dbt_ldap import t
 
-SAFE_EXCEPTIONS: tuple[type[Exception], ...] = (
-    ValueError,
-    TypeError,
-    KeyError,
-    AttributeError,
-    OSError,
-    RuntimeError,
-    ImportError,
-)
-"""Shared exception tuple for safe catch-all in non-critical paths."""
-
 
 class FlextDbtLdapError(FlextExceptions.BaseError):
     """FlextDbtLdapError - base DBT LDAP error."""

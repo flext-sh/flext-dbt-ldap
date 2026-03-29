@@ -17,7 +17,6 @@ from flext_meltano import FlextMeltanoModels
 from pydantic import Field, model_validator
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 
 logger = FlextLogger(__name__)
 
@@ -446,7 +445,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         membership_facts.extend(
                             self._extract_user_memberships(entry),
                         )
-                except SAFE_EXCEPTIONS:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS:
                     logger.exception(
                         "Failed to transform memberships for entry: "
                         f"{str(entry.dn) if entry.dn is not None else ''}",
@@ -485,7 +484,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     continue
                 try:
                     dimensions.append(build_dimension(entry))
-                except SAFE_EXCEPTIONS:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS:
                     entry_dn = str(entry.dn) if entry.dn is not None else ""
                     logger.exception(
                         "Failed to transform %s: %s",

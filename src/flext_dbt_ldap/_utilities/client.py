@@ -18,7 +18,6 @@ from flext_ldap import (
 from flext_meltano import FlextMeltanoDbtService
 
 from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
 from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = FlextLogger(__name__)
@@ -97,7 +96,7 @@ class FlextDbtLdapUtilitiesClient:
                     f"LDAP extraction failed: {result.error}",
                 )
             return result
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP extraction")
             return r[Sequence[t.DbtLdap.LdapEntryMapping]].fail(
                 f"LDAP extraction error: {e}",
@@ -160,7 +159,7 @@ class FlextDbtLdapUtilitiesClient:
             )
             logger.info("DBT transformation completed successfully")
             return r[m.DbtLdap.DbtRunStatus].ok(result_data)
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during DBT transformation")
             return r[m.DbtLdap.DbtRunStatus].fail(f"DBT transformation error: {e}")
 
@@ -197,7 +196,7 @@ class FlextDbtLdapUtilitiesClient:
                     f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
                 )
             return r[m.DbtLdap.ValidationMetrics].ok(metrics)
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP validation")
             return r[m.DbtLdap.ValidationMetrics].fail(f"LDAP validation error: {e}")
 
@@ -279,7 +278,7 @@ class FlextDbtLdapUtilitiesClient:
             return r[Sequence[t.DbtLdap.LdapEntryMapping]].fail(
                 result.error or "Search returned no results",
             )
-        except SAFE_EXCEPTIONS as e:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[Sequence[t.DbtLdap.LdapEntryMapping]].fail(
                 f"LDAP search failed: {e}",
             )

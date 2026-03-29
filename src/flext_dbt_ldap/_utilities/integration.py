@@ -10,8 +10,7 @@ from __future__ import annotations
 
 from flext_core import FlextLogger
 
-from flext_dbt_ldap import m, p, t
-from flext_dbt_ldap.errors import SAFE_EXCEPTIONS
+from flext_dbt_ldap import c, m, p, t
 
 logger = FlextLogger(__name__)
 
@@ -29,7 +28,7 @@ class FlextDbtLdapUtilitiesIntegration:
             entry_count = len(df)
             logger.info("Processing %d LDAP entries via flext-ldap API", entry_count)
             return df
-        except SAFE_EXCEPTIONS:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS:
             logger.exception("Failed to process LDAP entries via flext-ldap delegation")
             return df
 
@@ -47,7 +46,7 @@ class FlextDbtLdapUtilitiesIntegration:
                 valid_dns=entry_count,
                 quality_score=1.0,
             )
-        except SAFE_EXCEPTIONS:
+        except c.Meltano.Singer.SAFE_EXCEPTIONS:
             logger.exception("Failed to validate LDAP data quality")
             return m.DbtLdap.ValidationMetrics()
 

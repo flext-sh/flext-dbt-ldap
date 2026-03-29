@@ -40,7 +40,6 @@ if TYPE_CHECKING:
         FlextDbtLdapConstants as c,
     )
     from flext_dbt_ldap.errors import (
-        SAFE_EXCEPTIONS,
         FlextDbtLdapAuthenticationError,
         FlextDbtLdapConfigurationError,
         FlextDbtLdapConnectionError,
@@ -67,27 +66,53 @@ if TYPE_CHECKING:
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextDbtLdap": ["flext_dbt_ldap.simple_api", "FlextDbtLdap"],
-    "FlextDbtLdapAuthenticationError": ["flext_dbt_ldap.errors", "FlextDbtLdapAuthenticationError"],
-    "FlextDbtLdapConfigurationError": ["flext_dbt_ldap.errors", "FlextDbtLdapConfigurationError"],
-    "FlextDbtLdapConnectionError": ["flext_dbt_ldap.errors", "FlextDbtLdapConnectionError"],
+    "FlextDbtLdapAuthenticationError": [
+        "flext_dbt_ldap.errors",
+        "FlextDbtLdapAuthenticationError",
+    ],
+    "FlextDbtLdapConfigurationError": [
+        "flext_dbt_ldap.errors",
+        "FlextDbtLdapConfigurationError",
+    ],
+    "FlextDbtLdapConnectionError": [
+        "flext_dbt_ldap.errors",
+        "FlextDbtLdapConnectionError",
+    ],
     "FlextDbtLdapConstants": ["flext_dbt_ldap.constants", "FlextDbtLdapConstants"],
     "FlextDbtLdapError": ["flext_dbt_ldap.errors", "FlextDbtLdapError"],
     "FlextDbtLdapMacroError": ["flext_dbt_ldap.errors", "FlextDbtLdapMacroError"],
     "FlextDbtLdapModelError": ["flext_dbt_ldap.errors", "FlextDbtLdapModelError"],
     "FlextDbtLdapModels": ["flext_dbt_ldap.models", "FlextDbtLdapModels"],
-    "FlextDbtLdapProcessingError": ["flext_dbt_ldap.errors", "FlextDbtLdapProcessingError"],
+    "FlextDbtLdapProcessingError": [
+        "flext_dbt_ldap.errors",
+        "FlextDbtLdapProcessingError",
+    ],
     "FlextDbtLdapProtocols": ["flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"],
     "FlextDbtLdapSettings": ["flext_dbt_ldap.settings", "FlextDbtLdapSettings"],
     "FlextDbtLdapTestError": ["flext_dbt_ldap.errors", "FlextDbtLdapTestError"],
     "FlextDbtLdapTimeoutError": ["flext_dbt_ldap.errors", "FlextDbtLdapTimeoutError"],
     "FlextDbtLdapTypes": ["flext_dbt_ldap.typings", "FlextDbtLdapTypes"],
     "FlextDbtLdapUtilities": ["flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"],
-    "FlextDbtLdapUtilitiesClient": ["flext_dbt_ldap._utilities.client", "FlextDbtLdapUtilitiesClient"],
-    "FlextDbtLdapUtilitiesIntegration": ["flext_dbt_ldap._utilities.integration", "FlextDbtLdapUtilitiesIntegration"],
-    "FlextDbtLdapUtilitiesMacros": ["flext_dbt_ldap._utilities.macros", "FlextDbtLdapUtilitiesMacros"],
-    "FlextDbtLdapUtilitiesSync": ["flext_dbt_ldap._utilities.sync", "FlextDbtLdapUtilitiesSync"],
-    "FlextDbtLdapValidationError": ["flext_dbt_ldap.errors", "FlextDbtLdapValidationError"],
-    "SAFE_EXCEPTIONS": ["flext_dbt_ldap.errors", "SAFE_EXCEPTIONS"],
+    "FlextDbtLdapUtilitiesClient": [
+        "flext_dbt_ldap._utilities.client",
+        "FlextDbtLdapUtilitiesClient",
+    ],
+    "FlextDbtLdapUtilitiesIntegration": [
+        "flext_dbt_ldap._utilities.integration",
+        "FlextDbtLdapUtilitiesIntegration",
+    ],
+    "FlextDbtLdapUtilitiesMacros": [
+        "flext_dbt_ldap._utilities.macros",
+        "FlextDbtLdapUtilitiesMacros",
+    ],
+    "FlextDbtLdapUtilitiesSync": [
+        "flext_dbt_ldap._utilities.sync",
+        "FlextDbtLdapUtilitiesSync",
+    ],
+    "FlextDbtLdapValidationError": [
+        "flext_dbt_ldap.errors",
+        "FlextDbtLdapValidationError",
+    ],
     "__all__": ["flext_dbt_ldap.__version__", "__all__"],
     "__author__": ["flext_dbt_ldap.__version__", "__author__"],
     "__author_email__": ["flext_dbt_ldap.__version__", "__author_email__"],
@@ -113,7 +138,6 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
 }
 
 __all__ = [
-    "SAFE_EXCEPTIONS",
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapConfigurationError",
