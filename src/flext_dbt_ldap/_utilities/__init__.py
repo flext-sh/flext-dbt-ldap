@@ -23,22 +23,10 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync, logger
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
-    "FlextDbtLdapUtilitiesClient": [
-        "flext_dbt_ldap._utilities.client",
-        "FlextDbtLdapUtilitiesClient",
-    ],
-    "FlextDbtLdapUtilitiesIntegration": [
-        "flext_dbt_ldap._utilities.integration",
-        "FlextDbtLdapUtilitiesIntegration",
-    ],
-    "FlextDbtLdapUtilitiesMacros": [
-        "flext_dbt_ldap._utilities.macros",
-        "FlextDbtLdapUtilitiesMacros",
-    ],
-    "FlextDbtLdapUtilitiesSync": [
-        "flext_dbt_ldap._utilities.sync",
-        "FlextDbtLdapUtilitiesSync",
-    ],
+    "FlextDbtLdapUtilitiesClient": ["flext_dbt_ldap._utilities.client", "FlextDbtLdapUtilitiesClient"],
+    "FlextDbtLdapUtilitiesIntegration": ["flext_dbt_ldap._utilities.integration", "FlextDbtLdapUtilitiesIntegration"],
+    "FlextDbtLdapUtilitiesMacros": ["flext_dbt_ldap._utilities.macros", "FlextDbtLdapUtilitiesMacros"],
+    "FlextDbtLdapUtilitiesSync": ["flext_dbt_ldap._utilities.sync", "FlextDbtLdapUtilitiesSync"],
     "logger": ["flext_dbt_ldap._utilities.sync", "logger"],
 }
 
