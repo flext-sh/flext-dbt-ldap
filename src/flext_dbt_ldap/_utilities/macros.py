@@ -45,13 +45,13 @@ class FlextDbtLdapUtilitiesMacros:
     def extract_group_name_from_dn(dn: str) -> str | None:
         """Extract group name (cn) from DN."""
         return FlextDbtLdapUtilitiesMacros.parse_dn_component(
-            dn, c.DbtLdap.LdapAttributes.CN
+            dn, c.Ldap.LdapAttributeNames.CN
         )
 
     @staticmethod
     def extract_user_id_from_dn(dn: str) -> str | None:
         """Extract user ID from DN (tries uid, cn, samaccountname)."""
-        for attr in c.DbtLdap.LdapAttributes.USER_ID_ATTRIBUTES:
+        for attr in c.Ldap.LdapAttributeNames.USER_ID_ATTRIBUTES:
             user_id = FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, attr)
             if user_id:
                 return user_id

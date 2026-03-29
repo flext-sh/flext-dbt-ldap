@@ -18,17 +18,20 @@ if TYPE_CHECKING:
 
 
 class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
-    """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains."""
+    """LDAP DBT transformation-specific constants following FLEXT unified pattern with nested domains.
+
+    LDAP-generic constants are inherited from c.Ldap via MRO:
+    - c.Ldap.ConnectionDefaults (PORT, TIMEOUT)
+    - c.Ldap.LdapAttributeNames (UID, CN, MAIL, etc.)
+    - c.Ldap.Filters (USER, GROUP, MEMBERSHIP, ALL_ENTRIES_FILTER)
+    - c.Ldap.SearchAttributes (GROUP, MEMBERSHIP)
+    - c.Ldap.SchemaMapping (USERS_CLASSES, GROUPS_CLASSES, ORG_UNITS_CLASSES)
+    - c.Ldap.EntityTypes (USERS, GROUPS, ORG_UNITS)
+    - c.Ldap.OperationType / c.Ldap.LdapOperationNames
+    """
 
     class DbtLdap:
-        """LDAP connection configuration constants."""
-
-        class Ldap:
-            """Standard LDAP connection settings."""
-
-            DEFAULT_HOST: Final[str] = FlextMeltanoConstants.DEFAULT_HOST
-            DEFAULT_PORT: Final[int] = 389
-            DEFAULT_TIMEOUT: Final[int] = FlextMeltanoConstants.DEFAULT_TIMEOUT_SECONDS
+        """DBT-LDAP-specific constants (not available in parent c.Ldap)."""
 
         class Ldaps:
             """Secure LDAP connection settings."""
@@ -41,81 +44,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             DEFAULT_PROFILES_DIR = "./profiles"
             DEFAULT_TARGET = "dev"
             ALLOWED_TARGETS: ClassVar[t.StrSequence] = ["dev", "staging", "prod"]
-
-        class LdapSchemaMapping:
-            """LDAP t.NormalizedValue class to schema type mappings."""
-
-            USERS_CLASSES: Final[t.StrSequence] = ["person", "user", "inetOrgPerson"]
-            GROUPS_CLASSES: Final[t.StrSequence] = [
-                "group",
-                "groupOfNames",
-                "groupOfUniqueNames",
-            ]
-            ORG_UNITS_CLASSES: Final[t.StrSequence] = [
-                "organizationalUnit",
-                "organization",
-            ]
-
-        class LdapEntityTypes:
-            """LDAP entity type identifiers."""
-
-            USERS: Final[str] = "users"
-            GROUPS: Final[str] = "groups"
-            ORG_UNITS: Final[str] = "org_units"
-
-        class LdapAttributes:
-            """Common LDAP attribute names."""
-
-            UID: Final[str] = "uid"
-            CN: Final[str] = "cn"
-            MAIL: Final[str] = "mail"
-            DISPLAY_NAME: Final[str] = "displayName"
-            DEPARTMENT: Final[str] = "department"
-            MANAGER: Final[str] = "manager"
-            DESCRIPTION: Final[str] = "description"
-            MEMBER: Final[str] = "member"
-            GROUP_TYPE: Final[str] = "groupType"
-            MEMBER_OF: Final[str] = "memberOf"
-            UNIQUE_MEMBER: Final[str] = "uniqueMember"
-            SAM_ACCOUNT_NAME: Final[str] = "samaccountname"
-            OBJECT_CLASS: Final[str] = "objectClass"
-            EMPLOYEE_NUMBER: Final[str] = "employeeNumber"
-            TELEPHONE_NUMBER: Final[str] = "telephoneNumber"
-            USER_ACCOUNT_CONTROL: Final[str] = "userAccountControl"
-            CREATE_TIMESTAMP: Final[str] = "createTimestamp"
-            MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
-            MEMBER_UID: Final[str] = "memberUid"
-            DN: Final[str] = "dn"
-            USER_ID_ATTRIBUTES: Final[t.StrSequence] = ["uid", "cn", "samaccountname"]
-            MEMBERSHIP_ATTRIBUTES: Final[t.StrSequence] = [
-                "member",
-                "uniqueMember",
-                "memberUid",
-            ]
-
-        class Filters:
-            """LDAP search filter strings."""
-
-            DEFAULT: Final[str] = "(objectClass=*)"
-            USER: Final[str] = "(objectClass=person)"
-            GROUP: Final[str] = "(objectClass=group)"
-            MEMBERSHIP: Final[str] = "(|(objectClass=person)(objectClass=group))"
-
-        class SearchAttributes:
-            """Standard attribute sets for LDAP search operations."""
-
-            GROUP: Final[t.StrSequence] = [
-                "cn",
-                "description",
-                "member",
-                "groupType",
-            ]
-            MEMBERSHIP: Final[t.StrSequence] = [
-                "cn",
-                "member",
-                "memberOf",
-                "uniqueMember",
-            ]
 
         class DbtModels:
             """DBT model names for LDAP transformations."""
@@ -164,22 +92,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             PERFORMANCE_EXECUTION_TIME_THRESHOLD: Final[float] = 30.0
             PERFORMANCE_MEMORY_USAGE_THRESHOLD: Final[float] = 1024.0
             PERFORMANCE_ROWS_PROCESSED_THRESHOLD: Final[int] = 100000
-
-        @unique
-        class LdapOperations(StrEnum):
-            """LDAP operation types.
-
-            DRY Pattern:
-                StrEnum is the single source of truth. Use LdapOperations.SEARCH.value
-                or LdapOperations.SEARCH directly - no base strings needed.
-            """
-
-            SEARCH = "search"
-            BIND = "bind"
-            UNBIND = "unbind"
-            ADD = "add"
-            MODIFY = "modify"
-            DELETE = "delete"
 
         @unique
         class DbtCommands(StrEnum):

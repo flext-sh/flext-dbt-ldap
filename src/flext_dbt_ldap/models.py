@@ -261,7 +261,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """LDAP query configuration."""
 
             base_dn: str = ""
-            filter_str: str = c.DbtLdap.Filters.DEFAULT
+            filter_str: str = c.Ldap.Filters.ALL_ENTRIES_FILTER
             attributes: t.StrSequence = Field(default_factory=list)
             scope: str = "SUBTREE"
 
@@ -314,7 +314,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create user dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                la = c.DbtLdap.LdapAttributes
+                la = c.Ldap.LdapAttributeNames
                 return cls(
                     user_id=get_attr(attrs, la.UID, "") or "",
                     common_name=get_attr(attrs, la.CN, "") or "",
@@ -361,7 +361,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create group dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                la = c.DbtLdap.LdapAttributes
+                la = c.Ldap.LdapAttributeNames
                 member_count = len(attrs.get(la.MEMBER, [])) + len(
                     attrs.get(la.UNIQUE_MEMBER, []),
                 )
@@ -404,7 +404,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def get_object_classes(entry: m.Ldif.Entry) -> t.StrSequence:
             """Extract object classes from entry attributes."""
             raw = FlextDbtLdapModels._entry_attrs_mapping(entry)
-            return raw.get(c.DbtLdap.LdapAttributes.OBJECT_CLASS, [])
+            return raw.get(c.Ldap.LdapAttributeNames.OBJECT_CLASS, [])
 
         @staticmethod
         def normalize_attributes(
@@ -502,7 +502,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             memberships: MutableSequence[m.DbtLdap.MembershipFact] = []
             attrs = self.normalize_attributes(group_entry)
             group_dn = str(group_entry.dn) if group_entry.dn is not None else ""
-            for attr in c.DbtLdap.LdapAttributes.MEMBERSHIP_ATTRIBUTES:
+            for attr in c.Ldap.LdapAttributeNames.MEMBERSHIP_ATTRIBUTES:
                 if attr in attrs:
                     memberships.extend(
                         m.DbtLdap.MembershipFact(
@@ -522,14 +522,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             memberships: MutableSequence[m.DbtLdap.MembershipFact] = []
             attrs = self.normalize_attributes(user_entry)
             user_dn = str(user_entry.dn) if user_entry.dn is not None else ""
-            if c.DbtLdap.LdapAttributes.MEMBER_OF in attrs:
+            if c.Ldap.LdapAttributeNames.MEMBER_OF in attrs:
                 memberships.extend(
                     m.DbtLdap.MembershipFact(
                         user_dn=user_dn,
                         group_dn=group_dn,
                         membership_type=c.DbtLdap.MembershipTypes.DIRECT,
                     )
-                    for group_dn in attrs[c.DbtLdap.LdapAttributes.MEMBER_OF]
+                    for group_dn in attrs[c.Ldap.LdapAttributeNames.MEMBER_OF]
                 )
             return memberships
 
@@ -538,8 +538,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """Check if entry is a group entry using canonical schema mapping."""
             object_classes = m.DbtLdap.get_object_classes(entry)
             return any(
-                cls in object_classes
-                for cls in c.DbtLdap.LdapSchemaMapping.GROUPS_CLASSES
+                cls in object_classes for cls in c.Ldap.SchemaMapping.GROUPS_CLASSES
             )
 
         @staticmethod
@@ -547,8 +546,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """Check if entry is a user entry using canonical schema mapping."""
             object_classes = m.DbtLdap.get_object_classes(entry)
             return any(
-                cls in object_classes
-                for cls in c.DbtLdap.LdapSchemaMapping.USERS_CLASSES
+                cls in object_classes for cls in c.Ldap.SchemaMapping.USERS_CLASSES
             )
 
 
