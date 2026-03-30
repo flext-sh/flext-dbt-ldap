@@ -15,22 +15,22 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
+from flext_dbt_ldap.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
+)
+
 if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_ldap import d, e, h, r, s, x
 
     from flext_dbt_ldap import _utilities
-    from flext_dbt_ldap.__version__ import (
-        __all__,
-        __author__,
-        __author_email__,
-        __description__,
-        __license__,
-        __title__,
-        __url__,
-        __version__,
-        __version_info__,
-    )
     from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
@@ -63,6 +63,7 @@ if TYPE_CHECKING:
         FlextDbtLdapUtilities,
         FlextDbtLdapUtilities as u,
     )
+    from flext_dbt_ldap.version_info import __version__, __version_info__
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextDbtLdap": ["flext_dbt_ldap.simple_api", "FlextDbtLdap"],
@@ -113,15 +114,8 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "flext_dbt_ldap.errors",
         "FlextDbtLdapValidationError",
     ],
-    "__all__": ["flext_dbt_ldap.__version__", "__all__"],
-    "__author__": ["flext_dbt_ldap.__version__", "__author__"],
-    "__author_email__": ["flext_dbt_ldap.__version__", "__author_email__"],
-    "__description__": ["flext_dbt_ldap.__version__", "__description__"],
-    "__license__": ["flext_dbt_ldap.__version__", "__license__"],
-    "__title__": ["flext_dbt_ldap.__version__", "__title__"],
-    "__url__": ["flext_dbt_ldap.__version__", "__url__"],
-    "__version__": ["flext_dbt_ldap.__version__", "__version__"],
-    "__version_info__": ["flext_dbt_ldap.__version__", "__version_info__"],
+    "__version__": ["flext_dbt_ldap.version_info", "__version__"],
+    "__version_info__": ["flext_dbt_ldap.version_info", "__version_info__"],
     "_utilities": ["flext_dbt_ldap._utilities", ""],
     "c": ["flext_dbt_ldap.constants", "FlextDbtLdapConstants"],
     "d": ["flext_ldap", "d"],
@@ -159,7 +153,6 @@ __all__ = [
     "FlextDbtLdapUtilitiesMacros",
     "FlextDbtLdapUtilitiesSync",
     "FlextDbtLdapValidationError",
-    "__all__",
     "__author__",
     "__author_email__",
     "__description__",
