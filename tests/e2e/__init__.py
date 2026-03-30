@@ -10,31 +10,29 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
+from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes
-
-    from tests.e2e import conftest
+    from tests.e2e import conftest as conftest
     from tests.e2e.conftest import (
-        POSTGRES_READY_MAX_RETRIES,
-        count_rows,
-        db_connection,
-        dbt_profiles_dir,
-        dbt_project_dir,
-        flext_docker,
-        get_column_names,
-        logger,
-        postgres_container,
-        project_root,
-        psycopg,
-        query_database,
-        run_dbt_command,
-        sql,
-        table_exists,
+        POSTGRES_READY_MAX_RETRIES as POSTGRES_READY_MAX_RETRIES,
+        count_rows as count_rows,
+        db_connection as db_connection,
+        dbt_profiles_dir as dbt_profiles_dir,
+        dbt_project_dir as dbt_project_dir,
+        flext_docker as flext_docker,
+        get_column_names as get_column_names,
+        logger as logger,
+        postgres_container as postgres_container,
+        project_root as project_root,
+        psycopg as psycopg,
+        query_database as query_database,
+        run_dbt_command as run_dbt_command,
+        sql as sql,
+        table_exists as table_exists,
     )
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
@@ -56,7 +54,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "table_exists": ["tests.e2e.conftest", "table_exists"],
 }
 
-__all__ = [
+_EXPORTS: Sequence[str] = [
     "POSTGRES_READY_MAX_RETRIES",
     "conftest",
     "count_rows",
@@ -76,41 +74,4 @@ __all__ = [
 ]
 
 
-_LAZY_CACHE: MutableMapping[str, FlextTypes.ModuleExport] = {}
-
-
-def __getattr__(name: str) -> FlextTypes.ModuleExport:
-    """Lazy-load module attributes on first access (PEP 562).
-
-    A local cache ``_LAZY_CACHE`` persists resolved objects across repeated
-    accesses during process lifetime.
-
-    Args:
-        name: Attribute name requested by dir()/import.
-
-    Returns:
-        Lazy-loaded module export type.
-
-    Raises:
-        AttributeError: If attribute not registered.
-
-    """
-    if name in _LAZY_CACHE:
-        return _LAZY_CACHE[name]
-
-    value = lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
-    _LAZY_CACHE[name] = value
-    return value
-
-
-def __dir__() -> Sequence[str]:
-    """Return list of available attributes for dir() and autocomplete.
-
-    Returns:
-        List of public names from module exports.
-
-    """
-    return sorted(__all__)
-
-
-cleanup_submodule_namespace(__name__, _LAZY_IMPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, _EXPORTS)

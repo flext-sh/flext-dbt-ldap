@@ -5,85 +5,91 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
+from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes
-    from flext_tests import d, e, h, r, s, x
-
     from tests import (
-        conftest,
-        constants,
-        e2e,
-        models,
-        protocols,
-        typings,
-        unit,
-        utilities,
+        conftest as conftest,
+        constants as constants,
+        e2e as e2e,
+        models as models,
+        protocols as protocols,
+        typings as typings,
+        unit as unit,
+        utilities as utilities,
     )
     from tests.conftest import (
-        MockLdapConnection,
-        MockLdapDbtAdapter,
-        dbt_ldap_macros,
-        dbt_ldap_models,
-        dbt_ldap_profile,
-        dbt_ldap_project_config,
-        dbt_ldap_sources,
-        dbt_ldap_tests,
-        ldap_performance_config,
-        ldap_source_config,
-        ldap_validation_rules,
-        mock_ldap_connection,
-        mock_ldap_dbt_adapter,
-        pytest_configure,
-        sample_ldap_entries,
-        set_test_environment,
-        shared_ldap_config,
-        shared_ldap_container,
+        MockLdapConnection as MockLdapConnection,
+        MockLdapDbtAdapter as MockLdapDbtAdapter,
+        dbt_ldap_macros as dbt_ldap_macros,
+        dbt_ldap_models as dbt_ldap_models,
+        dbt_ldap_profile as dbt_ldap_profile,
+        dbt_ldap_project_config as dbt_ldap_project_config,
+        dbt_ldap_sources as dbt_ldap_sources,
+        dbt_ldap_tests as dbt_ldap_tests,
+        ldap_performance_config as ldap_performance_config,
+        ldap_source_config as ldap_source_config,
+        ldap_validation_rules as ldap_validation_rules,
+        mock_ldap_connection as mock_ldap_connection,
+        mock_ldap_dbt_adapter as mock_ldap_dbt_adapter,
+        pytest_configure as pytest_configure,
+        sample_ldap_entries as sample_ldap_entries,
+        set_test_environment as set_test_environment,
+        shared_ldap_config as shared_ldap_config,
+        shared_ldap_container as shared_ldap_container,
     )
     from tests.constants import (
-        FlextDbtLdapTestConstants,
+        FlextDbtLdapTestConstants as FlextDbtLdapTestConstants,
         FlextDbtLdapTestConstants as c,
     )
     from tests.e2e.conftest import (
-        POSTGRES_READY_MAX_RETRIES,
-        count_rows,
-        db_connection,
-        dbt_profiles_dir,
-        dbt_project_dir,
-        flext_docker,
-        get_column_names,
-        logger,
-        postgres_container,
-        project_root,
-        psycopg,
-        query_database,
-        run_dbt_command,
-        sql,
-        table_exists,
+        POSTGRES_READY_MAX_RETRIES as POSTGRES_READY_MAX_RETRIES,
+        count_rows as count_rows,
+        db_connection as db_connection,
+        dbt_profiles_dir as dbt_profiles_dir,
+        dbt_project_dir as dbt_project_dir,
+        flext_docker as flext_docker,
+        get_column_names as get_column_names,
+        logger as logger,
+        postgres_container as postgres_container,
+        project_root as project_root,
+        psycopg as psycopg,
+        query_database as query_database,
+        run_dbt_command as run_dbt_command,
+        sql as sql,
+        table_exists as table_exists,
     )
-    from tests.models import FlextDbtLdapTestModels, FlextDbtLdapTestModels as m
+    from tests.models import (
+        FlextDbtLdapTestModels as FlextDbtLdapTestModels,
+        FlextDbtLdapTestModels as m,
+    )
     from tests.protocols import (
-        FlextDbtLdapTestProtocols,
+        FlextDbtLdapTestProtocols as FlextDbtLdapTestProtocols,
         FlextDbtLdapTestProtocols as p,
     )
-    from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
-    from tests.unit import test_dbt_services_sync, test_version
+    from tests.typings import (
+        FlextDbtLdapTestTypes as FlextDbtLdapTestTypes,
+        FlextDbtLdapTestTypes as t,
+    )
+    from tests.unit import (
+        test_dbt_services_sync as test_dbt_services_sync,
+        test_version as test_version,
+    )
     from tests.unit.test_dbt_services_sync import (
-        test_sync_users_uses_incremental_bookmark_and_persists_state,
+        test_sync_users_uses_incremental_bookmark_and_persists_state as test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
     from tests.unit.test_version import (
-        test_dunder_alignment,
-        test_incremental_groups_sync_applies_bookmark_filter,
-        test_incremental_users_sync_applies_bookmark_filter,
-        test_version_metadata_integrity,
-        test_version_properties,
+        test_dunder_alignment as test_dunder_alignment,
+        test_incremental_groups_sync_applies_bookmark_filter as test_incremental_groups_sync_applies_bookmark_filter,
+        test_incremental_users_sync_applies_bookmark_filter as test_incremental_users_sync_applies_bookmark_filter,
+        test_version_metadata_integrity as test_version_metadata_integrity,
+        test_version_properties as test_version_properties,
     )
     from tests.utilities import (
-        FlextDbtLdapTestUtilities,
+        FlextDbtLdapTestUtilities as FlextDbtLdapTestUtilities,
         FlextDbtLdapTestUtilities as u,
     )
 
@@ -167,8 +173,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "x": ["flext_tests", "x"],
 }
 
-__all__ = [
-    "POSTGRES_READY_MAX_RETRIES",
+_EXPORTS: Sequence[str] = [
     "FlextDbtLdapTestConstants",
     "FlextDbtLdapTestModels",
     "FlextDbtLdapTestProtocols",
@@ -176,6 +181,7 @@ __all__ = [
     "FlextDbtLdapTestUtilities",
     "MockLdapConnection",
     "MockLdapDbtAdapter",
+    "POSTGRES_READY_MAX_RETRIES",
     "c",
     "conftest",
     "constants",
@@ -236,41 +242,4 @@ __all__ = [
 ]
 
 
-_LAZY_CACHE: MutableMapping[str, FlextTypes.ModuleExport] = {}
-
-
-def __getattr__(name: str) -> FlextTypes.ModuleExport:
-    """Lazy-load module attributes on first access (PEP 562).
-
-    A local cache ``_LAZY_CACHE`` persists resolved objects across repeated
-    accesses during process lifetime.
-
-    Args:
-        name: Attribute name requested by dir()/import.
-
-    Returns:
-        Lazy-loaded module export type.
-
-    Raises:
-        AttributeError: If attribute not registered.
-
-    """
-    if name in _LAZY_CACHE:
-        return _LAZY_CACHE[name]
-
-    value = lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
-    _LAZY_CACHE[name] = value
-    return value
-
-
-def __dir__() -> Sequence[str]:
-    """Return list of available attributes for dir() and autocomplete.
-
-    Returns:
-        List of public names from module exports.
-
-    """
-    return sorted(__all__)
-
-
-cleanup_submodule_namespace(__name__, _LAZY_IMPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, _EXPORTS)
