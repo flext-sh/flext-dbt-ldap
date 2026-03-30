@@ -15,61 +15,23 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._utilities import (
-        client as client,
-        integration as integration,
-        macros as macros,
-        sync as sync,
-    )
-    from flext_dbt_ldap._utilities.client import (
-        FlextDbtLdapUtilitiesClient as FlextDbtLdapUtilitiesClient,
-    )
-    from flext_dbt_ldap._utilities.integration import (
-        FlextDbtLdapUtilitiesIntegration as FlextDbtLdapUtilitiesIntegration,
-    )
-    from flext_dbt_ldap._utilities.macros import (
-        FlextDbtLdapUtilitiesMacros as FlextDbtLdapUtilitiesMacros,
-    )
-    from flext_dbt_ldap._utilities.sync import (
-        FlextDbtLdapUtilitiesSync as FlextDbtLdapUtilitiesSync,
-        logger as logger,
-    )
+    from flext_dbt_ldap._utilities import client, integration, macros, sync
+    from flext_dbt_ldap._utilities.client import *
+    from flext_dbt_ldap._utilities.integration import *
+    from flext_dbt_ldap._utilities.macros import *
+    from flext_dbt_ldap._utilities.sync import *
 
-_LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
-    "FlextDbtLdapUtilitiesClient": [
-        "flext_dbt_ldap._utilities.client",
-        "FlextDbtLdapUtilitiesClient",
-    ],
-    "FlextDbtLdapUtilitiesIntegration": [
-        "flext_dbt_ldap._utilities.integration",
-        "FlextDbtLdapUtilitiesIntegration",
-    ],
-    "FlextDbtLdapUtilitiesMacros": [
-        "flext_dbt_ldap._utilities.macros",
-        "FlextDbtLdapUtilitiesMacros",
-    ],
-    "FlextDbtLdapUtilitiesSync": [
-        "flext_dbt_ldap._utilities.sync",
-        "FlextDbtLdapUtilitiesSync",
-    ],
-    "client": ["flext_dbt_ldap._utilities.client", ""],
-    "integration": ["flext_dbt_ldap._utilities.integration", ""],
-    "logger": ["flext_dbt_ldap._utilities.sync", "logger"],
-    "macros": ["flext_dbt_ldap._utilities.macros", ""],
-    "sync": ["flext_dbt_ldap._utilities.sync", ""],
+_LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
+    "FlextDbtLdapUtilitiesClient": "flext_dbt_ldap._utilities.client",
+    "FlextDbtLdapUtilitiesIntegration": "flext_dbt_ldap._utilities.integration",
+    "FlextDbtLdapUtilitiesMacros": "flext_dbt_ldap._utilities.macros",
+    "FlextDbtLdapUtilitiesSync": "flext_dbt_ldap._utilities.sync",
+    "client": "flext_dbt_ldap._utilities.client",
+    "integration": "flext_dbt_ldap._utilities.integration",
+    "logger": "flext_dbt_ldap._utilities.sync",
+    "macros": "flext_dbt_ldap._utilities.macros",
+    "sync": "flext_dbt_ldap._utilities.sync",
 }
 
-_EXPORTS: Sequence[str] = [
-    "FlextDbtLdapUtilitiesClient",
-    "FlextDbtLdapUtilitiesIntegration",
-    "FlextDbtLdapUtilitiesMacros",
-    "FlextDbtLdapUtilitiesSync",
-    "client",
-    "integration",
-    "logger",
-    "macros",
-    "sync",
-]
 
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, _EXPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, sorted(_LAZY_IMPORTS))
