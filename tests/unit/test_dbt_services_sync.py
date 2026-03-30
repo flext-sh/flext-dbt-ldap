@@ -15,11 +15,11 @@ from unittest.mock import Mock
 import pytest
 from flext_core import r
 
-from flext_dbt_ldap import m
-from flext_dbt_ldap._utilities.sync import (
+from flext_dbt_ldap import (
+    FlextDbtLdapSettings,
     FlextDbtLdapUtilitiesSync as FlextDbtLdapService,
+    m,
 )
-from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 
 def test_sync_users_uses_incremental_bookmark_and_persists_state(

@@ -15,8 +15,7 @@ from pathlib import Path
 
 from flext_core import FlextLogger, r
 
-from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
+from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t
 
 logger = FlextLogger(__name__)
 

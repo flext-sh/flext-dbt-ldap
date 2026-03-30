@@ -17,8 +17,7 @@ from flext_ldap import (
 )
 from flext_meltano import FlextMeltanoDbtService
 
-from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap.settings import FlextDbtLdapSettings
+from flext_dbt_ldap import FlextDbtLdapSettings, c, m, t
 
 logger = FlextLogger(__name__)
 

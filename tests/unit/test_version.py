@@ -4,17 +4,16 @@ from __future__ import annotations
 
 from unittest.mock import Mock
 
-from flext_dbt_ldap import __version__, __version_info__
-from flext_dbt_ldap.__version__ import (
+from flext_dbt_ldap import (
+    FlextDbtLdapUtilitiesSync as FlextDbtLdapService,
     __author__,
     __author_email__,
     __description__,
     __license__,
     __title__,
     __url__,
-)
-from flext_dbt_ldap._utilities.sync import (
-    FlextDbtLdapUtilitiesSync as FlextDbtLdapService,
+    __version__,
+    __version_info__,
 )
 
 

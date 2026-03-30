@@ -15,8 +15,7 @@ from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
-from flext_dbt_ldap import t
-from flext_dbt_ldap.protocols import FlextDbtLdapProtocols
+from flext_dbt_ldap import FlextDbtLdapProtocols, t
 
 
 class FlextDbtLdapTestProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
