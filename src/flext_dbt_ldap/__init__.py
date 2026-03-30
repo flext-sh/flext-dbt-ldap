@@ -30,7 +30,6 @@ if TYPE_CHECKING:
     from flext_ldap import *
 
     from flext_dbt_ldap import (
-        _utilities,
         constants,
         errors,
         models,
@@ -41,11 +40,7 @@ if TYPE_CHECKING:
         utilities,
         version_info,
     )
-    from flext_dbt_ldap._utilities import client, integration, macros, sync
-    from flext_dbt_ldap._utilities.client import *
-    from flext_dbt_ldap._utilities.integration import *
-    from flext_dbt_ldap._utilities.macros import *
-    from flext_dbt_ldap._utilities.sync import *
+    from flext_dbt_ldap._utilities import *
     from flext_dbt_ldap.constants import *
     from flext_dbt_ldap.errors import *
     from flext_dbt_ldap.models import *
