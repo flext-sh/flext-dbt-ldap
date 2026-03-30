@@ -14,7 +14,16 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
-    from tests import e2e, unit
+    from tests import (
+        conftest,
+        constants,
+        e2e,
+        models,
+        protocols,
+        typings,
+        unit,
+        utilities,
+    )
     from tests.conftest import (
         MockLdapConnection,
         MockLdapDbtAdapter,
@@ -62,6 +71,7 @@ if TYPE_CHECKING:
         FlextDbtLdapTestProtocols as p,
     )
     from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
+    from tests.unit import test_dbt_services_sync, test_version
     from tests.unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
@@ -87,6 +97,8 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "MockLdapDbtAdapter": ["tests.conftest", "MockLdapDbtAdapter"],
     "POSTGRES_READY_MAX_RETRIES": ["tests.e2e.conftest", "POSTGRES_READY_MAX_RETRIES"],
     "c": ["tests.constants", "FlextDbtLdapTestConstants"],
+    "conftest": ["tests.conftest", ""],
+    "constants": ["tests.constants", ""],
     "count_rows": ["tests.e2e.conftest", "count_rows"],
     "d": ["flext_tests", "d"],
     "db_connection": ["tests.e2e.conftest", "db_connection"],
@@ -110,9 +122,11 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "m": ["tests.models", "FlextDbtLdapTestModels"],
     "mock_ldap_connection": ["tests.conftest", "mock_ldap_connection"],
     "mock_ldap_dbt_adapter": ["tests.conftest", "mock_ldap_dbt_adapter"],
+    "models": ["tests.models", ""],
     "p": ["tests.protocols", "FlextDbtLdapTestProtocols"],
     "postgres_container": ["tests.e2e.conftest", "postgres_container"],
     "project_root": ["tests.e2e.conftest", "project_root"],
+    "protocols": ["tests.protocols", ""],
     "psycopg": ["tests.e2e.conftest", "psycopg"],
     "pytest_configure": ["tests.conftest", "pytest_configure"],
     "query_database": ["tests.e2e.conftest", "query_database"],
@@ -126,6 +140,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "sql": ["tests.e2e.conftest", "sql"],
     "t": ["tests.typings", "FlextDbtLdapTestTypes"],
     "table_exists": ["tests.e2e.conftest", "table_exists"],
+    "test_dbt_services_sync": ["tests.unit.test_dbt_services_sync", ""],
     "test_dunder_alignment": ["tests.unit.test_version", "test_dunder_alignment"],
     "test_incremental_groups_sync_applies_bookmark_filter": [
         "tests.unit.test_version",
@@ -139,13 +154,16 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "tests.unit.test_dbt_services_sync",
         "test_sync_users_uses_incremental_bookmark_and_persists_state",
     ],
+    "test_version": ["tests.unit.test_version", ""],
     "test_version_metadata_integrity": [
         "tests.unit.test_version",
         "test_version_metadata_integrity",
     ],
     "test_version_properties": ["tests.unit.test_version", "test_version_properties"],
+    "typings": ["tests.typings", ""],
     "u": ["tests.utilities", "FlextDbtLdapTestUtilities"],
     "unit": ["tests.unit", ""],
+    "utilities": ["tests.utilities", ""],
     "x": ["flext_tests", "x"],
 }
 
@@ -159,6 +177,8 @@ __all__ = [
     "MockLdapConnection",
     "MockLdapDbtAdapter",
     "c",
+    "conftest",
+    "constants",
     "count_rows",
     "d",
     "db_connection",
@@ -182,9 +202,11 @@ __all__ = [
     "m",
     "mock_ldap_connection",
     "mock_ldap_dbt_adapter",
+    "models",
     "p",
     "postgres_container",
     "project_root",
+    "protocols",
     "psycopg",
     "pytest_configure",
     "query_database",
@@ -198,14 +220,18 @@ __all__ = [
     "sql",
     "t",
     "table_exists",
+    "test_dbt_services_sync",
     "test_dunder_alignment",
     "test_incremental_groups_sync_applies_bookmark_filter",
     "test_incremental_users_sync_applies_bookmark_filter",
     "test_sync_users_uses_incremental_bookmark_and_persists_state",
+    "test_version",
     "test_version_metadata_integrity",
     "test_version_properties",
+    "typings",
     "u",
     "unit",
+    "utilities",
     "x",
 ]
 

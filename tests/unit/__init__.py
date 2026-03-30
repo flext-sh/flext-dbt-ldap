@@ -13,6 +13,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core import FlextTypes
 
+    from tests.unit import test_dbt_services_sync, test_version
     from tests.unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
@@ -25,6 +26,7 @@ if TYPE_CHECKING:
     )
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
+    "test_dbt_services_sync": ["tests.unit.test_dbt_services_sync", ""],
     "test_dunder_alignment": ["tests.unit.test_version", "test_dunder_alignment"],
     "test_incremental_groups_sync_applies_bookmark_filter": [
         "tests.unit.test_version",
@@ -38,6 +40,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "tests.unit.test_dbt_services_sync",
         "test_sync_users_uses_incremental_bookmark_and_persists_state",
     ],
+    "test_version": ["tests.unit.test_version", ""],
     "test_version_metadata_integrity": [
         "tests.unit.test_version",
         "test_version_metadata_integrity",
@@ -46,10 +49,12 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
 }
 
 __all__ = [
+    "test_dbt_services_sync",
     "test_dunder_alignment",
     "test_incremental_groups_sync_applies_bookmark_filter",
     "test_incremental_users_sync_applies_bookmark_filter",
     "test_sync_users_uses_incremental_bookmark_and_persists_state",
+    "test_version",
     "test_version_metadata_integrity",
     "test_version_properties",
 ]

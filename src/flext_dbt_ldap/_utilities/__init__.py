@@ -17,6 +17,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core import FlextTypes
 
+    from flext_dbt_ldap._utilities import client, integration, macros, sync
     from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
@@ -39,7 +40,11 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "flext_dbt_ldap._utilities.sync",
         "FlextDbtLdapUtilitiesSync",
     ],
+    "client": ["flext_dbt_ldap._utilities.client", ""],
+    "integration": ["flext_dbt_ldap._utilities.integration", ""],
     "logger": ["flext_dbt_ldap._utilities.sync", "logger"],
+    "macros": ["flext_dbt_ldap._utilities.macros", ""],
+    "sync": ["flext_dbt_ldap._utilities.sync", ""],
 }
 
 __all__ = [
@@ -47,7 +52,11 @@ __all__ = [
     "FlextDbtLdapUtilitiesIntegration",
     "FlextDbtLdapUtilitiesMacros",
     "FlextDbtLdapUtilitiesSync",
+    "client",
+    "integration",
     "logger",
+    "macros",
+    "sync",
 ]
 
 

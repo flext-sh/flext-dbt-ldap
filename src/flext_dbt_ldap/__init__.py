@@ -30,7 +30,19 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_ldap import d, e, h, r, s, x
 
-    from flext_dbt_ldap import _utilities
+    from flext_dbt_ldap import (
+        _utilities,
+        constants,
+        errors,
+        models,
+        protocols,
+        settings,
+        simple_api,
+        typings,
+        utilities,
+        version_info,
+    )
+    from flext_dbt_ldap._utilities import client, integration, macros, sync
     from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
@@ -118,16 +130,29 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "__version_info__": ["flext_dbt_ldap.version_info", "__version_info__"],
     "_utilities": ["flext_dbt_ldap._utilities", ""],
     "c": ["flext_dbt_ldap.constants", "FlextDbtLdapConstants"],
+    "client": ["flext_dbt_ldap._utilities.client", ""],
+    "constants": ["flext_dbt_ldap.constants", ""],
     "d": ["flext_ldap", "d"],
     "e": ["flext_ldap", "e"],
+    "errors": ["flext_dbt_ldap.errors", ""],
     "h": ["flext_ldap", "h"],
+    "integration": ["flext_dbt_ldap._utilities.integration", ""],
     "logger": ["flext_dbt_ldap.settings", "logger"],
     "m": ["flext_dbt_ldap.models", "FlextDbtLdapModels"],
+    "macros": ["flext_dbt_ldap._utilities.macros", ""],
+    "models": ["flext_dbt_ldap.models", ""],
     "p": ["flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"],
+    "protocols": ["flext_dbt_ldap.protocols", ""],
     "r": ["flext_ldap", "r"],
     "s": ["flext_ldap", "s"],
+    "settings": ["flext_dbt_ldap.settings", ""],
+    "simple_api": ["flext_dbt_ldap.simple_api", ""],
+    "sync": ["flext_dbt_ldap._utilities.sync", ""],
     "t": ["flext_dbt_ldap.typings", "FlextDbtLdapTypes"],
+    "typings": ["flext_dbt_ldap.typings", ""],
     "u": ["flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"],
+    "utilities": ["flext_dbt_ldap.utilities", ""],
+    "version_info": ["flext_dbt_ldap.version_info", ""],
     "x": ["flext_ldap", "x"],
 }
 
@@ -163,16 +188,29 @@ __all__ = [
     "__version_info__",
     "_utilities",
     "c",
+    "client",
+    "constants",
     "d",
     "e",
+    "errors",
     "h",
+    "integration",
     "logger",
     "m",
+    "macros",
+    "models",
     "p",
+    "protocols",
     "r",
     "s",
+    "settings",
+    "simple_api",
+    "sync",
     "t",
+    "typings",
     "u",
+    "utilities",
+    "version_info",
     "x",
 ]
 

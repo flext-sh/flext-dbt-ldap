@@ -18,6 +18,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core import FlextTypes
 
+    from tests.e2e import conftest
     from tests.e2e.conftest import (
         POSTGRES_READY_MAX_RETRIES,
         count_rows,
@@ -38,6 +39,7 @@ if TYPE_CHECKING:
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "POSTGRES_READY_MAX_RETRIES": ["tests.e2e.conftest", "POSTGRES_READY_MAX_RETRIES"],
+    "conftest": ["tests.e2e.conftest", ""],
     "count_rows": ["tests.e2e.conftest", "count_rows"],
     "db_connection": ["tests.e2e.conftest", "db_connection"],
     "dbt_profiles_dir": ["tests.e2e.conftest", "dbt_profiles_dir"],
@@ -56,6 +58,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
 
 __all__ = [
     "POSTGRES_READY_MAX_RETRIES",
+    "conftest",
     "count_rows",
     "db_connection",
     "dbt_profiles_dir",
