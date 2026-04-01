@@ -18,7 +18,24 @@ from flext_core.lazy import install_lazy_exports
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
 
-    from tests.e2e.conftest import *
+    from tests.e2e import conftest
+    from tests.e2e.conftest import (
+        POSTGRES_READY_MAX_RETRIES,
+        count_rows,
+        db_connection,
+        dbt_profiles_dir,
+        dbt_project_dir,
+        flext_docker,
+        get_column_names,
+        logger,
+        postgres_container,
+        project_root,
+        psycopg,
+        query_database,
+        run_dbt_command,
+        sql,
+        table_exists,
+    )
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "POSTGRES_READY_MAX_RETRIES": "tests.e2e.conftest",

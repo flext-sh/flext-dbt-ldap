@@ -14,14 +14,77 @@ if _TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
-    from tests.conftest import *
-    from tests.constants import *
-    from tests.e2e import *
-    from tests.models import *
-    from tests.protocols import *
-    from tests.typings import *
-    from tests.unit import *
-    from tests.utilities import *
+    from tests import (
+        conftest,
+        constants,
+        e2e,
+        models,
+        protocols,
+        typings,
+        unit,
+        utilities,
+    )
+    from tests.conftest import (
+        MockLdapConnection,
+        MockLdapDbtAdapter,
+        dbt_ldap_macros,
+        dbt_ldap_models,
+        dbt_ldap_profile,
+        dbt_ldap_project_config,
+        dbt_ldap_sources,
+        dbt_ldap_tests,
+        ldap_performance_config,
+        ldap_source_config,
+        ldap_validation_rules,
+        mock_ldap_connection,
+        mock_ldap_dbt_adapter,
+        pytest_configure,
+        sample_ldap_entries,
+        set_test_environment,
+        shared_ldap_config,
+        shared_ldap_container,
+    )
+    from tests.constants import (
+        FlextDbtLdapTestConstants,
+        FlextDbtLdapTestConstants as c,
+    )
+    from tests.e2e import (
+        POSTGRES_READY_MAX_RETRIES,
+        count_rows,
+        db_connection,
+        dbt_profiles_dir,
+        dbt_project_dir,
+        flext_docker,
+        get_column_names,
+        logger,
+        postgres_container,
+        project_root,
+        psycopg,
+        query_database,
+        run_dbt_command,
+        sql,
+        table_exists,
+    )
+    from tests.models import FlextDbtLdapTestModels, FlextDbtLdapTestModels as m
+    from tests.protocols import (
+        FlextDbtLdapTestProtocols,
+        FlextDbtLdapTestProtocols as p,
+    )
+    from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
+    from tests.unit import (
+        test_dbt_services_sync,
+        test_dunder_alignment,
+        test_incremental_groups_sync_applies_bookmark_filter,
+        test_incremental_users_sync_applies_bookmark_filter,
+        test_sync_users_uses_incremental_bookmark_and_persists_state,
+        test_version,
+        test_version_metadata_integrity,
+        test_version_properties,
+    )
+    from tests.utilities import (
+        FlextDbtLdapTestUtilities,
+        FlextDbtLdapTestUtilities as u,
+    )
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
     (

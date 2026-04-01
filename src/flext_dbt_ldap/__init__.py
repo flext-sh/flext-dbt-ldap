@@ -30,16 +30,57 @@ if _TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_ldap import d, e, h, r, s, x
 
-    from flext_dbt_ldap._utilities import *
-    from flext_dbt_ldap.constants import *
-    from flext_dbt_ldap.errors import *
-    from flext_dbt_ldap.models import *
-    from flext_dbt_ldap.protocols import *
-    from flext_dbt_ldap.settings import *
-    from flext_dbt_ldap.simple_api import *
-    from flext_dbt_ldap.typings import *
-    from flext_dbt_ldap.utilities import *
-    from flext_dbt_ldap.version_info import *
+    from flext_dbt_ldap import (
+        _utilities,
+        constants,
+        errors,
+        models,
+        protocols,
+        settings,
+        simple_api,
+        typings,
+        utilities,
+        version_info,
+    )
+    from flext_dbt_ldap._utilities import (
+        FlextDbtLdapUtilitiesClient,
+        FlextDbtLdapUtilitiesIntegration,
+        FlextDbtLdapUtilitiesMacros,
+        FlextDbtLdapUtilitiesSync,
+        client,
+        integration,
+        macros,
+        sync,
+    )
+    from flext_dbt_ldap.constants import (
+        FlextDbtLdapConstants,
+        FlextDbtLdapConstants as c,
+    )
+    from flext_dbt_ldap.errors import (
+        FlextDbtLdapAuthenticationError,
+        FlextDbtLdapConfigurationError,
+        FlextDbtLdapConnectionError,
+        FlextDbtLdapError,
+        FlextDbtLdapMacroError,
+        FlextDbtLdapModelError,
+        FlextDbtLdapProcessingError,
+        FlextDbtLdapTestError,
+        FlextDbtLdapTimeoutError,
+        FlextDbtLdapValidationError,
+    )
+    from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
+    from flext_dbt_ldap.protocols import (
+        FlextDbtLdapProtocols,
+        FlextDbtLdapProtocols as p,
+    )
+    from flext_dbt_ldap.settings import FlextDbtLdapSettings, logger
+    from flext_dbt_ldap.simple_api import FlextDbtLdap
+    from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
+    from flext_dbt_ldap.utilities import (
+        FlextDbtLdapUtilities,
+        FlextDbtLdapUtilities as u,
+    )
+    from flext_dbt_ldap.version_info import __version__, __version_info__
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
     ("flext_dbt_ldap._utilities",),
