@@ -13,8 +13,16 @@ from flext_core.lazy import install_lazy_exports
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
 
-    from tests.unit.test_dbt_services_sync import *
-    from tests.unit.test_version import *
+    from tests.unit.test_dbt_services_sync import (
+        test_sync_users_uses_incremental_bookmark_and_persists_state,
+    )
+    from tests.unit.test_version import (
+        test_dunder_alignment,
+        test_incremental_groups_sync_applies_bookmark_filter,
+        test_incremental_users_sync_applies_bookmark_filter,
+        test_version_metadata_integrity,
+        test_version_properties,
+    )
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "test_dbt_services_sync": "tests.unit.test_dbt_services_sync",
