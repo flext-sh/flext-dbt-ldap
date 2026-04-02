@@ -27,6 +27,12 @@ from flext_dbt_ldap.__version__ import (
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.result import FlextResult as r
+    from flext_core.service import FlextService as s
     from flext_dbt_ldap import (
         _utilities,
         base,
@@ -72,7 +78,7 @@ if _TYPE_CHECKING:
         FlextDbtLdapProtocols,
         FlextDbtLdapProtocols as p,
     )
-    from flext_dbt_ldap.settings import FlextDbtLdapSettings, logger
+    from flext_dbt_ldap.settings import FlextDbtLdapSettings
     from flext_dbt_ldap.simple_api import FlextDbtLdap
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
     from flext_dbt_ldap.utilities import (
@@ -80,7 +86,6 @@ if _TYPE_CHECKING:
         FlextDbtLdapUtilities as u,
     )
     from flext_dbt_ldap.version_info import __version__, __version_info__
-    from flext_ldap import d, e, h, r, s, x
 
 _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
     ("flext_dbt_ldap._utilities",),
@@ -109,17 +114,16 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "base": "flext_dbt_ldap.base",
         "c": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
         "constants": "flext_dbt_ldap.constants",
-        "d": "flext_ldap",
-        "e": "flext_ldap",
+        "d": ("flext_core.decorators", "FlextDecorators"),
+        "e": ("flext_core.exceptions", "FlextExceptions"),
         "errors": "flext_dbt_ldap.errors",
-        "h": "flext_ldap",
-        "logger": "flext_dbt_ldap.settings",
+        "h": ("flext_core.handlers", "FlextHandlers"),
         "m": ("flext_dbt_ldap.models", "FlextDbtLdapModels"),
         "models": "flext_dbt_ldap.models",
         "p": ("flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"),
         "protocols": "flext_dbt_ldap.protocols",
-        "r": "flext_ldap",
-        "s": "flext_ldap",
+        "r": ("flext_core.result", "FlextResult"),
+        "s": ("flext_core.service", "FlextService"),
         "settings": "flext_dbt_ldap.settings",
         "simple_api": "flext_dbt_ldap.simple_api",
         "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
@@ -127,7 +131,7 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "u": ("flext_dbt_ldap.utilities", "FlextDbtLdapUtilities"),
         "utilities": "flext_dbt_ldap.utilities",
         "version_info": "flext_dbt_ldap.version_info",
-        "x": "flext_ldap",
+        "x": ("flext_core.mixins", "FlextMixins"),
     },
 )
 

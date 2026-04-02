@@ -20,7 +20,7 @@ if _TYPE_CHECKING:
     from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
-    from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync, logger
+    from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
 
 _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "FlextDbtLdapUtilitiesClient": "flext_dbt_ldap._utilities.client",
@@ -29,7 +29,6 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "FlextDbtLdapUtilitiesSync": "flext_dbt_ldap._utilities.sync",
     "client": "flext_dbt_ldap._utilities.client",
     "integration": "flext_dbt_ldap._utilities.integration",
-    "logger": "flext_dbt_ldap._utilities.sync",
     "macros": "flext_dbt_ldap._utilities.macros",
     "sync": "flext_dbt_ldap._utilities.sync",
 }

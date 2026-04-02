@@ -11,9 +11,13 @@ from typing import TYPE_CHECKING as _TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
 
 if _TYPE_CHECKING:
-    from flext_tests import d, e, h, r, s, x
-
     from flext_core import FlextTypes
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.result import FlextResult as r
+    from flext_core.service import FlextService as s
     from tests import (
         conftest,
         constants,
@@ -102,16 +106,16 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "c": ("tests.constants", "FlextDbtLdapTestConstants"),
         "conftest": "tests.conftest",
         "constants": "tests.constants",
-        "d": "flext_tests",
+        "d": ("flext_core.decorators", "FlextDecorators"),
         "dbt_ldap_macros": "tests.conftest",
         "dbt_ldap_models": "tests.conftest",
         "dbt_ldap_profile": "tests.conftest",
         "dbt_ldap_project_config": "tests.conftest",
         "dbt_ldap_sources": "tests.conftest",
         "dbt_ldap_tests": "tests.conftest",
-        "e": "flext_tests",
+        "e": ("flext_core.exceptions", "FlextExceptions"),
         "e2e": "tests.e2e",
-        "h": "flext_tests",
+        "h": ("flext_core.handlers", "FlextHandlers"),
         "ldap_performance_config": "tests.conftest",
         "ldap_source_config": "tests.conftest",
         "ldap_validation_rules": "tests.conftest",
@@ -122,8 +126,8 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "p": ("tests.protocols", "FlextDbtLdapTestProtocols"),
         "protocols": "tests.protocols",
         "pytest_configure": "tests.conftest",
-        "r": "flext_tests",
-        "s": "flext_tests",
+        "r": ("flext_core.result", "FlextResult"),
+        "s": ("flext_core.service", "FlextService"),
         "sample_ldap_entries": "tests.conftest",
         "set_test_environment": "tests.conftest",
         "shared_ldap_config": "tests.conftest",
@@ -133,7 +137,7 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "u": ("tests.utilities", "FlextDbtLdapTestUtilities"),
         "unit": "tests.unit",
         "utilities": "tests.utilities",
-        "x": "flext_tests",
+        "x": ("flext_core.mixins", "FlextMixins"),
     },
 )
 
