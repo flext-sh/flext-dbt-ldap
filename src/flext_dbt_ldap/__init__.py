@@ -32,6 +32,7 @@ if _TYPE_CHECKING:
 
     from flext_dbt_ldap import (
         _utilities,
+        base,
         constants,
         errors,
         models,
@@ -52,6 +53,7 @@ if _TYPE_CHECKING:
         macros,
         sync,
     )
+    from flext_dbt_ldap.base import FlextDbtLdapServiceBase
     from flext_dbt_ldap.constants import (
         FlextDbtLdapConstants,
         FlextDbtLdapConstants as c,
@@ -96,6 +98,7 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
         "FlextDbtLdapModels": "flext_dbt_ldap.models",
         "FlextDbtLdapProcessingError": "flext_dbt_ldap.errors",
         "FlextDbtLdapProtocols": "flext_dbt_ldap.protocols",
+        "FlextDbtLdapServiceBase": "flext_dbt_ldap.base",
         "FlextDbtLdapSettings": "flext_dbt_ldap.settings",
         "FlextDbtLdapTestError": "flext_dbt_ldap.errors",
         "FlextDbtLdapTimeoutError": "flext_dbt_ldap.errors",
@@ -105,6 +108,7 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
         "__version__": "flext_dbt_ldap.version_info",
         "__version_info__": "flext_dbt_ldap.version_info",
         "_utilities": "flext_dbt_ldap._utilities",
+        "base": "flext_dbt_ldap.base",
         "c": ("flext_dbt_ldap.constants", "FlextDbtLdapConstants"),
         "constants": "flext_dbt_ldap.constants",
         "d": "flext_ldap",

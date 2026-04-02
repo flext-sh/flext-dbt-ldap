@@ -15,7 +15,7 @@ from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
-from flext_dbt_ldap import FlextDbtLdapProtocols, t
+from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
 
 
 class FlextDbtLdapTestProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
@@ -37,9 +37,13 @@ class FlextDbtLdapTestProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
             params: tuple[str, ...] | None = None,
         ) -> FlextDbtLdapTestProtocols.DbCursor: ...
 
-        def fetchall(self) -> Sequence[tuple[t.NormalizedValue, ...]]: ...
+        def fetchall(
+            self,
+        ) -> Sequence[tuple[FlextDbtLdapTypes.NormalizedValue, ...]]: ...
 
-        def fetchone(self) -> tuple[t.NormalizedValue, ...] | None: ...
+        def fetchone(
+            self,
+        ) -> tuple[FlextDbtLdapTypes.NormalizedValue, ...] | None: ...
 
     @runtime_checkable
     class DbConnection(Protocol):
