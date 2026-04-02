@@ -450,7 +450,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         "Failed to transform memberships for entry: "
                         f"{str(entry.dn) if entry.dn is not None else ''}",
                     )
-            logger.info(f"Transformed {len(membership_facts)} membership facts")
+            logger.info("Transformed %d membership facts", len(membership_facts))
             return membership_facts
 
         def transform_users(
@@ -491,7 +491,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         failure_label,
                         entry_dn,
                     )
-            logger.info(f"Transformed {len(dimensions)} {transform_label}")
+            logger.info("Transformed %d %s", len(dimensions), transform_label)
             return dimensions
 
         def _extract_group_memberships(

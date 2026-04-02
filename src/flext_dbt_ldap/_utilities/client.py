@@ -15,9 +15,8 @@ from flext_ldap import (
     FlextLdapSettings,
     ldap,
 )
-from flext_meltano import FlextMeltanoDbtService
 
-from flext_dbt_ldap import FlextDbtLdapSettings, c, m, t
+from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
 
 logger = FlextLogger(__name__)
 
@@ -30,7 +29,7 @@ class FlextDbtLdapUtilitiesClient:
 
     _dbt_ldap_config: FlextDbtLdapSettings
     _ldap_api: ldap
-    _dbt_manager: FlextMeltanoDbtService | None
+    _dbt_manager: FlextDbtLdapServiceBase | None
 
     @property
     def config(self) -> FlextDbtLdapSettings:
@@ -38,10 +37,10 @@ class FlextDbtLdapUtilitiesClient:
         return self._dbt_ldap_config
 
     @property
-    def dbt_manager(self) -> FlextMeltanoDbtService:
+    def dbt_manager(self) -> FlextDbtLdapServiceBase:
         """Get or create DBT manager instance."""
         if self._dbt_manager is None:
-            self._dbt_manager = FlextMeltanoDbtService()
+            self._dbt_manager = FlextDbtLdapServiceBase()
         return self._dbt_manager
 
     @staticmethod

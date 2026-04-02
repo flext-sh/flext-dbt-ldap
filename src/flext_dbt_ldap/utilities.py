@@ -19,24 +19,6 @@ from flext_dbt_ldap import c, m, t
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
     """Unified DBT LDAP utilities service extending u."""
 
-    def execute(self) -> r[m.DbtLdap.ServiceStatus]:
-        """Execute the main DBT LDAP service operation."""
-        return r[m.DbtLdap.ServiceStatus].ok(
-            m.DbtLdap.ServiceStatus(
-                status="operational",
-                service="flext-dbt-ldap-utilities",
-                capabilities=[
-                    "dbt_project_management",
-                    "ldap_data_transformation",
-                    "schema_generation",
-                    "macro_management",
-                    "dbt_model_validation",
-                    "ldap_source_configuration",
-                    "transformation_optimization",
-                ],
-            ),
-        )
-
     class DbtLdap:
         """DBT project management utilities."""
 

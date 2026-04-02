@@ -27,9 +27,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     dbt_project_name: t.NonEmptyStr = "dbt-ldap"
 
-    @property
-    @override
-    def settings(self) -> FlextDbtLdapSettings:
+    def _dbt_ldap_settings(self) -> FlextDbtLdapSettings:
         """Return the typed dbt-ldap settings namespace."""
         return FlextSettings.get_global().get_namespace(
             "dbt_ldap", FlextDbtLdapSettings
@@ -38,7 +36,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @override
     def get_connection_profile(self) -> t.ContainerMapping:
         """Return dbt connection profile for LDAP."""
-        s = self.settings
+        s = self._dbt_ldap_settings()
         return {
             "type": "ldap",
             "host": s.ldap_host,

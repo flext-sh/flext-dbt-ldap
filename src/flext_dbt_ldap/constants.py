@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Sequence
-from enum import StrEnum, unique
 from typing import TYPE_CHECKING, ClassVar, Final
 
 from flext_ldap import FlextLdapConstants
@@ -180,22 +179,6 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             PERFORMANCE_EXECUTION_TIME_THRESHOLD: Final[float] = 30.0
             PERFORMANCE_MEMORY_USAGE_THRESHOLD: Final[float] = 1024.0
             PERFORMANCE_ROWS_PROCESSED_THRESHOLD: Final[int] = 100000
-
-        @unique
-        class DbtCommands(StrEnum):
-            """DBT command types.
-
-            DRY Pattern:
-                StrEnum is the single source of truth. Use DbtCommands.RUN.value
-                or DbtCommands.RUN directly - no base strings needed.
-            """
-
-            RUN = "run"
-            TEST = "test"
-            BUILD = "build"
-            SEED = "seed"
-            SNAPSHOT = "snapshot"
-            DOCS = "docs"
 
 
 c = FlextDbtLdapConstants
