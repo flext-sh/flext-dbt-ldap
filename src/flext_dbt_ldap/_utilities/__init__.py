@@ -16,14 +16,13 @@ from flext_core.lazy import install_lazy_exports
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
-
     from flext_dbt_ldap._utilities import client, integration, macros, sync
     from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
     from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync, logger
 
-_LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
+_LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "FlextDbtLdapUtilitiesClient": "flext_dbt_ldap._utilities.client",
     "FlextDbtLdapUtilitiesIntegration": "flext_dbt_ldap._utilities.integration",
     "FlextDbtLdapUtilitiesMacros": "flext_dbt_ldap._utilities.macros",

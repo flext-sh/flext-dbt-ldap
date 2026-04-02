@@ -373,7 +373,7 @@ class MockLdapDbtAdapter:
     def parse_ldap_attributes(
         self,
         attributes: Mapping[str, str | t.StrSequence | None],
-    ) -> Mapping[str, str | None]:
+    ) -> t.OptionalStrMapping:
         """Parse LDAP attributes for dbt models."""
         parsed: dict[str, str | None] = {}
         for key, value in attributes.items():

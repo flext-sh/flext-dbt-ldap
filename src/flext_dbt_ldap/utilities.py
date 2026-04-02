@@ -10,10 +10,9 @@ from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
 from pathlib import Path
 
 from flext_core import r
+from flext_dbt_ldap import c, m, t
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
-
-from flext_dbt_ldap import c, m, t
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):

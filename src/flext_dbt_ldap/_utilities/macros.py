@@ -11,7 +11,6 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from flext_core import FlextLogger
-
 from flext_dbt_ldap import c, t
 
 logger = FlextLogger(__name__)

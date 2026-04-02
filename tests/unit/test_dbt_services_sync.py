@@ -13,8 +13,8 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
-from flext_core import r
 
+from flext_core import r
 from flext_dbt_ldap import (
     FlextDbtLdapSettings,
     FlextDbtLdapUtilitiesSync as FlextDbtLdapService,

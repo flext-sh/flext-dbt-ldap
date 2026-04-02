@@ -17,7 +17,6 @@ from flext_core.lazy import install_lazy_exports
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
-
     from tests.e2e import conftest
     from tests.e2e.conftest import (
         POSTGRES_READY_MAX_RETRIES,
@@ -37,7 +36,7 @@ if _TYPE_CHECKING:
         table_exists,
     )
 
-_LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
+_LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "POSTGRES_READY_MAX_RETRIES": "tests.e2e.conftest",
     "conftest": "tests.e2e.conftest",
     "count_rows": "tests.e2e.conftest",

@@ -11,12 +11,11 @@ from __future__ import annotations
 from collections.abc import Mapping, MutableMapping, Sequence
 
 from flext_core import FlextLogger, r
+from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
 from flext_ldap import (
     FlextLdapSettings,
     ldap,
 )
-
-from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
 
 logger = FlextLogger(__name__)
 

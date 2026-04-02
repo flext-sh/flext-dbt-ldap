@@ -13,7 +13,6 @@ from collections.abc import Mapping
 from typing import override
 
 from flext_core import FlextExceptions
-
 from flext_dbt_ldap import t
 
 

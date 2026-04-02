@@ -11,12 +11,12 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, MutableMapping, MutableSequence, Sequence
 
-from flext_core import FlextLogger
-from flext_ldap import FlextLdapModels
-from flext_meltano import FlextMeltanoModels
 from pydantic import Field, model_validator
 
+from flext_core import FlextLogger
 from flext_dbt_ldap import c, t
+from flext_ldap import FlextLdapModels
+from flext_meltano import FlextMeltanoModels
 
 logger = FlextLogger(__name__)
 

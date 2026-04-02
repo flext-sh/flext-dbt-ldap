@@ -15,9 +15,9 @@ from types import ModuleType
 from typing import LiteralString
 
 import pytest
-from flext_core import FlextDecorators as d, FlextLogger
 from flext_tests import tk
 
+from flext_core import FlextDecorators as d, FlextLogger
 from tests import p, t
 
 psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
