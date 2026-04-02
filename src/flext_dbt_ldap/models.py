@@ -190,8 +190,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         class DbtSourceFreshness(FlextMeltanoModels.Value):
             """DBT source freshness configuration."""
 
-            warn_after: Mapping[str, int] = Field(default_factory=dict)
-            error_after: Mapping[str, int] = Field(default_factory=dict)
+            warn_after: t.IntMapping = Field(default_factory=dict)
+            error_after: t.IntMapping = Field(default_factory=dict)
 
         class DbtSourceDefinition(FlextMeltanoModels.Value):
             """Complete DBT source definition."""
@@ -212,7 +212,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         class ProjectStructureValidation(FlextMeltanoModels.Value):
             """DBT project structure validation result."""
 
-            results: Mapping[str, bool] = Field(default_factory=dict)
+            results: t.BoolMapping = Field(default_factory=dict)
 
         class OptimizationHints(FlextMeltanoModels.Value):
             """Query optimization hints."""

@@ -9,7 +9,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import json
-from collections.abc import MutableMapping
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -23,7 +22,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     """Warehouse sync mixin -- composed into FlextDbtLdap via MRO."""
 
     _sync_state_file: Path
-    _sync_bookmarks: MutableMapping[str, str]
+    _sync_bookmarks: t.MutableStrMapping
 
     def generate_analytics_report(
         self,
@@ -202,11 +201,11 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             return base_filter
         return f"(&{base_filter}(modifyTimestamp>={bookmark}))"
 
-    def _load_sync_state(self) -> MutableMapping[str, str]:
+    def _load_sync_state(self) -> t.MutableStrMapping:
         if not self._sync_state_file.exists():
             return {}
         try:
-            data: MutableMapping[str, str] = json.loads(
+            data: t.MutableStrMapping = json.loads(
                 self._sync_state_file.read_bytes(),
             )
             return data

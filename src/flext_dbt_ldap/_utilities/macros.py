@@ -8,8 +8,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-
 from flext_core import FlextLogger
 from flext_dbt_ldap import c, t
 
@@ -76,7 +74,7 @@ class FlextDbtLdapUtilitiesMacros:
         return not bool(user_account_control & 2)
 
     @staticmethod
-    def normalize_ldap_attribute(value: str | Sequence[str] | None) -> str:
+    def normalize_ldap_attribute(value: str | t.StrSequence | None) -> str:
         """Normalize LDAP attribute value for DBT processing."""
         if value is None:
             return ""

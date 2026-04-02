@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -20,6 +19,7 @@ from flext_dbt_ldap import (
     FlextDbtLdapUtilitiesSync as FlextDbtLdapService,
     m,
 )
+from tests import t
 
 
 def test_sync_users_uses_incremental_bookmark_and_persists_state(
@@ -48,5 +48,5 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
         call_kwargs["search_filter"]
         == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
     )
-    persisted: Mapping[str, str] = json.loads(state_file.read_bytes())
+    persisted: t.StrMapping = json.loads(state_file.read_bytes())
     assert persisted["users"] == "20260101000000Z"

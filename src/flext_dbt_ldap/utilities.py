@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
+from collections.abc import Mapping, MutableSequence, Sequence
 from pathlib import Path
 
 from flext_core import r
@@ -76,7 +76,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     "macros_dir": project_path / "macros",
                     "tests_dir": project_path / "tests",
                 }
-                results: MutableMapping[str, bool] = {}
+                results: t.MutableBoolMapping = {}
                 for name, path in required_files.items():
                     results[name] = path.exists()
                 return r[m.DbtLdap.ProjectStructureValidation].ok(
@@ -98,7 +98,7 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
             ) -> r[str]:
                 """Create DBT model SQL for LDAP data transformation."""
                 try:
-                    select_clauses: Sequence[str] = [
+                    select_clauses: t.StrSequence = [
                         f"    {column}"
                         if transformation == "identity"
                         else f"    {transformation} as {column}"

@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, ClassVar, Final
 
 from flext_ldap import FlextLdapConstants
@@ -60,12 +59,12 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
             MEMBER_UID: Final[str] = "memberUid"
             DN: Final[str] = "dn"
-            USER_ID_ATTRIBUTES: ClassVar[Sequence[str]] = [
+            USER_ID_ATTRIBUTES: ClassVar[t.StrSequence] = [
                 "uid",
                 "cn",
                 "samaccountname",
             ]
-            MEMBERSHIP_ATTRIBUTES: ClassVar[Sequence[str]] = [
+            MEMBERSHIP_ATTRIBUTES: ClassVar[t.StrSequence] = [
                 "member",
                 "uniqueMember",
                 "memberUid",
@@ -74,17 +73,17 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         class LdapSchemaMapping:
             """Project-specific LDAP schema class mappings."""
 
-            USERS_CLASSES: ClassVar[Sequence[str]] = [
+            USERS_CLASSES: ClassVar[t.StrSequence] = [
                 "person",
                 "user",
                 "inetOrgPerson",
             ]
-            GROUPS_CLASSES: ClassVar[Sequence[str]] = [
+            GROUPS_CLASSES: ClassVar[t.StrSequence] = [
                 "group",
                 "groupOfNames",
                 "groupOfUniqueNames",
             ]
-            ORG_UNITS_CLASSES: ClassVar[Sequence[str]] = [
+            ORG_UNITS_CLASSES: ClassVar[t.StrSequence] = [
                 "organizationalUnit",
                 "organization",
             ]
@@ -107,13 +106,13 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         class SearchAttributes:
             """Project-specific attribute sets for LDAP searches."""
 
-            GROUP: ClassVar[Sequence[str]] = [
+            GROUP: ClassVar[t.StrSequence] = [
                 "cn",
                 "description",
                 "member",
                 "groupType",
             ]
-            MEMBERSHIP: ClassVar[Sequence[str]] = [
+            MEMBERSHIP: ClassVar[t.StrSequence] = [
                 "cn",
                 "member",
                 "memberOf",
