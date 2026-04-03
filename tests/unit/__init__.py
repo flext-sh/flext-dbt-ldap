@@ -23,40 +23,36 @@ if _TYPE_CHECKING:
     from flext_core.service import FlextService as s
     from flext_core.typings import FlextTypes as t
     from flext_core.utilities import FlextUtilities as u
-    from flext_dbt_ldap import test_dbt_services_sync, test_version
-    from flext_dbt_ldap.test_dbt_services_sync import (
-        call_kwargs,
-        mock_pipeline,
-        persisted,
-        result,
-        return_value,
-        service,
-        state_file,
+    from tests.unit import test_dbt_services_sync, test_version
+    from tests.unit.test_dbt_services_sync import (
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
-    from flext_dbt_ldap.test_version import test_dunder_alignment
+    from tests.unit.test_version import (
+        test_dunder_alignment,
+        test_incremental_groups_sync_applies_bookmark_filter,
+        test_incremental_users_sync_applies_bookmark_filter,
+        test_version_metadata_integrity,
+        test_version_properties,
+    )
 
 _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "c": ("flext_core.constants", "FlextConstants"),
-    "call_kwargs": "flext_dbt_ldap.test_dbt_services_sync",
     "d": ("flext_core.decorators", "FlextDecorators"),
     "e": ("flext_core.exceptions", "FlextExceptions"),
     "h": ("flext_core.handlers", "FlextHandlers"),
     "m": ("flext_core.models", "FlextModels"),
-    "mock_pipeline": "flext_dbt_ldap.test_dbt_services_sync",
     "p": ("flext_core.protocols", "FlextProtocols"),
-    "persisted": "flext_dbt_ldap.test_dbt_services_sync",
     "r": ("flext_core.result", "FlextResult"),
-    "result": "flext_dbt_ldap.test_dbt_services_sync",
-    "return_value": "flext_dbt_ldap.test_dbt_services_sync",
     "s": ("flext_core.service", "FlextService"),
-    "service": "flext_dbt_ldap.test_dbt_services_sync",
-    "state_file": "flext_dbt_ldap.test_dbt_services_sync",
     "t": ("flext_core.typings", "FlextTypes"),
-    "test_dbt_services_sync": "flext_dbt_ldap.test_dbt_services_sync",
-    "test_dunder_alignment": "flext_dbt_ldap.test_version",
-    "test_sync_users_uses_incremental_bookmark_and_persists_state": "flext_dbt_ldap.test_dbt_services_sync",
-    "test_version": "flext_dbt_ldap.test_version",
+    "test_dbt_services_sync": "tests.unit.test_dbt_services_sync",
+    "test_dunder_alignment": "tests.unit.test_version",
+    "test_incremental_groups_sync_applies_bookmark_filter": "tests.unit.test_version",
+    "test_incremental_users_sync_applies_bookmark_filter": "tests.unit.test_version",
+    "test_sync_users_uses_incremental_bookmark_and_persists_state": "tests.unit.test_dbt_services_sync",
+    "test_version": "tests.unit.test_version",
+    "test_version_metadata_integrity": "tests.unit.test_version",
+    "test_version_properties": "tests.unit.test_version",
     "u": ("flext_core.utilities", "FlextUtilities"),
     "x": ("flext_core.mixins", "FlextMixins"),
 }
