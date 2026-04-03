@@ -1,12 +1,7 @@
 # AUTO-GENERATED FILE — DO NOT EDIT MANUALLY.
 # Regenerate with: make gen
 #
-"""End-to-end tests for flext-dbt-ldap.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
-"""
+"""E2e package."""
 
 from __future__ import annotations
 
@@ -17,42 +12,74 @@ from flext_core.lazy import install_lazy_exports
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
-    from tests.e2e import conftest
-    from tests.e2e.conftest import (
+    from flext_core.constants import FlextConstants as c
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.models import FlextModels as m
+    from flext_core.protocols import FlextProtocols as p
+    from flext_core.result import FlextResult as r
+    from flext_core.service import FlextService as s
+    from flext_core.typings import FlextTypes as t
+    from flext_core.utilities import FlextUtilities as u
+    from flext_dbt_ldap import conftest
+    from flext_dbt_ldap.conftest import (
         POSTGRES_READY_MAX_RETRIES,
-        count_rows,
+        capture_output,
+        check,
+        cmd,
+        cwd,
         db_connection,
         dbt_profiles_dir,
         dbt_project_dir,
+        env,
         flext_docker,
-        get_column_names,
         logger,
         postgres_container,
         project_root,
         psycopg,
         query_database,
-        run_dbt_command,
+        result,
         sql,
         table_exists,
+        text,
+        var_string,
     )
 
 _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
-    "POSTGRES_READY_MAX_RETRIES": "tests.e2e.conftest",
-    "conftest": "tests.e2e.conftest",
-    "count_rows": "tests.e2e.conftest",
-    "db_connection": "tests.e2e.conftest",
-    "dbt_profiles_dir": "tests.e2e.conftest",
-    "dbt_project_dir": "tests.e2e.conftest",
-    "flext_docker": "tests.e2e.conftest",
-    "get_column_names": "tests.e2e.conftest",
-    "logger": "tests.e2e.conftest",
-    "postgres_container": "tests.e2e.conftest",
-    "project_root": "tests.e2e.conftest",
-    "psycopg": "tests.e2e.conftest",
-    "query_database": "tests.e2e.conftest",
-    "run_dbt_command": "tests.e2e.conftest",
-    "sql": "tests.e2e.conftest",
-    "table_exists": "tests.e2e.conftest",
+    "POSTGRES_READY_MAX_RETRIES": "flext_dbt_ldap.conftest",
+    "c": ("flext_core.constants", "FlextConstants"),
+    "capture_output": "flext_dbt_ldap.conftest",
+    "check": "flext_dbt_ldap.conftest",
+    "cmd": "flext_dbt_ldap.conftest",
+    "conftest": "flext_dbt_ldap.conftest",
+    "cwd": "flext_dbt_ldap.conftest",
+    "d": ("flext_core.decorators", "FlextDecorators"),
+    "db_connection": "flext_dbt_ldap.conftest",
+    "dbt_profiles_dir": "flext_dbt_ldap.conftest",
+    "dbt_project_dir": "flext_dbt_ldap.conftest",
+    "e": ("flext_core.exceptions", "FlextExceptions"),
+    "env": "flext_dbt_ldap.conftest",
+    "flext_docker": "flext_dbt_ldap.conftest",
+    "h": ("flext_core.handlers", "FlextHandlers"),
+    "logger": "flext_dbt_ldap.conftest",
+    "m": ("flext_core.models", "FlextModels"),
+    "p": ("flext_core.protocols", "FlextProtocols"),
+    "postgres_container": "flext_dbt_ldap.conftest",
+    "project_root": "flext_dbt_ldap.conftest",
+    "psycopg": "flext_dbt_ldap.conftest",
+    "query_database": "flext_dbt_ldap.conftest",
+    "r": ("flext_core.result", "FlextResult"),
+    "result": "flext_dbt_ldap.conftest",
+    "s": ("flext_core.service", "FlextService"),
+    "sql": "flext_dbt_ldap.conftest",
+    "t": ("flext_core.typings", "FlextTypes"),
+    "table_exists": "flext_dbt_ldap.conftest",
+    "text": "flext_dbt_ldap.conftest",
+    "u": ("flext_core.utilities", "FlextUtilities"),
+    "var_string": "flext_dbt_ldap.conftest",
+    "x": ("flext_core.mixins", "FlextMixins"),
 }
 
 
