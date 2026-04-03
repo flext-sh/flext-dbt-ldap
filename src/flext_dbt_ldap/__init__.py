@@ -5,83 +5,167 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING as _TYPE_CHECKING
+import typing as _t
 
+from flext_core.decorators import FlextDecorators as d
+from flext_core.exceptions import FlextExceptions as e
+from flext_core.handlers import FlextHandlers as h
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
+from flext_core.mixins import FlextMixins as x
+from flext_core.result import FlextResult as r
 from flext_dbt_ldap.__version__ import *
+from flext_dbt_ldap.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+)
+from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
+from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
+from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
+from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
+from flext_dbt_ldap.base import (
+    FlextDbtLdapServiceBase,
+    FlextDbtLdapServiceBase as s,
+)
+from flext_dbt_ldap.constants import (
+    FlextDbtLdapConstants,
+    FlextDbtLdapConstants as c,
+)
+from flext_dbt_ldap.errors import (
+    FlextDbtLdapAuthenticationError,
+    FlextDbtLdapConfigurationError,
+    FlextDbtLdapConnectionError,
+    FlextDbtLdapError,
+    FlextDbtLdapMacroError,
+    FlextDbtLdapModelError,
+    FlextDbtLdapProcessingError,
+    FlextDbtLdapTestError,
+    FlextDbtLdapTimeoutError,
+    FlextDbtLdapValidationError,
+)
+from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
+from flext_dbt_ldap.protocols import (
+    FlextDbtLdapProtocols,
+    FlextDbtLdapProtocols as p,
+)
+from flext_dbt_ldap.settings import FlextDbtLdapSettings
+from flext_dbt_ldap.simple_api import FlextDbtLdap
+from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
+from flext_dbt_ldap.utilities import (
+    FlextDbtLdapUtilities,
+    FlextDbtLdapUtilities as u,
+)
+from flext_dbt_ldap.version_info import __version__, __version_info__
 
-if _TYPE_CHECKING:
-    from flext_core import FlextTypes
-    from flext_core.decorators import FlextDecorators as d
-    from flext_core.exceptions import FlextExceptions as e
-    from flext_core.handlers import FlextHandlers as h
-    from flext_core.mixins import FlextMixins as x
-    from flext_core.result import FlextResult as r
-    from flext_core.service import FlextService as s
-    from flext_dbt_ldap import (
-        _utilities,
-        base,
-        constants,
-        errors,
-        models,
-        protocols,
-        settings,
-        simple_api,
-        typings,
-        utilities,
-        version_info,
-    )
-    from flext_dbt_ldap.__version__ import (
+if _t.TYPE_CHECKING:
+    import flext_dbt_ldap._utilities as _flext_dbt_ldap__utilities
+
+    _utilities = _flext_dbt_ldap__utilities
+    import flext_dbt_ldap._utilities.client as _flext_dbt_ldap__utilities_client
+
+    client = _flext_dbt_ldap__utilities_client
+    import flext_dbt_ldap._utilities.integration as _flext_dbt_ldap__utilities_integration
+
+    integration = _flext_dbt_ldap__utilities_integration
+    import flext_dbt_ldap._utilities.macros as _flext_dbt_ldap__utilities_macros
+
+    macros = _flext_dbt_ldap__utilities_macros
+    import flext_dbt_ldap._utilities.sync as _flext_dbt_ldap__utilities_sync
+
+    sync = _flext_dbt_ldap__utilities_sync
+    import flext_dbt_ldap.base as _flext_dbt_ldap_base
+
+    base = _flext_dbt_ldap_base
+    import flext_dbt_ldap.constants as _flext_dbt_ldap_constants
+
+    constants = _flext_dbt_ldap_constants
+    import flext_dbt_ldap.errors as _flext_dbt_ldap_errors
+
+    errors = _flext_dbt_ldap_errors
+    import flext_dbt_ldap.models as _flext_dbt_ldap_models
+
+    models = _flext_dbt_ldap_models
+    import flext_dbt_ldap.protocols as _flext_dbt_ldap_protocols
+
+    protocols = _flext_dbt_ldap_protocols
+    import flext_dbt_ldap.settings as _flext_dbt_ldap_settings
+
+    settings = _flext_dbt_ldap_settings
+    import flext_dbt_ldap.simple_api as _flext_dbt_ldap_simple_api
+
+    simple_api = _flext_dbt_ldap_simple_api
+    import flext_dbt_ldap.typings as _flext_dbt_ldap_typings
+
+    typings = _flext_dbt_ldap_typings
+    import flext_dbt_ldap.utilities as _flext_dbt_ldap_utilities
+
+    utilities = _flext_dbt_ldap_utilities
+    import flext_dbt_ldap.version_info as _flext_dbt_ldap_version_info
+
+    version_info = _flext_dbt_ldap_version_info
+
+    _ = (
+        FlextDbtLdap,
+        FlextDbtLdapAuthenticationError,
+        FlextDbtLdapConfigurationError,
+        FlextDbtLdapConnectionError,
+        FlextDbtLdapConstants,
+        FlextDbtLdapError,
+        FlextDbtLdapMacroError,
+        FlextDbtLdapModelError,
+        FlextDbtLdapModels,
+        FlextDbtLdapProcessingError,
+        FlextDbtLdapProtocols,
+        FlextDbtLdapServiceBase,
+        FlextDbtLdapSettings,
+        FlextDbtLdapTestError,
+        FlextDbtLdapTimeoutError,
+        FlextDbtLdapTypes,
+        FlextDbtLdapUtilities,
+        FlextDbtLdapUtilitiesClient,
+        FlextDbtLdapUtilitiesIntegration,
+        FlextDbtLdapUtilitiesMacros,
+        FlextDbtLdapUtilitiesSync,
+        FlextDbtLdapValidationError,
         __author__,
         __author_email__,
         __description__,
         __license__,
         __title__,
         __url__,
-    )
-    from flext_dbt_ldap._utilities import (
-        FlextDbtLdapUtilitiesClient,
-        FlextDbtLdapUtilitiesIntegration,
-        FlextDbtLdapUtilitiesMacros,
-        FlextDbtLdapUtilitiesSync,
+        __version__,
+        __version_info__,
+        _utilities,
+        base,
+        c,
         client,
+        constants,
+        d,
+        e,
+        errors,
+        h,
         integration,
+        m,
         macros,
+        models,
+        p,
+        protocols,
+        r,
+        s,
+        settings,
+        simple_api,
         sync,
+        t,
+        typings,
+        u,
+        utilities,
+        version_info,
+        x,
     )
-    from flext_dbt_ldap.base import FlextDbtLdapServiceBase
-    from flext_dbt_ldap.constants import (
-        FlextDbtLdapConstants,
-        FlextDbtLdapConstants as c,
-    )
-    from flext_dbt_ldap.errors import (
-        FlextDbtLdapAuthenticationError,
-        FlextDbtLdapConfigurationError,
-        FlextDbtLdapConnectionError,
-        FlextDbtLdapError,
-        FlextDbtLdapMacroError,
-        FlextDbtLdapModelError,
-        FlextDbtLdapProcessingError,
-        FlextDbtLdapTestError,
-        FlextDbtLdapTimeoutError,
-        FlextDbtLdapValidationError,
-    )
-    from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
-    from flext_dbt_ldap.protocols import (
-        FlextDbtLdapProtocols,
-        FlextDbtLdapProtocols as p,
-    )
-    from flext_dbt_ldap.settings import FlextDbtLdapSettings
-    from flext_dbt_ldap.simple_api import FlextDbtLdap
-    from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
-    from flext_dbt_ldap.utilities import (
-        FlextDbtLdapUtilities,
-        FlextDbtLdapUtilities as u,
-    )
-    from flext_dbt_ldap.version_info import __version__, __version_info__
-
-_LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
+_LAZY_IMPORTS = merge_lazy_imports(
     ("flext_dbt_ldap._utilities",),
     {
         "FlextDbtLdap": "flext_dbt_ldap.simple_api",
@@ -123,7 +207,7 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "p": ("flext_dbt_ldap.protocols", "FlextDbtLdapProtocols"),
         "protocols": "flext_dbt_ldap.protocols",
         "r": ("flext_core.result", "FlextResult"),
-        "s": ("flext_core.service", "FlextService"),
+        "s": ("flext_dbt_ldap.base", "FlextDbtLdapServiceBase"),
         "settings": "flext_dbt_ldap.settings",
         "simple_api": "flext_dbt_ldap.simple_api",
         "t": ("flext_dbt_ldap.typings", "FlextDbtLdapTypes"),
@@ -134,6 +218,65 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "x": ("flext_core.mixins", "FlextMixins"),
     },
 )
+
+__all__ = [
+    "FlextDbtLdap",
+    "FlextDbtLdapAuthenticationError",
+    "FlextDbtLdapConfigurationError",
+    "FlextDbtLdapConnectionError",
+    "FlextDbtLdapConstants",
+    "FlextDbtLdapError",
+    "FlextDbtLdapMacroError",
+    "FlextDbtLdapModelError",
+    "FlextDbtLdapModels",
+    "FlextDbtLdapProcessingError",
+    "FlextDbtLdapProtocols",
+    "FlextDbtLdapServiceBase",
+    "FlextDbtLdapSettings",
+    "FlextDbtLdapTestError",
+    "FlextDbtLdapTimeoutError",
+    "FlextDbtLdapTypes",
+    "FlextDbtLdapUtilities",
+    "FlextDbtLdapUtilitiesClient",
+    "FlextDbtLdapUtilitiesIntegration",
+    "FlextDbtLdapUtilitiesMacros",
+    "FlextDbtLdapUtilitiesSync",
+    "FlextDbtLdapValidationError",
+    "__author__",
+    "__author_email__",
+    "__description__",
+    "__license__",
+    "__title__",
+    "__url__",
+    "__version__",
+    "__version_info__",
+    "_utilities",
+    "base",
+    "c",
+    "client",
+    "constants",
+    "d",
+    "e",
+    "errors",
+    "h",
+    "integration",
+    "m",
+    "macros",
+    "models",
+    "p",
+    "protocols",
+    "r",
+    "s",
+    "settings",
+    "simple_api",
+    "sync",
+    "t",
+    "typings",
+    "u",
+    "utilities",
+    "version_info",
+    "x",
+]
 
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
