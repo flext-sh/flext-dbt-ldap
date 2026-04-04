@@ -22,23 +22,17 @@ if _t.TYPE_CHECKING:
     )
 
     _utilities = _flext_dbt_ldap__utilities
-    import flext_dbt_ldap._utilities.client as _flext_dbt_ldap__utilities_client
-
-    client = _flext_dbt_ldap__utilities_client
-    import flext_dbt_ldap._utilities.integration as _flext_dbt_ldap__utilities_integration
-    from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
-
-    integration = _flext_dbt_ldap__utilities_integration
-    import flext_dbt_ldap._utilities.macros as _flext_dbt_ldap__utilities_macros
-    from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
-
-    macros = _flext_dbt_ldap__utilities_macros
-    import flext_dbt_ldap._utilities.sync as _flext_dbt_ldap__utilities_sync
-    from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
-
-    sync = _flext_dbt_ldap__utilities_sync
     import flext_dbt_ldap.base as _flext_dbt_ldap_base
-    from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
+    from flext_dbt_ldap._utilities import (
+        FlextDbtLdapUtilitiesClient,
+        FlextDbtLdapUtilitiesIntegration,
+        FlextDbtLdapUtilitiesMacros,
+        FlextDbtLdapUtilitiesSync,
+        client,
+        integration,
+        macros,
+        sync,
+    )
 
     base = _flext_dbt_ldap_base
     import flext_dbt_ldap.constants as _flext_dbt_ldap_constants

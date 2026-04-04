@@ -44,7 +44,7 @@ if _t.TYPE_CHECKING:
 
     e2e = _tests_e2e
     import tests.models as _tests_models
-    from tests.e2e.conftest import (
+    from tests.e2e import (
         POSTGRES_READY_MAX_RETRIES,
         count_rows,
         db_connection,
@@ -78,20 +78,14 @@ if _t.TYPE_CHECKING:
     from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
 
     unit = _tests_unit
-    import tests.unit.test_dbt_services_sync as _tests_unit_test_dbt_services_sync
-
-    test_dbt_services_sync = _tests_unit_test_dbt_services_sync
-    import tests.unit.test_version as _tests_unit_test_version
-    from tests.unit.test_dbt_services_sync import (
-        test_sync_users_uses_incremental_bookmark_and_persists_state,
-    )
-
-    test_version = _tests_unit_test_version
     import tests.utilities as _tests_utilities
-    from tests.unit.test_version import (
+    from tests.unit import (
+        test_dbt_services_sync,
         test_dunder_alignment,
         test_incremental_groups_sync_applies_bookmark_filter,
         test_incremental_users_sync_applies_bookmark_filter,
+        test_sync_users_uses_incremental_bookmark_and_persists_state,
+        test_version,
         test_version_metadata_integrity,
         test_version_properties,
     )
