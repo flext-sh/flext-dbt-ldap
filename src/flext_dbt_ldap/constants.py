@@ -59,34 +59,34 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
             MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
             MEMBER_UID: Final[str] = "memberUid"
             DN: Final[str] = "dn"
-            USER_ID_ATTRIBUTES: ClassVar[t.StrSequence] = [
+            USER_ID_ATTRIBUTES: ClassVar[t.StrSequence] = (
                 "uid",
                 "cn",
                 "samaccountname",
-            ]
-            MEMBERSHIP_ATTRIBUTES: ClassVar[t.StrSequence] = [
+            )
+            MEMBERSHIP_ATTRIBUTES: ClassVar[t.StrSequence] = (
                 "member",
                 "uniqueMember",
                 "memberUid",
-            ]
+            )
 
         class LdapSchemaMapping:
             """Project-specific LDAP schema class mappings."""
 
-            USERS_CLASSES: ClassVar[t.StrSequence] = [
+            USERS_CLASSES: ClassVar[t.StrSequence] = (
                 "person",
                 "user",
                 "inetOrgPerson",
-            ]
-            GROUPS_CLASSES: ClassVar[t.StrSequence] = [
+            )
+            GROUPS_CLASSES: ClassVar[t.StrSequence] = (
                 "group",
                 "groupOfNames",
                 "groupOfUniqueNames",
-            ]
-            ORG_UNITS_CLASSES: ClassVar[t.StrSequence] = [
+            )
+            ORG_UNITS_CLASSES: ClassVar[t.StrSequence] = (
                 "organizationalUnit",
                 "organization",
-            ]
+            )
 
         class LdapEntityTypes:
             """Project-specific entity type identifiers."""
@@ -106,18 +106,18 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         class SearchAttributes:
             """Project-specific attribute sets for LDAP searches."""
 
-            GROUP: ClassVar[t.StrSequence] = [
+            GROUP: ClassVar[t.StrSequence] = (
                 "cn",
                 "description",
                 "member",
                 "groupType",
-            ]
-            MEMBERSHIP: ClassVar[t.StrSequence] = [
+            )
+            MEMBERSHIP: ClassVar[t.StrSequence] = (
                 "cn",
                 "member",
                 "memberOf",
                 "uniqueMember",
-            ]
+            )
 
         class Ldaps:
             """Secure LDAP connection settings."""
@@ -129,7 +129,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
             DEFAULT_PROFILES_DIR = "./profiles"
             DEFAULT_TARGET = "dev"
-            ALLOWED_TARGETS: ClassVar[t.StrSequence] = ["dev", "staging", "prod"]
+            ALLOWED_TARGETS: ClassVar[t.StrSequence] = ("dev", "staging", "prod")
 
         class DbtModels:
             """DBT model names for LDAP transformations."""
@@ -143,12 +143,12 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         class DataTypes:
             """LDAP attribute to SQL data type mappings."""
 
-            TIMESTAMP_ATTRS: Final[t.StrSequence] = [
+            TIMESTAMP_ATTRS: Final[t.StrSequence] = (
                 "createtimestamp",
                 "modifytimestamp",
-            ]
-            ARRAY_ATTRS: Final[t.StrSequence] = ["memberof", "objectclass"]
-            INTEGER_ATTRS: Final[t.StrSequence] = ["uidnumber", "gidnumber"]
+            )
+            ARRAY_ATTRS: Final[t.StrSequence] = ("memberof", "objectclass")
+            INTEGER_ATTRS: Final[t.StrSequence] = ("uidnumber", "gidnumber")
             TIMESTAMP: Final[str] = "timestamp"
             TEXT_ARRAY: Final[str] = "text[]"
             INTEGER: Final[str] = "integer"
