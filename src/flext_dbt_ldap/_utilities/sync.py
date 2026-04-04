@@ -8,12 +8,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import json
 from datetime import UTC, datetime
 from pathlib import Path
 
 from flext_core import FlextLogger, r
-from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t
+from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t, u
 
 logger = FlextLogger(__name__)
 
@@ -205,9 +204,17 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         if not self._sync_state_file.exists():
             return {}
         try:
-            data: t.MutableStrMapping = json.loads(
-                self._sync_state_file.read_bytes(),
-            )
+            payload_result = u.Cli.json_read(self._sync_state_file)
+            if payload_result.is_failure:
+                logger.error(
+                    "Failed to parse sync state file: %s",
+                    payload_result.error or "",
+                )
+                return {}
+            loaded = payload_result.value or {}
+            data: t.MutableStrMapping = {
+                key: value for key, value in loaded.items() if isinstance(value, str)
+            }
             return data
         except c.Meltano.Singer.SAFE_EXCEPTIONS:
             logger.exception("Failed to read sync state file")
@@ -215,9 +222,14 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
 
     def _persist_sync_state(self) -> None:
         self._sync_state_file.parent.mkdir(parents=True, exist_ok=True)
-        self._sync_state_file.write_bytes(
-            json.dumps(dict(sorted(self._sync_bookmarks.items())), indent=2).encode(),
+        write_result = u.Cli.json_write(
+            self._sync_state_file,
+            dict(sorted(self._sync_bookmarks.items())),
+            sort_keys=True,
         )
+        if write_result.is_failure:
+            msg = write_result.error or "Failed to persist sync state"
+            raise OSError(msg)
 
     def _resolve_sync_state_file(self) -> Path:
         return Path(self.config.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
