@@ -7,28 +7,41 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, ClassVar
 
 from pydantic import Field, SecretStr
+from pydantic_settings import SettingsConfigDict
 
 from flext_core import FlextLogger, FlextSettings
-from flext_dbt_ldap import t
+from flext_dbt_ldap import c, t
 
 logger = FlextLogger(__name__)
 
 
+@FlextSettings.auto_register("dbt-ldap")
 class FlextDbtLdapSettings(FlextSettings):
     """Runtime settings for DBT LDAP transformations."""
+
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
+        env_prefix="FLEXT_DBT_LDAP_",
+        extra="ignore",
+    )
 
     # LDAP connection settings
     ldap_host: Annotated[
         str,
-        Field(default="localhost", description="LDAP server hostname"),
+        Field(default=c.LOCALHOST, description="LDAP server hostname"),
     ]
-    ldap_port: Annotated[int, Field(default=389, description="LDAP server port")]
+    ldap_port: Annotated[
+        int,
+        Field(default=c.Ldap.ConnectionDefaults.PORT, description="LDAP server port"),
+    ]
     ldap_use_tls: Annotated[
         bool,
-        Field(default=False, description="Use TLS for LDAP connection"),
+        Field(
+            default=c.Ldap.ConnectionDefaults.DEFAULT_USE_TLS,
+            description="Use TLS for LDAP connection",
+        ),
     ]
     ldap_bind_dn: Annotated[
         SecretStr | None,
@@ -40,7 +53,10 @@ class FlextDbtLdapSettings(FlextSettings):
     ]
     ldap_base_dn: Annotated[
         str,
-        Field(default="dc=example,dc=com", description="LDAP base DN for searches"),
+        Field(
+            default=c.Ldap.Defaults.EXAMPLE_BASE_DN,
+            description="LDAP base DN for searches",
+        ),
     ]
 
     # DBT project settings
@@ -53,7 +69,7 @@ class FlextDbtLdapSettings(FlextSettings):
     min_quality_threshold: Annotated[
         float,
         Field(
-            default=0.8,
+            default=c.DbtLdap.DEFAULT_QUALITY_THRESHOLD,
             ge=0.0,
             le=1.0,
             description="Minimum data quality score threshold",

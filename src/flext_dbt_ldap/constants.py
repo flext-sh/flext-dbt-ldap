@@ -32,6 +32,8 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     class DbtLdap:
         """DBT-LDAP-specific constants (not available in parent c.Ldap)."""
 
+        DEFAULT_QUALITY_THRESHOLD: Final[float] = 0.8
+
         class LdapAttributes:
             """Project-specific LDAP attribute selections for dbt transformations.
 

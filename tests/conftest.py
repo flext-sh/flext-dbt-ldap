@@ -20,6 +20,8 @@ from pydantic import TypeAdapter, ValidationError
 
 from tests import t
 
+pytest_plugins = ["flext_tests.conftest_plugin"]
+
 
 @pytest.fixture(scope="session")
 def shared_ldap_container(flext_docker: tk) -> str:
