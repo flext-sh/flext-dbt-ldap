@@ -1,23 +1,36 @@
+# AUTO-GENERATED — DO NOT EDIT MANUALLY
 site_name: flext-dbt-ldap Documentation
-site_description: Standard guides for flext-dbt-ldap
-site_url: https://github.com/flext-sh/flext
+site_description: Generated documentation for flext-dbt-ldap
+site_url: https://github.com/flext-sh/flext/blob/main/README.md
 repo_name: flext-sh/flext
 repo_url: https://github.com/flext-sh/flext
-edit_uri: edit/main/flext-dbt-ldap/docs/guides/
-docs_dir: docs/guides
+edit_uri: edit/main/flext-dbt-ldap/
+docs_dir: docs
 site_dir: .reports/docs/site
 
 theme:
-  name: mkdocs
+  name: material
 
-plugins: []
+plugins:
+  - search
+  - autorefs
+  - section-index
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - src
+          options:
+            show_root_heading: true
+            show_root_full_path: false
+            show_source: false
 
 nav:
-  - Home: README.md
-  - Getting Started: getting-started.md
-  - Configuration: configuration.md
-  - Development: development.md
-  - Testing: testing.md
-  - Troubleshooting: troubleshooting.md
-  - Security: security.md
-  - Automation Skill Pattern: skill-automation-pattern.md
+  - Home: index.md
+  - Guides: guides/README.md
+  - API Reference: api-reference/README.md
+
+validation:
+  omitted_files: ignore
+  absolute_links: ignore
+  unrecognized_links: ignore

@@ -34,7 +34,7 @@ class FlextDbtLdapUtilitiesMacros:
                 if "T" in timestamp
                 else timestamp[:10]
             )
-        except c.Meltano.Singer.SAFE_EXCEPTIONS:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             logger.exception("Error extracting date from timestamp: %s", timestamp)
             return None
 
@@ -62,7 +62,7 @@ class FlextDbtLdapUtilitiesMacros:
             if len(parts) > 1:
                 return ",".join(parts[1:])
             return None
-        except c.Meltano.Singer.SAFE_EXCEPTIONS:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             logger.exception("Failed to get parent DN: %s", dn)
             return None
 
@@ -92,7 +92,7 @@ class FlextDbtLdapUtilitiesMacros:
                 if key.lower() == component.lower():
                     return value
             return None
-        except c.Meltano.Singer.SAFE_EXCEPTIONS:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             logger.exception("Failed to parse DN component: %s", dn)
             return None
 

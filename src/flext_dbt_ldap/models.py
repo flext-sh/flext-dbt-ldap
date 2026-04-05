@@ -445,7 +445,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                         membership_facts.extend(
                             self._extract_user_memberships(entry),
                         )
-                except c.Meltano.Singer.SAFE_EXCEPTIONS:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                     logger.exception(
                         "Failed to transform memberships for entry: "
                         f"{str(entry.dn) if entry.dn is not None else ''}",
@@ -484,7 +484,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                     continue
                 try:
                     dimensions.append(build_dimension(entry))
-                except c.Meltano.Singer.SAFE_EXCEPTIONS:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                     entry_dn = str(entry.dn) if entry.dn is not None else ""
                     logger.exception(
                         "Failed to transform %s: %s",
