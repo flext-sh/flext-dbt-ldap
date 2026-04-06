@@ -7,11 +7,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
+from flext_cli import t as cli_t, u as cli_u
 
 from flext_core import r
 from flext_dbt_ldap import (
@@ -19,7 +19,6 @@ from flext_dbt_ldap import (
     FlextDbtLdapUtilitiesSync as FlextDbtLdapService,
     m,
 )
-from tests import t
 
 
 def test_sync_users_uses_incremental_bookmark_and_persists_state(
@@ -27,7 +26,7 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     state_file = tmp_path / "sync-state.json"
-    state_file.write_bytes(json.dumps({"users": "20250101000000Z"}).encode())
+    cli_u.Cli.json_write(state_file, {"users": "20250101000000Z"})
     service = object.__new__(FlextDbtLdapService)
     service._dbt_ldap_config = FlextDbtLdapSettings.model_validate({
         "ldap_base_dn": "dc=example,dc=com",
@@ -48,5 +47,5 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
         call_kwargs["search_filter"]
         == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
     )
-    persisted: t.StrMapping = json.loads(state_file.read_bytes())
+    persisted: cli_t.Cli.JsonMapping = cli_u.Cli.json_read(state_file).unwrap_or({})
     assert persisted["users"] == "20260101000000Z"
