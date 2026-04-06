@@ -314,7 +314,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create user dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                la = c.DbtLdap.LdapAttributes
+                # la = c.DbtLdap.LdapAttributes
                 return cls(
                     user_id=get_attr(attrs, la.UID, "") or "",
                     common_name=get_attr(attrs, la.CN, "") or "",
@@ -361,7 +361,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create group dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                la = c.DbtLdap.LdapAttributes
+                # la = c.DbtLdap.LdapAttributes
                 member_count = len(attrs.get(la.MEMBER, [])) + len(
                     attrs.get(la.UNIQUE_MEMBER, []),
                 )
