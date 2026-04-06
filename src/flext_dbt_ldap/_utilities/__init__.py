@@ -27,10 +27,22 @@ if _t.TYPE_CHECKING:
     sync = _flext_dbt_ldap__utilities_sync
     from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
 _LAZY_IMPORTS = {
-    "FlextDbtLdapUtilitiesClient": "flext_dbt_ldap._utilities.client",
-    "FlextDbtLdapUtilitiesIntegration": "flext_dbt_ldap._utilities.integration",
-    "FlextDbtLdapUtilitiesMacros": "flext_dbt_ldap._utilities.macros",
-    "FlextDbtLdapUtilitiesSync": "flext_dbt_ldap._utilities.sync",
+    "FlextDbtLdapUtilitiesClient": (
+        "flext_dbt_ldap._utilities.client",
+        "FlextDbtLdapUtilitiesClient",
+    ),
+    "FlextDbtLdapUtilitiesIntegration": (
+        "flext_dbt_ldap._utilities.integration",
+        "FlextDbtLdapUtilitiesIntegration",
+    ),
+    "FlextDbtLdapUtilitiesMacros": (
+        "flext_dbt_ldap._utilities.macros",
+        "FlextDbtLdapUtilitiesMacros",
+    ),
+    "FlextDbtLdapUtilitiesSync": (
+        "flext_dbt_ldap._utilities.sync",
+        "FlextDbtLdapUtilitiesSync",
+    ),
     "client": "flext_dbt_ldap._utilities.client",
     "integration": "flext_dbt_ldap._utilities.integration",
     "macros": "flext_dbt_ldap._utilities.macros",

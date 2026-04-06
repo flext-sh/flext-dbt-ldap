@@ -48,13 +48,25 @@ _LAZY_IMPORTS = {
     "s": ("flext_core.service", "FlextService"),
     "t": ("flext_core.typings", "FlextTypes"),
     "test_dbt_services_sync": "tests.unit.test_dbt_services_sync",
-    "test_dunder_alignment": "tests.unit.test_version",
-    "test_incremental_groups_sync_applies_bookmark_filter": "tests.unit.test_version",
-    "test_incremental_users_sync_applies_bookmark_filter": "tests.unit.test_version",
-    "test_sync_users_uses_incremental_bookmark_and_persists_state": "tests.unit.test_dbt_services_sync",
+    "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
+    "test_incremental_groups_sync_applies_bookmark_filter": (
+        "tests.unit.test_version",
+        "test_incremental_groups_sync_applies_bookmark_filter",
+    ),
+    "test_incremental_users_sync_applies_bookmark_filter": (
+        "tests.unit.test_version",
+        "test_incremental_users_sync_applies_bookmark_filter",
+    ),
+    "test_sync_users_uses_incremental_bookmark_and_persists_state": (
+        "tests.unit.test_dbt_services_sync",
+        "test_sync_users_uses_incremental_bookmark_and_persists_state",
+    ),
     "test_version": "tests.unit.test_version",
-    "test_version_metadata_integrity": "tests.unit.test_version",
-    "test_version_properties": "tests.unit.test_version",
+    "test_version_metadata_integrity": (
+        "tests.unit.test_version",
+        "test_version_metadata_integrity",
+    ),
+    "test_version_properties": ("tests.unit.test_version", "test_version_properties"),
     "u": ("flext_core.utilities", "FlextUtilities"),
     "x": ("flext_core.mixins", "FlextMixins"),
 }

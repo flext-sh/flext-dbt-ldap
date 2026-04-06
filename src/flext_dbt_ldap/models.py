@@ -314,22 +314,29 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create user dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                # la = c.DbtLdap.LdapAttributes
+                # c.DbtLdap.LdapAttributes = c.DbtLdap.LdapAttributes
                 return cls(
-                    user_id=get_attr(attrs, la.UID, "") or "",
-                    common_name=get_attr(attrs, la.CN, "") or "",
-                    email=get_attr(attrs, la.MAIL),
-                    display_name=get_attr(attrs, la.DISPLAY_NAME),
-                    department=get_attr(attrs, la.DEPARTMENT),
-                    manager_dn=get_attr(attrs, la.MANAGER),
-                    employee_number=get_attr(attrs, la.EMPLOYEE_NUMBER),
-                    phone=get_attr(attrs, la.TELEPHONE_NUMBER),
-                    is_active=not (
-                        la.USER_ACCOUNT_CONTROL in attrs
-                        and "2" in str(attrs[la.USER_ACCOUNT_CONTROL][0])
+                    user_id=get_attr(attrs, c.DbtLdap.LdapAttributes.UID, "") or "",
+                    common_name=get_attr(attrs, c.DbtLdap.LdapAttributes.CN, "") or "",
+                    email=get_attr(attrs, c.DbtLdap.LdapAttributes.MAIL),
+                    display_name=get_attr(attrs, c.DbtLdap.LdapAttributes.DISPLAY_NAME),
+                    department=get_attr(attrs, c.DbtLdap.LdapAttributes.DEPARTMENT),
+                    manager_dn=get_attr(attrs, c.DbtLdap.LdapAttributes.MANAGER),
+                    employee_number=get_attr(
+                        attrs, c.DbtLdap.LdapAttributes.EMPLOYEE_NUMBER
                     ),
-                    created_date=get_attr(attrs, la.CREATE_TIMESTAMP),
-                    modified_date=get_attr(attrs, la.MODIFY_TIMESTAMP),
+                    phone=get_attr(attrs, c.DbtLdap.LdapAttributes.TELEPHONE_NUMBER),
+                    is_active=not (
+                        c.DbtLdap.LdapAttributes.USER_ACCOUNT_CONTROL in attrs
+                        and "2"
+                        in str(attrs[c.DbtLdap.LdapAttributes.USER_ACCOUNT_CONTROL][0])
+                    ),
+                    created_date=get_attr(
+                        attrs, c.DbtLdap.LdapAttributes.CREATE_TIMESTAMP
+                    ),
+                    modified_date=get_attr(
+                        attrs, c.DbtLdap.LdapAttributes.MODIFY_TIMESTAMP
+                    ),
                 )
 
         class GroupDimension(_DbtDimensionBase):
@@ -361,19 +368,25 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create group dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                # la = c.DbtLdap.LdapAttributes
-                member_count = len(attrs.get(la.MEMBER, [])) + len(
-                    attrs.get(la.UNIQUE_MEMBER, []),
+                # c.DbtLdap.LdapAttributes = c.DbtLdap.LdapAttributes
+                member_count = len(
+                    attrs.get(c.DbtLdap.LdapAttributes.MEMBER, [])
+                ) + len(
+                    attrs.get(c.DbtLdap.LdapAttributes.UNIQUE_MEMBER, []),
                 )
                 return cls(
-                    group_id=get_attr(attrs, la.CN, "") or "",
-                    common_name=get_attr(attrs, la.CN, "") or "",
-                    description=get_attr(attrs, la.DESCRIPTION),
-                    group_type=get_attr(attrs, la.GROUP_TYPE),
+                    group_id=get_attr(attrs, c.DbtLdap.LdapAttributes.CN, "") or "",
+                    common_name=get_attr(attrs, c.DbtLdap.LdapAttributes.CN, "") or "",
+                    description=get_attr(attrs, c.DbtLdap.LdapAttributes.DESCRIPTION),
+                    group_type=get_attr(attrs, c.DbtLdap.LdapAttributes.GROUP_TYPE),
                     member_count=member_count,
                     is_active=True,
-                    created_date=get_attr(attrs, la.CREATE_TIMESTAMP),
-                    modified_date=get_attr(attrs, la.MODIFY_TIMESTAMP),
+                    created_date=get_attr(
+                        attrs, c.DbtLdap.LdapAttributes.CREATE_TIMESTAMP
+                    ),
+                    modified_date=get_attr(
+                        attrs, c.DbtLdap.LdapAttributes.MODIFY_TIMESTAMP
+                    ),
                 )
 
         class MembershipFact(_DbtSerializable):
