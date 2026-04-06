@@ -116,6 +116,11 @@ dev = [
   "vulture>=2.13",
 ]
 
+# [MANAGED] codespell
+[tool.codespell]
+check-filenames = true
+ignore-words-list = "crate,nd"
+
 # [MANAGED] coverage
 [tool.coverage.report]
 fail_under = 20
@@ -131,6 +136,7 @@ omit = [
 # [MANAGED] deptry
 [tool.deptry]
 known_first_party = [
+  "flext_cli",
   "flext_core",
   "flext_dbt_ldap",
   "flext_ldap",
@@ -220,21 +226,10 @@ project-includes = [
 ]
 python-version = "3.13"
 search-path = [
-  ".",
-  "../flext-cli/examples",
-  "../flext-cli/src",
-  "../flext-core/examples",
-  "../flext-core/src",
-  "../flext-infra/src",
-  "../flext-ldap/docs",
-  "../flext-ldap/src",
-  "../flext-ldif/examples",
-  "../flext-ldif/src",
-  "../flext-meltano/docs",
-  "../flext-meltano/examples",
-  "../flext-meltano/src",
-  "../flext-tests/src",
+  "examples",
+  "scripts",
   "src",
+  "tests",
 ]
 use-ignore-files = false
 
@@ -520,12 +515,7 @@ select = [
 [tool.ruff.lint.isort]
 combine-as-imports = true
 force-single-line = false
-known-first-party = [
-  "flext_core",
-  "flext_dbt_ldap",
-  "flext_ldap",
-  "flext_meltano",
-]
+known-first-party = [ "flext_cli", "flext_core", "flext_dbt_ldap", "flext_ldap", "flext_meltano" ]
 split-on-trailing-comma = true
 
 [tool.ruff.lint.per-file-ignores]
