@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import os
-import subprocess
 from collections.abc import Generator, Sequence
 from pathlib import Path
 from types import ModuleType
@@ -18,7 +17,7 @@ import pytest
 from flext_tests import tk
 
 from flext_core import FlextDecorators as d, FlextLogger
-from tests import p, t
+from tests import m, p, t, u
 
 psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
 sql: ModuleType = psycopg.sql
@@ -116,7 +115,7 @@ def run_dbt_command(
     project_dir: Path,
     profiles_dir: Path,
     dbt_vars: t.ContainerMapping | None = None,
-) -> subprocess.CompletedProcess[str]:
+) -> m.Cli.CommandOutput:
     """Run dbt command with proper configuration."""
     env = {
         **os.environ,
@@ -127,13 +126,13 @@ def run_dbt_command(
     if dbt_vars:
         var_string = " ".join((f"{k}:{v}" for k, v in dbt_vars.items()))
         cmd.extend(["--vars", var_string])
-    return subprocess.run(
-        cmd,
-        cwd=str(project_dir),
-        env=env,
-        capture_output=True,
-        text=True,
-        check=False,
+    result = u.Cli.run_raw(cmd, cwd=project_dir, env=env)
+    if result.is_success:
+        return result.value
+    return m.Cli.CommandOutput(
+        stdout="",
+        stderr=result.error or "dbt execution failed",
+        exit_code=1,
     )
 
 
