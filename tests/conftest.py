@@ -92,7 +92,7 @@ def dbt_ldap_profile() -> t.ContainerMapping:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> Mapping[str, t.Tests.Testobject]:
+def dbt_ldap_project_config() -> Mapping[str, t.Tests.TestobjectSerializable]:
     """Dbt LDAP project configuration for testing."""
     return td.build_dbt_project_config(
         name="flext_dbt_ldap_test",

@@ -12,7 +12,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from flext_cli import t as cli_t, u as cli_u
+from flext_cli import t, u
 from flext_core import r
 from flext_dbt_ldap import (
     FlextDbtLdapSettings,
@@ -26,7 +26,7 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     state_file = tmp_path / "sync-state.json"
-    cli_u.Cli.json_write(state_file, {"users": "20250101000000Z"})
+    u.Cli.json_write(state_file, {"users": "20250101000000Z"})
     service = object.__new__(FlextDbtLdapService)
     service._dbt_ldap_config = FlextDbtLdapSettings.model_validate({
         "ldap_base_dn": "dc=example,dc=com",
@@ -47,5 +47,5 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
         call_kwargs["search_filter"]
         == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
     )
-    persisted: cli_t.Cli.JsonMapping = cli_u.Cli.json_read(state_file).unwrap_or({})
+    persisted: t.Cli.JsonMapping = u.Cli.json_read(state_file).unwrap_or({})
     assert persisted["users"] == "20260101000000Z"
