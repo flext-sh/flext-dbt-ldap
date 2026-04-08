@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import typing as _t
 
-from flext_core.lazy import install_lazy_exports, merge_lazy_imports
+from flext_core.lazy import install_lazy_exports
 
 if _t.TYPE_CHECKING:
     import tests.conftest as _tests_conftest
@@ -17,46 +17,21 @@ if _t.TYPE_CHECKING:
     from tests.conftest import (
         MockLdapConnection,
         MockLdapDbtAdapter,
-        dbt_ldap_macros,
-        dbt_ldap_models,
-        dbt_ldap_profile,
-        dbt_ldap_project_config,
-        dbt_ldap_service_factory,
-        dbt_ldap_sources,
-        dbt_ldap_tests,
-        ldap_performance_config,
-        ldap_source_config,
-        ldap_validation_rules,
-        mock_ldap_connection,
-        mock_ldap_dbt_adapter,
         pytest_configure,
         pytest_plugins,
-        sample_ldap_entries,
-        set_test_environment,
-        shared_ldap_config,
-        shared_ldap_container,
     )
 
     constants = _tests_constants
-    import tests.e2e as _tests_e2e
+    import tests.models as _tests_models
     from tests.constants import (
         FlextDbtLdapTestConstants,
         FlextDbtLdapTestConstants as c,
     )
-
-    e2e = _tests_e2e
-    import tests.models as _tests_models
-    from tests.e2e import (
+    from tests.e2e.conftest import (
         POSTGRES_READY_MAX_RETRIES,
         count_rows,
-        db_connection,
-        dbt_profiles_dir,
-        dbt_project_dir,
-        flext_docker,
         get_column_names,
         logger,
-        postgres_container,
-        project_root,
         psycopg,
         query_database,
         run_dbt_command,
@@ -76,26 +51,8 @@ if _t.TYPE_CHECKING:
     )
 
     typings = _tests_typings
-    import tests.unit as _tests_unit
-    from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
-
-    unit = _tests_unit
     import tests.utilities as _tests_utilities
-    from tests.unit import (
-        test_constants_flat_api,
-        test_dbt_ldap_constants_surface_is_flat,
-        test_dbt_services_sync,
-        test_dunder_alignment,
-        test_run_dbt_models_propagates_run_models_failure,
-        test_service_init_fails_fast_when_sync_state_is_invalid,
-        test_sync_groups_uses_incremental_bookmark_and_persists_state,
-        test_sync_users_fails_when_sync_state_persistence_fails,
-        test_sync_users_uses_incremental_bookmark_and_persists_state,
-        test_user_dimension_from_ldap_entry_uses_flat_constants_surface,
-        test_version,
-        test_version_metadata_integrity,
-        test_version_properties,
-    )
+    from tests.typings import FlextDbtLdapTestTypes, FlextDbtLdapTestTypes as t
 
     utilities = _tests_utilities
     from flext_core.decorators import FlextDecorators as d
@@ -108,64 +65,43 @@ if _t.TYPE_CHECKING:
         FlextDbtLdapTestUtilities,
         FlextDbtLdapTestUtilities as u,
     )
-_LAZY_IMPORTS = merge_lazy_imports(
-    (
-        "tests.e2e",
-        "tests.unit",
-    ),
-    {
-        "FlextDbtLdapTestConstants": ("tests.constants", "FlextDbtLdapTestConstants"),
-        "FlextDbtLdapTestModels": ("tests.models", "FlextDbtLdapTestModels"),
-        "FlextDbtLdapTestProtocols": ("tests.protocols", "FlextDbtLdapTestProtocols"),
-        "FlextDbtLdapTestTypes": ("tests.typings", "FlextDbtLdapTestTypes"),
-        "FlextDbtLdapTestUtilities": ("tests.utilities", "FlextDbtLdapTestUtilities"),
-        "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),
-        "MockLdapDbtAdapter": ("tests.conftest", "MockLdapDbtAdapter"),
-        "c": ("tests.constants", "FlextDbtLdapTestConstants"),
-        "conftest": "tests.conftest",
-        "constants": "tests.constants",
-        "d": ("flext_core.decorators", "FlextDecorators"),
-        "dbt_ldap_macros": ("tests.conftest", "dbt_ldap_macros"),
-        "dbt_ldap_models": ("tests.conftest", "dbt_ldap_models"),
-        "dbt_ldap_profile": ("tests.conftest", "dbt_ldap_profile"),
-        "dbt_ldap_project_config": ("tests.conftest", "dbt_ldap_project_config"),
-        "dbt_ldap_service_factory": ("tests.conftest", "dbt_ldap_service_factory"),
-        "dbt_ldap_sources": ("tests.conftest", "dbt_ldap_sources"),
-        "dbt_ldap_tests": ("tests.conftest", "dbt_ldap_tests"),
-        "e": ("flext_core.exceptions", "FlextExceptions"),
-        "e2e": "tests.e2e",
-        "h": ("flext_core.handlers", "FlextHandlers"),
-        "ldap_performance_config": ("tests.conftest", "ldap_performance_config"),
-        "ldap_source_config": ("tests.conftest", "ldap_source_config"),
-        "ldap_validation_rules": ("tests.conftest", "ldap_validation_rules"),
-        "m": ("tests.models", "FlextDbtLdapTestModels"),
-        "mock_ldap_connection": ("tests.conftest", "mock_ldap_connection"),
-        "mock_ldap_dbt_adapter": ("tests.conftest", "mock_ldap_dbt_adapter"),
-        "models": "tests.models",
-        "p": ("tests.protocols", "FlextDbtLdapTestProtocols"),
-        "protocols": "tests.protocols",
-        "pytest_configure": ("tests.conftest", "pytest_configure"),
-        "pytest_plugins": ("tests.conftest", "pytest_plugins"),
-        "r": ("flext_core.result", "FlextResult"),
-        "s": ("flext_core.service", "FlextService"),
-        "sample_ldap_entries": ("tests.conftest", "sample_ldap_entries"),
-        "set_test_environment": ("tests.conftest", "set_test_environment"),
-        "shared_ldap_config": ("tests.conftest", "shared_ldap_config"),
-        "shared_ldap_container": ("tests.conftest", "shared_ldap_container"),
-        "t": ("tests.typings", "FlextDbtLdapTestTypes"),
-        "typings": "tests.typings",
-        "u": ("tests.utilities", "FlextDbtLdapTestUtilities"),
-        "unit": "tests.unit",
-        "utilities": "tests.utilities",
-        "x": ("flext_core.mixins", "FlextMixins"),
-    },
-)
-_ = _LAZY_IMPORTS.pop("cleanup_submodule_namespace", None)
-_ = _LAZY_IMPORTS.pop("install_lazy_exports", None)
-_ = _LAZY_IMPORTS.pop("lazy_getattr", None)
-_ = _LAZY_IMPORTS.pop("merge_lazy_imports", None)
-_ = _LAZY_IMPORTS.pop("output", None)
-_ = _LAZY_IMPORTS.pop("output_reporting", None)
+_LAZY_IMPORTS = {
+    "FlextDbtLdapTestConstants": ("tests.constants", "FlextDbtLdapTestConstants"),
+    "FlextDbtLdapTestModels": ("tests.models", "FlextDbtLdapTestModels"),
+    "FlextDbtLdapTestProtocols": ("tests.protocols", "FlextDbtLdapTestProtocols"),
+    "FlextDbtLdapTestTypes": ("tests.typings", "FlextDbtLdapTestTypes"),
+    "FlextDbtLdapTestUtilities": ("tests.utilities", "FlextDbtLdapTestUtilities"),
+    "MockLdapConnection": ("tests.conftest", "MockLdapConnection"),
+    "MockLdapDbtAdapter": ("tests.conftest", "MockLdapDbtAdapter"),
+    "POSTGRES_READY_MAX_RETRIES": ("tests.e2e.conftest", "POSTGRES_READY_MAX_RETRIES"),
+    "c": ("tests.constants", "FlextDbtLdapTestConstants"),
+    "conftest": "tests.conftest",
+    "constants": "tests.constants",
+    "count_rows": ("tests.e2e.conftest", "count_rows"),
+    "d": ("flext_core.decorators", "FlextDecorators"),
+    "e": ("flext_core.exceptions", "FlextExceptions"),
+    "get_column_names": ("tests.e2e.conftest", "get_column_names"),
+    "h": ("flext_core.handlers", "FlextHandlers"),
+    "logger": ("tests.e2e.conftest", "logger"),
+    "m": ("tests.models", "FlextDbtLdapTestModels"),
+    "models": "tests.models",
+    "p": ("tests.protocols", "FlextDbtLdapTestProtocols"),
+    "protocols": "tests.protocols",
+    "psycopg": ("tests.e2e.conftest", "psycopg"),
+    "pytest_configure": ("tests.conftest", "pytest_configure"),
+    "pytest_plugins": ("tests.conftest", "pytest_plugins"),
+    "query_database": ("tests.e2e.conftest", "query_database"),
+    "r": ("flext_core.result", "FlextResult"),
+    "run_dbt_command": ("tests.e2e.conftest", "run_dbt_command"),
+    "s": ("flext_core.service", "FlextService"),
+    "sql": ("tests.e2e.conftest", "sql"),
+    "t": ("tests.typings", "FlextDbtLdapTestTypes"),
+    "table_exists": ("tests.e2e.conftest", "table_exists"),
+    "typings": "tests.typings",
+    "u": ("tests.utilities", "FlextDbtLdapTestUtilities"),
+    "utilities": "tests.utilities",
+    "x": ("flext_core.mixins", "FlextMixins"),
+}
 
 __all__ = [
     "POSTGRES_READY_MAX_RETRIES",
@@ -181,32 +117,13 @@ __all__ = [
     "constants",
     "count_rows",
     "d",
-    "db_connection",
-    "dbt_ldap_macros",
-    "dbt_ldap_models",
-    "dbt_ldap_profile",
-    "dbt_ldap_project_config",
-    "dbt_ldap_service_factory",
-    "dbt_ldap_sources",
-    "dbt_ldap_tests",
-    "dbt_profiles_dir",
-    "dbt_project_dir",
     "e",
-    "e2e",
-    "flext_docker",
     "get_column_names",
     "h",
-    "ldap_performance_config",
-    "ldap_source_config",
-    "ldap_validation_rules",
     "logger",
     "m",
-    "mock_ldap_connection",
-    "mock_ldap_dbt_adapter",
     "models",
     "p",
-    "postgres_container",
-    "project_root",
     "protocols",
     "psycopg",
     "pytest_configure",
@@ -215,29 +132,11 @@ __all__ = [
     "r",
     "run_dbt_command",
     "s",
-    "sample_ldap_entries",
-    "set_test_environment",
-    "shared_ldap_config",
-    "shared_ldap_container",
     "sql",
     "t",
     "table_exists",
-    "test_constants_flat_api",
-    "test_dbt_ldap_constants_surface_is_flat",
-    "test_dbt_services_sync",
-    "test_dunder_alignment",
-    "test_run_dbt_models_propagates_run_models_failure",
-    "test_service_init_fails_fast_when_sync_state_is_invalid",
-    "test_sync_groups_uses_incremental_bookmark_and_persists_state",
-    "test_sync_users_fails_when_sync_state_persistence_fails",
-    "test_sync_users_uses_incremental_bookmark_and_persists_state",
-    "test_user_dimension_from_ldap_entry_uses_flat_constants_surface",
-    "test_version",
-    "test_version_metadata_integrity",
-    "test_version_properties",
     "typings",
     "u",
-    "unit",
     "utilities",
     "x",
 ]
