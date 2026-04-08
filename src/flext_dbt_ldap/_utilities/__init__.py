@@ -8,22 +8,10 @@ from __future__ import annotations
 from flext_core.lazy import install_lazy_exports
 
 _LAZY_IMPORTS = {
-    "FlextDbtLdapUtilitiesClient": (
-        "flext_dbt_ldap._utilities.client",
-        "FlextDbtLdapUtilitiesClient",
-    ),
-    "FlextDbtLdapUtilitiesIntegration": (
-        "flext_dbt_ldap._utilities.integration",
-        "FlextDbtLdapUtilitiesIntegration",
-    ),
-    "FlextDbtLdapUtilitiesMacros": (
-        "flext_dbt_ldap._utilities.macros",
-        "FlextDbtLdapUtilitiesMacros",
-    ),
-    "FlextDbtLdapUtilitiesSync": (
-        "flext_dbt_ldap._utilities.sync",
-        "FlextDbtLdapUtilitiesSync",
-    ),
+    "FlextDbtLdapUtilitiesClient": ".client",
+    "FlextDbtLdapUtilitiesIntegration": ".integration",
+    "FlextDbtLdapUtilitiesMacros": ".macros",
+    "FlextDbtLdapUtilitiesSync": ".sync",
 }
 
 
