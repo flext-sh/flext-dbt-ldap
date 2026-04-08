@@ -15,10 +15,7 @@ from pydantic import PrivateAttr
 
 from flext_cli import u
 from flext_core import FlextLogger, r
-from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import m
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t
 
 logger = FlextLogger(__name__)
 
