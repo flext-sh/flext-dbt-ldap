@@ -83,7 +83,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         class DbtRunStatus(FlextMeltanoModels.Value):
             """Status of a DBT transformation run."""
 
-            status: str = c.DbtLdap.Statuses.PENDING
+            status: str = c.Meltano.StreamStatus.PENDING
             models_run: t.StrSequence = Field(default_factory=list)
             entries_processed: int = 0
 
@@ -110,7 +110,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         class ServiceStatus(FlextMeltanoModels.Value):
             """Service status and capabilities."""
 
-            status: str = c.DbtLdap.Statuses.OPERATIONAL
+            status: str = c.DbtLdap.OPERATIONAL
             service: str = ""
             capabilities: t.StrSequence = Field(default_factory=list)
 
@@ -261,7 +261,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             """LDAP query configuration."""
 
             base_dn: str = ""
-            filter_str: str = c.DbtLdap.Filters.DEFAULT
+            filter_str: str = c.Ldap.Filters.ALL_ENTRIES_FILTER
             attributes: t.StrSequence = Field(default_factory=list)
             scope: str = "SUBTREE"
 
@@ -314,29 +314,21 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create user dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                # c.DbtLdap.LdapAttributes = c.DbtLdap.LdapAttributes
                 return cls(
-                    user_id=get_attr(attrs, c.DbtLdap.LdapAttributes.UID, "") or "",
-                    common_name=get_attr(attrs, c.DbtLdap.LdapAttributes.CN, "") or "",
-                    email=get_attr(attrs, c.DbtLdap.LdapAttributes.MAIL),
-                    display_name=get_attr(attrs, c.DbtLdap.LdapAttributes.DISPLAY_NAME),
-                    department=get_attr(attrs, c.DbtLdap.LdapAttributes.DEPARTMENT),
-                    manager_dn=get_attr(attrs, c.DbtLdap.LdapAttributes.MANAGER),
-                    employee_number=get_attr(
-                        attrs, c.DbtLdap.LdapAttributes.EMPLOYEE_NUMBER
-                    ),
-                    phone=get_attr(attrs, c.DbtLdap.LdapAttributes.TELEPHONE_NUMBER),
+                    user_id=get_attr(attrs, c.DbtLdap.UID, "") or "",
+                    common_name=get_attr(attrs, c.DbtLdap.CN, "") or "",
+                    email=get_attr(attrs, c.DbtLdap.MAIL),
+                    display_name=get_attr(attrs, c.DbtLdap.DISPLAY_NAME),
+                    department=get_attr(attrs, c.DbtLdap.DEPARTMENT),
+                    manager_dn=get_attr(attrs, c.DbtLdap.MANAGER),
+                    employee_number=get_attr(attrs, c.DbtLdap.EMPLOYEE_NUMBER),
+                    phone=get_attr(attrs, c.DbtLdap.TELEPHONE_NUMBER),
                     is_active=not (
-                        c.DbtLdap.LdapAttributes.USER_ACCOUNT_CONTROL in attrs
-                        and "2"
-                        in str(attrs[c.DbtLdap.LdapAttributes.USER_ACCOUNT_CONTROL][0])
+                        c.DbtLdap.USER_ACCOUNT_CONTROL in attrs
+                        and "2" in str(attrs[c.DbtLdap.USER_ACCOUNT_CONTROL][0])
                     ),
-                    created_date=get_attr(
-                        attrs, c.DbtLdap.LdapAttributes.CREATE_TIMESTAMP
-                    ),
-                    modified_date=get_attr(
-                        attrs, c.DbtLdap.LdapAttributes.MODIFY_TIMESTAMP
-                    ),
+                    created_date=get_attr(attrs, c.DbtLdap.CREATE_TIMESTAMP),
+                    modified_date=get_attr(attrs, c.DbtLdap.MODIFY_TIMESTAMP),
                 )
 
         class GroupDimension(_DbtDimensionBase):
@@ -368,25 +360,18 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
                 """Create group dimension from LDAP entry."""
                 attrs = FlextDbtLdapModels._entry_attrs_mapping(entry)
                 get_attr = FlextDbtLdapModels._get_attr
-                # c.DbtLdap.LdapAttributes = c.DbtLdap.LdapAttributes
-                member_count = len(
-                    attrs.get(c.DbtLdap.LdapAttributes.MEMBER, [])
-                ) + len(
-                    attrs.get(c.DbtLdap.LdapAttributes.UNIQUE_MEMBER, []),
+                member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(
+                    attrs.get(c.DbtLdap.UNIQUE_MEMBER, []),
                 )
                 return cls(
-                    group_id=get_attr(attrs, c.DbtLdap.LdapAttributes.CN, "") or "",
-                    common_name=get_attr(attrs, c.DbtLdap.LdapAttributes.CN, "") or "",
-                    description=get_attr(attrs, c.DbtLdap.LdapAttributes.DESCRIPTION),
-                    group_type=get_attr(attrs, c.DbtLdap.LdapAttributes.GROUP_TYPE),
+                    group_id=get_attr(attrs, c.DbtLdap.CN, "") or "",
+                    common_name=get_attr(attrs, c.DbtLdap.CN, "") or "",
+                    description=get_attr(attrs, c.DbtLdap.DESCRIPTION),
+                    group_type=get_attr(attrs, c.DbtLdap.GROUP_TYPE),
                     member_count=member_count,
                     is_active=True,
-                    created_date=get_attr(
-                        attrs, c.DbtLdap.LdapAttributes.CREATE_TIMESTAMP
-                    ),
-                    modified_date=get_attr(
-                        attrs, c.DbtLdap.LdapAttributes.MODIFY_TIMESTAMP
-                    ),
+                    created_date=get_attr(attrs, c.DbtLdap.CREATE_TIMESTAMP),
+                    modified_date=get_attr(attrs, c.DbtLdap.MODIFY_TIMESTAMP),
                 )
 
         class MembershipFact(_DbtSerializable):
@@ -394,7 +379,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
             user_dn: str
             group_dn: str
-            membership_type: str = c.DbtLdap.MembershipTypes.DIRECT
+            membership_type: str = c.DbtLdap.DIRECT
             is_primary: bool = False
             effective_date: str | None = None
             expiry_date: str | None = None
@@ -417,7 +402,7 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def get_object_classes(entry: m.Ldif.Entry) -> t.StrSequence:
             """Extract object classes from entry attributes."""
             raw = FlextDbtLdapModels._entry_attrs_mapping(entry)
-            return raw.get(c.DbtLdap.LdapAttributes.OBJECT_CLASS, [])
+            return raw.get(c.Ldap.LdapAttributeNames.OBJECT_CLASS, [])
 
         @staticmethod
         def normalize_attributes(
@@ -515,13 +500,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             memberships: MutableSequence[m.DbtLdap.MembershipFact] = []
             attrs = self.normalize_attributes(group_entry)
             group_dn = str(group_entry.dn) if group_entry.dn is not None else ""
-            for attr in c.DbtLdap.LdapAttributes.MEMBERSHIP_ATTRIBUTES:
+            for attr in c.DbtLdap.MEMBERSHIP_ATTRIBUTES:
                 if attr in attrs:
                     memberships.extend(
                         m.DbtLdap.MembershipFact(
                             user_dn=member_dn,
                             group_dn=group_dn,
-                            membership_type=c.DbtLdap.MembershipTypes.DIRECT,
+                            membership_type=c.DbtLdap.DIRECT,
                         )
                         for member_dn in attrs[attr]
                     )
@@ -535,14 +520,14 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
             memberships: MutableSequence[m.DbtLdap.MembershipFact] = []
             attrs = self.normalize_attributes(user_entry)
             user_dn = str(user_entry.dn) if user_entry.dn is not None else ""
-            if c.DbtLdap.LdapAttributes.MEMBER_OF in attrs:
+            if c.DbtLdap.MEMBER_OF in attrs:
                 memberships.extend(
                     m.DbtLdap.MembershipFact(
                         user_dn=user_dn,
                         group_dn=group_dn,
-                        membership_type=c.DbtLdap.MembershipTypes.DIRECT,
+                        membership_type=c.DbtLdap.DIRECT,
                     )
-                    for group_dn in attrs[c.DbtLdap.LdapAttributes.MEMBER_OF]
+                    for group_dn in attrs[c.DbtLdap.MEMBER_OF]
                 )
             return memberships
 
@@ -550,19 +535,13 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         def _is_group_entry(entry: m.Ldif.Entry) -> bool:
             """Check if entry is a group entry using canonical schema mapping."""
             object_classes = m.DbtLdap.get_object_classes(entry)
-            return any(
-                cls in object_classes
-                for cls in c.DbtLdap.LdapSchemaMapping.GROUPS_CLASSES
-            )
+            return any(cls in object_classes for cls in c.DbtLdap.GROUPS_CLASSES)
 
         @staticmethod
         def _is_user_entry(entry: m.Ldif.Entry) -> bool:
             """Check if entry is a user entry using canonical schema mapping."""
             object_classes = m.DbtLdap.get_object_classes(entry)
-            return any(
-                cls in object_classes
-                for cls in c.DbtLdap.LdapSchemaMapping.USERS_CLASSES
-            )
+            return any(cls in object_classes for cls in c.DbtLdap.USERS_CLASSES)
 
 
 # Short aliases

@@ -12,13 +12,11 @@ from unittest.mock import Mock
 
 import pytest
 
-from flext_cli import t, u
-from flext_core import r
 from flext_dbt_ldap import (
+    FlextDbtLdap,
     FlextDbtLdapSettings,
-    FlextDbtLdapUtilitiesSync as FlextDbtLdapService,
-    m,
 )
+from tests import m, r, t, u
 
 
 def test_sync_users_uses_incremental_bookmark_and_persists_state(
@@ -27,7 +25,7 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
 ) -> None:
     state_file = tmp_path / "sync-state.json"
     u.Cli.json_write(state_file, {"users": "20250101000000Z"})
-    service = object.__new__(FlextDbtLdapService)
+    service = object.__new__(FlextDbtLdap)
     service._dbt_ldap_config = FlextDbtLdapSettings.model_validate({
         "ldap_base_dn": "dc=example,dc=com",
     })

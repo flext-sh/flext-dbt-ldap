@@ -11,8 +11,12 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 
+from flext_cli import u
 from flext_core import FlextLogger, r
-from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t, u
+from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -47,7 +51,8 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             self.dbt_manager.run_models(models=model_list)
             return r[m.DbtLdap.DbtRunStatus].ok(
                 m.DbtLdap.DbtRunStatus(
-                    status=c.DbtLdap.Statuses.COMPLETED, models_run=model_list or []
+                    status=c.Meltano.StreamStatus.COMPLETED,
+                    models_run=model_list or [],
                 ),
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -89,7 +94,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         """Synchronize LDAP groups to data warehouse."""
         try:
             bookmark = self._bookmark_now()
-            group_filter = c.DbtLdap.Filters.GROUP
+            group_filter = c.DbtLdap.FILTER_GROUP
             if self._should_run_incremental(
                 "groups",
                 requested_incremental=incremental,
@@ -102,10 +107,10 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             result = self.run_full_pipeline(
                 search_base=search_base,
                 search_filter=group_filter,
-                attributes=c.DbtLdap.SearchAttributes.GROUP,
+                attributes=c.DbtLdap.SEARCH_GROUP,
                 model_names=[
-                    c.DbtLdap.DbtModels.STG_GROUPS,
-                    c.DbtLdap.DbtModels.DIM_GROUPS,
+                    c.DbtLdap.STG_GROUPS,
+                    c.DbtLdap.DIM_GROUPS,
                 ],
             )
             if result.is_success:
@@ -122,9 +127,9 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         try:
             return self.run_full_pipeline(
                 search_base=search_base,
-                search_filter=c.DbtLdap.Filters.MEMBERSHIP,
-                attributes=c.DbtLdap.SearchAttributes.MEMBERSHIP,
-                model_names=[c.DbtLdap.DbtModels.FACT_MEMBERSHIPS],
+                search_filter=c.DbtLdap.FILTER_MEMBERSHIP,
+                attributes=c.DbtLdap.SEARCH_MEMBERSHIP,
+                model_names=[c.DbtLdap.FACT_MEMBERSHIPS],
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
@@ -140,35 +145,35 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         """Synchronize LDAP users to data warehouse."""
         try:
             bookmark = self._bookmark_now()
-            user_filter = c.DbtLdap.Filters.USER
+            user_filter = c.DbtLdap.FILTER_USER
             if self._should_run_incremental(
-                c.DbtLdap.LdapEntityTypes.USERS,
+                c.DbtLdap.USERS,
                 requested_incremental=incremental,
                 current_bookmark=bookmark,
             ):
                 user_filter = self._build_incremental_filter(
                     user_filter,
-                    self._sync_bookmarks.get(c.DbtLdap.LdapEntityTypes.USERS),
+                    self._sync_bookmarks.get(c.DbtLdap.USERS),
                 )
             result = self.run_full_pipeline(
                 search_base=search_base,
                 search_filter=user_filter,
                 attributes=[
-                    c.DbtLdap.LdapAttributes.UID,
-                    c.DbtLdap.LdapAttributes.CN,
-                    c.DbtLdap.LdapAttributes.MAIL,
-                    c.DbtLdap.LdapAttributes.DISPLAY_NAME,
-                    c.DbtLdap.LdapAttributes.DEPARTMENT,
-                    c.DbtLdap.LdapAttributes.MANAGER,
+                    c.DbtLdap.UID,
+                    c.DbtLdap.CN,
+                    c.DbtLdap.MAIL,
+                    c.DbtLdap.DISPLAY_NAME,
+                    c.DbtLdap.DEPARTMENT,
+                    c.DbtLdap.MANAGER,
                 ],
                 model_names=[
-                    c.DbtLdap.DbtModels.STG_USERS,
-                    c.DbtLdap.DbtModels.DIM_USERS,
+                    c.DbtLdap.STG_USERS,
+                    c.DbtLdap.DIM_USERS,
                 ],
             )
             if result.is_success:
                 self._update_bookmark(
-                    c.DbtLdap.LdapEntityTypes.USERS,
+                    c.DbtLdap.USERS,
                     bookmark,
                     successful=True,
                 )
@@ -211,7 +216,9 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                     payload_result.error or "",
                 )
                 return {}
-            loaded = payload_result.value or {}
+            loaded: object = payload_result.value or {}
+            if not isinstance(loaded, dict):
+                return {}
             data: t.MutableStrMapping = {
                 key: value for key, value in loaded.items() if isinstance(value, str)
             }

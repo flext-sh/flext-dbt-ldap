@@ -10,7 +10,9 @@ from collections.abc import Mapping, MutableSequence, Sequence
 from pathlib import Path
 
 from flext_core import r
-from flext_dbt_ldap import c, m, t
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.typings import t
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 
@@ -170,15 +172,13 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                             "name": attr.lower().replace("-", "_"),
                             "description": f"LDAP {attr} attribute",
                             "data_type": (
-                                c.DbtLdap.DataTypes.TIMESTAMP
-                                if attr.lower()
-                                in set(c.DbtLdap.DataTypes.TIMESTAMP_ATTRS)
-                                else c.DbtLdap.DataTypes.TEXT_ARRAY
-                                if attr.lower() in set(c.DbtLdap.DataTypes.ARRAY_ATTRS)
-                                else c.DbtLdap.DataTypes.INTEGER
-                                if attr.lower()
-                                in set(c.DbtLdap.DataTypes.INTEGER_ATTRS)
-                                else c.DbtLdap.DataTypes.TEXT
+                                c.DbtLdap.TIMESTAMP
+                                if attr.lower() in set(c.DbtLdap.TIMESTAMP_ATTRS)
+                                else c.DbtLdap.TEXT_ARRAY
+                                if attr.lower() in set(c.DbtLdap.ARRAY_ATTRS)
+                                else c.DbtLdap.INTEGER
+                                if attr.lower() in set(c.DbtLdap.INTEGER_ATTRS)
+                                else c.DbtLdap.TEXT
                             ),
                         }
                         for attr in ldap_attributes
@@ -379,21 +379,21 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
                     recommendations: MutableSequence[str] = []
                     if (
                         model_stats.execution_time
-                        > c.DbtLdap.TransformationOptimization.PERFORMANCE_EXECUTION_TIME_THRESHOLD
+                        > c.DbtLdap.PERFORMANCE_EXECUTION_TIME_THRESHOLD
                     ):
                         recommendations.append(
                             "Consider adding indexes or partitioning for large datasets",
                         )
                     if (
                         model_stats.memory_usage
-                        > c.DbtLdap.TransformationOptimization.PERFORMANCE_MEMORY_USAGE_THRESHOLD
+                        > c.DbtLdap.PERFORMANCE_MEMORY_USAGE_THRESHOLD
                     ):
                         recommendations.append(
                             "Consider processing data in smaller batches",
                         )
                     if (
                         model_stats.rows_processed
-                        > c.DbtLdap.TransformationOptimization.PERFORMANCE_ROWS_PROCESSED_THRESHOLD
+                        > c.DbtLdap.PERFORMANCE_ROWS_PROCESSED_THRESHOLD
                     ):
                         recommendations.append(
                             "Consider incremental processing for large datasets",

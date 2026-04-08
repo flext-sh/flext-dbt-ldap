@@ -16,8 +16,8 @@ from typing import LiteralString
 import pytest
 from flext_tests import tk
 
-from flext_core import FlextDecorators as d, FlextLogger
-from tests import m, p, t, u
+from flext_core import FlextLogger
+from tests import d, m, p, t, u
 
 psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
 sql: ModuleType = psycopg.sql

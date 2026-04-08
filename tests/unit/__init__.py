@@ -10,7 +10,14 @@ import typing as _t
 from flext_core.lazy import install_lazy_exports
 
 if _t.TYPE_CHECKING:
+    import tests.unit.test_constants_flat_api as _tests_unit_test_constants_flat_api
+
+    test_constants_flat_api = _tests_unit_test_constants_flat_api
     import tests.unit.test_dbt_services_sync as _tests_unit_test_dbt_services_sync
+    from tests.unit.test_constants_flat_api import (
+        test_dbt_ldap_constants_surface_is_flat,
+        test_user_dimension_from_ldap_entry_uses_flat_constants_surface,
+    )
 
     test_dbt_services_sync = _tests_unit_test_dbt_services_sync
     import tests.unit.test_version as _tests_unit_test_version
@@ -47,6 +54,11 @@ _LAZY_IMPORTS = {
     "r": ("flext_core.result", "FlextResult"),
     "s": ("flext_core.service", "FlextService"),
     "t": ("flext_core.typings", "FlextTypes"),
+    "test_constants_flat_api": "tests.unit.test_constants_flat_api",
+    "test_dbt_ldap_constants_surface_is_flat": (
+        "tests.unit.test_constants_flat_api",
+        "test_dbt_ldap_constants_surface_is_flat",
+    ),
     "test_dbt_services_sync": "tests.unit.test_dbt_services_sync",
     "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
     "test_incremental_groups_sync_applies_bookmark_filter": (
@@ -60,6 +72,10 @@ _LAZY_IMPORTS = {
     "test_sync_users_uses_incremental_bookmark_and_persists_state": (
         "tests.unit.test_dbt_services_sync",
         "test_sync_users_uses_incremental_bookmark_and_persists_state",
+    ),
+    "test_user_dimension_from_ldap_entry_uses_flat_constants_surface": (
+        "tests.unit.test_constants_flat_api",
+        "test_user_dimension_from_ldap_entry_uses_flat_constants_surface",
     ),
     "test_version": "tests.unit.test_version",
     "test_version_metadata_integrity": (
@@ -81,11 +97,14 @@ __all__ = [
     "r",
     "s",
     "t",
+    "test_constants_flat_api",
+    "test_dbt_ldap_constants_surface_is_flat",
     "test_dbt_services_sync",
     "test_dunder_alignment",
     "test_incremental_groups_sync_applies_bookmark_filter",
     "test_incremental_users_sync_applies_bookmark_filter",
     "test_sync_users_uses_incremental_bookmark_and_persists_state",
+    "test_user_dimension_from_ldap_entry_uses_flat_constants_surface",
     "test_version",
     "test_version_metadata_integrity",
     "test_version_properties",

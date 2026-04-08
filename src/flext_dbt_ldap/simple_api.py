@@ -12,7 +12,9 @@ from __future__ import annotations
 from typing import override
 
 from flext_core import FlextService, r
-from flext_dbt_ldap import FlextDbtLdapSettings, FlextDbtLdapUtilitiesSync, m
+from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 
 class FlextDbtLdap(

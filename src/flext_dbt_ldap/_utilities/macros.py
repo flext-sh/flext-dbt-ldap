@@ -9,7 +9,8 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_core import FlextLogger
-from flext_dbt_ldap import c, t
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -41,14 +42,12 @@ class FlextDbtLdapUtilitiesMacros:
     @staticmethod
     def extract_group_name_from_dn(dn: str) -> str | None:
         """Extract group name (cn) from DN."""
-        return FlextDbtLdapUtilitiesMacros.parse_dn_component(
-            dn, c.DbtLdap.LdapAttributes.CN
-        )
+        return FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, c.DbtLdap.CN)
 
     @staticmethod
     def extract_user_id_from_dn(dn: str) -> str | None:
         """Extract user ID from DN (tries uid, cn, samaccountname)."""
-        for attr in c.DbtLdap.LdapAttributes.USER_ID_ATTRIBUTES:
+        for attr in c.DbtLdap.USER_ID_ATTRIBUTES:
             user_id = FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, attr)
             if user_id:
                 return user_id

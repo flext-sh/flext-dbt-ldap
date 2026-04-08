@@ -11,7 +11,11 @@ from __future__ import annotations
 from collections.abc import Mapping, MutableMapping, Sequence
 
 from flext_core import FlextLogger, r
-from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
+from flext_dbt_ldap.base import FlextDbtLdapServiceBase
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.settings import FlextDbtLdapSettings
+from flext_dbt_ldap.typings import t
 from flext_ldap import (
     FlextLdapSettings,
     ldap,
@@ -67,7 +71,7 @@ class FlextDbtLdapUtilitiesClient:
     def extract_ldap_entries(
         self,
         search_base: str | None = None,
-        search_filter: str = c.DbtLdap.Filters.DEFAULT,
+        search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
         attributes: t.StrSequence | None = None,
     ) -> r[Sequence[t.DbtLdap.LdapEntryMapping]]:
         """Extract LDAP entries for DBT processing."""
@@ -102,7 +106,7 @@ class FlextDbtLdapUtilitiesClient:
     def run_full_pipeline(
         self,
         search_base: str | None = None,
-        search_filter: str = c.DbtLdap.Filters.DEFAULT,
+        search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
         attributes: t.StrSequence | None = None,
         model_names: t.StrSequence | None = None,
     ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
@@ -150,7 +154,7 @@ class FlextDbtLdapUtilitiesClient:
             model_list = list(model_names) if model_names else None
             self.dbt_manager.run_models(models=model_list)
             result_data = m.DbtLdap.DbtRunStatus(
-                status=c.DbtLdap.Statuses.COMPLETED,
+                status=c.Meltano.StreamStatus.COMPLETED,
                 models_run=model_list or [],
                 entries_processed=len(entries),
             )
@@ -172,7 +176,7 @@ class FlextDbtLdapUtilitiesClient:
             valid_dns = 0
             valid_entries = 0
             for entry in entries:
-                if entry.get(c.DbtLdap.LdapAttributes.DN):
+                if entry.get(c.Ldap.LdapAttributeNames.DN):
                     valid_dns += 1
                 if all(attr in entry and entry[attr] for attr in required_attributes):
                     valid_entries += 1
@@ -202,7 +206,7 @@ class FlextDbtLdapUtilitiesClient:
         entry: t.DbtLdap.LdapEntryMapping,
     ) -> t.ConfigurationMapping:
         """Map LDAP entry attributes using configuration mapping."""
-        dn_attr = c.DbtLdap.LdapAttributes.DN
+        dn_attr = c.Ldap.LdapAttributeNames.DN
         dn_str = str(entry.get(dn_attr, [""])[0]) if entry.get(dn_attr) else ""
         mapped_attrs: t.MutableConfigurationMapping = {dn_attr: dn_str}
         for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
@@ -223,12 +227,12 @@ class FlextDbtLdapUtilitiesClient:
     ) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes: t.StrSequence = [
-            str(x) for x in entry.get(c.DbtLdap.LdapAttributes.OBJECT_CLASS, [])
+            str(x) for x in entry.get(c.Ldap.LdapAttributeNames.OBJECT_CLASS, [])
         ]
         schema_mapping: Mapping[str, t.StrSequence] = {
-            c.DbtLdap.LdapEntityTypes.USERS: c.DbtLdap.LdapSchemaMapping.USERS_CLASSES,
-            c.DbtLdap.LdapEntityTypes.GROUPS: c.DbtLdap.LdapSchemaMapping.GROUPS_CLASSES,
-            c.DbtLdap.LdapEntityTypes.ORG_UNITS: c.DbtLdap.LdapSchemaMapping.ORG_UNITS_CLASSES,
+            c.DbtLdap.USERS: c.DbtLdap.USERS_CLASSES,
+            c.DbtLdap.GROUPS: c.DbtLdap.GROUPS_CLASSES,
+            c.DbtLdap.ORG_UNITS: c.DbtLdap.ORG_UNITS_CLASSES,
         }
         expected_classes = schema_mapping.get(schema_name, [])
         return any(cls in object_classes for cls in expected_classes)
