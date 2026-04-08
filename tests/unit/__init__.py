@@ -22,6 +22,8 @@ if _t.TYPE_CHECKING:
     test_dbt_services_sync = _tests_unit_test_dbt_services_sync
     import tests.unit.test_version as _tests_unit_test_version
     from tests.unit.test_dbt_services_sync import (
+        test_run_dbt_models_propagates_run_models_failure,
+        test_sync_groups_uses_incremental_bookmark_and_persists_state,
         test_sync_users_uses_incremental_bookmark_and_persists_state,
     )
 
@@ -39,8 +41,6 @@ if _t.TYPE_CHECKING:
     from flext_core.utilities import FlextUtilities as u
     from tests.unit.test_version import (
         test_dunder_alignment,
-        test_incremental_groups_sync_applies_bookmark_filter,
-        test_incremental_users_sync_applies_bookmark_filter,
         test_version_metadata_integrity,
         test_version_properties,
     )
@@ -61,13 +61,13 @@ _LAZY_IMPORTS = {
     ),
     "test_dbt_services_sync": "tests.unit.test_dbt_services_sync",
     "test_dunder_alignment": ("tests.unit.test_version", "test_dunder_alignment"),
-    "test_incremental_groups_sync_applies_bookmark_filter": (
-        "tests.unit.test_version",
-        "test_incremental_groups_sync_applies_bookmark_filter",
+    "test_run_dbt_models_propagates_run_models_failure": (
+        "tests.unit.test_dbt_services_sync",
+        "test_run_dbt_models_propagates_run_models_failure",
     ),
-    "test_incremental_users_sync_applies_bookmark_filter": (
-        "tests.unit.test_version",
-        "test_incremental_users_sync_applies_bookmark_filter",
+    "test_sync_groups_uses_incremental_bookmark_and_persists_state": (
+        "tests.unit.test_dbt_services_sync",
+        "test_sync_groups_uses_incremental_bookmark_and_persists_state",
     ),
     "test_sync_users_uses_incremental_bookmark_and_persists_state": (
         "tests.unit.test_dbt_services_sync",
@@ -101,8 +101,8 @@ __all__ = [
     "test_dbt_ldap_constants_surface_is_flat",
     "test_dbt_services_sync",
     "test_dunder_alignment",
-    "test_incremental_groups_sync_applies_bookmark_filter",
-    "test_incremental_users_sync_applies_bookmark_filter",
+    "test_run_dbt_models_propagates_run_models_failure",
+    "test_sync_groups_uses_incremental_bookmark_and_persists_state",
     "test_sync_users_uses_incremental_bookmark_and_persists_state",
     "test_user_dimension_from_ldap_entry_uses_flat_constants_surface",
     "test_version",

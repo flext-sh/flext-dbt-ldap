@@ -10,12 +10,10 @@ from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping, Sequence
 
-from flext_core import FlextLogger, r
-from flext_dbt_ldap.base import FlextDbtLdapServiceBase
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import m
-from flext_dbt_ldap.settings import FlextDbtLdapSettings
-from flext_dbt_ldap.typings import t
+from pydantic import PrivateAttr
+
+from flext_core import FlextLogger
+from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, r, t
 from flext_ldap import (
     FlextLdapSettings,
     ldap,
@@ -24,27 +22,13 @@ from flext_ldap import (
 logger = FlextLogger(__name__)
 
 
-class FlextDbtLdapUtilitiesClient:
+class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     """LDAP extraction and DBT transformation mixin.
 
     Mixed into FlextDbtLdap via MRO. State set by facade __init__.
     """
 
-    _dbt_ldap_config: FlextDbtLdapSettings
-    _ldap_api: ldap
-    _dbt_manager: FlextDbtLdapServiceBase | None
-
-    @property
-    def config(self) -> FlextDbtLdapSettings:
-        """Settings -- overridden by facade via FlextService."""
-        return self._dbt_ldap_config
-
-    @property
-    def dbt_manager(self) -> FlextDbtLdapServiceBase:
-        """Get or create DBT manager instance."""
-        if self._dbt_manager is None:
-            self._dbt_manager = FlextDbtLdapServiceBase()
-        return self._dbt_manager
+    _ldap_api: ldap = PrivateAttr()
 
     @staticmethod
     def create_ldap_api(config: FlextDbtLdapSettings) -> ldap:
@@ -145,17 +129,20 @@ class FlextDbtLdapUtilitiesClient:
     ) -> r[m.DbtLdap.DbtRunStatus]:
         """Transform LDAP data using DBT models."""
         try:
+            run_result = self._run_selected_models(model_names)
+            if run_result.is_failure:
+                return r[m.DbtLdap.DbtRunStatus].fail(
+                    run_result.error or "DBT transformation failed",
+                )
             logger.info(
                 "Running DBT transformations on %d LDAP entries, models=%s",
                 len(entries),
                 ", ".join(model_names) if model_names else "",
             )
             _ = self._prepare_ldap_data_for_dbt(entries)
-            model_list = list(model_names) if model_names else None
-            self.dbt_manager.run_models(models=model_list)
             result_data = m.DbtLdap.DbtRunStatus(
                 status=c.Meltano.StreamStatus.COMPLETED,
-                models_run=model_list or [],
+                models_run=run_result.value,
                 entries_processed=len(entries),
             )
             logger.info("DBT transformation completed successfully")
@@ -163,6 +150,19 @@ class FlextDbtLdapUtilitiesClient:
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during DBT transformation")
             return r[m.DbtLdap.DbtRunStatus].fail(f"DBT transformation error: {e}")
+
+    def _run_selected_models(
+        self,
+        model_names: t.StrSequence | None = None,
+    ) -> r[t.StrSequence]:
+        """Run selected DBT models through the canonical service runtime."""
+        model_list: list[str] = list(model_names) if model_names else []
+        run_result = self.run_models(models=model_list or None)
+        if run_result.is_failure:
+            return r[t.StrSequence].fail(
+                run_result.error or "DBT model execution failed",
+            )
+        return r[t.StrSequence].ok(model_list)
 
     def validate_ldap_data(
         self,

@@ -12,7 +12,8 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextSettings
+from pydantic import Field
+
 from flext_dbt_ldap import FlextDbtLdapSettings, t
 from flext_meltano import FlextMeltanoDbtServiceBase
 
@@ -24,18 +25,28 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     Adds typed settings for the dbt-ldap domain.
     """
 
-    dbt_project_name: t.NonEmptyStr = "dbt-ldap"
+    config_type: type | None = Field(
+        default=FlextDbtLdapSettings,
+        description="Configuration class for DBT LDAP service initialization",
+    )
+    dbt_project_name: t.NonEmptyStr = Field(
+        default="dbt-ldap",
+        description="Canonical dbt project name for the DBT LDAP service",
+    )
 
-    def _dbt_ldap_settings(self) -> FlextDbtLdapSettings:
-        """Return the typed dbt-ldap settings namespace."""
-        return FlextSettings.get_global().get_namespace(
-            "dbt_ldap", FlextDbtLdapSettings
-        )
+    @property
+    @override
+    def config(self) -> FlextDbtLdapSettings:
+        """Return the typed dbt-ldap configuration for this service instance."""
+        config = super().config
+        if isinstance(config, FlextDbtLdapSettings):
+            return config
+        return FlextDbtLdapSettings.model_validate(self.config_overrides or {})
 
     @override
     def get_connection_profile(self) -> t.ContainerMapping:
         """Return dbt connection profile for LDAP."""
-        s = self._dbt_ldap_settings()
+        s = self.config
         return {
             "type": "ldap",
             "host": s.ldap_host,

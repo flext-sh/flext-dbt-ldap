@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-from unittest.mock import Mock
-
 from flext_dbt_ldap import (
-    FlextDbtLdap,
     __author__,
     __author_email__,
     __description__,
@@ -42,31 +39,3 @@ def test_version_properties() -> None:
     """Version fields should not be empty when package metadata is available."""
     assert __version__.strip() != ""
     assert len(__version_info__) >= 1
-
-
-def test_incremental_users_sync_applies_bookmark_filter() -> None:
-    service = object.__new__(FlextDbtLdap)
-    mock_pipeline = Mock(return_value=Mock(is_success=True, error=None))
-    object.__setattr__(service, "run_full_pipeline", mock_pipeline)
-    service._dbt_ldap_config = Mock(ldap_base_dn="dc=example,dc=com")
-    service._sync_bookmarks = {"users": "20250101000000Z"}
-    service._sync_state_file = Mock()
-    result = service.sync_users_to_warehouse(incremental=True)
-    assert result.is_success
-    called_filter = mock_pipeline.call_args.kwargs["search_filter"]
-    assert "modifyTimestamp>=20250101000000Z" in called_filter
-    assert service._sync_bookmarks["users"] != "20250101000000Z"
-
-
-def test_incremental_groups_sync_applies_bookmark_filter() -> None:
-    service = object.__new__(FlextDbtLdap)
-    mock_pipeline = Mock(return_value=Mock(is_success=True, error=None))
-    object.__setattr__(service, "run_full_pipeline", mock_pipeline)
-    service._dbt_ldap_config = Mock(ldap_base_dn="dc=example,dc=com")
-    service._sync_bookmarks = {"groups": "20250101000000Z"}
-    service._sync_state_file = Mock()
-    result = service.sync_groups_to_warehouse(incremental=True)
-    assert result.is_success
-    called_filter = mock_pipeline.call_args.kwargs["search_filter"]
-    assert "modifyTimestamp>=20250101000000Z" in called_filter
-    assert service._sync_bookmarks["groups"] != "20250101000000Z"

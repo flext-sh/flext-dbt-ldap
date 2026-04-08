@@ -11,16 +11,50 @@ import os
 import pathlib
 import re
 import tempfile
-from collections.abc import Generator, Mapping, Sequence
+from collections.abc import Callable, Generator, Mapping, Sequence
 from typing import TypeIs
+from unittest.mock import Mock
 
 import pytest
 from flext_tests import td, tk
 from pydantic import TypeAdapter, ValidationError
 
-from tests import t
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
+from tests import t, u
 
 pytest_plugins = ["flext_tests.conftest_plugin"]
+
+
+def _fake_create_ldap_api(_config: FlextDbtLdapSettings) -> object:
+    return Mock(spec=object)
+
+
+@pytest.fixture
+def dbt_ldap_service_factory(
+    monkeypatch: pytest.MonkeyPatch,
+) -> Callable[[pathlib.Path, dict[str, str] | None], tuple[FlextDbtLdap, pathlib.Path]]:
+    """Build a real public facade instance with isolated sync-state storage."""
+    monkeypatch.setattr(
+        FlextDbtLdap,
+        "create_ldap_api",
+        staticmethod(_fake_create_ldap_api),
+    )
+
+    def factory(
+        dbt_project_dir: pathlib.Path,
+        initial_state: dict[str, str] | None = None,
+    ) -> tuple[FlextDbtLdap, pathlib.Path]:
+        settings = FlextDbtLdapSettings.model_validate({
+            "ldap_base_dn": "dc=example,dc=com",
+            "dbt_project_dir": str(dbt_project_dir),
+        })
+        state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
+        if initial_state is not None:
+            write_result = u.Cli.json_write(state_file, initial_state)
+            assert write_result.is_success, write_result.error
+        return FlextDbtLdap(config=settings), state_file
+
+    return factory
 
 
 @pytest.fixture(scope="session")

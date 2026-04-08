@@ -11,6 +11,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 
+from pydantic import PrivateAttr
+
 from flext_cli import u
 from flext_core import FlextLogger, r
 from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
@@ -21,11 +23,17 @@ from flext_dbt_ldap.typings import t
 logger = FlextLogger(__name__)
 
 
+def _new_sync_bookmarks() -> dict[str, str]:
+    return {}
+
+
 class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     """Warehouse sync mixin -- composed into FlextDbtLdap via MRO."""
 
-    _sync_state_file: Path
-    _sync_bookmarks: t.MutableStrMapping
+    _sync_state_file: Path = PrivateAttr()
+    _sync_bookmarks: t.MutableStrMapping = PrivateAttr(
+        default_factory=_new_sync_bookmarks,
+    )
 
     def generate_analytics_report(
         self,
@@ -47,12 +55,15 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     ) -> r[m.DbtLdap.DbtRunStatus]:
         """Run DBT models."""
         try:
-            model_list = list(model_names) if model_names else None
-            self.dbt_manager.run_models(models=model_list)
+            run_result = self._run_selected_models(model_names)
+            if run_result.is_failure:
+                return r[m.DbtLdap.DbtRunStatus].fail(
+                    run_result.error or "DBT model execution failed",
+                )
             return r[m.DbtLdap.DbtRunStatus].ok(
                 m.DbtLdap.DbtRunStatus(
                     status=c.Meltano.StreamStatus.COMPLETED,
-                    models_run=model_list or [],
+                    models_run=run_result.value,
                 ),
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -187,8 +198,11 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     ) -> r[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse."""
         try:
-            model_list = list(model_names) if model_names else None
-            self.dbt_manager.run_models(models=model_list)
+            run_result = self._run_selected_models(model_names)
+            if run_result.is_failure:
+                return r[m.DbtLdap.ValidationMetrics].fail(
+                    run_result.error or "Data quality validation failed",
+                )
             return r[m.DbtLdap.ValidationMetrics].ok(
                 m.DbtLdap.ValidationMetrics(validation_passed=True),
             )
