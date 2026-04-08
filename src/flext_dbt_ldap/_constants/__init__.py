@@ -24,10 +24,6 @@ _LAZY_IMPORTS = {
         "flext_dbt_ldap._constants.transformation",
         "FlextDbtLdapConstantsTransformation",
     ),
-    "attributes": "flext_dbt_ldap._constants.attributes",
-    "base": "flext_dbt_ldap._constants.base",
-    "search": "flext_dbt_ldap._constants.search",
-    "transformation": "flext_dbt_ldap._constants.transformation",
 }
 
 

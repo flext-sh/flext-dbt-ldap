@@ -24,10 +24,6 @@ _LAZY_IMPORTS = {
         "flext_dbt_ldap._utilities.sync",
         "FlextDbtLdapUtilitiesSync",
     ),
-    "client": "flext_dbt_ldap._utilities.client",
-    "integration": "flext_dbt_ldap._utilities.integration",
-    "macros": "flext_dbt_ldap._utilities.macros",
-    "sync": "flext_dbt_ldap._utilities.sync",
 }
 
 
