@@ -7,9 +7,9 @@ from flext_tests import FlextTestsConstants
 from flext_dbt_ldap import FlextDbtLdapConstants
 
 
-class FlextDbtLdapTestConstants(FlextTestsConstants, FlextDbtLdapConstants):
+class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):
     """Constants for flext-dbt-ldap tests."""
 
 
-c = FlextDbtLdapTestConstants
-__all__ = ["FlextDbtLdapTestConstants", "c"]
+c = TestsFlextDbtLdapConstants
+__all__ = ["TestsFlextDbtLdapConstants", "c"]

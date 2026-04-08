@@ -1,6 +1,6 @@
 """Test type definitions for flext-dbt-ldap.
 
-Provides FlextDbtLdapTestTypes, combining FlextTestsTypes with
+Provides TestsFlextDbtLdapTypes, combining TestsFlextTypes with
 FlextDbtLdapTypes for test-specific type definitions.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -14,8 +14,8 @@ from flext_tests import FlextTestsTypes
 from flext_dbt_ldap import FlextDbtLdapTypes
 
 
-class FlextDbtLdapTestTypes(FlextTestsTypes, FlextDbtLdapTypes):
-    """Test types combining FlextTestsTypes with flext-dbt-ldap types."""
+class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
+    """Test types combining TestsFlextTypes with flext-dbt-ldap types."""
 
     class DbtLdap(FlextDbtLdapTypes.DbtLdap):
         """DbtLdap test types namespace."""
@@ -24,5 +24,5 @@ class FlextDbtLdapTestTypes(FlextTestsTypes, FlextDbtLdapTypes):
             """Internal tests declarations."""
 
 
-t = FlextDbtLdapTestTypes
-__all__ = ["FlextDbtLdapTestTypes", "t"]
+t = TestsFlextDbtLdapTypes
+__all__ = ["TestsFlextDbtLdapTypes", "t"]

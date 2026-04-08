@@ -1,6 +1,6 @@
 """Test protocol definitions for flext-dbt-ldap.
 
-Provides FlextDbtLdapTestProtocols, combining FlextTestsProtocols with
+Provides TestsFlextDbtLdapProtocols, combining TestsFlextProtocols with
 FlextDbtLdapProtocols for test-specific protocol definitions.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -18,8 +18,8 @@ from flext_tests import FlextTestsProtocols
 from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
 
 
-class FlextDbtLdapTestProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
-    """Test protocols combining FlextTestsProtocols and FlextDbtLdapProtocols."""
+class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
+    """Test protocols combining TestsFlextProtocols and FlextDbtLdapProtocols."""
 
     class DbtLdap(FlextDbtLdapProtocols.DbtLdap):
         """DbtLdap test protocols namespace."""
@@ -35,7 +35,7 @@ class FlextDbtLdapTestProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
             self,
             query: str | object,
             params: tuple[str, ...] | None = None,
-        ) -> FlextDbtLdapTestProtocols.DbCursor: ...
+        ) -> TestsFlextDbtLdapProtocols.DbCursor: ...
 
         def fetchall(
             self,
@@ -53,10 +53,10 @@ class FlextDbtLdapTestProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def cursor(
             self,
-        ) -> AbstractContextManager[FlextDbtLdapTestProtocols.DbCursor]: ...
+        ) -> AbstractContextManager[TestsFlextDbtLdapProtocols.DbCursor]: ...
 
         def close(self) -> None: ...
 
 
-p = FlextDbtLdapTestProtocols
-__all__ = ["FlextDbtLdapTestProtocols", "p"]
+p = TestsFlextDbtLdapProtocols
+__all__ = ["TestsFlextDbtLdapProtocols", "p"]
