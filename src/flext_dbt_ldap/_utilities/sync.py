@@ -23,8 +23,9 @@ from flext_dbt_ldap.typings import t
 logger = FlextLogger(__name__)
 
 
-def _new_sync_bookmarks() -> dict[str, str]:
-    return {}
+def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:
+    empty_bookmarks: t.MutableMappingKV[str, str] = {}
+    return empty_bookmarks
 
 
 class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
@@ -125,7 +126,15 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                 ],
             )
             if result.is_success:
-                self._update_bookmark("groups", bookmark, successful=True)
+                update_result = self._update_bookmark(
+                    "groups",
+                    bookmark,
+                    successful=True,
+                )
+                if update_result.is_failure:
+                    return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                        update_result.error or "Group sync state persistence failed",
+                    )
             return result
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
@@ -183,11 +192,15 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                 ],
             )
             if result.is_success:
-                self._update_bookmark(
+                update_result = self._update_bookmark(
                     c.DbtLdap.USERS,
                     bookmark,
                     successful=True,
                 )
+                if update_result.is_failure:
+                    return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                        update_result.error or "User sync state persistence failed",
+                    )
             return result
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"User sync error: {e}")
@@ -221,25 +234,22 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
 
     def _load_sync_state(self) -> t.MutableStrMapping:
         if not self._sync_state_file.exists():
-            return {}
-        try:
-            payload_result = u.Cli.json_read(self._sync_state_file)
-            if payload_result.is_failure:
-                logger.error(
-                    "Failed to parse sync state file: %s",
-                    payload_result.error or "",
-                )
-                return {}
-            loaded: object = payload_result.value or {}
-            if not isinstance(loaded, dict):
-                return {}
-            data: t.MutableStrMapping = {
-                key: value for key, value in loaded.items() if isinstance(value, str)
-            }
-            return data
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
-            logger.exception("Failed to read sync state file")
-            return {}
+            empty_state: t.MutableStrMapping = {}
+            return empty_state
+        payload_result = u.Cli.json_read(self._sync_state_file)
+        if payload_result.is_failure:
+            raise OSError(payload_result.error or "Failed to read sync state file")
+        loaded: t.OpaqueValue = payload_result.value
+        if not isinstance(loaded, dict):
+            msg = "Sync state file must contain a JSON object"
+            raise TypeError(msg)
+        data: t.MutableStrMapping = {}
+        for key, value in loaded.items():
+            if not isinstance(value, str):
+                msg = "Sync state file values must be strings"
+                raise TypeError(msg)
+            data[key] = value
+        return data
 
     def _persist_sync_state(self) -> None:
         self._sync_state_file.parent.mkdir(parents=True, exist_ok=True)
@@ -273,14 +283,20 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         bookmark: str,
         *,
         successful: bool,
-    ) -> None:
+    ) -> r[bool]:
         if not successful:
-            return
+            return r[bool].ok(True)
+        previous_bookmark = self._sync_bookmarks.get(sync_key)
         self._sync_bookmarks[sync_key] = bookmark
         try:
             self._persist_sync_state()
-        except OSError:
-            logger.exception("Failed to persist bookmark state")
+        except OSError as error:
+            if previous_bookmark is None:
+                self._sync_bookmarks.pop(sync_key, None)
+            else:
+                self._sync_bookmarks[sync_key] = previous_bookmark
+            return r[bool].fail(str(error))
+        return r[bool].ok(True)
 
 
 __all__: t.StrSequence = ["FlextDbtLdapUtilitiesSync"]

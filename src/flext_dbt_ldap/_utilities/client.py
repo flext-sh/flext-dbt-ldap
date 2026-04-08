@@ -156,7 +156,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         model_names: t.StrSequence | None = None,
     ) -> r[t.StrSequence]:
         """Run selected DBT models through the canonical service runtime."""
-        model_list: list[str] = list(model_names) if model_names else []
+        model_list: t.MutableSequenceOf[str] = list(model_names) if model_names else []
         run_result = self.run_models(models=model_list or None)
         if run_result.is_failure:
             return r[t.StrSequence].fail(

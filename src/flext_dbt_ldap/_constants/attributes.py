@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
+from flext_dbt_ldap import t
 from flext_ldap import FlextLdapConstants
 
 
@@ -32,27 +33,27 @@ class FlextDbtLdapConstantsAttributes:
     CREATE_TIMESTAMP: Final[str] = "createTimestamp"
     MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
     MEMBER_UID: Final[str] = "memberUid"
-    USER_ID_ATTRIBUTES: ClassVar[tuple[str, ...]] = (
+    USER_ID_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (
         UID,
         CN,
         SAM_ACCOUNT_NAME,
     )
-    MEMBERSHIP_ATTRIBUTES: ClassVar[tuple[str, ...]] = (
+    MEMBERSHIP_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (
         MEMBER,
         UNIQUE_MEMBER,
         MEMBER_UID,
     )
-    USERS_CLASSES: ClassVar[tuple[str, ...]] = (
+    USERS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
         "person",
         "user",
         "inetOrgPerson",
     )
-    GROUPS_CLASSES: ClassVar[tuple[str, ...]] = (
+    GROUPS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
         "group",
         "groupOfNames",
         "groupOfUniqueNames",
     )
-    ORG_UNITS_CLASSES: ClassVar[tuple[str, ...]] = (
+    ORG_UNITS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
         "organizationalUnit",
         "organization",
     )

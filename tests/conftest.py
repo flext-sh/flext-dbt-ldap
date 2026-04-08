@@ -24,15 +24,21 @@ from tests import t, u
 
 pytest_plugins = ["flext_tests.conftest_plugin"]
 
+type _SyncState = t.MutableMappingKV[str, str] | None
+type _ServiceFactory = Callable[
+    [pathlib.Path, _SyncState],
+    t.Pair[FlextDbtLdap, pathlib.Path],
+]
 
-def _fake_create_ldap_api(_config: FlextDbtLdapSettings) -> object:
-    return Mock(spec=object)
+
+def _fake_create_ldap_api(_config: FlextDbtLdapSettings) -> t.OpaqueValue:
+    return Mock()
 
 
 @pytest.fixture
 def dbt_ldap_service_factory(
     monkeypatch: pytest.MonkeyPatch,
-) -> Callable[[pathlib.Path, dict[str, str] | None], tuple[FlextDbtLdap, pathlib.Path]]:
+) -> _ServiceFactory:
     """Build a real public facade instance with isolated sync-state storage."""
     monkeypatch.setattr(
         FlextDbtLdap,
@@ -42,8 +48,8 @@ def dbt_ldap_service_factory(
 
     def factory(
         dbt_project_dir: pathlib.Path,
-        initial_state: dict[str, str] | None = None,
-    ) -> tuple[FlextDbtLdap, pathlib.Path]:
+        initial_state: _SyncState = None,
+    ) -> t.Pair[FlextDbtLdap, pathlib.Path]:
         settings = FlextDbtLdapSettings.model_validate({
             "ldap_base_dn": "dc=example,dc=com",
             "dbt_project_dir": str(dbt_project_dir),
@@ -368,8 +374,10 @@ class MockLdapDbtAdapter:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.ldap_entries: t.ContainerMapping = {}
-        self.compiled_models: t.ContainerMapping = {}
+        empty_entries: t.ContainerMapping = {}
+        empty_models: t.ContainerMapping = {}
+        self.ldap_entries = empty_entries
+        self.compiled_models = empty_models
 
     def extract_ldap_data(
         self,

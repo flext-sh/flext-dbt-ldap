@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
+from flext_dbt_ldap import t
 from flext_meltano import FlextMeltanoConstants
 
 
@@ -24,12 +25,12 @@ class FlextDbtLdapConstantsTransformation:
     TEXT_ARRAY: Final[str] = "text[]"
     INTEGER: Final[str] = "integer"
     TEXT: Final[str] = "text"
-    TIMESTAMP_ATTRS: ClassVar[tuple[str, ...]] = (
+    TIMESTAMP_ATTRS: ClassVar[t.VariadicTuple[str]] = (
         "createtimestamp",
         "modifytimestamp",
     )
-    ARRAY_ATTRS: ClassVar[tuple[str, ...]] = ("memberof", "objectclass")
-    INTEGER_ATTRS: ClassVar[tuple[str, ...]] = ("uidnumber", "gidnumber")
+    ARRAY_ATTRS: ClassVar[t.VariadicTuple[str]] = ("memberof", "objectclass")
+    INTEGER_ATTRS: ClassVar[t.VariadicTuple[str]] = ("uidnumber", "gidnumber")
 
     DIRECT: Final[str] = "direct"
     OPERATIONAL: Final[str] = "operational"
@@ -43,4 +44,4 @@ class FlextDbtLdapConstantsTransformation:
 
     DEFAULT_PROFILES_DIR: Final[str] = "./profiles"
     DEFAULT_TARGET: Final[str] = "dev"
-    ALLOWED_TARGETS: ClassVar[tuple[str, ...]] = ("dev", "staging", "prod")
+    ALLOWED_TARGETS: ClassVar[t.VariadicTuple[str]] = ("dev", "staging", "prod")

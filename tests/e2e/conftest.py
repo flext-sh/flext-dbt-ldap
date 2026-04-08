@@ -24,6 +24,7 @@ sql: ModuleType = psycopg.sql
 
 logger = FlextLogger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
+type _DbRow = t.VariadicTuple[t.NormalizedValue]
 
 
 @pytest.fixture(scope="session")
@@ -139,7 +140,7 @@ def run_dbt_command(
 def query_database(
     conn: p.DbConnection,
     query: LiteralString,
-) -> Sequence[tuple[t.NormalizedValue, ...]]:
+) -> Sequence[_DbRow]:
     """Execute query and return results."""
     with conn.cursor() as cur:
         _ = cur.execute(sql.SQL(query))
