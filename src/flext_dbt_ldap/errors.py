@@ -12,19 +12,19 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import override
 
-from flext_core import FlextExceptions
+from flext_core import e
 from flext_dbt_ldap import t
 
 
-class FlextDbtLdapError(FlextExceptions.BaseError):
+class FlextDbtLdapError(e.BaseError):
     """FlextDbtLdapError - base DBT LDAP error."""
 
 
-class FlextDbtLdapValidationError(FlextExceptions.ValidationError):
+class FlextDbtLdapValidationError(e.ValidationError):
     """FlextDbtLdapValidationError - validation error."""
 
 
-class FlextDbtLdapConfigurationError(FlextExceptions.ConfigurationError):
+class FlextDbtLdapConfigurationError(e.ConfigurationError):
     """FlextDbtLdapConfigurationError - configuration error."""
 
 
@@ -55,7 +55,7 @@ class _DbtLdapContextMixin:
         return {key: value for key, value in fields.items() if value is not None}
 
 
-class FlextDbtLdapModelError(_DbtLdapContextMixin, FlextExceptions.BaseError):
+class FlextDbtLdapModelError(_DbtLdapContextMixin, e.BaseError):
     """LDAP DBT model-specific errors."""
 
     @override
@@ -80,7 +80,7 @@ class FlextDbtLdapModelError(_DbtLdapContextMixin, FlextExceptions.BaseError):
         )
 
 
-class FlextDbtLdapMacroError(_DbtLdapContextMixin, FlextExceptions.BaseError):
+class FlextDbtLdapMacroError(_DbtLdapContextMixin, e.BaseError):
     """LDAP DBT macro errors."""
 
     @override
@@ -103,7 +103,7 @@ class FlextDbtLdapMacroError(_DbtLdapContextMixin, FlextExceptions.BaseError):
         )
 
 
-class FlextDbtLdapTestError(_DbtLdapContextMixin, FlextExceptions.BaseError):
+class FlextDbtLdapTestError(_DbtLdapContextMixin, e.BaseError):
     """LDAP DBT test errors."""
 
     @override
