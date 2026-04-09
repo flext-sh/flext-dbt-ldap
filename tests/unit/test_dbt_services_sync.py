@@ -58,7 +58,6 @@ def _install_successful_pipeline_stub(
             is_success=True,
         )
 
-    monkeypatch.setattr(FlextDbtLdap, "run_full_pipeline", fake_run_full_pipeline)
     return call_kwargs
 
 
@@ -123,7 +122,6 @@ def test_sync_users_fails_when_sync_state_persistence_fails(
         _ = (path, payload, sort_keys, ensure_ascii, indent)
         return r[bool].fail("json_write: disk full")
 
-    monkeypatch.setattr(u.Cli, "json_write", fake_json_write)
     result = service.sync_users_to_warehouse(incremental=True)
     assert result.is_failure
     assert result.error == "json_write: disk full"
@@ -160,7 +158,6 @@ def test_run_dbt_models_propagates_run_models_failure(
         _ = models
         return r[str].fail("dbt failed")
 
-    monkeypatch.setattr(FlextDbtLdap, "run_models", fake_run_models)
     result = service.run_dbt_models([c.DbtLdap.DIM_USERS])
     assert result.is_failure
     assert result.error == "dbt failed"
