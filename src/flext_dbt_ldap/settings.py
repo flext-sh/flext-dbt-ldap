@@ -12,10 +12,8 @@ from typing import Annotated, ClassVar
 from pydantic import Field, SecretStr
 from pydantic_settings import SettingsConfigDict
 
-from flext_core import FlextLogger, FlextSettings
+from flext_core import FlextSettings
 from flext_dbt_ldap import c, t
-
-logger = FlextLogger(__name__)
 
 
 @FlextSettings.auto_register("dbt-ldap")
@@ -97,6 +95,3 @@ class FlextDbtLdapSettings(FlextSettings):
             description="Mapping of LDAP schemas to DBT tables",
         ),
     ] = Field(default_factory=dict)
-
-
-__all__: t.StrSequence = ["FlextDbtLdapSettings"]

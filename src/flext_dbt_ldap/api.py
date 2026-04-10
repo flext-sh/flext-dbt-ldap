@@ -12,12 +12,7 @@ from __future__ import annotations
 from typing import override
 
 from flext_core import r
-from flext_dbt_ldap import (
-    FlextDbtLdapSettings,
-    FlextDbtLdapUtilitiesSync,
-    m,
-    t,
-)
+from flext_dbt_ldap import FlextDbtLdapSettings, FlextDbtLdapUtilitiesSync, t, u
 
 
 class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
@@ -36,7 +31,7 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
             config_type=FlextDbtLdapSettings,
         )
         object.__setattr__(self, "_ldap_api", self.create_ldap_api(self.config))
-        object.__setattr__(self, "transformer", m.DbtLdap())
+        object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
 

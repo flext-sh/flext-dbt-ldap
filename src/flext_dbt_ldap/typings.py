@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, MutableMapping, Sequence
 
 from flext_ldap import FlextLdapTypes
 from flext_meltano import FlextMeltanoTypes
@@ -21,8 +21,16 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     class DbtLdap:
         """DBT LDAP domain type contracts."""
 
-        type LdapEntryMapping = Mapping[str, FlextMeltanoTypes.StrSequence]
+        type LdapAttributeValues = FlextMeltanoTypes.StrSequence
+        "Multi-valued LDAP attribute payload."
+        type LdapEntryMapping = Mapping[str, LdapAttributeValues]
         "Single LDAP entry: attribute name → list of string values."
+        type MutableLdapEntryMapping = MutableMapping[str, LdapAttributeValues]
+        "Mutable LDAP entry mapping used while normalizing raw records."
+        type SerializableMapping = Mapping[str, FlextMeltanoTypes.Serializable]
+        "String-keyed serializable DBT payload item."
+        type SerializableMappingSequence = Sequence[SerializableMapping]
+        "Read-only sequence of serializable DBT payload items."
 
 
 t = FlextDbtLdapTypes

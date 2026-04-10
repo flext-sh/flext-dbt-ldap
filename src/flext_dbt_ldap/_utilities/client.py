@@ -12,11 +12,11 @@ from collections.abc import Mapping, MutableMapping, Sequence
 
 from pydantic import PrivateAttr
 
-from flext_core import FlextLogger
-from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, r, t
+from flext_core import FlextLogger, r
+from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
 from flext_ldap import (
+    FlextLdap,
     FlextLdapSettings,
-    ldap,
 )
 
 logger = FlextLogger(__name__)
@@ -28,10 +28,10 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     Mixed into FlextDbtLdap via MRO. State set by facade __init__.
     """
 
-    _ldap_api: ldap = PrivateAttr()
+    _ldap_api: FlextLdap = PrivateAttr()
 
     @staticmethod
-    def create_ldap_api(config: FlextDbtLdapSettings) -> ldap:
+    def create_ldap_api(config: FlextDbtLdapSettings) -> FlextLdap:
         """Create a ldap API instance from DBT LDAP settings."""
         ldap_bind_dn = (
             config.ldap_bind_dn.get_secret_value() if config.ldap_bind_dn else None
@@ -50,7 +50,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
                 "bind_password": ldap_bind_password or "",
             },
         )
-        return ldap(config_overrides=ldap_settings.model_dump())
+        return FlextLdap(config_overrides=ldap_settings.model_dump())
 
     def extract_ldap_entries(
         self,
