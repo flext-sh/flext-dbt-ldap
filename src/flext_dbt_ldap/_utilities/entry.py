@@ -3,13 +3,11 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping
-from typing import TYPE_CHECKING
+
+from flext_ldif import m as lm
 
 from flext_core import FlextLogger
 from flext_dbt_ldap import FlextDbtLdapUtilitiesMacros, c, t
-
-if TYPE_CHECKING:
-    from flext_ldif import m as lm
 
 
 class FlextDbtLdapUtilitiesEntry:

@@ -2,20 +2,18 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Self
+from typing import Annotated, Self
 
+from flext_ldif import m as lm
 from pydantic import Field, model_validator
 
 from flext_dbt_ldap import FlextDbtLdapModelsShared, FlextDbtLdapUtilitiesEntry, c
-
-if TYPE_CHECKING:
-    from flext_ldif import m as lm
 
 
 class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
     """Directory-backed dimensions and facts for dbt-ldap."""
 
-    class UserDimension(FlextDbtLdapModelsShared._DbtDimensionBase):
+    class UserDimension(FlextDbtLdapModelsShared.DbtDimensionBase):
         """Canonical user dimension."""
 
         user_id: Annotated[str, Field(description="Canonical user identifier")]
@@ -87,7 +85,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 ),
             )
 
-    class GroupDimension(FlextDbtLdapModelsShared._DbtDimensionBase):
+    class GroupDimension(FlextDbtLdapModelsShared.DbtDimensionBase):
         """Canonical group dimension."""
 
         group_id: Annotated[str, Field(description="Canonical group identifier")]
@@ -146,7 +144,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 ),
             )
 
-    class MembershipFact(FlextDbtLdapModelsShared._DbtSerializable):
+    class MembershipFact(FlextDbtLdapModelsShared.DbtSerializable):
         """Canonical membership fact."""
 
         user_dn: Annotated[str, Field(description="Member distinguished name")]

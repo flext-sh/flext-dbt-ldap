@@ -13,6 +13,7 @@ from flext_core.lazy import (
 from flext_dbt_ldap.__version__ import *
 
 if _t.TYPE_CHECKING:
+    from flext_cli.base import s
     from flext_core.decorators import d
     from flext_core.exceptions import e
     from flext_core.handlers import h
@@ -35,14 +36,8 @@ if _t.TYPE_CHECKING:
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
     from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
     from flext_dbt_ldap.api import FlextDbtLdap
-    from flext_dbt_ldap.base import (
-        FlextDbtLdapServiceBase,
-        FlextDbtLdapServiceBase as s,
-    )
-    from flext_dbt_ldap.constants import (
-        FlextDbtLdapConstants,
-        FlextDbtLdapConstants as c,
-    )
+    from flext_dbt_ldap.base import FlextDbtLdapServiceBase
+    from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
     from flext_dbt_ldap.errors import (
         FlextDbtLdapAuthenticationError,
         FlextDbtLdapConfigurationError,
@@ -55,17 +50,11 @@ if _t.TYPE_CHECKING:
         FlextDbtLdapTimeoutError,
         FlextDbtLdapValidationError,
     )
-    from flext_dbt_ldap.models import FlextDbtLdapModels, FlextDbtLdapModels as m
-    from flext_dbt_ldap.protocols import (
-        FlextDbtLdapProtocols,
-        FlextDbtLdapProtocols as p,
-    )
+    from flext_dbt_ldap.models import FlextDbtLdapModels, m
+    from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
     from flext_dbt_ldap.settings import FlextDbtLdapSettings
-    from flext_dbt_ldap.typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
-    from flext_dbt_ldap.utilities import (
-        FlextDbtLdapUtilities,
-        FlextDbtLdapUtilities as u,
-    )
+    from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
+    from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
 _LAZY_IMPORTS = merge_lazy_imports(
     (
         "._constants",
@@ -86,7 +75,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
             ),
             ".api": ("FlextDbtLdap",),
             ".base": ("FlextDbtLdapServiceBase",),
-            ".constants": ("FlextDbtLdapConstants",),
+            ".constants": (
+                "FlextDbtLdapConstants",
+                "c",
+            ),
             ".errors": (
                 "FlextDbtLdapAuthenticationError",
                 "FlextDbtLdapConfigurationError",
@@ -99,24 +91,29 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextDbtLdapTimeoutError",
                 "FlextDbtLdapValidationError",
             ),
-            ".models": ("FlextDbtLdapModels",),
-            ".protocols": ("FlextDbtLdapProtocols",),
+            ".models": (
+                "FlextDbtLdapModels",
+                "m",
+            ),
+            ".protocols": (
+                "FlextDbtLdapProtocols",
+                "p",
+            ),
             ".settings": ("FlextDbtLdapSettings",),
-            ".typings": ("FlextDbtLdapTypes",),
-            ".utilities": ("FlextDbtLdapUtilities",),
+            ".typings": (
+                "FlextDbtLdapTypes",
+                "t",
+            ),
+            ".utilities": (
+                "FlextDbtLdapUtilities",
+                "u",
+            ),
+            "flext_cli.base": ("s",),
             "flext_core.decorators": ("d",),
             "flext_core.exceptions": ("e",),
             "flext_core.handlers": ("h",),
             "flext_core.mixins": ("x",),
             "flext_core.result": ("r",),
-        },
-        alias_groups={
-            ".base": (("s", "FlextDbtLdapServiceBase"),),
-            ".constants": (("c", "FlextDbtLdapConstants"),),
-            ".models": (("m", "FlextDbtLdapModels"),),
-            ".protocols": (("p", "FlextDbtLdapProtocols"),),
-            ".typings": (("t", "FlextDbtLdapTypes"),),
-            ".utilities": (("u", "FlextDbtLdapUtilities"),),
         },
     ),
     exclude_names=(
@@ -130,6 +127,9 @@ _LAZY_IMPORTS = merge_lazy_imports(
     ),
     module_name=__name__,
 )
+
+
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 
 __all__ = [
     "FlextDbtLdap",
@@ -184,6 +184,3 @@ __all__ = [
     "u",
     "x",
 ]
-
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)

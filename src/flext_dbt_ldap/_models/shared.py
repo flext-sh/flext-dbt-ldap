@@ -13,7 +13,7 @@ from flext_meltano import FlextMeltanoModels
 class FlextDbtLdapModelsShared:
     """Shared internal model bases reused across dbt-ldap model mixins."""
 
-    class _DbtSerializable(FlextMeltanoModels.Entity):
+    class DbtSerializable(FlextMeltanoModels.Entity):
         """Base for DBT-serializable models."""
 
         def to_dbt_dict(self) -> t.ConfigurationMapping:
@@ -24,7 +24,7 @@ class FlextDbtLdapModelsShared:
                 for key, value in dumped.items()
             }
 
-    class _DbtDimensionBase(_DbtSerializable):
+    class DbtDimensionBase(DbtSerializable):
         """Shared fields for directory-backed dimension models."""
 
         common_name: Annotated[str, Field(description="Canonical common name")]
