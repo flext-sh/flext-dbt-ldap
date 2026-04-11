@@ -36,11 +36,11 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @property
     @override
-    def config(self) -> FlextDbtLdapSettings:
+    def settings(self) -> FlextDbtLdapSettings:
         """Return the typed dbt-ldap configuration for this service instance."""
-        config = super().config
-        if isinstance(config, FlextDbtLdapSettings):
-            return config
+        settings = super().settings
+        if isinstance(settings, FlextDbtLdapSettings):
+            return settings
         return FlextDbtLdapSettings.model_validate(self.config_overrides or {})
 
     @override
@@ -48,7 +48,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @override
     def connection_profile(self) -> t.ContainerMapping:
         """Dbt connection profile for LDAP."""
-        s = self.config
+        s = self.settings
         return {
             "type": "ldap",
             "host": s.ldap_host,

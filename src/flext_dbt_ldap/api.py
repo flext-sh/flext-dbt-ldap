@@ -22,15 +22,15 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
     are directly available via MRO. No wrappers, no delegation.
     """
 
-    def __init__(self, config: FlextDbtLdapSettings | None = None) -> None:
+    def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
         """Wire all mixin state."""
         super().__init__(
-            config_overrides=(
-                config.model_dump(exclude_none=True) if config is not None else None
+            settings_overrides=(
+                settings.model_dump(exclude_none=True) if settings is not None else None
             ),
-            config_type=FlextDbtLdapSettings,
+            settings_type=FlextDbtLdapSettings,
         )
-        object.__setattr__(self, "_ldap_api", self.create_ldap_api(self.config))
+        object.__setattr__(self, "_ldap_api", self.create_ldap_api(self.settings))
         object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
@@ -38,7 +38,7 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
     @override
     def execute(self) -> r[t.ContainerMapping]:
         """Execute DBT LDAP service — verify readiness."""
-        return r[t.ContainerMapping].ok(self.config.model_dump(exclude_none=True))
+        return r[t.ContainerMapping].ok(self.settings.model_dump(exclude_none=True))
 
 
 dbt_ldap = FlextDbtLdap

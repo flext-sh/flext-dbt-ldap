@@ -49,7 +49,7 @@ if _t.TYPE_CHECKING:
     from flext_dbt_ldap.settings import FlextDbtLdapSettings
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
-    from flext_meltano import d, e, h, r, s, x
+    from flext_ldap import d, e, h, r, s, x
 _LAZY_IMPORTS = merge_lazy_imports(
     (
         "._constants",
@@ -106,7 +106,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextDbtLdapUtilities",
                 "u",
             ),
-            "flext_meltano": (
+            "flext_ldap": (
                 "d",
                 "e",
                 "h",

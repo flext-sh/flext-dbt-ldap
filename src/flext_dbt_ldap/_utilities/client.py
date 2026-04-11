@@ -31,26 +31,26 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     _ldap_api: FlextLdap = PrivateAttr()
 
     @staticmethod
-    def create_ldap_api(config: FlextDbtLdapSettings) -> FlextLdap:
+    def create_ldap_api(settings: FlextDbtLdapSettings) -> FlextLdap:
         """Create a ldap API instance from DBT LDAP settings."""
         ldap_bind_dn = (
-            config.ldap_bind_dn.get_secret_value() if config.ldap_bind_dn else None
+            settings.ldap_bind_dn.get_secret_value() if settings.ldap_bind_dn else None
         )
         ldap_bind_password = (
-            config.ldap_bind_password.get_secret_value()
-            if config.ldap_bind_password
+            settings.ldap_bind_password.get_secret_value()
+            if settings.ldap_bind_password
             else None
         )
         ldap_settings = FlextLdapSettings.fetch_global().model_copy(
             update={
-                "host": config.ldap_host,
-                "port": config.ldap_port,
-                "use_tls": config.ldap_use_tls,
+                "host": settings.ldap_host,
+                "port": settings.ldap_port,
+                "use_tls": settings.ldap_use_tls,
                 "bind_dn": ldap_bind_dn or "",
                 "bind_password": ldap_bind_password or "",
             },
         )
-        return FlextLdap(config_overrides=ldap_settings.model_dump())
+        return FlextLdap(settings_overrides=ldap_settings.model_dump())
 
     def extract_ldap_entries(
         self,
@@ -62,11 +62,11 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         try:
             logger.info(
                 "Extracting LDAP entries: base=%s, filter=%s",
-                search_base or self.config.ldap_base_dn,
+                search_base or self.settings.ldap_base_dn,
                 search_filter,
             )
             result = self._search_entries_sync(
-                base_dn=search_base or self.config.ldap_base_dn,
+                base_dn=search_base or self.settings.ldap_base_dn,
                 search_filter=search_filter,
                 attributes=attributes,
             )
@@ -171,7 +171,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         """Validate LDAP data quality for DBT processing."""
         try:
             logger.info("Validating %d LDAP entries for data quality", len(entries))
-            required_attributes = self.config.required_attributes
+            required_attributes = self.settings.required_attributes
             total_entries = len(entries)
             valid_dns = 0
             valid_entries = 0
@@ -186,7 +186,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
                 valid_dns=valid_dns,
                 valid_entries=valid_entries,
                 quality_score=round(quality_score, 3),
-                validation_passed=quality_score >= self.config.min_quality_threshold,
+                validation_passed=quality_score >= self.settings.min_quality_threshold,
             )
             logger.info(
                 "LDAP data validation completed: quality_score=%.3f",
@@ -194,7 +194,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
             )
             if not metrics.validation_passed:
                 return r[m.DbtLdap.ValidationMetrics].fail(
-                    f"Data quality below threshold: {quality_score} < {self.config.min_quality_threshold}",
+                    f"Data quality below threshold: {quality_score} < {self.settings.min_quality_threshold}",
                 )
             return r[m.DbtLdap.ValidationMetrics].ok(metrics)
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -209,13 +209,13 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         dn_attr = c.Ldap.LdapAttributeNames.DN
         dn_str = str(entry.get(dn_attr, [""])[0]) if entry.get(dn_attr) else ""
         mapped_attrs: t.MutableConfigurationMapping = {dn_attr: dn_str}
-        for ldap_attr, dbt_attr in self.config.ldap_attribute_mapping.items():
+        for ldap_attr, dbt_attr in self.settings.ldap_attribute_mapping.items():
             if ldap_attr in entry:
                 values_obj = entry[ldap_attr]
                 first_value = values_obj[0] if values_obj else ""
                 mapped_attrs[dbt_attr] = first_value
         for attr, values in entry.items():
-            if attr not in self.config.ldap_attribute_mapping and attr != dn_attr:
+            if attr not in self.settings.ldap_attribute_mapping and attr != dn_attr:
                 first_value = values[0] if values else ""
                 mapped_attrs[attr] = first_value
         return mapped_attrs
@@ -243,7 +243,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     ) -> Mapping[str, Sequence[t.ConfigurationMapping]]:
         """Prepare LDAP entries for DBT processing."""
         prepared_data: MutableMapping[str, Sequence[t.ConfigurationMapping]] = {}
-        for schema_name, table_name in self.config.ldap_schema_mapping.items():
+        for schema_name, table_name in self.settings.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]

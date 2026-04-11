@@ -260,7 +260,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             raise OSError(msg)
 
     def _resolve_sync_state_file(self) -> Path:
-        return Path(self.config.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
+        return Path(self.settings.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
 
     def _should_run_incremental(
         self,

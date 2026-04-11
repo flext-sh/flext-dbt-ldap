@@ -31,7 +31,7 @@ type _ServiceFactory = Callable[
 ]
 
 
-def _fake_create_ldap_api(_config: FlextDbtLdapSettings) -> t.OpaqueValue:
+def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.OpaqueValue:
     return Mock()
 
 
@@ -58,7 +58,7 @@ def dbt_ldap_service_factory(
         if initial_state is not None:
             write_result = u.Cli.json_write(state_file, initial_state)
             assert write_result.success, write_result.error
-        return FlextDbtLdap(config=settings), state_file
+        return FlextDbtLdap(settings=settings), state_file
 
     return factory
 
@@ -76,7 +76,7 @@ def shared_ldap_container(flext_docker: tk) -> str:
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_config() -> t.ContainerMapping:
+def shared_ldap_settings() -> t.ContainerMapping:
     """Shared LDAP configuration for tests."""
     return {
         "server_url": "ldap://localhost:3390",
@@ -105,7 +105,7 @@ def set_test_environment() -> Generator[None]:
 def dbt_ldap_profile() -> t.ContainerMapping:
     """Dbt LDAP profile configuration for testing."""
     return {
-        "config": {
+        "settings": {
             "partial_parse": True,
             "printer_width": 120,
             "send_anonymous_usage_stats": False,
@@ -132,13 +132,13 @@ def dbt_ldap_profile() -> t.ContainerMapping:
 
 
 @pytest.fixture
-def dbt_ldap_project_config() -> Mapping[str, t.Tests.TestobjectSerializable]:
+def dbt_ldap_project_settings() -> Mapping[str, t.Tests.TestobjectSerializable]:
     """Dbt LDAP project configuration for testing."""
-    return td.build_dbt_project_config(
+    return td.build_dbt_project_settings(
         name="flext_dbt_ldap_test",
         version="0.9.0",
         profile="test",
-        model_config={
+        model_settings={
             "materialized": "table",
             "ldap": {
                 "enable_ldap_functions": True,
@@ -156,11 +156,11 @@ def dbt_ldap_project_config() -> Mapping[str, t.Tests.TestobjectSerializable]:
 
 
 @pytest.fixture
-def ldap_source_config(
-    shared_ldap_config: t.ContainerMapping,
+def ldap_source_settings(
+    shared_ldap_settings: t.ContainerMapping,
 ) -> t.ContainerMapping:
     """LDAP source configuration for testing using shared container."""
-    _ = shared_ldap_config
+    _ = shared_ldap_settings
     return {
         "server": "localhost",
         "port": 3390,
@@ -227,11 +227,11 @@ def sample_ldap_entries() -> Sequence[t.ContainerMapping]:
 def dbt_ldap_models() -> t.StrMapping:
     """Dbt LDAP model SQL definitions for testing."""
     return {
-        "staging_ldap_users": "\n\n          {{ config(materialized='view') }}\n          SELECT\n              {{ ldap_extract_attribute('dn') }} as user_dn,\n              {{ ldap_extract_attribute('cn', 0) }} as username,\n              {{ ldap_extract_attribute('uid', 0) }} as user_id,\n              {{ ldap_extract_attribute('mail', 0) }} as email,\n              {{ ldap_extract_attribute('givenName', 0) }} as first_name,\n              {{ ldap_extract_attribute('sn', 0) }} as last_name,\n              {{ ldap_extract_attribute('employeeNumber', 0) }} as employee_number,\n              {{ ldap_extract_attribute('departmentNumber', 0) }} as department,\n              {{ ldap_extract_attribute('title', 0) }} as job_title,\n              {{ ldap_extract_attribute('telephoneNumber', 0) }} as phone,\n              CURRENT_TIMESTAMP as extracted_at\n          FROM {{ source('ldap_raw', 'users') }}\n          WHERE {{ ldap_filter_object_class('inetOrgPerson') }}\n      ",
-        "dim_users": "\n\n          {{ config(\n              materialized='table',\n              ldap={'validate_dn': true, 'normalize_attributes': true}\n          ) }}\n          SELECT\n              user_dn,\n              username,\n              user_id,\n              LOWER(email) as email_normalized,\n              TRIM(first_name || ' ' || last_name) as full_name,\n              first_name,\n              last_name,\n              employee_number,\n              department,\n              job_title,\n              phone,\n              {{ ldap_parse_dn_component('user_dn', 'ou') }} as organizational_unit,\n              {{ ldap_validate_email('email') }} as email_valid,\n              extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_users') }}\n          WHERE email IS NOT NULL\n      ",
-        "staging_ldap_groups": "\n\n          {{ config(materialized='view') }}\n          SELECT\n              {{ ldap_extract_attribute('dn') }} as group_dn,\n              {{ ldap_extract_attribute('cn', 0) }} as group_name,\n              {{ ldap_extract_attribute('description', 0) }} as group_description,\n              {{ ldap_extract_multi_attribute('member') }} as members,\n              CURRENT_TIMESTAMP as extracted_at\n          FROM {{ source('ldap_raw', 'groups') }}\n          WHERE {{ ldap_filter_object_class('groupOfNames') }}\n      ",
-        "dim_groups": "\n\n          {{ config(materialized='table') }}\n          SELECT\n              group_dn,\n              group_name,\n              group_description,\n              {{ ldap_count_members('members') }} as member_count,\n              extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_groups') }}\n      ",
-        "fact_group_memberships": "\n\n          {{ config(\n              materialized='incremental',\n              unique_key=['group_dn', 'member_dn']\n          ) }}\n          SELECT\n              g.group_dn,\n              g.group_name,\n              {{ ldap_unnest_members('g.members') }} as member_dn,\n              u.user_id,\n              u.username,\n              g.extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_groups') }} g\n          CROSS JOIN LATERAL {{ ldap_split_members('g.members') }} AS member_dn\n          LEFT JOIN {{ ref('dim_users') }} u\n              ON u.user_dn = member_dn\n          {% if is_incremental() %}\n              WHERE g.extracted_at > (SELECT MAX(extracted_at) FROM {{ this }})\n          {% endif %}\n      ",
+        "staging_ldap_users": "\n\n          {{ settings(materialized='view') }}\n          SELECT\n              {{ ldap_extract_attribute('dn') }} as user_dn,\n              {{ ldap_extract_attribute('cn', 0) }} as username,\n              {{ ldap_extract_attribute('uid', 0) }} as user_id,\n              {{ ldap_extract_attribute('mail', 0) }} as email,\n              {{ ldap_extract_attribute('givenName', 0) }} as first_name,\n              {{ ldap_extract_attribute('sn', 0) }} as last_name,\n              {{ ldap_extract_attribute('employeeNumber', 0) }} as employee_number,\n              {{ ldap_extract_attribute('departmentNumber', 0) }} as department,\n              {{ ldap_extract_attribute('title', 0) }} as job_title,\n              {{ ldap_extract_attribute('telephoneNumber', 0) }} as phone,\n              CURRENT_TIMESTAMP as extracted_at\n          FROM {{ source('ldap_raw', 'users') }}\n          WHERE {{ ldap_filter_object_class('inetOrgPerson') }}\n      ",
+        "dim_users": "\n\n          {{ settings(\n              materialized='table',\n              ldap={'validate_dn': true, 'normalize_attributes': true}\n          ) }}\n          SELECT\n              user_dn,\n              username,\n              user_id,\n              LOWER(email) as email_normalized,\n              TRIM(first_name || ' ' || last_name) as full_name,\n              first_name,\n              last_name,\n              employee_number,\n              department,\n              job_title,\n              phone,\n              {{ ldap_parse_dn_component('user_dn', 'ou') }} as organizational_unit,\n              {{ ldap_validate_email('email') }} as email_valid,\n              extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_users') }}\n          WHERE email IS NOT NULL\n      ",
+        "staging_ldap_groups": "\n\n          {{ settings(materialized='view') }}\n          SELECT\n              {{ ldap_extract_attribute('dn') }} as group_dn,\n              {{ ldap_extract_attribute('cn', 0) }} as group_name,\n              {{ ldap_extract_attribute('description', 0) }} as group_description,\n              {{ ldap_extract_multi_attribute('member') }} as members,\n              CURRENT_TIMESTAMP as extracted_at\n          FROM {{ source('ldap_raw', 'groups') }}\n          WHERE {{ ldap_filter_object_class('groupOfNames') }}\n      ",
+        "dim_groups": "\n\n          {{ settings(materialized='table') }}\n          SELECT\n              group_dn,\n              group_name,\n              group_description,\n              {{ ldap_count_members('members') }} as member_count,\n              extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_groups') }}\n      ",
+        "fact_group_memberships": "\n\n          {{ settings(\n              materialized='incremental',\n              unique_key=['group_dn', 'member_dn']\n          ) }}\n          SELECT\n              g.group_dn,\n              g.group_name,\n              {{ ldap_unnest_members('g.members') }} as member_dn,\n              u.user_id,\n              u.username,\n              g.extracted_at,\n              CURRENT_TIMESTAMP as dbt_updated_at\n          FROM {{ ref('staging_ldap_groups') }} g\n          CROSS JOIN LATERAL {{ ldap_split_members('g.members') }} AS member_dn\n          LEFT JOIN {{ ref('dim_users') }} u\n              ON u.user_dn = member_dn\n          {% if is_incremental() %}\n              WHERE g.extracted_at > (SELECT MAX(extracted_at) FROM {{ this }})\n          {% endif %}\n      ",
     }
 
 
@@ -342,7 +342,7 @@ def ldap_validation_rules() -> t.ContainerMapping:
 
 
 @pytest.fixture
-def ldap_performance_config() -> t.ContainerMapping:
+def ldap_performance_settings() -> t.ContainerMapping:
     """LDAP performance test configuration."""
     return {
         "large_directory_entries": 10000,
@@ -354,26 +354,26 @@ def ldap_performance_config() -> t.ContainerMapping:
     }
 
 
-def pytest_configure(config: pytest.Config) -> None:
+def pytest_settingsure(settings: pytest.Config) -> None:
     """Configure pytest markers."""
-    config.addinivalue_line("markers", "unit: Unit tests")
-    config.addinivalue_line("markers", "integration: Integration tests")
-    config.addinivalue_line("markers", "e2e: End-to-end tests")
-    config.addinivalue_line("markers", "dbt: dbt-specific tests")
-    config.addinivalue_line("markers", "ldap: LDAP integration tests")
-    config.addinivalue_line("markers", "transformation: Data transformation tests")
-    config.addinivalue_line("markers", "validation: Data validation tests")
-    config.addinivalue_line("markers", "performance: Performance tests")
-    config.addinivalue_line("markers", "slow: Slow tests")
+    settings.addinivalue_line("markers", "unit: Unit tests")
+    settings.addinivalue_line("markers", "integration: Integration tests")
+    settings.addinivalue_line("markers", "e2e: End-to-end tests")
+    settings.addinivalue_line("markers", "dbt: dbt-specific tests")
+    settings.addinivalue_line("markers", "ldap: LDAP integration tests")
+    settings.addinivalue_line("markers", "transformation: Data transformation tests")
+    settings.addinivalue_line("markers", "validation: Data validation tests")
+    settings.addinivalue_line("markers", "performance: Performance tests")
+    settings.addinivalue_line("markers", "slow: Slow tests")
 
 
 class MockLdapDbtAdapter:
     """Mock LDAP dbt adapter."""
 
-    def __init__(self, config: t.ContainerMapping) -> None:
+    def __init__(self, settings: t.ContainerMapping) -> None:
         """Initialize the instance."""
         super().__init__()
-        self.config = config
+        self.settings = settings
         empty_entries: t.ContainerMapping = {}
         empty_models: t.ContainerMapping = {}
         self.ldap_entries = empty_entries
@@ -451,10 +451,10 @@ def mock_ldap_dbt_adapter() -> type[MockLdapDbtAdapter]:
 class MockLdapConnection:
     """Mock LDAP connection."""
 
-    def __init__(self, config: t.ContainerMapping) -> None:
+    def __init__(self, settings: t.ContainerMapping) -> None:
         """Initialize the instance."""
         super().__init__()
-        self.config = config
+        self.settings = settings
         self.connected = False
         self.entries: Sequence[t.ContainerMapping] = []
 

@@ -7,7 +7,9 @@ from typing import Annotated, Self
 from flext_ldif import m as lm
 from pydantic import Field, model_validator
 
-from flext_dbt_ldap import FlextDbtLdapModelsShared, FlextDbtLdapUtilitiesEntry, c
+from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
+from flext_dbt_ldap.constants import c
 
 
 class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):

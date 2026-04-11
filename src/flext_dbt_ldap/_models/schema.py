@@ -1,4 +1,4 @@
-"""Schema, validation, and transformation config models for dbt-ldap."""
+"""Schema, validation, and transformation settings models for dbt-ldap."""
 
 from __future__ import annotations
 

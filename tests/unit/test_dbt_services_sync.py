@@ -144,7 +144,7 @@ def test_service_init_fails_fast_when_sync_state_is_invalid(
     })
 
     with pytest.raises(TypeError, match="Sync state file values must be strings"):
-        _ = FlextDbtLdap(config=settings)
+        _ = FlextDbtLdap(settings=settings)
 
 
 def test_run_dbt_models_propagates_run_models_failure(
