@@ -70,7 +70,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
                 search_filter=search_filter,
                 attributes=attributes,
             )
-            if result.is_success:
+            if result.success:
                 logger.info(
                     "Successfully extracted %d LDAP entries",
                     len(result.value) if result.value else 0,
@@ -101,18 +101,18 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
             search_filter,
             attributes,
         )
-        if extract_result.is_failure:
+        if extract_result.failure:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                 extract_result.error or "LDAP extraction failed",
             )
         entries = extract_result.value or []
         validate_result = self.validate_ldap_data(entries)
-        if validate_result.is_failure:
+        if validate_result.failure:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                 validate_result.error or "LDAP validation failed",
             )
         transform_result = self.transform_with_dbt(entries, model_names)
-        if transform_result.is_failure:
+        if transform_result.failure:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                 transform_result.error or "DBT transformation failed",
             )
@@ -130,7 +130,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         """Transform LDAP data using DBT models."""
         try:
             run_result = self._run_selected_models(model_names)
-            if run_result.is_failure:
+            if run_result.failure:
                 return r[m.DbtLdap.DbtRunStatus].fail(
                     run_result.error or "DBT transformation failed",
                 )
@@ -158,7 +158,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         """Run selected DBT models through the canonical service runtime."""
         model_list: t.MutableSequenceOf[str] = list(model_names) if model_names else []
         run_result = self.run_models(models=model_list or None)
-        if run_result.is_failure:
+        if run_result.failure:
             return r[t.StrSequence].fail(
                 run_result.error or "DBT model execution failed",
             )
@@ -273,7 +273,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
                 attributes=list(attributes) if attributes else None,
             )
             result = self._ldap_api.search(search_options=search_options)
-            if result.is_success and result.value:
+            if result.success and result.value:
                 entries = result.value.entries
                 return r[Sequence[t.DbtLdap.LdapEntryMapping]].ok(entries)
             return r[Sequence[t.DbtLdap.LdapEntryMapping]].fail(

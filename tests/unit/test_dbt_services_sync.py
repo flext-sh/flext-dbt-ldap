@@ -21,7 +21,7 @@ type _SyncFactory = Callable[[Path, _SyncState], t.Pair[FlextDbtLdap, Path]]
 
 def _read_sync_state(state_file: Path) -> t.Cli.JsonMapping:
     read_result = u.Cli.json_read(state_file)
-    if read_result.is_failure:
+    if read_result.failure:
         pytest.fail(read_result.error or "Failed to read sync state")
     return read_result.unwrap()
 
@@ -55,7 +55,7 @@ def _install_successful_pipeline_stub(
         })
         return r[m.DbtLdap.DbtLdapPipelineResult](
             value=m.DbtLdap.DbtLdapPipelineResult(extracted_entries=1),
-            is_success=True,
+            success=True,
         )
 
     monkeypatch.setattr(FlextDbtLdap, "run_full_pipeline", fake_run_full_pipeline)
@@ -73,7 +73,7 @@ def test_sync_users_uses_incremental_bookmark_and_persists_state(
     )
     call_kwargs = _install_successful_pipeline_stub(monkeypatch)
     result = service.sync_users_to_warehouse(incremental=True)
-    assert result.is_success
+    assert result.success
     assert (
         call_kwargs["search_filter"]
         == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
@@ -94,7 +94,7 @@ def test_sync_groups_uses_incremental_bookmark_and_persists_state(
     )
     call_kwargs = _install_successful_pipeline_stub(monkeypatch)
     result = service.sync_groups_to_warehouse(incremental=True)
-    assert result.is_success
+    assert result.success
     assert (
         call_kwargs["search_filter"]
         == f"(&{c.DbtLdap.FILTER_GROUP}(modifyTimestamp>=20250101000000Z))"
@@ -126,7 +126,7 @@ def test_sync_users_fails_when_sync_state_persistence_fails(
     monkeypatch.setattr(u.Cli, "json_write", fake_json_write)
 
     result = service.sync_users_to_warehouse(incremental=True)
-    assert result.is_failure
+    assert result.failure
     assert result.error == "json_write: disk full"
     assert not state_file.exists()
 
@@ -164,5 +164,5 @@ def test_run_dbt_models_propagates_run_models_failure(
     monkeypatch.setattr(FlextDbtLdap, "run_models", fake_run_models)
 
     result = service.run_dbt_models([c.DbtLdap.DIM_USERS])
-    assert result.is_failure
+    assert result.failure
     assert result.error == "dbt failed"

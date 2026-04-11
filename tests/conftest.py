@@ -57,7 +57,7 @@ def dbt_ldap_service_factory(
         state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
         if initial_state is not None:
             write_result = u.Cli.json_write(state_file, initial_state)
-            assert write_result.is_success, write_result.error
+            assert write_result.success, write_result.error
         return FlextDbtLdap(config=settings), state_file
 
     return factory
@@ -70,7 +70,7 @@ def shared_ldap_container(flext_docker: tk) -> str:
         "~/flext/docker/docker-compose.openldap.yml",
     ).expanduser()
     start_result = flext_docker.start_compose_stack(str(compose_file))
-    if start_result.is_failure:
+    if start_result.failure:
         pytest.skip(f"OpenLDAP container failed to start: {start_result.error}")
     return "flext-openldap-test"
 

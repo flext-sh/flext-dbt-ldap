@@ -45,7 +45,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
     compose_file = project_root / "docker-compose.yml"
     logger.info("Starting PostgreSQL container using tk...")
     start_result = flext_docker.start_compose_stack(str(compose_file))
-    if start_result.is_failure:
+    if start_result.failure:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
 
     @d.retry(
@@ -69,7 +69,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
     logger.info("Stopping PostgreSQL container using tk...")
 
     class _StopResult:
-        is_failure: bool = False
+        failure: bool = False
         error: str | None = None
 
     if hasattr(flext_docker, "stop_compose_stack"):
@@ -77,7 +77,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
         stop_result: _StopResult = stop_fn(str(compose_file))
     else:
         stop_result = _StopResult()
-    if stop_result.is_failure and stop_result.error:
+    if stop_result.failure and stop_result.error:
         logger.warning(
             "PostgreSQL container stop reported failure: %s",
             stop_result.error,
@@ -128,7 +128,7 @@ def run_dbt_command(
         var_string = " ".join((f"{k}:{v}" for k, v in dbt_vars.items()))
         cmd.extend(["--vars", var_string])
     result = u.Cli.run_raw(cmd, cwd=project_dir, env=env)
-    if result.is_success:
+    if result.success:
         return result.value
     return m.Cli.CommandOutput(
         stdout="",

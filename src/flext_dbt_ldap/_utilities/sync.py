@@ -54,7 +54,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         """Run DBT models."""
         try:
             run_result = self._run_selected_models(model_names)
-            if run_result.is_failure:
+            if run_result.failure:
                 return r[m.DbtLdap.DbtRunStatus].fail(
                     run_result.error or "DBT model execution failed",
                 )
@@ -81,9 +81,9 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         )
         membership_result = self.sync_memberships_to_warehouse(search_base)
         counts = [
-            user_result.is_success,
-            group_result.is_success,
-            membership_result.is_success,
+            user_result.success,
+            group_result.success,
+            membership_result.success,
         ]
         sync_result = m.DbtLdap.SyncResult(
             overall_success=all(counts),
@@ -122,13 +122,13 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                     c.DbtLdap.DIM_GROUPS,
                 ],
             )
-            if result.is_success:
+            if result.success:
                 update_result = self._update_bookmark(
                     "groups",
                     bookmark,
                     successful=True,
                 )
-                if update_result.is_failure:
+                if update_result.failure:
                     return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                         update_result.error or "Group sync state persistence failed",
                     )
@@ -188,13 +188,13 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
                     c.DbtLdap.DIM_USERS,
                 ],
             )
-            if result.is_success:
+            if result.success:
                 update_result = self._update_bookmark(
                     c.DbtLdap.USERS,
                     bookmark,
                     successful=True,
                 )
-                if update_result.is_failure:
+                if update_result.failure:
                     return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                         update_result.error or "User sync state persistence failed",
                     )
@@ -209,7 +209,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         """Validate data quality in the warehouse."""
         try:
             run_result = self._run_selected_models(model_names)
-            if run_result.is_failure:
+            if run_result.failure:
                 return r[m.DbtLdap.ValidationMetrics].fail(
                     run_result.error or "Data quality validation failed",
                 )
@@ -234,7 +234,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             empty_state: t.MutableStrMapping = {}
             return empty_state
         payload_result = u.Cli.json_read(self._sync_state_file)
-        if payload_result.is_failure:
+        if payload_result.failure:
             raise OSError(payload_result.error or "Failed to read sync state file")
         loaded: t.OpaqueValue = payload_result.value
         if not isinstance(loaded, dict):
@@ -255,7 +255,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
             dict(sorted(self._sync_bookmarks.items())),
             sort_keys=True,
         )
-        if write_result.is_failure:
+        if write_result.failure:
             msg = write_result.error or "Failed to persist sync state"
             raise OSError(msg)
 
