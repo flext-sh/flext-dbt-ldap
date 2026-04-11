@@ -44,8 +44,10 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
         return FlextDbtLdapSettings.model_validate(self.config_overrides or {})
 
     @override
-    def get_connection_profile(self) -> t.ContainerMapping:
-        """Return dbt connection profile for LDAP."""
+    @property
+    @override
+    def connection_profile(self) -> t.ContainerMapping:
+        """Dbt connection profile for LDAP."""
         s = self.config
         return {
             "type": "ldap",

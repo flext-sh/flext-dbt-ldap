@@ -137,7 +137,7 @@ def test_service_init_fails_fast_when_sync_state_is_invalid(
 ) -> None:
     _ = dbt_ldap_service_factory
     state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
-    state_file.write_text('{"users": 1}\n', encoding=c.Cli.Encoding.DEFAULT)
+    state_file.write_text('{"users": 1}\n', encoding=c.Cli.ENCODING_DEFAULT)
     settings = FlextDbtLdapSettings.model_validate({
         "ldap_base_dn": "dc=example,dc=com",
         "dbt_project_dir": str(tmp_path),
