@@ -13,27 +13,28 @@ from flext_core.lazy import (
 from flext_dbt_ldap.__version__ import *
 
 if _t.TYPE_CHECKING:
-    from _constants.attributes import FlextDbtLdapConstantsAttributes
-    from _constants.base import FlextDbtLdapConstantsBase
-    from _constants.search import FlextDbtLdapConstantsSearch
-    from _constants.transformation import FlextDbtLdapConstantsTransformation
-    from _models.configuration import FlextDbtLdapModelsConfiguration
-    from _models.dimensions import FlextDbtLdapModelsDimensions
-    from _models.results import FlextDbtLdapModelsResults
-    from _models.schema import FlextDbtLdapModelsSchema
-    from _models.shared import FlextDbtLdapModelsShared
-    from _utilities.client import FlextDbtLdapUtilitiesClient
-    from _utilities.entry import FlextDbtLdapUtilitiesEntry
-    from _utilities.integration import FlextDbtLdapUtilitiesIntegration
-    from _utilities.macros import FlextDbtLdapUtilitiesMacros
-    from _utilities.sync import FlextDbtLdapUtilitiesSync
-
     from flext_cli.base import s
     from flext_core.decorators import d
     from flext_core.exceptions import e
     from flext_core.handlers import h
     from flext_core.mixins import x
     from flext_core.result import r
+    from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
+    from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
+    from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
+    from flext_dbt_ldap._constants.transformation import (
+        FlextDbtLdapConstantsTransformation,
+    )
+    from flext_dbt_ldap._models.configuration import FlextDbtLdapModelsConfiguration
+    from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
+    from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
+    from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
+    from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+    from flext_dbt_ldap._utilities.client import FlextDbtLdapUtilitiesClient
+    from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
+    from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
+    from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
+    from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
     from flext_dbt_ldap.api import FlextDbtLdap
     from flext_dbt_ldap.base import FlextDbtLdapServiceBase
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
@@ -107,20 +108,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextDbtLdapUtilities",
                 "u",
             ),
-            "_constants.attributes": ("FlextDbtLdapConstantsAttributes",),
-            "_constants.base": ("FlextDbtLdapConstantsBase",),
-            "_constants.search": ("FlextDbtLdapConstantsSearch",),
-            "_constants.transformation": ("FlextDbtLdapConstantsTransformation",),
-            "_models.configuration": ("FlextDbtLdapModelsConfiguration",),
-            "_models.dimensions": ("FlextDbtLdapModelsDimensions",),
-            "_models.results": ("FlextDbtLdapModelsResults",),
-            "_models.schema": ("FlextDbtLdapModelsSchema",),
-            "_models.shared": ("FlextDbtLdapModelsShared",),
-            "_utilities.client": ("FlextDbtLdapUtilitiesClient",),
-            "_utilities.entry": ("FlextDbtLdapUtilitiesEntry",),
-            "_utilities.integration": ("FlextDbtLdapUtilitiesIntegration",),
-            "_utilities.macros": ("FlextDbtLdapUtilitiesMacros",),
-            "_utilities.sync": ("FlextDbtLdapUtilitiesSync",),
             "flext_cli.base": ("s",),
             "flext_core.decorators": ("d",),
             "flext_core.exceptions": ("e",),
