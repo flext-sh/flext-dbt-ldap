@@ -13,7 +13,7 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from pydantic import PrivateAttr
 
 from flext_core import r
-from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
+from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t, u
 from flext_ldap import (
     FlextLdap,
     FlextLdapSettings,

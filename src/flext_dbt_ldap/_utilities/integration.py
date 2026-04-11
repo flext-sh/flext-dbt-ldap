@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, MutableSequence, Sequence
 
-from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t
+from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t, u
 
 
 class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):

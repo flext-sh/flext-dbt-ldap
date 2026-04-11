@@ -41,4 +41,6 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
         return r[t.ContainerMapping].ok(self.config.model_dump(exclude_none=True))
 
 
-__all__ = ["FlextDbtLdap"]
+dbt_ldap = FlextDbtLdap
+
+__all__ = ["FlextDbtLdap", "dbt_ldap"]
