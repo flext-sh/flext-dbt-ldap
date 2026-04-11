@@ -16,13 +16,12 @@ from typing import LiteralString
 import pytest
 from flext_tests import tk
 
-from flext_core import FlextLogger
 from tests import d, m, p, t, u
 
 psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
 sql: ModuleType = psycopg.sql
 
-logger = FlextLogger(__name__)
+logger = u.fetch_logger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
 type _DbRow = t.VariadicTuple[t.NormalizedValue]
 

@@ -10,14 +10,13 @@ from __future__ import annotations
 
 from collections.abc import Callable, MutableSequence, Sequence
 
-from flext_core import FlextLogger
 from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t
 
 
 class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     """Typed LDAP-to-DBT transformation helpers."""
 
-    _log = FlextLogger.create_module_logger(__name__)
+    _log = u.fetch_logger(__name__)
 
     def transform_groups(
         self,

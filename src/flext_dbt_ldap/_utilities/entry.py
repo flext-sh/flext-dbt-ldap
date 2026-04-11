@@ -6,14 +6,13 @@ from collections.abc import Mapping, MutableMapping
 
 from flext_ldif import m as lm
 
-from flext_core import FlextLogger
 from flext_dbt_ldap import FlextDbtLdapUtilitiesMacros, c, t
 
 
 class FlextDbtLdapUtilitiesEntry:
     """Low-level LDAP entry helpers reused by models and integrations."""
 
-    _log = FlextLogger.create_module_logger(__name__)
+    _log = u.fetch_logger(__name__)
 
     @staticmethod
     def ldap_first_attribute(

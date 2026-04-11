@@ -14,10 +14,10 @@ from pathlib import Path
 from pydantic import PrivateAttr
 
 from flext_cli import u
-from flext_core import FlextLogger, r
+from flext_core import r
 from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t
 
-logger = FlextLogger(__name__)
+logger = u.fetch_logger(__name__)
 
 
 def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:

@@ -12,14 +12,14 @@ from collections.abc import Mapping, MutableMapping, Sequence
 
 from pydantic import PrivateAttr
 
-from flext_core import FlextLogger, r
+from flext_core import r
 from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t
 from flext_ldap import (
     FlextLdap,
     FlextLdapSettings,
 )
 
-logger = FlextLogger(__name__)
+logger = u.fetch_logger(__name__)
 
 
 class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
@@ -41,7 +41,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
             if config.ldap_bind_password
             else None
         )
-        ldap_settings = FlextLdapSettings.get_global().model_copy(
+        ldap_settings = FlextLdapSettings.fetch_global().model_copy(
             update={
                 "host": config.ldap_host,
                 "port": config.ldap_port,

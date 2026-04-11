@@ -29,7 +29,7 @@ if _t.TYPE_CHECKING:
     from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
     from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
     from flext_dbt_ldap._utilities.sync import FlextDbtLdapUtilitiesSync
-    from flext_dbt_ldap.api import FlextDbtLdap
+    from flext_dbt_ldap.api import FlextDbtLdap, dbt_ldap
     from flext_dbt_ldap.base import FlextDbtLdapServiceBase
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
     from flext_dbt_ldap.errors import (
@@ -68,7 +68,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "__version__",
                 "__version_info__",
             ),
-            ".api": ("FlextDbtLdap",),
+            ".api": (
+                "FlextDbtLdap",
+                "dbt_ldap",
+            ),
             ".base": ("FlextDbtLdapServiceBase",),
             ".constants": (
                 "FlextDbtLdapConstants",
@@ -171,6 +174,7 @@ __all__ = [
     "__version_info__",
     "c",
     "d",
+    "dbt_ldap",
     "e",
     "h",
     "m",
