@@ -36,7 +36,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     def __init__(
         self,
-        settings: FlextDbtLdapSettings | t.ContainerMapping | None = None,
+        settings: FlextDbtLdapSettings | t.RecursiveContainerMapping | None = None,
     ) -> None:
         """Expose the typed DBT LDAP settings bootstrap surface."""
         super().__init__(settings=settings)
@@ -53,7 +53,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @property
     @override
-    def connection_profile(self) -> t.ContainerMapping:
+    def connection_profile(self) -> t.RecursiveContainerMapping:
         """Dbt connection profile for LDAP."""
         s = self.settings
         return {

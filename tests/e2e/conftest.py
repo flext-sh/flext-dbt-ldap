@@ -23,7 +23,7 @@ sql: ModuleType = psycopg.sql
 
 logger = u.fetch_logger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
-type _DbRow = t.VariadicTuple[t.NormalizedValue]
+type _DbRow = t.VariadicTuple[t.RecursiveContainer]
 
 
 @pytest.fixture(scope="session")
@@ -114,7 +114,7 @@ def run_dbt_command(
     command: t.StrSequence,
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: t.ContainerMapping | None = None,
+    dbt_vars: t.RecursiveContainerMapping | None = None,
 ) -> m.Cli.CommandOutput:
     """Run dbt command with proper configuration."""
     env = {
