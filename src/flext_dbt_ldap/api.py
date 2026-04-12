@@ -44,4 +44,4 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
 
 dbt_ldap = FlextDbtLdap
 
-__all__ = ["FlextDbtLdap", "dbt_ldap"]
+__all__: list[str] = ["FlextDbtLdap", "dbt_ldap"]

@@ -22,6 +22,6 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
         """DBT LDAP domain model namespace."""
 
 
-__all__ = ["FlextDbtLdapModels", "m"]
+__all__: list[str] = ["FlextDbtLdapModels", "m"]
 
 m = FlextDbtLdapModels

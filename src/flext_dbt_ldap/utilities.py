@@ -22,6 +22,6 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
         """Project-specific dbt-ldap utility surface."""
 
 
-__all__ = ["FlextDbtLdapUtilities", "u"]
+__all__: list[str] = ["FlextDbtLdapUtilities", "u"]
 
 u = FlextDbtLdapUtilities

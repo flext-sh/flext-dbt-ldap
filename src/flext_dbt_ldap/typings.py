@@ -34,4 +34,4 @@ class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
 
 
 t = FlextDbtLdapTypes
-__all__ = ["FlextDbtLdapTypes", "t"]
+__all__: list[str] = ["FlextDbtLdapTypes", "t"]

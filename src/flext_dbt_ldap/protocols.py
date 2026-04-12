@@ -333,6 +333,6 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
                     ...
 
 
-__all__ = ["FlextDbtLdapProtocols", "p"]
+__all__: list[str] = ["FlextDbtLdapProtocols", "p"]
 
 p = FlextDbtLdapProtocols

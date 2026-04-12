@@ -66,4 +66,4 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
         }
 
 
-__all__ = ["FlextDbtLdapServiceBase"]
+__all__: list[str] = ["FlextDbtLdapServiceBase"]

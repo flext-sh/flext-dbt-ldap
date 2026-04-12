@@ -44,4 +44,4 @@ class FlextDbtLdapConstants(
 
 c = FlextDbtLdapConstants
 
-__all__ = ["FlextDbtLdapConstants", "c"]
+__all__: list[str] = ["FlextDbtLdapConstants", "c"]

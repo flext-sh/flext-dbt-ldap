@@ -25,4 +25,4 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
 
 u = TestsFlextDbtLdapUtilities
-__all__ = ["TestsFlextDbtLdapUtilities", "u"]
+__all__: list[str] = ["TestsFlextDbtLdapUtilities", "u"]

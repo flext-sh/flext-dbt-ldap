@@ -25,4 +25,4 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
 
 
 t = TestsFlextDbtLdapTypes
-__all__ = ["TestsFlextDbtLdapTypes", "t"]
+__all__: list[str] = ["TestsFlextDbtLdapTypes", "t"]
