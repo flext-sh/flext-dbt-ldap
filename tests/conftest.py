@@ -22,8 +22,6 @@ from pydantic import TypeAdapter, ValidationError
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests import t, u
 
-pytest_plugins = ["flext_tests.conftest_plugin"]
-
 type _SyncState = t.MutableMappingKV[str, str] | None
 type _ServiceFactory = Callable[
     [pathlib.Path, _SyncState],
