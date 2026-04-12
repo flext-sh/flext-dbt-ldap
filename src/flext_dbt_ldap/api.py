@@ -12,7 +12,13 @@ from __future__ import annotations
 from typing import override
 
 from flext_core import r
-from flext_dbt_ldap import FlextDbtLdapSettings, FlextDbtLdapUtilitiesSync, t, u
+from flext_dbt_ldap import (
+    FlextDbtLdapServiceBase,
+    FlextDbtLdapSettings,
+    FlextDbtLdapUtilitiesSync,
+    t,
+    u,
+)
 
 
 class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
@@ -24,12 +30,7 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
 
     def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
         """Wire all mixin state."""
-        super().__init__(
-            settings_overrides=(
-                settings.model_dump(exclude_none=True) if settings is not None else None
-            ),
-            settings_type=FlextDbtLdapSettings,
-        )
+        FlextDbtLdapServiceBase.__init__(self, settings=settings)
         object.__setattr__(self, "_ldap_api", self.create_ldap_api(self.settings))
         object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())

@@ -21,8 +21,7 @@ class FlextDbtLdapSettings(FlextSettings):
     """Runtime settings for DBT LDAP transformations."""
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
-        env_prefix="FLEXT_DBT_LDAP_",
-        extra="ignore",
+        env_prefix="FLEXT_DBT_LDAP_", extra="ignore"
     )
 
     # LDAP connection settings

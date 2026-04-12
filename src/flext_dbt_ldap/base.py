@@ -25,25 +25,32 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     Adds typed settings for the dbt-ldap domain.
     """
 
-    config_type: type | None = Field(
+    settings_type: type[FlextDbtLdapSettings] | None = Field(
         default=FlextDbtLdapSettings,
-        description="Configuration class for DBT LDAP service initialization",
+        description="Settings class for DBT LDAP service initialization",
     )
     dbt_project_name: t.NonEmptyStr = Field(
         default="dbt-ldap",
         description="Canonical dbt project name for the DBT LDAP service",
     )
 
+    def __init__(
+        self,
+        settings: FlextDbtLdapSettings | t.ContainerMapping | None = None,
+    ) -> None:
+        """Expose the typed DBT LDAP settings bootstrap surface."""
+        super().__init__(settings=settings)
+
     @property
     @override
     def settings(self) -> FlextDbtLdapSettings:
-        """Return the typed dbt-ldap configuration for this service instance."""
+        """Return the typed dbt-ldap settings for this service instance."""
         settings = super().settings
-        if isinstance(settings, FlextDbtLdapSettings):
-            return settings
-        return FlextDbtLdapSettings.model_validate(self.config_overrides or {})
+        if not isinstance(settings, FlextDbtLdapSettings):
+            msg = "DBT LDAP service runtime settings must be FlextDbtLdapSettings"
+            raise TypeError(msg)
+        return settings
 
-    @override
     @property
     @override
     def connection_profile(self) -> t.ContainerMapping:
