@@ -12,8 +12,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import override
 
-from flext_core import e
-from flext_dbt_ldap import t
+from flext_dbt_ldap import e, t
 
 
 class FlextDbtLdapError(e.BaseError):

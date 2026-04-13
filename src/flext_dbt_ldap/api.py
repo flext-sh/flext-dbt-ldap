@@ -11,11 +11,12 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import p, r
 from flext_dbt_ldap import (
     FlextDbtLdapServiceBase,
     FlextDbtLdapSettings,
     FlextDbtLdapUtilitiesSync,
+    p,
+    r,
     t,
     u,
 )
