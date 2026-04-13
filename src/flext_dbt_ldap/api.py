@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import r
+from flext_core import p, r
 from flext_dbt_ldap import (
     FlextDbtLdapServiceBase,
     FlextDbtLdapSettings,
@@ -37,7 +37,7 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
 
     @override
-    def execute(self) -> r[t.RecursiveContainerMapping]:
+    def execute(self) -> p.Result[t.RecursiveContainerMapping]:
         """Execute DBT LDAP service — verify readiness."""
         return r[t.RecursiveContainerMapping].ok(
             self.settings.model_dump(exclude_none=True)

@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, r, t, u
+from tests import c, m, p, r, t, u
 
 type _SyncState = t.MutableMappingKV[str, str] | None
 type _SyncFactory = Callable[[Path, _SyncState], t.Pair[FlextDbtLdap, Path]]
@@ -46,7 +46,7 @@ def _install_successful_pipeline_stub(
         search_filter: str,
         attributes: t.StrSequence | None = None,
         model_names: t.StrSequence | None = None,
-    ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         call_kwargs.update({
             "search_base": search_base,
             "search_filter": search_filter,
@@ -119,7 +119,7 @@ def test_sync_users_fails_when_sync_state_persistence_fails(
         sort_keys: bool = False,
         ensure_ascii: bool = False,
         indent: int = 2,
-    ) -> r[bool]:
+    ) -> p.Result[bool]:
         _ = (path, payload, sort_keys, ensure_ascii, indent)
         return r[bool].fail("json_write: disk full")
 
@@ -157,7 +157,7 @@ def test_run_dbt_models_propagates_run_models_failure(
     def fake_run_models(
         _self: FlextDbtLdap,
         models: t.StrSequence | None = None,
-    ) -> r[str]:
+    ) -> p.Result[str]:
         _ = models
         return r[str].fail("dbt failed")
 

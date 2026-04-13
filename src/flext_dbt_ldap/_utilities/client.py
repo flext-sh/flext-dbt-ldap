@@ -12,7 +12,7 @@ from collections.abc import Mapping, MutableMapping, Sequence
 
 from pydantic import PrivateAttr
 
-from flext_core import r
+from flext_core import p, r
 from flext_dbt_ldap import FlextDbtLdapServiceBase, FlextDbtLdapSettings, c, m, t, u
 from flext_ldap import (
     FlextLdap,
@@ -57,7 +57,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         search_base: str | None = None,
         search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
         attributes: t.StrSequence | None = None,
-    ) -> r[Sequence[t.DbtLdap.LdapEntryMapping]]:
+    ) -> p.Result[Sequence[t.DbtLdap.LdapEntryMapping]]:
         """Extract LDAP entries for DBT processing."""
         try:
             logger.info(
@@ -93,7 +93,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
         attributes: t.StrSequence | None = None,
         model_names: t.StrSequence | None = None,
-    ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Run complete LDAP to DBT transformation pipeline."""
         logger.info("Starting full LDAP-to-DBT pipeline")
         extract_result = self.extract_ldap_entries(
@@ -126,7 +126,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         self,
         entries: Sequence[t.DbtLdap.LdapEntryMapping],
         model_names: t.StrSequence | None = None,
-    ) -> r[m.DbtLdap.DbtRunStatus]:
+    ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Transform LDAP data using DBT models."""
         try:
             run_result = self._run_selected_models(model_names)
@@ -154,7 +154,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     def _run_selected_models(
         self,
         model_names: t.StrSequence | None = None,
-    ) -> r[t.StrSequence]:
+    ) -> p.Result[t.StrSequence]:
         """Run selected DBT models through the canonical service runtime."""
         model_list: t.MutableSequenceOf[str] = list(model_names) if model_names else []
         run_result = self.run_models(models=model_list or None)
@@ -167,7 +167,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     def validate_ldap_data(
         self,
         entries: Sequence[t.DbtLdap.LdapEntryMapping],
-    ) -> r[m.DbtLdap.ValidationMetrics]:
+    ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate LDAP data quality for DBT processing."""
         try:
             logger.info("Validating %d LDAP entries for data quality", len(entries))
@@ -264,7 +264,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         base_dn: str,
         search_filter: str,
         attributes: t.StrSequence | None,
-    ) -> r[Sequence[t.DbtLdap.LdapEntryMapping]]:
+    ) -> p.Result[Sequence[t.DbtLdap.LdapEntryMapping]]:
         """Synchronously perform LDAP search using flext-ldap API."""
         try:
             search_options = m.Ldap.SearchOptions(

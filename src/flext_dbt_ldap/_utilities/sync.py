@@ -14,7 +14,7 @@ from pathlib import Path
 from pydantic import PrivateAttr
 
 from flext_cli import u
-from flext_core import r
+from flext_core import p, r
 from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, t
 
 logger = u.fetch_logger(__name__)
@@ -36,7 +36,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     def generate_analytics_report(
         self,
         report_type: str = "summary",
-    ) -> r[m.DbtLdap.AnalyticsReport]:
+    ) -> p.Result[m.DbtLdap.AnalyticsReport]:
         """Generate analytics report from warehouse data."""
         try:
             report = m.DbtLdap.AnalyticsReport(
@@ -50,7 +50,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     def run_dbt_models(
         self,
         model_names: t.StrSequence | None = None,
-    ) -> r[m.DbtLdap.DbtRunStatus]:
+    ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Run DBT models."""
         try:
             run_result = self._run_selected_models(model_names)
@@ -72,7 +72,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[m.DbtLdap.SyncResult]:
+    ) -> p.Result[m.DbtLdap.SyncResult]:
         """Run complete LDAP to data warehouse synchronization."""
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
@@ -99,7 +99,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse."""
         try:
             bookmark = self._bookmark_now()
@@ -139,7 +139,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     def sync_memberships_to_warehouse(
         self,
         search_base: str | None = None,
-    ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse."""
         try:
             return self.run_full_pipeline(
@@ -158,7 +158,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> r[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse."""
         try:
             bookmark = self._bookmark_now()
@@ -205,7 +205,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     def validate_warehouse_data_quality(
         self,
         model_names: t.StrSequence | None = None,
-    ) -> r[m.DbtLdap.ValidationMetrics]:
+    ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse."""
         try:
             run_result = self._run_selected_models(model_names)
@@ -280,7 +280,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         bookmark: str,
         *,
         successful: bool,
-    ) -> r[bool]:
+    ) -> p.Result[bool]:
         if not successful:
             return r[bool].ok(True)
         previous_bookmark = self._sync_bookmarks.get(sync_key)
