@@ -8,8 +8,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap import c, t
 from flext_meltano import u
 
 logger = u.fetch_logger(__name__)

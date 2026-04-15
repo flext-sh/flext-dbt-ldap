@@ -6,9 +6,7 @@ from collections.abc import Mapping, MutableMapping
 
 from flext_ldif import m as lm
 
-from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap import FlextDbtLdapUtilitiesMacros, c, t
 from flext_meltano import u
 
 
