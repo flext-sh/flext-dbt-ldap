@@ -1,6 +1,6 @@
 """Shared service foundation for flext-dbt-ldap components.
 
-Inherits from FlextMeltanoDbtServiceBase which provides dbt command
+Inherits from s which provides dbt command
 execution (run_models, run_tests, compile, docs, manifest, CLI).
 This base adds typed settings access for dbt-ldap domain.
 
@@ -10,29 +10,31 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
+from typing import Annotated, override
 
-from pydantic import Field
-
-from flext_dbt_ldap import FlextDbtLdapSettings, t
-from flext_meltano import FlextMeltanoDbtServiceBase
+from flext_dbt_ldap import FlextDbtLdapSettings, m, t
+from flext_meltano import s
 
 
-class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
+class FlextDbtLdapServiceBase(s):
     """Base class for flext-dbt-ldap services.
 
-    Inherits dbt execution infrastructure from FlextMeltanoDbtServiceBase.
+    Inherits dbt execution infrastructure from s.
     Adds typed settings for the dbt-ldap domain.
     """
 
-    settings_type: type[FlextDbtLdapSettings] | None = Field(
-        default=FlextDbtLdapSettings,
-        description="Settings class for DBT LDAP service initialization",
-    )
-    dbt_project_name: t.NonEmptyStr = Field(
-        default="dbt-ldap",
-        description="Canonical dbt project name for the DBT LDAP service",
-    )
+    settings_type: Annotated[
+        type[FlextDbtLdapSettings] | None,
+        m.Field(
+            description="Settings class for DBT LDAP service initialization",
+        ),
+    ] = FlextDbtLdapSettings
+    dbt_project_name: Annotated[
+        t.NonEmptyStr,
+        m.Field(
+            description="Canonical dbt project name for the DBT LDAP service",
+        ),
+    ] = "dbt-ldap"
 
     def __init__(
         self,
@@ -65,5 +67,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
             "project": self.dbt_project_name,
         }
 
+
+s = FlextDbtLdapServiceBase
 
 __all__: list[str] = ["FlextDbtLdapServiceBase"]

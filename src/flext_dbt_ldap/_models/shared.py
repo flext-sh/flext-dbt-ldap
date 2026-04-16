@@ -4,16 +4,14 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from pydantic import Field
-
 from flext_dbt_ldap import c, t
-from flext_meltano import FlextMeltanoModels
+from flext_meltano import m
 
 
 class FlextDbtLdapModelsShared:
     """Shared internal model bases reused across dbt-ldap model mixins."""
 
-    class DbtSerializable(FlextMeltanoModels.Entity):
+    class DbtSerializable(m.Entity):
         """Base for DBT-serializable models."""
 
         def to_dbt_dict(self) -> t.ConfigurationMapping:
@@ -27,16 +25,14 @@ class FlextDbtLdapModelsShared:
     class DbtDimensionBase(DbtSerializable):
         """Shared fields for directory-backed dimension models."""
 
-        common_name: Annotated[str, Field(description="Canonical common name")]
+        common_name: Annotated[str, m.Field(description="Canonical common name")]
         is_active: Annotated[
             bool,
-            Field(description="Whether the directory record is active"),
+            m.Field(description="Whether the directory record is active"),
         ] = True
         created_date: Annotated[
-            str | None,
-            Field(default=None, description="Source creation timestamp"),
+            str | None, m.Field(description="Source creation timestamp")
         ] = None
         modified_date: Annotated[
-            str | None,
-            Field(default=None, description="Source modification timestamp"),
+            str | None, m.Field(description="Source modification timestamp")
         ] = None

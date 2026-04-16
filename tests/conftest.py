@@ -17,10 +17,10 @@ from unittest.mock import Mock
 
 import pytest
 from flext_tests import td, tk
-from pydantic import TypeAdapter, ValidationError
+from pydantic import TypeAdapter
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import t, u
+from tests import c, m, t, u
 
 type _SyncState = t.MutableMappingKV[str, str] | None
 type _ServiceFactory = Callable[
@@ -399,13 +399,13 @@ class MockLdapDbtAdapter:
     def _is_ldap_attribute_map(
         value: t.RecursiveContainer,
     ) -> TypeIs[Mapping[str, str | t.StrSequence | None]]:
-        adapter: TypeAdapter[Mapping[str, str | t.StrSequence | None]] = TypeAdapter(
+        adapter: m.TypeAdapter[Mapping[str, str | t.StrSequence | None]] = TypeAdapter(
             Mapping[str, str | t.StrSequence | None]
         )
         try:
             _ = adapter.validate_python(value)
             return True
-        except ValidationError:
+        except c.ValidationError:
             return False
 
     def split(self, dn: str) -> bool:
