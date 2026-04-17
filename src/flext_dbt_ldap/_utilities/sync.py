@@ -11,8 +11,6 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 
-from pydantic import PrivateAttr
-
 from flext_cli import u
 from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, p, r, t
 
@@ -27,8 +25,8 @@ def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:
 class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
     """Warehouse sync mixin -- composed into FlextDbtLdap via MRO."""
 
-    _sync_state_file: Path = PrivateAttr()
-    _sync_bookmarks: t.MutableStrMapping = PrivateAttr(
+    _sync_state_file: Path = u.PrivateAttr()
+    _sync_bookmarks: t.MutableStrMapping = u.PrivateAttr(
         default_factory=_new_sync_bookmarks,
     )
 

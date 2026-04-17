@@ -10,8 +10,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping, Sequence
 
-from pydantic import PrivateAttr
-
 from flext_dbt_ldap import (
     FlextDbtLdapServiceBase,
     FlextDbtLdapSettings,
@@ -36,7 +34,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     Mixed into FlextDbtLdap via MRO. State set by facade __init__.
     """
 
-    _ldap_api: FlextLdap = PrivateAttr()
+    _ldap_api: FlextLdap = u.PrivateAttr()
 
     @staticmethod
     def create_ldap_api(settings: FlextDbtLdapSettings) -> FlextLdap:

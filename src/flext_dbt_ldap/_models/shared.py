@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Annotated
 
 from flext_dbt_ldap import c, t
-from flext_meltano import m
+from flext_meltano import m, u
 
 
 class FlextDbtLdapModelsShared:
@@ -25,14 +25,14 @@ class FlextDbtLdapModelsShared:
     class DbtDimensionBase(DbtSerializable):
         """Shared fields for directory-backed dimension models."""
 
-        common_name: Annotated[str, m.Field(description="Canonical common name")]
+        common_name: Annotated[str, u.Field(description="Canonical common name")]
         is_active: Annotated[
             bool,
-            m.Field(description="Whether the directory record is active"),
+            u.Field(description="Whether the directory record is active"),
         ] = True
         created_date: Annotated[
-            str | None, m.Field(description="Source creation timestamp")
+            str | None, u.Field(description="Source creation timestamp")
         ] = None
         modified_date: Annotated[
-            str | None, m.Field(description="Source modification timestamp")
+            str | None, u.Field(description="Source modification timestamp")
         ] = None

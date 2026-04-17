@@ -12,7 +12,7 @@ from typing import Annotated, ClassVar
 from pydantic import SecretStr
 from pydantic_settings import SettingsConfigDict
 
-from flext_core import FlextSettings
+from flext_core import FlextSettings, u
 from flext_dbt_ldap import c, m, t
 
 
@@ -25,38 +25,38 @@ class FlextDbtLdapSettings(FlextSettings):
     )
 
     # LDAP connection settings
-    ldap_host: Annotated[str, m.Field(description="LDAP server hostname")] = c.LOCALHOST
-    ldap_port: Annotated[int, m.Field(description="LDAP server port")] = (
+    ldap_host: Annotated[str, u.Field(description="LDAP server hostname")] = c.LOCALHOST
+    ldap_port: Annotated[int, u.Field(description="LDAP server port")] = (
         c.Ldap.ConnectionDefaults.PORT
     )
     ldap_use_tls: Annotated[
         bool,
-        m.Field(
+        u.Field(
             description="Use TLS for LDAP connection",
         ),
     ] = c.Ldap.ConnectionDefaults.DEFAULT_USE_TLS
     ldap_bind_dn: Annotated[
-        SecretStr | None, m.Field(description="LDAP bind DN for authentication")
+        SecretStr | None, u.Field(description="LDAP bind DN for authentication")
     ] = None
     ldap_bind_password: Annotated[
-        SecretStr | None, m.Field(description="LDAP bind password")
+        SecretStr | None, u.Field(description="LDAP bind password")
     ] = None
     ldap_base_dn: Annotated[
         str,
-        m.Field(
+        u.Field(
             description="LDAP base DN for searches",
         ),
     ] = c.Ldap.Defaults.EXAMPLE_BASE_DN
 
     # DBT project settings
     dbt_project_dir: Annotated[
-        str, m.Field(description="Path to DBT project directory")
+        str, u.Field(description="Path to DBT project directory")
     ] = "."
 
     # Data quality settings
     min_quality_threshold: Annotated[
         float,
-        m.Field(
+        u.Field(
             ge=0.0,
             le=1.0,
             description="Minimum data quality score threshold",
@@ -64,23 +64,23 @@ class FlextDbtLdapSettings(FlextSettings):
     ] = c.DbtLdap.DEFAULT_QUALITY_THRESHOLD
     required_attributes: Annotated[
         t.StrSequence,
-        m.Field(
+        u.Field(
             description="Required LDAP attributes for validation",
         ),
-    ] = m.Field(default_factory=list)
+    ] = u.Field(default_factory=list)
 
     # Attribute mapping
     ldap_attribute_mapping: Annotated[
         t.StrMapping,
-        m.Field(
+        u.Field(
             description="Mapping of LDAP attributes to DBT model attributes",
         ),
-    ] = m.Field(default_factory=dict)
+    ] = u.Field(default_factory=dict)
 
     # Schema mapping
     ldap_schema_mapping: Annotated[
         t.StrMapping,
-        m.Field(
+        u.Field(
             description="Mapping of LDAP schemas to DBT tables",
         ),
-    ] = m.Field(default_factory=dict)
+    ] = u.Field(default_factory=dict)

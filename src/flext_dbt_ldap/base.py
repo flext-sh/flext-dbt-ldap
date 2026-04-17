@@ -12,11 +12,11 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_dbt_ldap import FlextDbtLdapSettings, m, t
-from flext_meltano import s
+from flext_dbt_ldap import FlextDbtLdapSettings, t
+from flext_meltano import FlextMeltanoDbtServiceBase, u
 
 
-class FlextDbtLdapServiceBase(s):
+class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     """Base class for flext-dbt-ldap services.
 
     Inherits dbt execution infrastructure from s.
@@ -25,23 +25,16 @@ class FlextDbtLdapServiceBase(s):
 
     settings_type: Annotated[
         type[FlextDbtLdapSettings] | None,
-        m.Field(
+        u.Field(
             description="Settings class for DBT LDAP service initialization",
         ),
     ] = FlextDbtLdapSettings
     dbt_project_name: Annotated[
         t.NonEmptyStr,
-        m.Field(
+        u.Field(
             description="Canonical dbt project name for the DBT LDAP service",
         ),
     ] = "dbt-ldap"
-
-    def __init__(
-        self,
-        settings: FlextDbtLdapSettings | t.RecursiveContainerMapping | None = None,
-    ) -> None:
-        """Expose the typed DBT LDAP settings bootstrap surface."""
-        super().__init__(settings=settings)
 
     @property
     @override
