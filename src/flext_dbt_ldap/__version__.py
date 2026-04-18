@@ -1,28 +1,37 @@
-"""Version and package metadata using importlib.metadata.
+# AUTO-GENERATED FILE — Regenerate with: make gen
+"""Package version and metadata for flext-dbt-ldap.
 
-Single source of truth pattern following flext-core standards.
-All metadata comes from pyproject.toml via importlib.metadata.
+Subclass of ``FlextVersion`` — overrides only ``_metadata``.
+All derived attributes (``__version__``, ``__title__``, etc.) are
+computed automatically via ``FlextVersion.__init_subclass__``.
 
-Copyright (c) 2025 Flext Telecom. Todos os direitos reservados.
-SPDX-License-Identifier: Proprietary
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
 
-from importlib.metadata import metadata
+from importlib.metadata import PackageMetadata, metadata
 
-_metadata = metadata("flext_dbt_ldap")
-__version__ = _metadata.get("Version", "")
-__version_info__ = tuple(
-    int(part) if part.isdigit() else part for part in __version__.split(".")
-)
-__title__ = _metadata.get("Name", "")
-__description__ = _metadata.get("Summary", "")
-__author__ = _metadata.get("Author", "")
-__author_email__ = _metadata.get("Author-Email", "")
-__license__ = _metadata.get("License-Expression", _metadata.get("License", ""))
-__url__ = _metadata.get("Home-Page", "")
+from flext_core import FlextVersion
+
+
+class FlextDbtLdapVersion(FlextVersion):
+    """flext-dbt-ldap version — MRO-derived from FlextVersion."""
+
+    _metadata: PackageMetadata = metadata("flext-dbt-ldap")
+
+
+__version__ = FlextDbtLdapVersion.__version__
+__version_info__ = FlextDbtLdapVersion.__version_info__
+__title__ = FlextDbtLdapVersion.__title__
+__description__ = FlextDbtLdapVersion.__description__
+__author__ = FlextDbtLdapVersion.__author__
+__author_email__ = FlextDbtLdapVersion.__author_email__
+__license__ = FlextDbtLdapVersion.__license__
+__url__ = FlextDbtLdapVersion.__url__
 __all__: list[str] = [
+    "FlextDbtLdapVersion",
     "__author__",
     "__author_email__",
     "__description__",
