@@ -15,6 +15,7 @@ if _t.TYPE_CHECKING:
     from flext_tests import td, tf, tk, tm, tv
 
     from flext_dbt_ldap import d, e, h, r, s, x
+    from tests.conftest import MockLdapConnection, MockLdapDbtAdapter
     from tests.constants import TestsFlextDbtLdapConstants, c
     from tests.models import TestsFlextDbtLdapModels, m
     from tests.protocols import TestsFlextDbtLdapProtocols, p
@@ -27,6 +28,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
     ),
     build_lazy_import_map(
         {
+            ".conftest": (
+                "MockLdapConnection",
+                "MockLdapDbtAdapter",
+            ),
             ".constants": (
                 "TestsFlextDbtLdapConstants",
                 "c",
@@ -80,6 +85,8 @@ _LAZY_IMPORTS = merge_lazy_imports(
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 
 __all__: list[str] = [
+    "MockLdapConnection",
+    "MockLdapDbtAdapter",
     "TestsFlextDbtLdapConstants",
     "TestsFlextDbtLdapModels",
     "TestsFlextDbtLdapProtocols",

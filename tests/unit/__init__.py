@@ -10,19 +10,6 @@ _LAZY_IMPORTS = build_lazy_import_map(
         ".test_constants_flat_api": ("test_constants_flat_api",),
         ".test_dbt_services_sync": ("test_dbt_services_sync",),
         ".test_version": ("test_version",),
-        "flext_dbt_ldap": (
-            "c",
-            "d",
-            "e",
-            "h",
-            "m",
-            "p",
-            "r",
-            "s",
-            "t",
-            "u",
-            "x",
-        ),
     },
 )
 
