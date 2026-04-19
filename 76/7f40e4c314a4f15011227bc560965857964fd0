@@ -1,0 +1,16 @@
+tests/conftest.py
+  h_9db9d35f50cf33 22,401,407
+src/flext_dbt_ldap/settings.py
+  h_9db9d35f50cf33 20,36,39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "767f40e4c314a4f15011227bc560965857964fd0",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
