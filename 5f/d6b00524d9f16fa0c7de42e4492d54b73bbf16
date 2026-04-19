@@ -1,0 +1,26 @@
+src/flext_dbt_ldap/api.py
+  h_9db9d35f50cf33 41,43
+docs/guides/development.md
+  h_9db9d35f50cf33 154,193,196,202,353,356,405
+tests/conftest.py
+  h_9db9d35f50cf33 76,102,157-158,175,249,319,342,370,374-375,383,399,429-430,432,451,456,473
+src/flext_dbt_ldap/base.py
+  h_9db9d35f50cf33 51
+docs/guides/troubleshooting.md
+  h_9db9d35f50cf33 141,155
+docs/guides/testing.md
+  h_9db9d35f50cf33 528
+tests/e2e/conftest.py
+  h_9db9d35f50cf33 26,117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "5fd6b00524d9f16fa0c7de42e4492d54b73bbf16",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
