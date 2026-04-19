@@ -38,9 +38,9 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
 
     @override
-    def execute(self) -> p.Result[t.RecursiveContainerMapping]:
+    def execute(self) -> p.Result[Mapping[str, t.Container]]:
         """Execute DBT LDAP service — verify readiness."""
-        return r[t.RecursiveContainerMapping].ok(
+        return r[Mapping[str, t.Container]].ok(
             self.settings.model_dump(exclude_none=True)
         )
 

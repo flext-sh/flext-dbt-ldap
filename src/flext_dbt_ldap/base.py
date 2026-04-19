@@ -48,7 +48,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @property
     @override
-    def connection_profile(self) -> t.RecursiveContainerMapping:
+    def connection_profile(self) -> Mapping[str, t.Container]:
         """Dbt connection profile for LDAP."""
         s = self.settings
         return {
