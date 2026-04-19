@@ -9,9 +9,6 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar
 
-from pydantic import SecretStr
-from pydantic_settings import SettingsConfigDict
-
 from flext_core import FlextSettings, u
 from flext_dbt_ldap import c, m, t
 
@@ -20,7 +17,7 @@ from flext_dbt_ldap import c, m, t
 class FlextDbtLdapSettings(FlextSettings):
     """Runtime settings for DBT LDAP transformations."""
 
-    model_config: ClassVar[SettingsConfigDict] = m.SettingsConfigDict(
+    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
         env_prefix="FLEXT_DBT_LDAP_", extra="ignore"
     )
 
@@ -36,10 +33,10 @@ class FlextDbtLdapSettings(FlextSettings):
         ),
     ] = c.Ldap.ConnectionDefaults.DEFAULT_USE_TLS
     ldap_bind_dn: Annotated[
-        SecretStr | None, u.Field(description="LDAP bind DN for authentication")
+        t.SecretStr | None, u.Field(description="LDAP bind DN for authentication")
     ] = None
     ldap_bind_password: Annotated[
-        SecretStr | None, u.Field(description="LDAP bind password")
+        t.SecretStr | None, u.Field(description="LDAP bind password")
     ] = None
     ldap_base_dn: Annotated[
         str,
