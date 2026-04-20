@@ -11,7 +11,12 @@ import os
 import pathlib
 import re
 import tempfile
-from collections.abc import Callable, Generator, Mapping, Sequence
+from collections.abc import (
+    Callable,
+    Generator,
+    Mapping,
+    Sequence,
+)
 from typing import TypeIs
 from unittest.mock import Mock
 

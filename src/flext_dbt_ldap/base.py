@@ -10,6 +10,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import (
+    Mapping,
+)
 from typing import Annotated, override
 
 from flext_dbt_ldap import FlextDbtLdapSettings, t

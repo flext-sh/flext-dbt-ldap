@@ -8,7 +8,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, MutableSequence, Sequence
+from collections.abc import (
+    Callable,
+    MutableSequence,
+    Sequence,
+)
 
 from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t
 from flext_meltano import u
