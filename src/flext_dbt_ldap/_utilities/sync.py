@@ -233,7 +233,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         payload_result = u.Cli.json_read(self._sync_state_file)
         if payload_result.failure:
             raise OSError(payload_result.error or "Failed to read sync state file")
-        loaded: t.OpaqueValue = payload_result.value
+        loaded: t.JsonValue = dict(payload_result.value)
         if not isinstance(loaded, dict):
             msg = "Sync state file must contain a JSON object"
             raise TypeError(msg)
