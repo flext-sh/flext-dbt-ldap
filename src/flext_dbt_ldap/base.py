@@ -15,8 +15,9 @@ from collections.abc import (
 )
 from typing import Annotated, override
 
-from flext_dbt_ldap import FlextDbtLdapSettings, t
 from flext_meltano import FlextMeltanoDbtServiceBase, u
+
+from flext_dbt_ldap import FlextDbtLdapSettings, t
 
 
 class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):

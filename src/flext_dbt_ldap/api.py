@@ -14,6 +14,8 @@ from collections.abc import (
 )
 from typing import override
 
+from flext_meltano import FlextMeltanoDbtServiceBase
+
 from flext_dbt_ldap import (
     FlextDbtLdapSettings,
     FlextDbtLdapUtilitiesSync,
@@ -22,7 +24,6 @@ from flext_dbt_ldap import (
     t,
     u,
 )
-from flext_meltano import FlextMeltanoDbtServiceBase
 
 
 class FlextDbtLdap(FlextDbtLdapUtilitiesSync):

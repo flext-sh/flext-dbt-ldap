@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from flext_cli import u
+
 from flext_dbt_ldap import FlextDbtLdapUtilitiesClient, c, m, p, r, t
 
 logger = u.fetch_logger(__name__)
