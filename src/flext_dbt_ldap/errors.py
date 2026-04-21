@@ -46,7 +46,7 @@ class FlextDbtLdapTimeoutError(FlextDbtLdapError):
 
 
 class _DbtLdapContextMixin:
-    """DRY mixin for building MetadataAttributeValue-compatible context dicts."""
+    """DRY mixin for building MetadataData-compatible context dicts."""
 
     @staticmethod
     def _build_context(
