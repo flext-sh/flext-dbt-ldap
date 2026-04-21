@@ -7,12 +7,12 @@ provide the generic LDAP and Meltano utility surfaces.
 from __future__ import annotations
 
 from flext_ldap import FlextLdapUtilities
-from flext_meltano import FlextMeltanoUtilities
+from flext_meltano import u
 
 from flext_dbt_ldap import FlextDbtLdapUtilitiesIntegration, FlextDbtLdapUtilitiesMacros
 
 
-class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
+class FlextDbtLdapUtilities(u, FlextLdapUtilities):
     """Thin dbt-ldap utilities facade following the canonical MRO pattern."""
 
     class DbtLdap(

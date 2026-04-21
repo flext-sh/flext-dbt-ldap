@@ -16,22 +16,22 @@ from collections.abc import (
 )
 
 from flext_ldap import FlextLdapTypes
-from flext_meltano import FlextMeltanoTypes
+from flext_meltano import t
 
 
-class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
+class FlextDbtLdapTypes(t, FlextLdapTypes):
     """MRO facade composing Meltano + LDAP type namespaces."""
 
     class DbtLdap:
         """DBT LDAP domain type contracts."""
 
-        type LdapAttributeValues = FlextMeltanoTypes.StrSequence
+        type LdapAttributeValues = t.StrSequence
         "Multi-valued LDAP attribute payload."
         type LdapEntryMapping = Mapping[str, LdapAttributeValues]
         "Single LDAP entry: attribute name → list of string values."
         type MutableLdapEntryMapping = MutableMapping[str, LdapAttributeValues]
         "Mutable LDAP entry mapping used while normalizing raw records."
-        type SerializableMapping = Mapping[str, FlextMeltanoTypes.Serializable]
+        type SerializableMapping = Mapping[str, t.Serializable]
         "String-keyed serializable DBT payload item."
         type SerializableMappingSequence = Sequence[SerializableMapping]
         "Read-only sequence of serializable DBT payload items."

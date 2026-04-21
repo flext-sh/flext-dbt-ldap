@@ -10,9 +10,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
 from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoDbtServiceBase, u
@@ -52,7 +49,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @property
     @override
-    def connection_profile(self) -> Mapping[str, t.Container]:
+    def connection_profile(self) -> t.Cli.JsonMapping:
         """Dbt connection profile for LDAP."""
         s = self.settings
         return {

@@ -50,7 +50,7 @@ class _DbtLdapContextMixin:
 
     @staticmethod
     def _build_context(
-        **fields: t.Scalar | None,
+        **fields: t.MetadataValue | None,
     ) -> Mapping[str, t.MetadataValue]:
         """Build context dictionary from keyword arguments."""
         return {key: value for key, value in fields.items() if value is not None}
