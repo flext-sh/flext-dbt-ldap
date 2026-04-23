@@ -17,7 +17,6 @@ from collections.abc import (
     Mapping,
     Sequence,
 )
-from typing import TypeIs
 from unittest.mock import Mock
 
 import pytest
@@ -400,17 +399,16 @@ class MockLdapDbtAdapter:
         ]
 
     @staticmethod
-    def _is_ldap_attribute_map(
+    def _coerce_ldap_attribute_map(
         value: t.JsonValue,
-    ) -> TypeIs[Mapping[str, str | t.StrSequence | None]]:
+    ) -> Mapping[str, str | t.StrSequence | None] | None:
         adapter: m.TypeAdapter[Mapping[str, str | t.StrSequence | None]] = (
             m.TypeAdapter(Mapping[str, str | t.StrSequence | None])
         )
         try:
-            _ = adapter.validate_python(value)
-            return True
+            return adapter.validate_python(value)
         except e.ValidationError:
-            return False
+            return None
 
     def split(self, dn: str) -> bool:
         """Validate DN format."""
@@ -438,8 +436,9 @@ class MockLdapDbtAdapter:
         for entry in ldap_data:
             flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
             attrs = entry.get("attributes")
-            if self._is_ldap_attribute_map(attrs):
-                flat_entry.update(self.parse_ldap_attributes(attrs))
+            coerced = self._coerce_ldap_attribute_map(attrs)
+            if coerced is not None:
+                flat_entry.update(self.parse_ldap_attributes(coerced))
             transformed.append(flat_entry)
         return transformed
 
