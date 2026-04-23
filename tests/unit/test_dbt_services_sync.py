@@ -21,7 +21,7 @@ type _SyncState = t.MutableMappingKV[str, str] | None
 type _SyncFactory = Callable[[Path, _SyncState], t.Pair[FlextDbtLdap, Path]]
 
 
-def _read_sync_state(state_file: Path) -> t.Cli.JsonMapping:
+def _read_sync_state(state_file: Path) -> t.JsonMapping:
     read_result = u.Cli.json_read(state_file)
     if read_result.failure:
         pytest.fail(read_result.error or "Failed to read sync state")
@@ -116,7 +116,7 @@ def test_sync_users_fails_when_sync_state_persistence_fails(
 
     def fake_json_write(
         path: Path,
-        payload: t.Cli.JsonPayload,
+        payload: t.JsonPayload,
         *,
         sort_keys: bool = False,
         ensure_ascii: bool = False,

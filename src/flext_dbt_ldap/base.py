@@ -49,7 +49,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @property
     @override
-    def connection_profile(self) -> t.Cli.JsonMapping:
+    def connection_profile(self) -> t.JsonMapping:
         """Dbt connection profile for LDAP."""
         s = self.settings
         return {

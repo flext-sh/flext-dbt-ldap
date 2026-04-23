@@ -10,7 +10,6 @@ from __future__ import annotations
 import os
 from collections.abc import (
     Generator,
-    Mapping,
     Sequence,
 )
 from pathlib import Path
@@ -27,7 +26,7 @@ sql: ModuleType = psycopg.sql
 
 logger = u.fetch_logger(__name__)
 POSTGRES_READY_MAX_RETRIES = 30
-type _DbRow = t.VariadicTuple[t.Container]
+type _DbRow = t.VariadicTuple[t.JsonValue]
 
 
 @pytest.fixture(scope="session")
@@ -118,7 +117,7 @@ def run_dbt_command(
     command: t.StrSequence,
     project_dir: Path,
     profiles_dir: Path,
-    dbt_vars: Mapping[str, t.Container] | None = None,
+    dbt_vars: t.JsonMapping | None = None,
 ) -> m.Cli.CommandOutput:
     """Run dbt command with proper configuration."""
     env = {

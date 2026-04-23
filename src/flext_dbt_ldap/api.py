@@ -9,9 +9,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
 from typing import override
 
 from flext_meltano import FlextMeltanoDbtServiceBase
@@ -42,11 +39,9 @@ class FlextDbtLdap(FlextDbtLdapUtilitiesSync):
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
 
     @override
-    def execute(self) -> p.Result[Mapping[str, t.Container]]:
+    def execute(self) -> p.Result[t.JsonMapping]:
         """Execute DBT LDAP service — verify readiness."""
-        return r[Mapping[str, t.Container]].ok(
-            self.settings.model_dump(exclude_none=True)
-        )
+        return r[t.JsonMapping].ok(self.settings.model_dump(exclude_none=True))
 
 
 dbt_ldap = FlextDbtLdap

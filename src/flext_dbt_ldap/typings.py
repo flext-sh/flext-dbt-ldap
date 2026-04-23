@@ -31,7 +31,7 @@ class FlextDbtLdapTypes(t, FlextLdapTypes):
         "Single LDAP entry: attribute name → list of string values."
         type MutableLdapEntryMapping = MutableMapping[str, LdapAttributeValues]
         "Mutable LDAP entry mapping used while normalizing raw records."
-        type SerializableMapping = Mapping[str, t.Serializable]
+        type SerializableMapping = Mapping[str, t.JsonValue]
         "String-keyed serializable DBT payload item."
         type SerializableMappingSequence = Sequence[SerializableMapping]
         "Read-only sequence of serializable DBT payload items."

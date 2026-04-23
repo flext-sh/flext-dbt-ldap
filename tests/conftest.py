@@ -33,7 +33,7 @@ type _ServiceFactory = Callable[
 ]
 
 
-def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.OpaqueValue:
+def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.JsonValue:
     return Mock()
 
 
@@ -78,7 +78,7 @@ def shared_ldap_container(flext_docker: tk) -> str:
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_settings() -> Mapping[str, t.Container]:
+def shared_ldap_settings() -> t.JsonMapping:
     """Shared LDAP configuration for tests."""
     return {
         "server_url": "ldap://localhost:3390",
@@ -104,7 +104,7 @@ def set_test_environment() -> Generator[None]:
 
 
 @pytest.fixture
-def dbt_ldap_profile() -> Mapping[str, t.Container]:
+def dbt_ldap_profile() -> t.JsonMapping:
     """Dbt LDAP profile configuration for testing."""
     return {
         "settings": {
@@ -159,8 +159,8 @@ def dbt_ldap_project_settings() -> Mapping[str, t.Tests.TestobjectSerializable]:
 
 @pytest.fixture
 def ldap_source_settings(
-    shared_ldap_settings: Mapping[str, t.Container],
-) -> Mapping[str, t.Container]:
+    shared_ldap_settings: t.JsonMapping,
+) -> t.JsonMapping:
     """LDAP source configuration for testing using shared container."""
     _ = shared_ldap_settings
     return {
@@ -177,7 +177,7 @@ def ldap_source_settings(
 
 
 @pytest.fixture
-def sample_ldap_entries() -> Sequence[Mapping[str, t.Container]]:
+def sample_ldap_entries() -> Sequence[t.JsonMapping]:
     """Sample LDAP entries for testing using shared container domain."""
     return [
         {
@@ -251,7 +251,7 @@ def dbt_ldap_macros() -> t.StrMapping:
 
 
 @pytest.fixture
-def dbt_ldap_sources() -> Mapping[str, t.Container]:
+def dbt_ldap_sources() -> t.JsonMapping:
     """Dbt LDAP source definitions for testing."""
     return {
         "version": 2,
@@ -321,7 +321,7 @@ def dbt_ldap_tests() -> t.StrMapping:
 
 
 @pytest.fixture
-def ldap_validation_rules() -> Mapping[str, t.Container]:
+def ldap_validation_rules() -> t.JsonMapping:
     """LDAP validation rules for testing."""
     return {
         "dn_format": {
@@ -344,7 +344,7 @@ def ldap_validation_rules() -> Mapping[str, t.Container]:
 
 
 @pytest.fixture
-def ldap_performance_settings() -> Mapping[str, t.Container]:
+def ldap_performance_settings() -> t.JsonMapping:
     """LDAP performance test configuration."""
     return {
         "large_directory_entries": 10000,
@@ -372,12 +372,12 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLdapDbtAdapter:
     """Mock LDAP dbt adapter."""
 
-    def __init__(self, settings: Mapping[str, t.Container]) -> None:
+    def __init__(self, settings: t.JsonMapping) -> None:
         """Initialize the instance."""
         super().__init__()
         self.settings = settings
-        empty_entries: Mapping[str, t.Container] = {}
-        empty_models: Mapping[str, t.Container] = {}
+        empty_entries = {}
+        empty_models = {}
         self.ldap_entries = empty_entries
         self.compiled_models = empty_models
 
@@ -385,7 +385,7 @@ class MockLdapDbtAdapter:
         self,
         _base_dn: str,
         _search_filter: str,
-    ) -> Sequence[Mapping[str, t.Container]]:
+    ) -> Sequence[t.JsonMapping]:
         """Extract LDAP data for dbt processing."""
         return [
             {
@@ -401,7 +401,7 @@ class MockLdapDbtAdapter:
 
     @staticmethod
     def _is_ldap_attribute_map(
-        value: t.Container,
+        value: t.JsonValue,
     ) -> TypeIs[Mapping[str, str | t.StrSequence | None]]:
         adapter: m.TypeAdapter[Mapping[str, str | t.StrSequence | None]] = (
             m.TypeAdapter(Mapping[str, str | t.StrSequence | None])
@@ -431,10 +431,10 @@ class MockLdapDbtAdapter:
 
     def transform_ldap_to_relational(
         self,
-        ldap_data: Sequence[Mapping[str, t.Container]],
-    ) -> Sequence[Mapping[str, t.Container]]:
+        ldap_data: Sequence[t.JsonMapping],
+    ) -> Sequence[t.JsonMapping]:
         """Transform LDAP data to relational format."""
-        transformed: list[Mapping[str, t.Container]] = []
+        transformed: list[t.JsonMapping] = []
         for entry in ldap_data:
             flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
             attrs = entry.get("attributes")
@@ -453,12 +453,12 @@ def mock_ldap_dbt_adapter() -> type[MockLdapDbtAdapter]:
 class MockLdapConnection:
     """Mock LDAP connection."""
 
-    def __init__(self, settings: Mapping[str, t.Container]) -> None:
+    def __init__(self, settings: t.JsonMapping) -> None:
         """Initialize the instance."""
         super().__init__()
         self.settings = settings
         self.connected = False
-        self.entries: Sequence[Mapping[str, t.Container]] = []
+        self.entries: Sequence[t.JsonMapping] = []
 
     def connect(self) -> bool:
         """Connect to LDAP server."""
@@ -475,7 +475,7 @@ class MockLdapConnection:
         base_dn: str,
         _search_filter: str,
         _attributes: t.StrSequence | None = None,
-    ) -> Sequence[Mapping[str, t.Container]]:
+    ) -> Sequence[t.JsonMapping]:
         """Search LDAP directory."""
         if "people" in base_dn or "users" in base_dn:
             return [

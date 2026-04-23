@@ -41,11 +41,11 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def fetchall(
             self,
-        ) -> Sequence[tuple[FlextDbtLdapTypes.RecursiveContainer, ...]]: ...
+        ) -> Sequence[tuple[FlextDbtLdapTypes.JsonValue, ...]]: ...
 
         def fetchone(
             self,
-        ) -> tuple[FlextDbtLdapTypes.RecursiveContainer, ...] | None: ...
+        ) -> tuple[FlextDbtLdapTypes.JsonValue, ...] | None: ...
 
     @runtime_checkable
     class DbConnection(Protocol):
