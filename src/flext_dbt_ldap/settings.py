@@ -10,12 +10,13 @@ from __future__ import annotations
 from typing import Annotated, ClassVar
 
 from flext_core import FlextSettings, u
+from flext_meltano import FlextMeltanoSettings
 
 from flext_dbt_ldap import c, m, t
 
 
 @FlextSettings.auto_register("dbt-ldap")
-class FlextDbtLdapSettings(FlextSettings):
+class FlextDbtLdapSettings(FlextMeltanoSettings):
     """Runtime settings for DBT LDAP transformations."""
 
     model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(

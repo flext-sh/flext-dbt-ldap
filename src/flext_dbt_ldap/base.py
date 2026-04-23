@@ -17,7 +17,7 @@ from flext_meltano import FlextMeltanoDbtServiceBase, u
 from flext_dbt_ldap import FlextDbtLdapSettings, t
 
 
-class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
+class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase[FlextDbtLdapSettings]):
     """Base class for flext-dbt-ldap services.
 
     Inherits dbt execution infrastructure from s.
@@ -25,7 +25,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     """
 
     settings_type: Annotated[
-        type[FlextDbtLdapSettings] | None,
+        type | None,
         u.Field(
             description="Settings class for DBT LDAP service initialization",
         ),
@@ -36,16 +36,6 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
             description="Canonical dbt project name for the DBT LDAP service",
         ),
     ] = "dbt-ldap"
-
-    @property
-    @override
-    def settings(self) -> FlextDbtLdapSettings:
-        """Return the typed dbt-ldap settings for this service instance."""
-        settings = super().settings
-        if not isinstance(settings, FlextDbtLdapSettings):
-            msg = "DBT LDAP service runtime settings must be FlextDbtLdapSettings"
-            raise TypeError(msg)
-        return settings
 
     @property
     @override
