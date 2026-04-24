@@ -7,9 +7,9 @@ from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 _LAZY_IMPORTS = build_lazy_import_map(
     {
-        ".test_constants_flat_api": ("test_constants_flat_api",),
-        ".test_dbt_services_sync": ("test_dbt_services_sync",),
-        ".test_version": ("test_version",),
+        ".test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
+        ".test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
+        ".test_version": ("TestsFlextDbtLdapVersion",),
     },
 )
 

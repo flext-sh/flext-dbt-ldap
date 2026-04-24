@@ -20,6 +20,9 @@ if _t.TYPE_CHECKING:
     from tests.models import TestsFlextDbtLdapModels, m
     from tests.protocols import TestsFlextDbtLdapProtocols, p
     from tests.typings import TestsFlextDbtLdapTypes, t
+    from tests.unit.test_constants_flat_api import TestsFlextDbtLdapConstantsFlatApi
+    from tests.unit.test_dbt_services_sync import TestsFlextDbtLdapServicesSync
+    from tests.unit.test_version import TestsFlextDbtLdapVersion
     from tests.utilities import TestsFlextDbtLdapUtilities, u
 _LAZY_IMPORTS = merge_lazy_imports(
     (
@@ -48,6 +51,9 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "TestsFlextDbtLdapTypes",
                 "t",
             ),
+            ".unit.test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
+            ".unit.test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
+            ".unit.test_version": ("TestsFlextDbtLdapVersion",),
             ".utilities": (
                 "TestsFlextDbtLdapUtilities",
                 "u",
@@ -88,10 +94,13 @@ __all__: list[str] = [
     "MockLdapConnection",
     "MockLdapDbtAdapter",
     "TestsFlextDbtLdapConstants",
+    "TestsFlextDbtLdapConstantsFlatApi",
     "TestsFlextDbtLdapModels",
     "TestsFlextDbtLdapProtocols",
+    "TestsFlextDbtLdapServicesSync",
     "TestsFlextDbtLdapTypes",
     "TestsFlextDbtLdapUtilities",
+    "TestsFlextDbtLdapVersion",
     "c",
     "d",
     "e",
