@@ -50,7 +50,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
 
     @d.retry(
-        max_attempts=c.DbtLdap.Tests.E2E.POSTGRES_READY_MAX_RETRIES,
+        max_attempts=c.DbtLdap.Tests.POSTGRES_READY_MAX_RETRIES,
         delay_seconds=2.0,
         backoff_strategy="linear",
     )

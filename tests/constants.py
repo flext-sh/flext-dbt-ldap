@@ -18,10 +18,7 @@ class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):
         class Tests(FlextTestsConstants.Tests):
             """DBT LDAP-specific test constants."""
 
-            class E2E:
-                """E2E constants for DBT LDAP tests."""
-
-                POSTGRES_READY_MAX_RETRIES: Final[int] = 30
+            POSTGRES_READY_MAX_RETRIES: Final[int] = 30
 
 
 c = TestsFlextDbtLdapConstants
