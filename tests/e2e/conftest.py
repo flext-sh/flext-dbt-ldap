@@ -19,13 +19,12 @@ from typing import LiteralString
 import pytest
 from flext_tests import tk
 
-from tests import d, m, p, t, u
+from tests import c, d, m, p, t, u
 
 psycopg: ModuleType = pytest.importorskip("psycopg", reason="psycopg not installed")
 sql: ModuleType = psycopg.sql
 
 logger = u.fetch_logger(__name__)
-POSTGRES_READY_MAX_RETRIES = 30
 type _DbRow = t.VariadicTuple[t.JsonValue]
 
 
@@ -51,7 +50,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
 
     @d.retry(
-        max_attempts=POSTGRES_READY_MAX_RETRIES,
+        max_attempts=c.DbtLdap.Tests.E2E.POSTGRES_READY_MAX_RETRIES,
         delay_seconds=2.0,
         backoff_strategy="linear",
     )
@@ -131,7 +130,7 @@ def run_dbt_command(
         cmd.extend(["--vars", var_string])
     result = u.Cli.run_raw(cmd, cwd=project_dir, env=env)
     if result.success:
-        return result.value
+        return m.Cli.CommandOutput.model_validate(result.value)
     return m.Cli.CommandOutput(
         stdout="",
         stderr=result.error or "dbt execution failed",
