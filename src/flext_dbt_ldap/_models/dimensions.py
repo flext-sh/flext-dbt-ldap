@@ -40,7 +40,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
         @classmethod
-        def from_ldap_entry(cls, entry: m.Entry) -> Self:
+        def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a user dimension from a LDIF entry."""
             attrs = FlextDbtLdapUtilitiesEntry.ldap_entry_mapping(entry)
             return cls(
@@ -105,7 +105,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
         @classmethod
-        def from_ldap_entry(cls, entry: m.Entry) -> Self:
+        def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a group dimension from a LDIF entry."""
             attrs = FlextDbtLdapUtilitiesEntry.ldap_entry_mapping(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(

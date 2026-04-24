@@ -26,7 +26,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def transform_groups(
         self,
-        entries: Sequence[m.Entry],
+        entries: Sequence[m.Ldif.Entry],
     ) -> Sequence[m.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions."""
         return self._transform_entries_to_dimensions(
@@ -39,7 +39,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def transform_memberships(
         self,
-        entries: Sequence[m.Entry],
+        entries: Sequence[m.Ldif.Entry],
     ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts."""
         self._log.info(
@@ -67,7 +67,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def transform_users(
         self,
-        entries: Sequence[m.Entry],
+        entries: Sequence[m.Ldif.Entry],
     ) -> Sequence[m.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions."""
         return self._transform_entries_to_dimensions(
@@ -80,7 +80,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def _extract_group_memberships(
         self,
-        entry: m.Entry,
+        entry: m.Ldif.Entry,
     ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Build membership facts from group membership attributes."""
         memberships: MutableSequence[m.DbtLdap.MembershipFact] = []
@@ -102,7 +102,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def _extract_user_memberships(
         self,
-        entry: m.Entry,
+        entry: m.Ldif.Entry,
     ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Build membership facts from a user entry."""
         attrs = self.ldap_entry_mapping(entry)
@@ -123,9 +123,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     def _transform_entries_to_dimensions[DimensionT](
         self,
         *,
-        entries: Sequence[m.Entry],
-        is_entry_target: Callable[[m.Entry], bool],
-        build_dimension: Callable[[m.Entry], DimensionT],
+        entries: Sequence[m.Ldif.Entry],
+        is_entry_target: Callable[[m.Ldif.Entry], bool],
+        build_dimension: Callable[[m.Ldif.Entry], DimensionT],
         transform_label: str,
         failure_label: str,
     ) -> Sequence[DimensionT]:
