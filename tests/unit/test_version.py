@@ -1,6 +1,8 @@
-"""Version metadata tests for flext-dbt-ldap."""
+"""Behavior contract for flext_dbt_ldap version metadata."""
 
 from __future__ import annotations
+
+from flext_tests import tm
 
 from flext_dbt_ldap import (
     __author__,
@@ -14,28 +16,25 @@ from flext_dbt_ldap import (
 )
 
 
-def test_dunder_alignment() -> None:
-    """Ensure version exports are consistent."""
-    assert isinstance(__version__, str)
-    assert isinstance(__version_info__, tuple)
-    assert (
-        tuple(int(part) if part.isdigit() else part for part in __version__.split("."))
-        == __version_info__
-    )
+class TestsFlextDbtLdapVersion:
+    """Behavior contract for flext_dbt_ldap version metadata exports."""
 
+    def test_version_string_and_tuple_are_aligned(self) -> None:
+        tm.that(__version__, is_=str)
+        tm.that(__version_info__, is_=tuple)
+        parts = tuple(
+            int(part) if part.isdigit() else part for part in __version__.split(".")
+        )
+        tm.that(parts, eq=__version_info__)
 
-def test_version_metadata_integrity() -> None:
-    """Metadata exports should be strings or None (when missing from package metadata)."""
-    assert isinstance(__title__, str)
-    assert isinstance(__description__, str)
-    assert isinstance(__author_email__, str)
-    assert isinstance(__license__, str)
-    # __author__ and __url__ may be None/empty depending on package metadata availability
-    assert __author__ is None or isinstance(__author__, str)
-    assert isinstance(__url__, str)
+    def test_metadata_exports_have_expected_types(self) -> None:
+        tm.that(__title__, is_=str)
+        tm.that(__description__, is_=str)
+        tm.that(__author_email__, is_=str)
+        tm.that(__license__, is_=str)
+        tm.that(__author__ is None or isinstance(__author__, str), eq=True)
+        tm.that(__url__, is_=str)
 
-
-def test_version_properties() -> None:
-    """Version fields should not be empty when package metadata is available."""
-    assert __version__.strip() != ""
-    assert len(__version_info__) >= 1
+    def test_version_fields_are_non_empty(self) -> None:
+        tm.that(__version__.strip(), ne="")
+        tm.that(len(__version_info__), gte=1)
