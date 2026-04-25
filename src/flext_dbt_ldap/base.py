@@ -12,12 +12,13 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
+from flext_core import FlextSettings
 from flext_meltano import FlextMeltanoDbtServiceBase, u
 
 from flext_dbt_ldap import FlextDbtLdapSettings, t
 
 
-class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase[FlextDbtLdapSettings]):
+class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     """Base class for flext-dbt-ldap services.
 
     Inherits dbt execution infrastructure from s.
@@ -36,6 +37,14 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase[FlextDbtLdapSettings]):
             description="Canonical dbt project name for the DBT LDAP service",
         ),
     ] = "dbt-ldap"
+
+    @property
+    @override
+    def settings(self) -> FlextDbtLdapSettings:
+        """Return the typed dbt-ldap settings namespace."""
+        return FlextSettings.fetch_global().fetch_namespace(
+            "dbt-ldap", FlextDbtLdapSettings
+        )
 
     @property
     @override
