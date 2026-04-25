@@ -1,9 +1,3 @@
-<!-- TOC START -->
-- [Source of Truth](#source-of-truth)
-- [Generated Pages](#generated-pages)
-- [Surface Summary](#surface-summary)
-<!-- TOC END -->
-
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
 # flext-dbt-ldap API Reference
@@ -25,7 +19,7 @@ This section is generated from public exports and real docstrings.
 
 ## Surface Summary
 
-- Primary facades: `FlextDbtLdapUtilities`, `FlextDbtLdapMacroError`, `FlextDbtLdapTestError`, `FlextDbtLdapProtocols`, `FlextDbtLdapUtilitiesEntry`, `FlextDbtLdap` (+26 more)
+- Primary facades: `FlextDbtLdapUtilitiesSync`, `FlextDbtLdapTestError`, `FlextDbtLdapUtilities`, `FlextDbtLdapModelsDimensions`, `FlextDbtLdap`, `FlextDbtLdapConstantsTransformation` (+26 more)
 - Generated module pages: `10`
 
 - [Back to project docs](../index.md)

@@ -9,7 +9,11 @@ from __future__ import annotations
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import u
 
-from flext_dbt_ldap import FlextDbtLdapUtilitiesIntegration, FlextDbtLdapUtilitiesMacros
+from flext_dbt_ldap import (
+    FlextDbtLdapUtilitiesIntegration,
+    FlextDbtLdapUtilitiesMacros,
+    t,
+)
 
 
 class FlextDbtLdapUtilities(u, FlextLdapUtilities):
@@ -22,6 +26,6 @@ class FlextDbtLdapUtilities(u, FlextLdapUtilities):
         """Project-specific dbt-ldap utility surface."""
 
 
-__all__: list[str] = ["FlextDbtLdapUtilities", "u"]
+__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapUtilities", "u"]
 
 u = FlextDbtLdapUtilities

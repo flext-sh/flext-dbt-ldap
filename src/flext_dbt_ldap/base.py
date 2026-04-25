@@ -63,4 +63,4 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
 s = FlextDbtLdapServiceBase
 
-__all__: list[str] = ["FlextDbtLdapServiceBase"]
+__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapServiceBase"]

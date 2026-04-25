@@ -90,7 +90,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         )
         if all(counts):
             return r[m.DbtLdap.SyncResult].ok(sync_result)
-        return r[m.DbtLdap.SyncResult].fail("Some components failed in full sync")
+        return r[m.DbtLdap.SyncResult].fail_op("complete full sync of all components")
 
     def sync_groups_to_warehouse(
         self,

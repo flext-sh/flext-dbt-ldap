@@ -1,5 +1,7 @@
 """FLEXT DBT LDAP Constants - Thin MRO Facade.
 
+from flext_core import FlextConstants as Constants
+
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
