@@ -3,14 +3,14 @@
 # flext-dbt-ldap API Overview
 
 - Package: `flext_dbt_ldap`
-- Version: `0.12.0-dev`
+- Version: ``
 - Description: FLEXT dbt LDAP - dbt Models for LDAP Data Transformation
 - Project class: `integration`
 - Keywords: `data-transformation`, `dbt`, `enterprise`, `flext`, `sql`, `typed`
-- Main facades: `FlextDbtLdap`, `FlextDbtLdapAuthenticationError`, `FlextDbtLdapConfigurationError`, `FlextDbtLdapConnectionError`, `FlextDbtLdapConstants`, `FlextDbtLdapError`, `FlextDbtLdapMacroError`, `FlextDbtLdapModelError` (+10 more)
+- Main facades: `FlextDbtLdapUtilitiesMacros`, `FlextDbtLdapError`, `FlextDbtLdapAuthenticationError`, `FlextDbtLdapTestError`, `FlextDbtLdapModelsShared`, `FlextDbtLdapUtilitiesIntegration`, `FlextDbtLdapConstantsSearch`, `FlextDbtLdapTimeoutError` (+24 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapAuthenticationError`, `FlextDbtLdapConfigurationError`, `FlextDbtLdapConnectionError`, `FlextDbtLdapConstants`, `FlextDbtLdapError`, `FlextDbtLdapMacroError`, `FlextDbtLdapModelError`, `FlextDbtLdapModels`, `FlextDbtLdapProcessingError` (+8 more)
-- Exported module shortcuts: `base`, `constants`, `errors`, `models`, `protocols`, `settings`, `simple_api`, `typings` (+2 more)
+- Public symbol exports: `FlextDbtLdapUtilitiesMacros`, `FlextDbtLdapError`, `FlextDbtLdapAuthenticationError`, `FlextDbtLdapTestError`, `FlextDbtLdapModelsShared`, `FlextDbtLdapUtilitiesIntegration`, `FlextDbtLdapConstantsSearch`, `FlextDbtLdapTimeoutError`, `FlextDbtLdapProcessingError`, `FlextDbtLdapUtilitiesEntry` (+23 more)
+- Exported module shortcuts: _none_
 - Generated module pages: `10`
 
 ## Next Pages

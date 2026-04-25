@@ -19,7 +19,7 @@ This section is generated from public exports and real docstrings.
 
 ## Surface Summary
 
-- Primary facades: `FlextDbtLdap`, `FlextDbtLdapAuthenticationError`, `FlextDbtLdapConfigurationError`, `FlextDbtLdapConnectionError`, `FlextDbtLdapConstants`, `FlextDbtLdapError` (+12 more)
+- Primary facades: `FlextDbtLdapUtilitiesMacros`, `FlextDbtLdapError`, `FlextDbtLdapAuthenticationError`, `FlextDbtLdapTestError`, `FlextDbtLdapModelsShared`, `FlextDbtLdapUtilitiesIntegration` (+26 more)
 - Generated module pages: `10`
 
 - [Back to project docs](../index.md)
