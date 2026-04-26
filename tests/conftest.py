@@ -176,55 +176,6 @@ def ldap_source_settings(
 
 
 @pytest.fixture
-def sample_ldap_entries() -> Sequence[t.JsonMapping]:
-    """Sample LDAP entries for testing using shared container domain."""
-    return [
-        {
-            "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
-            "attributes": {
-                "cn": ["john.doe"],
-                "uid": ["jdoe"],
-                "mail": ["john.doe@internal.invalid"],
-                "givenName": ["John"],
-                "sn": ["Doe"],
-                "employeeNumber": ["12345"],
-                "departmentNumber": ["IT"],
-                "title": ["Software Engineer"],
-                "telephoneNumber": ["+1-555-1234"],
-                "objectClass": ["inetOrgPerson", "organizationalPerson", "person"],
-            },
-        },
-        {
-            "dn": "cn=jane.smith,ou=people,dc=flext,dc=local",
-            "attributes": {
-                "cn": ["jane.smith"],
-                "uid": ["jsmith"],
-                "mail": ["jane.smith@internal.invalid"],
-                "givenName": ["Jane"],
-                "sn": ["Smith"],
-                "employeeNumber": ["12346"],
-                "departmentNumber": ["HR"],
-                "title": ["HR Manager"],
-                "telephoneNumber": ["+1-555-5678"],
-                "objectClass": ["inetOrgPerson", "organizationalPerson", "person"],
-            },
-        },
-        {
-            "dn": "cn=developers,ou=groups,dc=flext,dc=local",
-            "attributes": {
-                "cn": ["developers"],
-                "description": ["Software Developers Group"],
-                "member": [
-                    "cn=john.doe,ou=people,dc=flext,dc=local",
-                    "cn=bob.johnson,ou=people,dc=flext,dc=local",
-                ],
-                "objectClass": ["groupOfNames"],
-            },
-        },
-    ]
-
-
-@pytest.fixture
 def dbt_ldap_models() -> t.StrMapping:
     """Dbt LDAP model SQL definitions for testing."""
     return {
