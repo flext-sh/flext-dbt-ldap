@@ -19,7 +19,7 @@ This section is generated from public exports and real docstrings.
 
 ## Surface Summary
 
-- Primary facades: `FlextDbtLdapUtilitiesSync`, `FlextDbtLdapTestError`, `FlextDbtLdapUtilities`, `FlextDbtLdapModelsDimensions`, `FlextDbtLdap`, `FlextDbtLdapConstantsTransformation` (+26 more)
+- Primary facades: `FlextDbtLdapModelsSchema`, `FlextDbtLdapTimeoutError`, `FlextDbtLdapUtilities`, `FlextDbtLdapConstantsSearch`, `FlextDbtLdapUtilitiesIntegration`, `FlextDbtLdapModels` (+26 more)
 - Generated module pages: `10`
 
 - [Back to project docs](../index.md)
