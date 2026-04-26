@@ -14,9 +14,8 @@ from collections.abc import (
     Sequence,
 )
 
-from flext_meltano import u
-
 from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t
+from flext_meltano import u
 
 
 class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):

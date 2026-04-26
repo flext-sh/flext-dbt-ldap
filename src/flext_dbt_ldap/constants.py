@@ -8,15 +8,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import FlextLdapConstants
-from flext_meltano import c
-
 from flext_dbt_ldap import (
     FlextDbtLdapConstantsAttributes,
     FlextDbtLdapConstantsBase,
     FlextDbtLdapConstantsSearch,
     FlextDbtLdapConstantsTransformation,
 )
+from flext_ldap import FlextLdapConstants
+from flext_meltano import c
 
 
 class FlextDbtLdapConstants(

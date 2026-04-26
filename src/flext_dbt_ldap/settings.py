@@ -10,9 +10,8 @@ from __future__ import annotations
 from typing import Annotated, ClassVar
 
 from flext_core import FlextSettings, u
-from flext_meltano import FlextMeltanoSettings
-
 from flext_dbt_ldap import c, m, t
+from flext_meltano import FlextMeltanoSettings
 
 
 @FlextSettings.auto_register("dbt-ldap")

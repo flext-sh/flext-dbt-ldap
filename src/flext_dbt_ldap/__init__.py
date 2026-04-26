@@ -10,12 +10,9 @@ from flext_core.lazy import (
     install_lazy_exports,
     merge_lazy_imports,
 )
-
 from flext_dbt_ldap.__version__ import *
 
 if _t.TYPE_CHECKING:
-    from flext_meltano import d, e, h, r, s, x
-
     from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
     from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
     from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
@@ -52,6 +49,7 @@ if _t.TYPE_CHECKING:
     from flext_dbt_ldap.settings import FlextDbtLdapSettings
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
+    from flext_meltano import d, e, h, r, s, x
 _LAZY_IMPORTS = merge_lazy_imports(
     (
         "._constants",

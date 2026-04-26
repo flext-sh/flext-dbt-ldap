@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from flext_meltano import m, u
-
 from flext_dbt_ldap import c, t
+from flext_meltano import m, u
 
 
 class FlextDbtLdapModelsSchema:

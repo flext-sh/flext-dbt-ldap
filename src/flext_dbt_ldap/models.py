@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-from flext_ldap import FlextLdapModels
-from flext_meltano import m
-
 from flext_dbt_ldap import (
     FlextDbtLdapModelsConfiguration,
     FlextDbtLdapModelsDimensions,
     FlextDbtLdapModelsResults,
     FlextDbtLdapModelsSchema,
 )
+from flext_ldap import FlextLdapModels
+from flext_meltano import m
 
 
 class FlextDbtLdapModels(m, FlextLdapModels):

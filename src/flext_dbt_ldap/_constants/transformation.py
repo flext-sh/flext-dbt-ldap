@@ -8,9 +8,8 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
-from flext_meltano import c
-
 from flext_dbt_ldap import t
+from flext_meltano import c
 
 
 class FlextDbtLdapConstantsTransformation:

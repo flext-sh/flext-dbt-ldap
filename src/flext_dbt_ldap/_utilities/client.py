@@ -14,11 +14,6 @@ from collections.abc import (
     Sequence,
 )
 
-from flext_ldap import (
-    FlextLdap,
-    FlextLdapSettings,
-)
-
 from flext_dbt_ldap import (
     FlextDbtLdapServiceBase,
     FlextDbtLdapSettings,
@@ -28,6 +23,10 @@ from flext_dbt_ldap import (
     r,
     t,
     u,
+)
+from flext_ldap import (
+    FlextLdap,
+    FlextLdapSettings,
 )
 
 logger = u.fetch_logger(__name__)

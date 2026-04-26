@@ -11,10 +11,9 @@ from collections.abc import (
 )
 from typing import Protocol, runtime_checkable
 
+from flext_dbt_ldap import m, t
 from flext_ldap import FlextLdapProtocols
 from flext_meltano import p
-
-from flext_dbt_ldap import m, t
 
 
 class FlextDbtLdapProtocols(p, FlextLdapProtocols):

@@ -8,9 +8,9 @@ from collections.abc import (
 )
 
 from flext_ldif import m as lm
-from flext_meltano import u
 
 from flext_dbt_ldap import FlextDbtLdapUtilitiesMacros, c, t
+from flext_meltano import u
 
 
 class FlextDbtLdapUtilitiesEntry:
