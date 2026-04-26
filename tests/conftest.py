@@ -103,36 +103,6 @@ def set_test_environment() -> Generator[None]:
 
 
 @pytest.fixture
-def dbt_ldap_profile() -> t.JsonMapping:
-    """Dbt LDAP profile configuration for testing."""
-    return {
-        "settings": {
-            "partial_parse": True,
-            "printer_width": 120,
-            "send_anonymous_usage_stats": False,
-            "use_colors": True,
-        },
-        "test": {
-            "outputs": {
-                "default": {
-                    "type": "postgres",
-                    "host": "localhost",
-                    "port": 5432,
-                    "database": "ldap_warehouse",
-                    "schema": "ldap_transformed",
-                    "user": "dbt_ldap_user",
-                    "password": "dbt_ldap_pass",
-                    "threads": 4,
-                    "keepalives_idle": 0,
-                    "search_path": "ldap_transformed",
-                },
-            },
-            "target": "default",
-        },
-    }
-
-
-@pytest.fixture
 def dbt_ldap_project_settings() -> Mapping[str, t.Tests.TestobjectSerializable]:
     """Dbt LDAP project configuration for testing."""
     return td.build_dbt_project_settings(
