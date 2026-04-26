@@ -1,6 +1,6 @@
 """FLEXT DBT LDAP Exceptions.
 
-Domain-specific exceptions using DRY base mixin.
+Domain-specific exceptions — e.BaseError _params_cls hook; Pydantic validates kwargs.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -9,12 +9,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
-from typing import override
+from typing import ClassVar, override
 
-from flext_dbt_ldap import e, t
+from flext_dbt_ldap import e, m, t
 
 
 class FlextDbtLdapError(e.BaseError):
@@ -45,88 +42,63 @@ class FlextDbtLdapTimeoutError(FlextDbtLdapError):
     """FlextDbtLdapTimeoutError - timeout error."""
 
 
-class _DbtLdapContextMixin:
-    """DRY mixin for building JsonPayload-compatible context dicts."""
-
-    @staticmethod
-    def _build_context(
-        **fields: t.JsonValue | None,
-    ) -> Mapping[str, t.JsonValue]:
-        """Build context dictionary from keyword arguments."""
-        return {key: value for key, value in fields.items() if value is not None}
+class _ModelErrorParams(m.Value):
+    model_config = m.ConfigDict(extra="ignore")
+    model_name: str | None = None
+    model_type: str | None = None
 
 
-class FlextDbtLdapModelError(_DbtLdapContextMixin, e.BaseError):
+class FlextDbtLdapModelError(e.BaseError):
     """LDAP DBT model-specific errors."""
 
+    _params_cls = _ModelErrorParams
+    _param_keys: ClassVar[frozenset[str]] = frozenset({"model_name", "model_type"})
+    _default_error_code: ClassVar[str] = "DBT_LDAP_MODEL_ERROR"
+
     @override
     def __init__(
-        self,
-        message: str = "LDAP DBT model error",
-        *,
-        model_name: str | None = None,
-        model_type: str | None = None,
-        error_code: str | None = None,
-        correlation_id: str | None = None,
+        self, message: str = "LDAP DBT model error", **kwargs: t.JsonValue
     ) -> None:
-        """Initialize LDAP DBT model error with context."""
-        self.model_name = model_name
-        self.model_type = model_type
-        context = self._build_context(model_name=model_name, model_type=model_type)
-        super().__init__(
-            f"LDAP DBT model: {message}",
-            error_code=error_code or "DBT_LDAP_MODEL_ERROR",
-            context=context,
-            correlation_id=correlation_id,
-        )
+        super().__init__(f"LDAP DBT model: {message}", merged_kwargs=kwargs)
 
 
-class FlextDbtLdapMacroError(_DbtLdapContextMixin, e.BaseError):
+class _MacroErrorParams(m.Value):
+    model_config = m.ConfigDict(extra="ignore")
+    macro_name: str | None = None
+
+
+class FlextDbtLdapMacroError(e.BaseError):
     """LDAP DBT macro errors."""
 
+    _params_cls = _MacroErrorParams
+    _param_keys: ClassVar[frozenset[str]] = frozenset({"macro_name"})
+    _default_error_code: ClassVar[str] = "DBT_LDAP_MACRO_ERROR"
+
     @override
     def __init__(
-        self,
-        message: str = "LDAP DBT macro error",
-        *,
-        macro_name: str | None = None,
-        error_code: str | None = None,
-        correlation_id: str | None = None,
+        self, message: str = "LDAP DBT macro error", **kwargs: t.JsonValue
     ) -> None:
-        """Initialize LDAP DBT macro error with context."""
-        self.macro_name = macro_name
-        context = self._build_context(macro_name=macro_name)
-        super().__init__(
-            f"LDAP DBT macro: {message}",
-            error_code=error_code or "DBT_LDAP_MACRO_ERROR",
-            context=context,
-            correlation_id=correlation_id,
-        )
+        super().__init__(f"LDAP DBT macro: {message}", merged_kwargs=kwargs)
 
 
-class FlextDbtLdapTestError(_DbtLdapContextMixin, e.BaseError):
+class _TestErrorParams(m.Value):
+    model_config = m.ConfigDict(extra="ignore")
+    test_name: str | None = None
+    model_name: str | None = None
+
+
+class FlextDbtLdapTestError(e.BaseError):
     """LDAP DBT test errors."""
 
+    _params_cls = _TestErrorParams
+    _param_keys: ClassVar[frozenset[str]] = frozenset({"test_name", "model_name"})
+    _default_error_code: ClassVar[str] = "DBT_LDAP_TEST_ERROR"
+
     @override
     def __init__(
-        self,
-        message: str = "LDAP DBT test failed",
-        *,
-        test_name: str | None = None,
-        model_name: str | None = None,
-        error_code: str | None = None,
-        correlation_id: str | None = None,
+        self, message: str = "LDAP DBT test failed", **kwargs: t.JsonValue
     ) -> None:
-        """Initialize LDAP DBT test error with context."""
-        self.test_name = test_name
-        self.model_name = model_name
-        context = self._build_context(test_name=test_name, model_name=model_name)
-        super().__init__(
-            f"LDAP DBT test: {message}",
-            error_code=error_code or "DBT_LDAP_TEST_ERROR",
-            context=context,
-            correlation_id=correlation_id,
-        )
+        super().__init__(f"LDAP DBT test: {message}", merged_kwargs=kwargs)
 
 
 __all__: t.StrSequence = [
