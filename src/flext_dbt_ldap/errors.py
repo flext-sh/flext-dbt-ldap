@@ -43,7 +43,7 @@ class FlextDbtLdapTimeoutError(FlextDbtLdapError):
 
 
 class _ModelErrorParams(m.Value):
-    model_config = m.ConfigDict(extra="ignore")
+    model_config: ClassVar[m.ConfigDict] = m.ConfigDict(extra="ignore")
     model_name: str | None = None
     model_type: str | None = None
 
@@ -63,7 +63,7 @@ class FlextDbtLdapModelError(e.BaseError):
 
 
 class _MacroErrorParams(m.Value):
-    model_config = m.ConfigDict(extra="ignore")
+    model_config: ClassVar[m.ConfigDict] = m.ConfigDict(extra="ignore")
     macro_name: str | None = None
 
 
@@ -82,7 +82,7 @@ class FlextDbtLdapMacroError(e.BaseError):
 
 
 class _TestErrorParams(m.Value):
-    model_config = m.ConfigDict(extra="ignore")
+    model_config: ClassVar[m.ConfigDict] = m.ConfigDict(extra="ignore")
     test_name: str | None = None
     model_name: str | None = None
 
