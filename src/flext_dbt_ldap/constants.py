@@ -46,4 +46,4 @@ class FlextDbtLdapConstants(
 
 c = FlextDbtLdapConstants
 
-__all__: list[str] = ["FlextDbtLdapConstants", "c"]
+__all__: tuple[str, ...] = ("FlextDbtLdapConstants", "c")
