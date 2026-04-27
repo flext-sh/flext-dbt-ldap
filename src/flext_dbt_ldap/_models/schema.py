@@ -136,11 +136,11 @@ class FlextDbtLdapModelsSchema:
             c.DEFAULT_EMPTY_STRING
         )
         filter_str: Annotated[str, u.Field(description="LDAP search filter")] = (
-            c.Ldap.Filters.ALL_ENTRIES_FILTER
+            c.Ldap.ALL_ENTRIES_FILTER
         )
         attributes: Annotated[
             t.StrSequence, u.Field(description="LDAP attributes requested by the query")
         ] = u.Field(default_factory=list)
         scope: Annotated[str, u.Field(description="LDAP search scope")] = (
-            c.Ldap.SearchDefaults.DEFAULT_SCOPE
+            c.Ldap.DEFAULT_SCOPE
         )

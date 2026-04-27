@@ -11,7 +11,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
     """Behavior contract for c.DbtLdap flat surface and UserDimension integration."""
 
     def test_flat_constants_surface_reuses_parent_ldap(self) -> None:
-        tm.that(c.DbtLdap.CN, eq=c.Ldap.LdapAttributeNames.COMMON_NAME)
+        tm.that(c.DbtLdap.CN, eq=c.Ldap.AttributeName.COMMON_NAME)
         tm.that(c.DbtLdap.FILTER_GROUP, eq="(objectClass=group)")
         tm.that(c.DbtLdap.STG_USERS, eq="stg_users")
         tm.that(c.DbtLdap.DEFAULT_BATCH_SIZE, eq=c.DEFAULT_SIZE)

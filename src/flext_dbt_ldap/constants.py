@@ -28,9 +28,9 @@ class FlextDbtLdapConstants(
     All constants are accessible via inheritance—do not duplicate parent attributes.
 
     LDAP protocol constants are inherited from c.Ldap via MRO:
-    - c.Ldap.ConnectionDefaults (PORT, TIMEOUT)
-    - c.Ldap.LdapAttributeNames (DN, OBJECT_CLASS, COMMON_NAME — protocol-only)
-    - c.Ldap.Filters.ALL_ENTRIES_FILTER (protocol-level wildcard)
+    - c.Ldap.PORT / c.Ldap.TIMEOUT
+    - c.Ldap.AttributeName (DN, OBJECT_CLASS, COMMON_NAME — protocol-only)
+    - c.Ldap.ALL_ENTRIES_FILTER (protocol-level wildcard)
 
     Domain-specific constants (attributes, filters, models, data types) live in this class.
     """

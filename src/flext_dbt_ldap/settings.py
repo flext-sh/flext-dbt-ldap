@@ -24,15 +24,13 @@ class FlextDbtLdapSettings(FlextMeltanoSettings):
 
     # LDAP connection settings
     ldap_host: Annotated[str, u.Field(description="LDAP server hostname")] = c.LOCALHOST
-    ldap_port: Annotated[int, u.Field(description="LDAP server port")] = (
-        c.Ldap.ConnectionDefaults.PORT
-    )
+    ldap_port: Annotated[int, u.Field(description="LDAP server port")] = c.Ldap.PORT
     ldap_use_tls: Annotated[
         bool,
         u.Field(
             description="Use TLS for LDAP connection",
         ),
-    ] = c.Ldap.ConnectionDefaults.DEFAULT_USE_TLS
+    ] = c.Ldap.DEFAULT_USE_TLS
     ldap_bind_dn: Annotated[
         t.SecretStr | None, u.Field(description="LDAP bind DN for authentication")
     ] = None
@@ -44,7 +42,7 @@ class FlextDbtLdapSettings(FlextMeltanoSettings):
         u.Field(
             description="LDAP base DN for searches",
         ),
-    ] = c.Ldap.Defaults.EXAMPLE_BASE_DN
+    ] = c.Ldap.EXAMPLE_BASE_DN
 
     # DBT project settings
     dbt_project_dir: Annotated[

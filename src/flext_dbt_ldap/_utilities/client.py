@@ -65,7 +65,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     def extract_ldap_entries(
         self,
         search_base: str | None = None,
-        search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
+        search_filter: str = c.Ldap.ALL_ENTRIES_FILTER,
         attributes: t.StrSequence | None = None,
     ) -> p.Result[Sequence[t.DbtLdap.LdapEntryMapping]]:
         """Extract LDAP entries for DBT processing."""
@@ -100,7 +100,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     def run_full_pipeline(
         self,
         search_base: str | None = None,
-        search_filter: str = c.Ldap.Filters.ALL_ENTRIES_FILTER,
+        search_filter: str = c.Ldap.ALL_ENTRIES_FILTER,
         attributes: t.StrSequence | None = None,
         model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
@@ -186,7 +186,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
             valid_dns = 0
             valid_entries = 0
             for entry in entries:
-                if entry.get(c.Ldap.LdapAttributeNames.DN):
+                if entry.get(c.Ldap.AttributeName.DN):
                     valid_dns += 1
                 if all(attr in entry and entry[attr] for attr in required_attributes):
                     valid_entries += 1
@@ -216,7 +216,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
         entry: t.DbtLdap.LdapEntryMapping,
     ) -> t.ConfigurationMapping:
         """Map LDAP entry attributes using configuration mapping."""
-        dn_attr = c.Ldap.LdapAttributeNames.DN
+        dn_attr = c.Ldap.AttributeName.DN
         dn_str = str(entry.get(dn_attr, [""])[0]) if entry.get(dn_attr) else ""
         mapped_attrs: t.MutableConfigurationMapping = {dn_attr: dn_str}
         for ldap_attr, dbt_attr in self.settings.ldap_attribute_mapping.items():
@@ -237,7 +237,7 @@ class FlextDbtLdapUtilitiesClient(FlextDbtLdapServiceBase):
     ) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes: t.StrSequence = [
-            str(x) for x in entry.get(c.Ldap.LdapAttributeNames.OBJECT_CLASS, [])
+            str(x) for x in entry.get(c.Ldap.AttributeName.OBJECT_CLASS, [])
         ]
         schema_mapping: Mapping[str, t.StrSequence] = {
             c.DbtLdap.USERS: c.DbtLdap.USERS_CLASSES,

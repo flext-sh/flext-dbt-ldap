@@ -16,7 +16,7 @@ class FlextDbtLdapConstantsAttributes:
     """Project-specific LDAP attributes and schema mappings."""
 
     UID: Final[str] = "uid"
-    CN: Final[str] = FlextLdapConstants.Ldap.LdapAttributeNames.COMMON_NAME
+    CN: Final[str] = FlextLdapConstants.Ldap.AttributeName.COMMON_NAME
     MAIL: Final[str] = "mail"
     DISPLAY_NAME: Final[str] = "displayName"
     DEPARTMENT: Final[str] = "department"

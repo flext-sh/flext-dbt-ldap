@@ -50,7 +50,7 @@ class FlextDbtLdapUtilitiesEntry:
     def ldap_object_classes(cls, entry: lm.Ldif.Entry) -> t.StrSequence:
         """Return normalized LDAP object classes for an entry."""
         attrs = cls.ldap_entry_mapping(entry)
-        return attrs.get(c.Ldap.LdapAttributeNames.OBJECT_CLASS, [])
+        return attrs.get(c.Ldap.AttributeName.OBJECT_CLASS, [])
 
     @classmethod
     def is_active_entry(cls, attrs: t.DbtLdap.LdapEntryMapping) -> bool:
