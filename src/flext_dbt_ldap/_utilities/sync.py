@@ -251,7 +251,7 @@ class FlextDbtLdapUtilitiesSync(FlextDbtLdapUtilitiesClient):
         write_result = u.Cli.json_write(
             self._sync_state_file,
             dict(sorted(self._sync_bookmarks.items())),
-            sort_keys=True,
+            options=m.Cli.JsonWriteOptions(sort_keys=True),
         )
         if write_result.failure:
             msg = write_result.error or "Failed to persist sync state"
