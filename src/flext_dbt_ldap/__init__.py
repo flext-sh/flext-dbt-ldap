@@ -55,6 +55,8 @@ if _t.TYPE_CHECKING:
     )
     from flext_dbt_ldap.models import FlextDbtLdapModels, m
     from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
+    from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
+    from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
     from flext_dbt_ldap.settings import FlextDbtLdapSettings
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
@@ -64,6 +66,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
         "._constants",
         "._models",
         "._utilities",
+        ".services",
     ),
     build_lazy_import_map(
         {
@@ -120,6 +123,8 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextDbtLdapProtocols",
                 "p",
             ),
+            ".services.client": ("FlextDbtLdapClientMixin",),
+            ".services.sync": ("FlextDbtLdapSyncMixin",),
             ".settings": ("FlextDbtLdapSettings",),
             ".typings": (
                 "FlextDbtLdapTypes",
@@ -167,6 +172,7 @@ install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 __all__: list[str] = [
     "FlextDbtLdap",
     "FlextDbtLdapAuthenticationError",
+    "FlextDbtLdapClientMixin",
     "FlextDbtLdapConfigurationError",
     "FlextDbtLdapConnectionError",
     "FlextDbtLdapConstants",
@@ -187,6 +193,7 @@ __all__: list[str] = [
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
     "FlextDbtLdapSettings",
+    "FlextDbtLdapSyncMixin",
     "FlextDbtLdapTestError",
     "FlextDbtLdapTimeoutError",
     "FlextDbtLdapTypes",

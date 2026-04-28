@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from flext_tests import tm
 
-from flext_dbt_ldap import (
+from flext_dbt_ldap.__version__ import (
     __author__,
     __author_email__,
     __description__,

@@ -85,7 +85,7 @@ git status
 
 #### Problem: ModuleNotFoundError
 
-```python
+```text
 # Error
 ModuleNotFoundError: No module named 'flext_core'
 ```
@@ -115,7 +115,7 @@ poetry install
 
 ### r
 
-```python
+```text
 # Debug import issues
 import sys
 
@@ -136,7 +136,7 @@ except ImportError as e:
 
 #### Problem: MyPy errors
 
-```python
+```text
 # Error
 error: Argument 1 to "process" has incompatible type "str"; expected "t.JsonMapping"
 ```
@@ -193,7 +193,7 @@ pytest tests/unit/test_module.py::TestClass::test_method -v --pdb
 
 **Check test data:**
 
-```python
+```text
 def test_with_debug():
     result = my_function()
     print(f"Result: {result}")
@@ -222,7 +222,7 @@ env | grep FLEXT_
 
 **Validate configuration:**
 
-```python
+```text
 from flext_core import FlextBus
 from flext_core import FlextSettings
 from flext_core import FlextConstants
@@ -252,7 +252,7 @@ except c.ValidationError as e:
 
 **Debug configuration loading:**
 
-```python
+```text
 import os
 from flext_core import FlextBus
 from flext_core import FlextSettings
@@ -288,7 +288,7 @@ print(f"Config: {settings.dict()}")
 
 #### Problem: LDIF parsing fails
 
-```python
+```text
 # Error
 LdifParsingException: Invalid LDIF format
 ```
@@ -297,7 +297,7 @@ LdifParsingException: Invalid LDIF format
 
 **Check LDIF content:**
 
-```python
+```text
 from flext_ldif import ldif
 
 content = """dn: cn=test,dc=example,dc=com
@@ -312,7 +312,7 @@ if result.failure:
 
 **Enable debug logging:**
 
-```python
+```text
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -322,7 +322,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 **Validate LDIF format:**
 
-```python
+```text
 # Check for common LDIF issues
 def validate_ldif_content(content: str) -> t.StringList:
     issues = []
@@ -354,7 +354,7 @@ LdifMigrationException: Server compatibility error
 
 **Check server configuration:**
 
-```python
+```text
 from flext_ldif import FlextLdifSettings
 
 settings = FlextLdifSettings(
@@ -369,7 +369,7 @@ print(f"Config: {settings.model_dump()}")
 
 **Enable server quirks:**
 
-```python
+```text
 settings = FlextLdifSettings(
     servers_enabled=True, source_server="oid", target_server="oud"
 )
@@ -377,7 +377,7 @@ settings = FlextLdifSettings(
 
 **Test with sample data:**
 
-```python
+```text
 # Test migration with small sample
 sample_ldif = """dn: cn=test,dc=example,dc=com
 cn: test
@@ -394,7 +394,7 @@ else:
 
 #### Problem: Slow processing
 
-```python
+```text
 # Symptoms
 # - High memory usage
 # - Slow response times
@@ -405,7 +405,7 @@ else:
 
 **Profile memory usage:**
 
-```python
+```text
 import psutil
 import os
 
@@ -427,7 +427,7 @@ profile_memory()
 
 **Optimize batch size:**
 
-```python
+```text
 from flext_ldif import FlextLdifSettings
 
 # Reduce batch size for memory-constrained environments
@@ -439,7 +439,7 @@ settings = FlextLdifSettings(
 
 **Enable parallel processing:**
 
-```python
+```text
 settings = FlextLdifSettings(
     parallel_processing=True,
     max_workers=4,  # Adjust based on CPU cores
@@ -450,7 +450,7 @@ settings = FlextLdifSettings(
 
 ### 1. Logging Configuration
 
-```python
+```text
 import logging
 from flext_core import FlextBus
 from flext_core import FlextSettings
@@ -487,7 +487,7 @@ logger.error("Error message")
 
 ### 2. Exception Handling
 
-```python
+```text
 from flext_core import FlextBus
 from flext_core import FlextSettings
 from flext_core import FlextConstants
@@ -524,7 +524,7 @@ def safe_operation(data: dict) -> p.Result[dict]:
 
 ### 3. Debug Mode
 
-```python
+```text
 from flext_core import FlextBus
 from flext_core import FlextSettings
 from flext_core import FlextConstants
@@ -555,7 +555,7 @@ print(f"Log level: {settings.log_level}")
 
 ### 4. Step-by-Step Debugging
 
-```python
+```text
 def debug_ldif_processing(content: str):
     """Debug LDIF processing step by step."""
     print(f"Input content length: {len(content)}")
@@ -616,7 +616,7 @@ def debug_ldif_processing(content: str):
 
 ### Memory Issues
 
-```python
+```text
 # Monitor memory usage
 import psutil
 import os
@@ -639,7 +639,7 @@ monitor_memory()
 
 ### CPU Issues
 
-```python
+```text
 # Monitor CPU usage
 import psutil
 import time
@@ -719,7 +719,7 @@ When reporting issues, include:
 
 1. **Error Details**
 
-   ```python
+   ```text
    # Full error traceback
    import traceback
    try:
@@ -730,7 +730,7 @@ When reporting issues, include:
 
 1. **Minimal Reproduction**
 
-   ```python
+   ```text
    # Minimal code that reproduces the issue
    from flext_core import FlextBus
    ```
@@ -768,7 +768,7 @@ from flext_core import u
 
 1. **Always Use r**
 
-```python
+```text
 # ✅ GOOD
 def process(data: dict) -> p.Result[ProcessedData]:
     return r.ok(ProcessedData(**data))
@@ -781,7 +781,7 @@ def process(data: dict) -> ProcessedData:
 
 1. **Validate Input Early**
 
-   ```python
+   ```text
    def process_data(data: dict) -> p.Result[dict]:
        if not data:
            return r.fail("Data required")
@@ -792,7 +792,7 @@ def process(data: dict) -> ProcessedData:
 
 1. **Use Type Hints**
 
-   ```python
+   ```text
    # ✅ GOOD
    def process(items: Sequence[Item]) -> p.Result[Sequence[ProcessedItem]]:
        pass
@@ -805,7 +805,7 @@ def process(data: dict) -> ProcessedData:
 
 1. **Test Thoroughly**
 
-   ```python
+   ```text
    def test_process_data():
        # Test success case
        result = process_data({"key": "value"})
