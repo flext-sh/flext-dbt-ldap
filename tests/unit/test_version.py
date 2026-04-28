@@ -32,7 +32,7 @@ class TestsFlextDbtLdapVersion:
         tm.that(__description__, is_=str)
         tm.that(__author_email__, is_=str)
         tm.that(__license__, is_=str)
-        tm.that(__author__ is None or isinstance(__author__, str), eq=True)
+        tm.that(__author__, is_=str)
         tm.that(__url__, is_=str)
 
     def test_version_fields_are_non_empty(self) -> None:

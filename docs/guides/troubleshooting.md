@@ -145,7 +145,7 @@ error: Argument 1 to "process" has incompatible type "str"; expected "t.JsonMapp
 
 **Fix type annotations:**
 
-```python
+```text
 # ❌ WRONG
 def process(data):
     return data
@@ -172,7 +172,7 @@ mypy src/ --show-error-codes | grep "error-code"
 
 #### Problem: Tests failing
 
-```python
+```text
 # Error
 AssertionError: Expected success but got failure
 ```
@@ -207,7 +207,7 @@ def test_with_debug():
 
 #### Problem: Configuration not loading
 
-```python
+```text
 # Error
 ValidationError: field required
 ```
@@ -345,7 +345,7 @@ def validate_ldif_content(content: str) -> t.StringList:
 
 #### Problem: Migration fails
 
-```python
+```text
 # Error
 LdifMigrationException: Server compatibility error
 ```
@@ -364,7 +364,7 @@ settings = FlextLdifSettings(
     handle_schema_extensions=True,
 )
 
-print(f"Config: {settings.dict()}")
+print(f"Config: {settings.model_dump()}")
 ```
 
 **Enable server quirks:**

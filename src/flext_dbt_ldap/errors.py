@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar, override
+from typing import Annotated, ClassVar, override
 
 from flext_dbt_ldap import e, m, t
 
@@ -44,8 +44,14 @@ class FlextDbtLdapTimeoutError(FlextDbtLdapError):
 
 class _ModelErrorParams(m.Value):
     model_config: ClassVar[m.ConfigDict] = m.ConfigDict(extra="ignore")
-    model_name: str | None = None
-    model_type: str | None = None
+    model_name: Annotated[
+        str | None,
+        m.Field(description="Optional dbt model name associated with the error"),
+    ] = None
+    model_type: Annotated[
+        str | None,
+        m.Field(description="Optional dbt model type associated with the error"),
+    ] = None
 
 
 class FlextDbtLdapModelError(e.BaseError):
@@ -64,7 +70,10 @@ class FlextDbtLdapModelError(e.BaseError):
 
 class _MacroErrorParams(m.Value):
     model_config: ClassVar[m.ConfigDict] = m.ConfigDict(extra="ignore")
-    macro_name: str | None = None
+    macro_name: Annotated[
+        str | None,
+        m.Field(description="Optional dbt macro name associated with the error"),
+    ] = None
 
 
 class FlextDbtLdapMacroError(e.BaseError):
@@ -83,8 +92,14 @@ class FlextDbtLdapMacroError(e.BaseError):
 
 class _TestErrorParams(m.Value):
     model_config: ClassVar[m.ConfigDict] = m.ConfigDict(extra="ignore")
-    test_name: str | None = None
-    model_name: str | None = None
+    test_name: Annotated[
+        str | None,
+        m.Field(description="Optional dbt test name associated with the error"),
+    ] = None
+    model_name: Annotated[
+        str | None,
+        m.Field(description="Optional dbt model name associated with the test error"),
+    ] = None
 
 
 class FlextDbtLdapTestError(e.BaseError):

@@ -7,6 +7,7 @@ from typing import Annotated, Self
 from flext_ldif import m, u
 
 from flext_dbt_ldap import FlextDbtLdapModelsShared, FlextDbtLdapUtilitiesEntry, c
+from flext_ldap import FlextLdapUtilities as ul
 
 
 class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
@@ -42,40 +43,41 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         @classmethod
         def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a user dimension from a LDIF entry."""
-            attrs = FlextDbtLdapUtilitiesEntry.ldap_entry_mapping(entry)
+            attrs = ul.Ldap.extract_entry_attributes(entry)
             return cls(
-                user_id=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.UID, c.DEFAULT_EMPTY_STRING
-                )
+                user_id=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.UID)
                 or c.DEFAULT_EMPTY_STRING,
-                common_name=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.CN, c.DEFAULT_EMPTY_STRING
-                )
+                common_name=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.CN)
                 or c.DEFAULT_EMPTY_STRING,
-                email=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.MAIL
+                email=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.MAIL),
+                display_name=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.DISPLAY_NAME,
                 ),
-                display_name=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.DISPLAY_NAME
+                department=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.DEPARTMENT,
                 ),
-                department=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.DEPARTMENT
+                manager_dn=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.MANAGER,
                 ),
-                manager_dn=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.MANAGER
+                employee_number=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.EMPLOYEE_NUMBER,
                 ),
-                employee_number=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.EMPLOYEE_NUMBER
-                ),
-                phone=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.TELEPHONE_NUMBER
+                phone=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.TELEPHONE_NUMBER,
                 ),
                 is_active=FlextDbtLdapUtilitiesEntry.is_active_entry(attrs),
-                created_date=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.CREATE_TIMESTAMP
+                created_date=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.CREATE_TIMESTAMP,
                 ),
-                modified_date=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.MODIFY_TIMESTAMP
+                modified_date=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.MODIFY_TIMESTAMP,
                 ),
             )
 
@@ -107,34 +109,34 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         @classmethod
         def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a group dimension from a LDIF entry."""
-            attrs = FlextDbtLdapUtilitiesEntry.ldap_entry_mapping(entry)
+            attrs = ul.Ldap.extract_entry_attributes(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(
                 attrs.get(c.DbtLdap.UNIQUE_MEMBER, []),
             )
             common_name = (
-                FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs,
-                    c.DbtLdap.CN,
-                    c.DEFAULT_EMPTY_STRING,
-                )
+                ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.CN)
                 or c.DEFAULT_EMPTY_STRING
             )
             return cls(
                 group_id=common_name,
                 common_name=common_name,
-                description=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.DESCRIPTION
+                description=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.DESCRIPTION,
                 ),
-                group_type=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.GROUP_TYPE
+                group_type=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.GROUP_TYPE,
                 ),
                 member_count=member_count,
                 is_active=True,
-                created_date=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.CREATE_TIMESTAMP
+                created_date=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.CREATE_TIMESTAMP,
                 ),
-                modified_date=FlextDbtLdapUtilitiesEntry.ldap_first_attribute(
-                    attrs, c.DbtLdap.MODIFY_TIMESTAMP
+                modified_date=ul.Ldap.get_first_attribute_value(
+                    attrs,
+                    c.DbtLdap.MODIFY_TIMESTAMP,
                 ),
             )
 

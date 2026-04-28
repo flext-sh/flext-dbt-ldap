@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import Annotated
 
 from flext_dbt_ldap import c, t
@@ -23,36 +24,36 @@ class FlextDbtLdapModelsConfiguration:
         )
         model_paths: Annotated[
             t.StrSequence, u.Field(description="Directories containing DBT models")
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_MODEL_PATHS))
+        ] = c.DbtLdap.DEFAULT_MODEL_PATHS
         analysis_paths: Annotated[
             t.StrSequence, u.Field(description="Directories containing DBT analyses")
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_ANALYSIS_PATHS))
+        ] = c.DbtLdap.DEFAULT_ANALYSIS_PATHS
         test_paths: Annotated[
             t.StrSequence, u.Field(description="Directories containing DBT tests")
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_TEST_PATHS))
+        ] = c.DbtLdap.DEFAULT_TEST_PATHS
         seed_paths: Annotated[
             t.StrSequence, u.Field(description="Directories containing DBT seeds")
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_SEED_PATHS))
+        ] = c.DbtLdap.DEFAULT_SEED_PATHS
         macro_paths: Annotated[
             t.StrSequence, u.Field(description="Directories containing DBT macros")
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_MACRO_PATHS))
+        ] = c.DbtLdap.DEFAULT_MACRO_PATHS
         snapshot_paths: Annotated[
             t.StrSequence, u.Field(description="Directories containing DBT snapshots")
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_SNAPSHOT_PATHS))
+        ] = c.DbtLdap.DEFAULT_SNAPSHOT_PATHS
         target_path: Annotated[
             str, u.Field(description="Directory used for DBT build artifacts")
         ] = c.Meltano.PREFIX_TARGET
         clean_targets: Annotated[
             t.StrSequence,
             u.Field(description="Directories cleaned by DBT maintenance commands"),
-        ] = u.Field(default_factory=lambda: list(c.DbtLdap.DEFAULT_CLEAN_TARGETS))
+        ] = c.DbtLdap.DEFAULT_CLEAN_TARGETS
         target_schema: Annotated[
             str, u.Field(description="Default database schema for DBT relations")
         ] = c.DbtLdap.DEFAULT_DBT_SCHEMA
         tags: Annotated[
             t.StrSequence,
             u.Field(description="Tags applied to generated DBT resources"),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
         materialized: Annotated[
             str, u.Field(description="Default DBT materialization strategy")
         ] = c.Meltano.DBT_MATERIALIZATION_TABLE
@@ -96,10 +97,10 @@ class FlextDbtLdapModelsConfiguration:
 
         warn_after: Annotated[
             t.IntMapping, u.Field(description="Warning freshness thresholds")
-        ] = u.Field(default_factory=dict)
+        ] = u.Field(default_factory=lambda: MappingProxyType({}))
         error_after: Annotated[
             t.IntMapping, u.Field(description="Error freshness thresholds")
-        ] = u.Field(default_factory=dict)
+        ] = u.Field(default_factory=lambda: MappingProxyType({}))
 
     class DbtSourceDefinition(m.Value):
         """Complete DBT source definition."""
@@ -111,7 +112,7 @@ class FlextDbtLdapModelsConfiguration:
         tables: Annotated[
             t.DbtLdap.SerializableMappingSequence,
             u.Field(description="Tables declared for the DBT source"),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
     class DbtConfig(m.Value):
         """General DBT execution configuration."""

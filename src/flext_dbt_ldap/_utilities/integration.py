@@ -15,6 +15,7 @@ from collections.abc import (
 )
 
 from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t
+from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
 
@@ -83,7 +84,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Build membership facts from group membership attributes."""
         memberships: MutableSequence[m.DbtLdap.MembershipFact] = []
-        attrs = self.ldap_entry_mapping(entry)
+        attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dn = str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
         for attribute in c.DbtLdap.MEMBERSHIP_ATTRIBUTES:
             members = attrs.get(attribute)
@@ -104,7 +105,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         entry: m.Ldif.Entry,
     ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Build membership facts from a user entry."""
-        attrs = self.ldap_entry_mapping(entry)
+        attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dns = attrs.get(c.DbtLdap.MEMBER_OF, [])
         if not group_dns:
             empty: MutableSequence[m.DbtLdap.MembershipFact] = []

@@ -292,14 +292,16 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLdapDbtAdapter:
     """Mock LDAP dbt adapter."""
 
+    LDAP_ATTRIBUTE_MAP_ADAPTER = m.TypeAdapter(dict[str, str | t.StrSequence | None])
+
     def __init__(self, settings: t.JsonMapping) -> None:
         """Initialize the instance."""
         super().__init__()
         self.settings = settings
-        empty_entries = {}
-        empty_models = {}
-        self.ldap_entries = empty_entries
-        self.compiled_models = empty_models
+        empty_entries: dict[str, t.JsonValue] = {}
+        empty_models: dict[str, t.JsonValue] = {}
+        self.ldap_entries: dict[str, t.JsonValue] = empty_entries
+        self.compiled_models: dict[str, t.JsonValue] = empty_models
 
     def extract_ldap_data(
         self,
@@ -323,11 +325,8 @@ class MockLdapDbtAdapter:
     def _coerce_ldap_attribute_map(
         value: t.JsonValue,
     ) -> Mapping[str, str | t.StrSequence | None] | None:
-        adapter: m.TypeAdapter[Mapping[str, str | t.StrSequence | None]] = (
-            m.TypeAdapter(Mapping[str, str | t.StrSequence | None])
-        )
         try:
-            return adapter.validate_python(value)
+            return MockLdapDbtAdapter.LDAP_ATTRIBUTE_MAP_ADAPTER.validate_python(value)
         except e.ValidationError:
             return None
 
@@ -343,7 +342,7 @@ class MockLdapDbtAdapter:
         parsed: dict[str, str | None] = {}
         for key, value in attributes.items():
             if isinstance(value, list):
-                parsed[key] = str(value[0]) if value else None
+                parsed[key] = value[0] if value else None
             else:
                 parsed[key] = str(value) if value is not None else None
         return parsed
@@ -355,7 +354,10 @@ class MockLdapDbtAdapter:
         """Transform LDAP data to relational format."""
         transformed: list[t.JsonMapping] = []
         for entry in ldap_data:
-            flat_entry = {"dn": entry["dn"], "extracted_at": entry["extracted_at"]}
+            flat_entry: dict[str, t.JsonValue] = {
+                "dn": entry["dn"],
+                "extracted_at": entry["extracted_at"],
+            }
             attrs = entry.get("attributes")
             coerced = self._coerce_ldap_attribute_map(attrs)
             if coerced is not None:
@@ -364,69 +366,29 @@ class MockLdapDbtAdapter:
         return transformed
 
 
-@pytest.fixture
-def mock_ldap_dbt_adapter() -> type[MockLdapDbtAdapter]:
-    """Mock LDAP dbt adapter for testing."""
-    return MockLdapDbtAdapter
-
-
 class MockLdapConnection:
-    """Mock LDAP connection."""
+    """Minimal LDAP connection stub exported by the tests package."""
 
-    def __init__(self, settings: t.JsonMapping) -> None:
-        """Initialize the instance."""
+    def __init__(self) -> None:
+        """Initialize the stub connection with deterministic state."""
         super().__init__()
-        self.settings = settings
-        self.connected = False
-        self.entries: Sequence[t.JsonMapping] = []
+        self.bound = True
+        self.response: list[t.JsonMapping] = []
 
-    def connect(self) -> bool:
-        """Connect to LDAP server."""
-        self.connected = True
-        return True
-
-    def disconnect(self) -> bool:
-        """Disconnect from LDAP server."""
-        self.connected = False
+    def bind(self) -> bool:
+        """Report a successful bind operation."""
+        self.bound = True
         return True
 
     def search(
         self,
-        base_dn: str,
+        _search_base: str,
         _search_filter: str,
-        _attributes: t.StrSequence | None = None,
-    ) -> Sequence[t.JsonMapping]:
-        """Search LDAP directory."""
-        if "people" in base_dn or "users" in base_dn:
-            return [
-                {
-                    "dn": "cn=john.doe,ou=people,dc=flext,dc=local",
-                    "attributes": {
-                        "cn": ["john.doe"],
-                        "mail": ["john.doe@internal.invalid"],
-                        "objectClass": ["inetOrgPerson"],
-                    },
-                },
-            ]
-        if "groups" in base_dn:
-            return [
-                {
-                    "dn": "cn=developers,ou=groups,dc=flext,dc=local",
-                    "attributes": {
-                        "cn": ["developers"],
-                        "member": ["cn=john.doe,ou=people,dc=flext,dc=local"],
-                        "objectClass": ["groupOfNames"],
-                    },
-                },
-            ]
-        return []
+    ) -> bool:
+        """Report a successful search operation."""
+        return True
 
-    def validate_entry(self, dn: str) -> bool:
-        """Validate LDAP entry exists."""
-        return dn in [entry["dn"] for entry in self.entries]
-
-
-@pytest.fixture
-def mock_ldap_connection() -> type[MockLdapConnection]:
-    """Mock LDAP connection for testing."""
-    return MockLdapConnection
+    def unbind(self) -> bool:
+        """Report a successful unbind operation."""
+        self.bound = False
+        return True

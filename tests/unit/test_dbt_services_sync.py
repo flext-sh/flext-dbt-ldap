@@ -19,15 +19,15 @@ def _read_sync_state(state_file: Path) -> t.JsonMapping:
     read_result = u.Cli.json_read(state_file)
     if read_result.failure:
         pytest.fail(read_result.error or "Failed to read sync state")
-    return read_result.unwrap()
+    payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
+        read_result.value or {}
+    )
+    return payload
 
 
 def _read_bookmark(state_file: Path, sync_key: str) -> str:
     value = _read_sync_state(state_file)[sync_key]
-    if not isinstance(value, str):
-        msg = f"Expected bookmark value for {sync_key} to be a string"
-        pytest.fail(msg)
-    return value
+    return str(value)
 
 
 def _install_successful_pipeline_stub(
@@ -115,12 +115,9 @@ class TestsFlextDbtLdapServicesSync:
         def fake_json_write(
             path: Path,
             payload: t.JsonPayload,
-            *,
-            sort_keys: bool = False,
-            ensure_ascii: bool = False,
-            indent: int = 2,
+            options: m.Cli.JsonWriteOptions | None = None,
         ) -> p.Result[bool]:
-            _ = (path, payload, sort_keys, ensure_ascii, indent)
+            _ = (path, payload, options)
             return r[bool].fail("json_write: disk full")
 
         monkeypatch.setattr(u.Cli, "json_write", fake_json_write)

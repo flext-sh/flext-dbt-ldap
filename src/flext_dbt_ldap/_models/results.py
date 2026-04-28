@@ -40,7 +40,7 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
         ] = c.Meltano.StreamStatus.PENDING
         models_run: Annotated[
             t.StrSequence, u.Field(description="DBT models executed during the run")
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
         entries_processed: Annotated[
             t.NonNegativeInt, u.Field(description="LDAP entries processed by the run")
         ] = 0
@@ -82,7 +82,7 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
         ] = 0.0
         recommendations: Annotated[
             t.StrSequence, u.Field(description="Performance tuning recommendations")
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
     class ServiceStatus(m.Value):
         """Service status and capability summary."""
@@ -95,7 +95,7 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
         )
         capabilities: Annotated[
             t.StrSequence, u.Field(description="Supported public service capabilities")
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
     class AnalyticsReport(m.Value):
         """Analytics report metadata."""
