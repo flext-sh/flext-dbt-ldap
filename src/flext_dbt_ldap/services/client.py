@@ -201,7 +201,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
     ) -> t.ConfigurationMapping:
         """Map LDAP entry attributes using configuration mapping."""
         dn_attr = c.Ldap.AttributeName.DN
-        dn_str = str(entry.get(dn_attr, [""])[0]) if entry.get(dn_attr) else ""
+        dn_str = entry.get(dn_attr, [""])[0] if entry.get(dn_attr) else ""
         mapped_attrs: t.MutableConfigurationMapping = {dn_attr: dn_str}
         for ldap_attr, dbt_attr in self.settings.ldap_attribute_mapping.items():
             if ldap_attr in entry:
@@ -220,9 +220,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         schema_name: str,
     ) -> bool:
         """Check if LDAP entry matches schema type."""
-        object_classes: t.StrSequence = [
-            str(x) for x in entry.get(c.Ldap.AttributeName.OBJECT_CLASS, [])
-        ]
+        object_classes: t.StrSequence = list(
+            entry.get(c.Ldap.AttributeName.OBJECT_CLASS, [])
+        )
         schema_mapping: Mapping[str, t.StrSequence] = {
             c.DbtLdap.USERS: c.DbtLdap.USERS_CLASSES,
             c.DbtLdap.GROUPS: c.DbtLdap.GROUPS_CLASSES,

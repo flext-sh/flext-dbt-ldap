@@ -31,7 +31,13 @@ type _DbRow = t.VariadicTuple[t.JsonValue]
 @pytest.fixture(scope="session")
 def flext_docker() -> tk:
     """Get tk unified management instance."""
-    return tk()
+    project_root = Path(__file__).parent.parent.parent
+    return tk.stack(
+        project_root / "docker-compose.yml",
+        host="localhost",
+        port=25432,
+        workspace_root=project_root,
+    )
 
 
 @pytest.fixture(scope="session")
@@ -43,9 +49,8 @@ def project_root() -> Path:
 @pytest.fixture(scope="session")
 def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
     """Start PostgreSQL container for testing using tk."""
-    compose_file = project_root / "docker-compose.yml"
     logger.info("Starting PostgreSQL container using tk...")
-    start_result = flext_docker.start_compose_stack(str(compose_file))
+    start_result = flext_docker.up()
     if start_result.failure:
         pytest.skip(f"PostgreSQL container failed to start: {start_result.error}")
 
@@ -69,15 +74,7 @@ def postgres_container(flext_docker: tk, project_root: Path) -> Generator[None]:
     yield
     logger.info("Stopping PostgreSQL container using tk...")
 
-    class _StopResult:
-        failure: bool = False
-        error: str | None = None
-
-    if hasattr(flext_docker, "stop_compose_stack"):
-        stop_fn = getattr(flext_docker, "stop_compose_stack")
-        stop_result: _StopResult = stop_fn(str(compose_file))
-    else:
-        stop_result = _StopResult()
+    stop_result = flext_docker.down()
     if stop_result.failure and stop_result.error:
         logger.warning(
             "PostgreSQL container stop reported failure: %s",

@@ -78,7 +78,7 @@ class FlextDbtLdapUtilitiesMacros:
             return ""
         if isinstance(value, str):
             return value
-        return str(value[0]) if value else ""
+        return value[0] if value else ""
 
     @staticmethod
     def parse_dn_component(dn: str, component: str) -> str | None:
