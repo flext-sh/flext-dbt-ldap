@@ -35,14 +35,12 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             if settings.ldap_bind_password
             else None
         )
-        ldap_settings = FlextLdapSettings.fetch_global().model_copy(
-            update={
-                "host": settings.ldap_host,
-                "port": settings.ldap_port,
-                "use_tls": settings.ldap_use_tls,
-                "bind_dn": ldap_bind_dn or "",
-                "bind_password": ldap_bind_password or "",
-            },
+        ldap_settings = FlextLdapSettings.fetch_global().clone(
+            host=settings.ldap_host,
+            port=settings.ldap_port,
+            use_tls=settings.ldap_use_tls,
+            bind_dn=ldap_bind_dn or "",
+            bind_password=ldap_bind_password or "",
         )
         return FlextLdap(settings_overrides=ldap_settings.model_dump())
 
