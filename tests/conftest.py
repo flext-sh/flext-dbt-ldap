@@ -20,7 +20,7 @@ from collections.abc import (
 from unittest.mock import Mock
 
 import pytest
-from flext_tests import td, tk
+from flext_tests import tk
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests import e, m, t, u
@@ -108,30 +108,6 @@ def set_test_environment() -> Generator[None]:
     _ = os.environ.pop("FLEXT_LOG_LEVEL", None)
     _ = os.environ.pop("DBT_PROFILES_DIR", None)
     _ = os.environ.pop("LDAP_TEST_MODE", None)
-
-
-@pytest.fixture
-def dbt_ldap_project_settings() -> Mapping[str, t.Tests.TestobjectSerializable]:
-    """Dbt LDAP project configuration for testing."""
-    return td.build_dbt_project_settings(
-        name="flext_dbt_ldap_test",
-        version="0.9.0",
-        profile="test",
-        model_config={
-            "materialized": "table",
-            "ldap": {
-                "enable_ldap_functions": True,
-                "ldap_server": "localhost:389",
-                "base_dn": "dc=test,dc=com",
-            },
-        },
-        variables={
-            "ldap_base_dn": "dc=test,dc=com",
-            "ldap_users_ou": "ou=users",
-            "ldap_groups_ou": "ou=groups",
-            "enable_ldap_validation": True,
-        },
-    )
 
 
 @pytest.fixture
