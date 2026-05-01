@@ -6,9 +6,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Sequence,
-)
 from typing import Protocol, runtime_checkable
 
 from flext_dbt_ldap import m, t
@@ -85,13 +82,13 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     self,
                     ldap_config: m.DbtLdap.LdapQuery,
                     extraction_config: m.DbtLdap.TransformationConfig,
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Extract data from LDAP directory for DBT processing."""
                     ...
 
                 def sync_ldap_to_warehouse(
                     self,
-                    ldap_data: Sequence[m.DbtLdap.UserDimension],
+                    ldap_data: t.SequenceOf[m.DbtLdap.UserDimension],
                     warehouse_config: m.DbtLdap.DbtConfig,
                 ) -> p.Result[m.DbtLdap.DbtRunStatus]:
                     """Sync LDAP data to data warehouse."""
@@ -99,15 +96,15 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def transform_ldap_to_dbt_format(
                     self,
-                    ldap_data: Sequence[m.DbtLdap.UserDimension],
+                    ldap_data: t.SequenceOf[m.DbtLdap.UserDimension],
                     transformation_config: m.DbtLdap.TransformationConfig,
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Transform LDAP data to DBT-compatible format."""
                     ...
 
                 def validate_ldap_data_quality(
                     self,
-                    data: Sequence[m.DbtLdap.UserDimension],
+                    data: t.SequenceOf[m.DbtLdap.UserDimension],
                     quality_rules: m.DbtLdap.DataValidationConfig,
                 ) -> p.Result[m.DbtLdap.ValidationMetrics]:
                     """Validate LDAP data quality for DBT processing."""
@@ -122,7 +119,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def create_group_dimension(
                     self,
-                    ldap_groups: Sequence[m.DbtLdap.GroupDimension],
+                    ldap_groups: t.SequenceOf[m.DbtLdap.GroupDimension],
                     dimension_config: m.DbtLdap.DbtModelDefinition,
                 ) -> p.Result[m.DbtLdap.DbtModelDefinition]:
                     """Create group dimension model from LDAP group data."""
@@ -130,7 +127,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def create_organizational_hierarchy(
                     self,
-                    ldap_data: Sequence[m.DbtLdap.UserDimension],
+                    ldap_data: t.SequenceOf[m.DbtLdap.UserDimension],
                     hierarchy_config: m.DbtLdap.DbtModelDefinition,
                 ) -> p.Result[m.DbtLdap.DbtModelDefinition]:
                     """Create organizational hierarchy from LDAP OUs."""
@@ -138,7 +135,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def create_user_dimension(
                     self,
-                    ldap_users: Sequence[m.DbtLdap.UserDimension],
+                    ldap_users: t.SequenceOf[m.DbtLdap.UserDimension],
                     dimension_config: m.DbtLdap.DbtModelDefinition,
                 ) -> p.Result[m.DbtLdap.DbtModelDefinition]:
                     """Create user dimension model from LDAP user data."""
@@ -146,9 +143,9 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def generate_fact_tables(
                     self,
-                    dimensions: Sequence[m.DbtLdap.DbtModelDefinition],
+                    dimensions: t.SequenceOf[m.DbtLdap.DbtModelDefinition],
                     fact_config: m.DbtLdap.DbtModelDefinition,
-                ) -> p.Result[Sequence[m.DbtLdap.DbtModelDefinition]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.DbtModelDefinition]]:
                     """Generate fact tables from LDAP dimensions."""
                     ...
 
@@ -161,33 +158,33 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def apply_business_rules(
                     self,
-                    data: Sequence[m.DbtLdap.UserDimension],
+                    data: t.SequenceOf[m.DbtLdap.UserDimension],
                     business_rules: m.DbtLdap.TransformationRule,
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Apply business rules to LDAP data transformations."""
                     ...
 
                 def enrich_ldap_data(
                     self,
-                    ldap_data: Sequence[m.DbtLdap.UserDimension],
-                    enrichment_sources: Sequence[m.DbtLdap.UserDimension],
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                    ldap_data: t.SequenceOf[m.DbtLdap.UserDimension],
+                    enrichment_sources: t.SequenceOf[m.DbtLdap.UserDimension],
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Enrich LDAP data with additional data sources."""
                     ...
 
                 def generate_derived_attributes(
                     self,
-                    ldap_data: Sequence[m.DbtLdap.UserDimension],
+                    ldap_data: t.SequenceOf[m.DbtLdap.UserDimension],
                     derivation_config: m.DbtLdap.TransformationConfig,
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Generate derived attributes from LDAP base attributes."""
                     ...
 
                 def normalize_ldap_attributes(
                     self,
-                    ldap_entries: Sequence[m.DbtLdap.UserDimension],
+                    ldap_entries: t.SequenceOf[m.DbtLdap.UserDimension],
                     normalization_rules: m.DbtLdap.TransformationRule,
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Normalize LDAP attributes for consistent processing."""
                     ...
 
@@ -229,7 +226,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def check_data_completeness(
                     self,
-                    data: Sequence[m.DbtLdap.UserDimension],
+                    data: t.SequenceOf[m.DbtLdap.UserDimension],
                     completeness_config: m.DbtLdap.DataValidationConfig,
                 ) -> p.Result[m.DbtLdap.ValidationMetrics]:
                     """Check LDAP data completeness for DBT processing."""
@@ -237,15 +234,15 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def detect_data_anomalies(
                     self,
-                    data: Sequence[m.DbtLdap.UserDimension],
+                    data: t.SequenceOf[m.DbtLdap.UserDimension],
                     anomaly_config: m.DbtLdap.DataValidationConfig,
-                ) -> p.Result[Sequence[m.DbtLdap.UserDimension]]:
+                ) -> p.Result[t.SequenceOf[m.DbtLdap.UserDimension]]:
                     """Detect anomalies in LDAP data."""
                     ...
 
                 def generate_quality_report(
                     self,
-                    quality_results: Sequence[m.DbtLdap.ValidationMetrics],
+                    quality_results: t.SequenceOf[m.DbtLdap.ValidationMetrics],
                     report_config: m.DbtLdap.DbtConfig,
                 ) -> p.Result[m.DbtLdap.DbtRunStatus]:
                     """Generate data quality report."""
@@ -253,7 +250,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
 
                 def validate_ldap_schema_compliance(
                     self,
-                    ldap_data: Sequence[m.DbtLdap.UserDimension],
+                    ldap_data: t.SequenceOf[m.DbtLdap.UserDimension],
                     schema_rules: m.DbtLdap.LdapSchema,
                 ) -> p.Result[m.DbtLdap.ValidationMetrics]:
                     """Validate LDAP data against schema compliance rules."""

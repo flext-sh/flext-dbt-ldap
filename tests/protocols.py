@@ -9,15 +9,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Sequence,
-)
 from contextlib import AbstractContextManager
 from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
-from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
+from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes, t
 
 
 class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
@@ -41,7 +38,7 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def fetchall(
             self,
-        ) -> Sequence[tuple[FlextDbtLdapTypes.JsonValue, ...]]: ...
+        ) -> t.SequenceOf[tuple[FlextDbtLdapTypes.JsonValue, ...]]: ...
 
         def fetchone(
             self,

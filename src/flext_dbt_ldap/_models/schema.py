@@ -19,7 +19,7 @@ class FlextDbtLdapModelsSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         sources: Annotated[
-            t.DbtLdap.SerializableMappingSequence,
+            t.SequenceOf[t.JsonMapping],
             u.Field(description="DBT source definitions"),
         ] = u.Field(default_factory=tuple)
 
@@ -30,7 +30,7 @@ class FlextDbtLdapModelsSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
-            t.DbtLdap.SerializableMappingSequence,
+            t.SequenceOf[t.JsonMapping],
             u.Field(description="DBT model definitions"),
         ] = u.Field(default_factory=tuple)
 
@@ -41,11 +41,11 @@ class FlextDbtLdapModelsSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
-            t.DbtLdap.SerializableMappingSequence,
+            t.SequenceOf[t.JsonMapping],
             u.Field(description="DBT test model definitions"),
         ] = u.Field(default_factory=tuple)
         columns: Annotated[
-            t.DbtLdap.LdapEntryMapping,
+            t.Ldap.OperationAttributes,
             u.Field(description="Column-level DBT tests keyed by attribute name"),
         ] = u.Field(default_factory=lambda: MappingProxyType({}))
 
@@ -115,7 +115,7 @@ class FlextDbtLdapModelsSchema:
             bool, u.Field(description="Whether distinguished names must be present")
         ] = True
         columns: Annotated[
-            t.DbtLdap.LdapEntryMapping,
+            t.Ldap.OperationAttributes,
             u.Field(description="Column validation configuration keyed by attribute"),
         ] = u.Field(default_factory=lambda: MappingProxyType({}))
 

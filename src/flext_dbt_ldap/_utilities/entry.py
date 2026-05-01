@@ -15,7 +15,7 @@ class FlextDbtLdapUtilitiesEntry:
     _log = u.fetch_logger(__name__)
 
     @classmethod
-    def is_active_entry(cls, attrs: t.DbtLdap.LdapEntryMapping) -> bool:
+    def is_active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
         """Return whether the LDAP entry represents an active account."""
         raw_flag = ul.Ldap.get_first_attribute_value(
             attrs,

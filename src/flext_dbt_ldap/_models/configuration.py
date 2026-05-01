@@ -110,7 +110,7 @@ class FlextDbtLdapModelsConfiguration:
             c.DEFAULT_EMPTY_STRING
         )
         tables: Annotated[
-            t.DbtLdap.SerializableMappingSequence,
+            t.SequenceOf[t.JsonMapping],
             u.Field(description="Tables declared for the DBT source"),
         ] = u.Field(default_factory=tuple)
 

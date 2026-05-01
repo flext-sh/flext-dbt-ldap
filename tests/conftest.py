@@ -14,8 +14,6 @@ import tempfile
 from collections.abc import (
     Callable,
     Generator,
-    Mapping,
-    Sequence,
 )
 from unittest.mock import Mock
 
@@ -291,7 +289,7 @@ class MockLdapDbtAdapter:
         self,
         _base_dn: str,
         _search_filter: str,
-    ) -> Sequence[t.JsonMapping]:
+    ) -> t.SequenceOf[t.JsonMapping]:
         """Extract LDAP data for dbt processing."""
         return [
             {
@@ -308,7 +306,7 @@ class MockLdapDbtAdapter:
     @staticmethod
     def _coerce_ldap_attribute_map(
         value: t.JsonValue,
-    ) -> Mapping[str, str | t.StrSequence | None] | None:
+    ) -> t.MappingKV[str, str | t.StrSequence | None] | None:
         try:
             return MockLdapDbtAdapter.LDAP_ATTRIBUTE_MAP_ADAPTER.validate_python(value)
         except e.ValidationError:
@@ -320,7 +318,7 @@ class MockLdapDbtAdapter:
 
     def parse_ldap_attributes(
         self,
-        attributes: Mapping[str, str | t.StrSequence | None],
+        attributes: t.MappingKV[str, str | t.StrSequence | None],
     ) -> t.OptionalStrMapping:
         """Parse LDAP attributes for dbt models."""
         parsed: dict[str, str | None] = {}
@@ -333,8 +331,8 @@ class MockLdapDbtAdapter:
 
     def transform_ldap_to_relational(
         self,
-        ldap_data: Sequence[t.JsonMapping],
-    ) -> Sequence[t.JsonMapping]:
+        ldap_data: t.SequenceOf[t.JsonMapping],
+    ) -> t.SequenceOf[t.JsonMapping]:
         """Transform LDAP data to relational format."""
         transformed: list[t.JsonMapping] = []
         for entry in ldap_data:

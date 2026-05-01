@@ -10,7 +10,6 @@ from __future__ import annotations
 import os
 from collections.abc import (
     Generator,
-    Sequence,
 )
 from pathlib import Path
 from types import ModuleType
@@ -138,7 +137,7 @@ def run_dbt_command(
 def query_database(
     conn: p.DbConnection,
     query: LiteralString,
-) -> Sequence[_DbRow]:
+) -> t.SequenceOf[_DbRow]:
     """Execute query and return results."""
     with conn.cursor() as cur:
         _ = cur.execute(sql.SQL(query))
