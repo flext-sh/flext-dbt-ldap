@@ -16,7 +16,7 @@ logger = u.fetch_logger(__name__)
 class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
     """LDAP extraction and DBT transformation mixin for service facades."""
 
-    _ldap_api: FlextLdap = u.PrivateAttr()
+    _ldap_api: p.Ldap.LdapClient = u.PrivateAttr()
 
     @staticmethod
     def create_ldap_api(settings: FlextDbtLdapSettings) -> FlextLdap:
