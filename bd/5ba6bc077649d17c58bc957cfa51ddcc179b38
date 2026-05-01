@@ -1,0 +1,16 @@
+docs/guides/troubleshooting.md
+  h_9db9d35f50cf33 797
+src/flext_dbt_ldap/_utilities/integration.py
+  h_9db9d35f50cf33 84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "bd5ba6bc077649d17c58bc957cfa51ddcc179b38",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
