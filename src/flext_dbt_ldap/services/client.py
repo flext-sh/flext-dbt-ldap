@@ -64,7 +64,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             else:
                 logger.error("LDAP extraction failed: %s", result.error or "")
                 return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail_op(
-                    "LDAP extraction", result.error,
+                    "LDAP extraction",
+                    result.error,
                 )
             return result
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -274,7 +275,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail_op(
-                "LDAP search", e,
+                "LDAP search",
+                e,
             )
 
 
