@@ -58,40 +58,6 @@ class FlextDbtLdapModelsConfiguration:
             str, u.Field(description="Default DBT materialization strategy")
         ] = c.Meltano.DBT_MATERIALIZATION_TABLE
 
-    class DbtProfileConfig(m.Value):
-        """DBT profile connection configuration."""
-
-        type: Annotated[str, u.Field(description="Database adapter type")] = (
-            c.DbtLdap.DEFAULT_DBT_ADAPTER
-        )
-        host: Annotated[str, u.Field(description="Database host")] = c.LOCALHOST
-        user: Annotated[str, u.Field(description="Database user name")] = (
-            c.DbtLdap.DEFAULT_DBT_USER
-        )
-        password: Annotated[str, u.Field(description="Database password")] = (
-            c.DEFAULT_EMPTY_STRING
-        )
-        port: Annotated[t.PortNumber, u.Field(description="Database port")] = (
-            c.Meltano.DB_PORT_POSTGRES
-        )
-        dbname: Annotated[str, u.Field(description="Database name")] = (
-            c.DbtLdap.DEFAULT_DBT_DATABASE
-        )
-        schema_name: Annotated[
-            str, u.Field(description="Target schema for DBT models")
-        ] = c.DbtLdap.DEFAULT_DBT_SCHEMA
-        threads: Annotated[
-            t.PositiveInt, u.Field(description="Number of DBT worker threads")
-        ] = c.DbtLdap.DEFAULT_DBT_THREADS
-
-    class DbtSourceTable(m.Value):
-        """DBT source table definition."""
-
-        name: Annotated[str, u.Field(description="DBT source table name")]
-        description: Annotated[
-            str, u.Field(description="DBT source table description")
-        ] = c.DEFAULT_EMPTY_STRING
-
     class DbtSourceFreshness(m.Value):
         """DBT source freshness configuration."""
 

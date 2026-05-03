@@ -12,17 +12,6 @@ from flext_meltano import m, u
 class FlextDbtLdapModelsSchema:
     """Schema and transformation models for dbt-ldap."""
 
-    class DbtSourceSchema(m.Value):
-        """DBT source schema definition."""
-
-        version: Annotated[str, u.Field(description="DBT schema.yml version")] = (
-            c.DbtLdap.DBT_SCHEMA_VERSION
-        )
-        sources: Annotated[
-            t.SequenceOf[t.JsonMapping],
-            u.Field(description="DBT source definitions"),
-        ] = u.Field(default_factory=tuple)
-
     class DbtModelDefinition(m.Value):
         """DBT model definition."""
 
@@ -48,33 +37,6 @@ class FlextDbtLdapModelsSchema:
             t.Ldap.OperationAttributes,
             u.Field(description="Column-level DBT tests keyed by attribute name"),
         ] = u.Field(default_factory=lambda: MappingProxyType({}))
-
-    class ProjectStructureValidation(m.Value):
-        """DBT project structure validation result."""
-
-        results: Annotated[
-            t.BoolMapping,
-            u.Field(description="Validation results keyed by project artifact"),
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
-
-    class OptimizationHints(m.Value):
-        """Query optimization hints."""
-
-        add_indexes: Annotated[
-            bool, u.Field(description="Whether index recommendations should be applied")
-        ] = False
-        index_columns: Annotated[
-            t.StrSequence, u.Field(description="Columns recommended for indexing")
-        ] = u.Field(default_factory=tuple)
-        partition_by: Annotated[
-            str, u.Field(description="Suggested partition key for large tables")
-        ] = c.DEFAULT_EMPTY_STRING
-        filter_early: Annotated[
-            bool,
-            u.Field(
-                description="Whether filters should be pushed earlier in the query"
-            ),
-        ] = False
 
     class TransformationConfig(m.Value):
         """Transformation configuration."""
