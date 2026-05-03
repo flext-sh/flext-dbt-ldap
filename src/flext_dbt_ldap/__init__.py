@@ -41,18 +41,6 @@ if _t.TYPE_CHECKING:
     from flext_dbt_ldap.api import FlextDbtLdap, dbt_ldap
     from flext_dbt_ldap.base import FlextDbtLdapServiceBase
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
-    from flext_dbt_ldap.errors import (
-        FlextDbtLdapAuthenticationError,
-        FlextDbtLdapConfigurationError,
-        FlextDbtLdapConnectionError,
-        FlextDbtLdapError,
-        FlextDbtLdapMacroError,
-        FlextDbtLdapModelError,
-        FlextDbtLdapProcessingError,
-        FlextDbtLdapTestError,
-        FlextDbtLdapTimeoutError,
-        FlextDbtLdapValidationError,
-    )
     from flext_dbt_ldap.models import FlextDbtLdapModels, m
     from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
     from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
@@ -102,18 +90,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
             ".constants": (
                 "FlextDbtLdapConstants",
                 "c",
-            ),
-            ".errors": (
-                "FlextDbtLdapAuthenticationError",
-                "FlextDbtLdapConfigurationError",
-                "FlextDbtLdapConnectionError",
-                "FlextDbtLdapError",
-                "FlextDbtLdapMacroError",
-                "FlextDbtLdapModelError",
-                "FlextDbtLdapProcessingError",
-                "FlextDbtLdapTestError",
-                "FlextDbtLdapTimeoutError",
-                "FlextDbtLdapValidationError",
             ),
             ".models": (
                 "FlextDbtLdapModels",
@@ -171,31 +147,22 @@ install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 
 __all__: list[str] = [
     "FlextDbtLdap",
-    "FlextDbtLdapAuthenticationError",
     "FlextDbtLdapClientMixin",
-    "FlextDbtLdapConfigurationError",
-    "FlextDbtLdapConnectionError",
     "FlextDbtLdapConstants",
     "FlextDbtLdapConstantsAttributes",
     "FlextDbtLdapConstantsBase",
     "FlextDbtLdapConstantsSearch",
     "FlextDbtLdapConstantsTransformation",
-    "FlextDbtLdapError",
-    "FlextDbtLdapMacroError",
-    "FlextDbtLdapModelError",
     "FlextDbtLdapModels",
     "FlextDbtLdapModelsConfiguration",
     "FlextDbtLdapModelsDimensions",
     "FlextDbtLdapModelsResults",
     "FlextDbtLdapModelsSchema",
     "FlextDbtLdapModelsShared",
-    "FlextDbtLdapProcessingError",
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
     "FlextDbtLdapSettings",
     "FlextDbtLdapSyncMixin",
-    "FlextDbtLdapTestError",
-    "FlextDbtLdapTimeoutError",
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapUtilitiesClient",
@@ -203,7 +170,6 @@ __all__: list[str] = [
     "FlextDbtLdapUtilitiesIntegration",
     "FlextDbtLdapUtilitiesMacros",
     "FlextDbtLdapUtilitiesSync",
-    "FlextDbtLdapValidationError",
     "__author__",
     "__author_email__",
     "__description__",
