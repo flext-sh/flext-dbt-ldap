@@ -22,7 +22,6 @@ class FlextDbtLdapConstantsTransformation:
     FACT_MEMBERSHIPS: Final[str] = "fact_memberships"
 
     TIMESTAMP: Final[str] = "timestamp"
-    TEXT_ARRAY: Final[str] = "text[]"
     INTEGER: Final[str] = "integer"
     TEXT: Final[str] = "text"
     TIMESTAMP_ATTRS: ClassVar[t.VariadicTuple[str]] = (
@@ -34,10 +33,6 @@ class FlextDbtLdapConstantsTransformation:
 
     DIRECT: Final[str] = "direct"
     OPERATIONAL: Final[str] = "operational"
-
-    PERFORMANCE_EXECUTION_TIME_THRESHOLD: Final[float] = 30.0
-    PERFORMANCE_MEMORY_USAGE_THRESHOLD: Final[float] = 1024.0
-    PERFORMANCE_ROWS_PROCESSED_THRESHOLD: Final[int] = 100000
 
     DEFAULT_BATCH_SIZE: Final[int] = c.DEFAULT_SIZE
     MAX_BATCH_SIZE: Final[int] = c.MAX_ITEMS
