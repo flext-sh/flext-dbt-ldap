@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_core import FlextSettings
 from flext_dbt_ldap import FlextDbtLdapSettings, t
 from flext_meltano import FlextMeltanoDbtServiceBase, u
 
@@ -41,9 +40,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @override
     def settings(self) -> FlextDbtLdapSettings:
         """Return the typed dbt-ldap settings namespace."""
-        return FlextSettings.fetch_global().fetch_namespace(
-            "dbt-ldap", FlextDbtLdapSettings
-        )
+        return FlextDbtLdapSettings.fetch_global()
 
     @property
     @override
