@@ -1,0 +1,23 @@
+src/flext_dbt_ldap/_utilities/integration.py
+  h_5cf852cc46bf92 153
+tests/protocols.py
+  h_5cf852cc46bf92 36
+src/flext_dbt_ldap/services/sync.py
+  h_5cf852cc46bf92 231
+src/flext_dbt_ldap/_utilities/macros.py
+  h_5cf852cc46bf92 98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "916dbbac6d76690568c682dfec022695adbbdd05",
+  "prompts": {},
+  "humans": {
+    "h_5cf852cc46bf92": {
+      "author": "FLEXT Bot <team@flext.sh>"
+    },
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
