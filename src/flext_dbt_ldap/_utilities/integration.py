@@ -150,6 +150,4 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         return dimensions
 
 
-__all__: t.StrSequence = [
-    "FlextDbtLdapUtilitiesIntegration",
-]
+__all__: t.StrSequence = ("FlextDbtLdapUtilitiesIntegration",)

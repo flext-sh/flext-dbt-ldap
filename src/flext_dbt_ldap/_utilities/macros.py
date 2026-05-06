@@ -95,4 +95,4 @@ class FlextDbtLdapUtilitiesMacros:
             return None
 
 
-__all__: t.StrSequence = ["FlextDbtLdapUtilitiesMacros"]
+__all__: t.StrSequence = ("FlextDbtLdapUtilitiesMacros",)

@@ -33,7 +33,7 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
         def execute(
             self,
             query: str | object,
-            params: tuple[str, ...] | None = None,
+            params: t.StrSequence | None = None,
         ) -> TestsFlextDbtLdapProtocols.DbCursor: ...
 
         def fetchall(

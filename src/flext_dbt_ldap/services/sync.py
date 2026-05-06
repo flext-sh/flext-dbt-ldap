@@ -6,7 +6,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from flext_cli import u
-
 from flext_dbt_ldap import c, m, p, r, t
 from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
 
@@ -229,10 +228,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         payload_result = u.Cli.json_read(self._sync_state_file)
         if payload_result.failure:
             raise OSError(payload_result.error or "Failed to read sync state file")
-        loaded: t.JsonValue = dict(payload_result.value)
-        if not isinstance(loaded, dict):
-            msg = "Sync state file must contain a JSON object"
-            raise TypeError(msg)
+        loaded = t.json_dict_adapter().validate_python(payload_result.value)
         data: t.MutableStrMapping = {}
         for key, value in loaded.items():
             if not isinstance(value, str):
