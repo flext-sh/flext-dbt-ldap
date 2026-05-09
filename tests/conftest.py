@@ -7,9 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import os
 import pathlib
-import tempfile
 from collections.abc import (
     Callable,
     Generator,
@@ -19,7 +17,7 @@ from unittest.mock import Mock
 import pytest
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import t, u
+from tests import t, tf, u
 
 type _SyncState = t.MutableMappingKV[str, str] | None
 type _ServiceFactory = Callable[
@@ -63,13 +61,13 @@ def dbt_ldap_service_factory(
 @pytest.fixture(autouse=True)
 def set_test_environment() -> Generator[None]:
     """Set test environment variables."""
-    os.environ["FLEXT_ENV"] = "test"
-    os.environ["FLEXT_LOG_LEVEL"] = "DEBUG"
-    temp_dir = tempfile.mkdtemp(prefix="dbt_profiles_")
-    os.environ["DBT_PROFILES_DIR"] = temp_dir
-    os.environ["LDAP_TEST_MODE"] = "true"
-    yield
-    _ = os.environ.pop("FLEXT_ENV", None)
-    _ = os.environ.pop("FLEXT_LOG_LEVEL", None)
-    _ = os.environ.pop("DBT_PROFILES_DIR", None)
-    _ = os.environ.pop("LDAP_TEST_MODE", None)
+    with (
+        tf().temporary_directory() as temp_dir,
+        u.Tests.env_vars_context({
+            "FLEXT_ENV": "test",
+            "FLEXT_LOG_LEVEL": "DEBUG",
+            "DBT_PROFILES_DIR": temp_dir,
+            "LDAP_TEST_MODE": "true",
+        }),
+    ):
+        yield
