@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
 from pathlib import Path
 
 from flext_cli import u
@@ -214,7 +213,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
 
     def _bookmark_now(self) -> str:
-        return datetime.now(UTC).strftime("%Y%m%d%H%M%SZ")
+        return u.generate_datetime_utc().strftime("%Y%m%d%H%M%SZ")
 
     def _build_incremental_filter(self, base_filter: str, bookmark: str | None) -> str:
         if bookmark is None:
