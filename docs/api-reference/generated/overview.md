@@ -9,7 +9,7 @@
 - Keywords: `data-transformation`, `dbt`, `enterprise`, `flext`, `sql`, `typed`
 - Main facades: _none_
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextDbtLdapConstantsSearch`, `FlextDbtLdapModelsDimensions`, `FlextDbtLdap`, `FlextDbtLdapModelsSchema`, `FlextDbtLdapSyncMixin`, `FlextDbtLdapUtilitiesEntry`, `FlextDbtLdapUtilities`, `FlextDbtLdapModelsShared`, `FlextDbtLdapModels`, `dbt_ldap` (+15 more)
+- Public symbol exports: `FlextDbtLdapTypes`, `FlextDbtLdapModelsDimensions`, `FlextDbtLdapModelsConfiguration`, `FlextDbtLdapConstantsAttributes`, `FlextDbtLdapModels`, `FlextDbtLdapUtilitiesClient`, `FlextDbtLdapConstantsSearch`, `FlextDbtLdapServiceBase`, `FlextDbtLdap`, `FlextDbtLdapUtilities` (+15 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `10`
 
