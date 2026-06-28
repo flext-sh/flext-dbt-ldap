@@ -12,19 +12,37 @@ from flext_core.lazy import (
 )
 
 if _t.TYPE_CHECKING:
-    from flext_tests import td, tf, tk, tm, tv
+    from flext_tests import td as td, tf as tf, tk as tk, tv as tv
 
-    from flext_dbt_ldap import d, e, h, r, x
-    from tests.base import TestsFlextDbtLdapServiceBase, s
-    from tests.constants import TestsFlextDbtLdapConstants, c
-    from tests.models import TestsFlextDbtLdapModels, m
-    from tests.protocols import TestsFlextDbtLdapProtocols, p
-    from tests.settings import TestsFlextDbtLdapSettings
-    from tests.typings import TestsFlextDbtLdapTypes, t
-    from tests.unit.test_constants_flat_api import TestsFlextDbtLdapConstantsFlatApi
-    from tests.unit.test_dbt_services_sync import TestsFlextDbtLdapServicesSync
-    from tests.unit.test_version import TestsFlextDbtLdapVersion
-    from tests.utilities import TestsFlextDbtLdapUtilities, u
+    from flext_dbt_ldap import d as d, e as e, h as h, r as r, x as x
+    from tests.base import (
+        TestsFlextDbtLdapServiceBase as TestsFlextDbtLdapServiceBase,
+        s as s,
+    )
+    from tests.constants import (
+        TestsFlextDbtLdapConstants as TestsFlextDbtLdapConstants,
+        c as c,
+    )
+    from tests.models import TestsFlextDbtLdapModels as TestsFlextDbtLdapModels, m as m
+    from tests.protocols import (
+        TestsFlextDbtLdapProtocols as TestsFlextDbtLdapProtocols,
+        p as p,
+    )
+    from tests.settings import TestsFlextDbtLdapSettings as TestsFlextDbtLdapSettings
+    from tests.typings import TestsFlextDbtLdapTypes as TestsFlextDbtLdapTypes, t as t
+    from tests.unit.test_constants_flat_api import (
+        TestsFlextDbtLdapConstantsFlatApi as TestsFlextDbtLdapConstantsFlatApi,
+    )
+    from tests.unit.test_dbt_services_sync import (
+        TestsFlextDbtLdapServicesSync as TestsFlextDbtLdapServicesSync,
+    )
+    from tests.unit.test_version import (
+        TestsFlextDbtLdapVersion as TestsFlextDbtLdapVersion,
+    )
+    from tests.utilities import (
+        TestsFlextDbtLdapUtilities as TestsFlextDbtLdapUtilities,
+        u as u,
+    )
 _LAZY_IMPORTS = merge_lazy_imports(
     (
         ".e2e",
@@ -71,7 +89,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "td",
                 "tf",
                 "tk",
-                "tm",
                 "tv",
             ),
         },
@@ -124,7 +141,6 @@ __all__: list[str] = [
     "td",
     "tf",
     "tk",
-    "tm",
     "tv",
     "u",
     "x",
