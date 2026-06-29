@@ -15,9 +15,11 @@ from collections.abc import (
 from unittest.mock import Mock
 
 import pytest
+from flext_tests import tf
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import t, tf, u
+from tests.typings import t
+from tests.utilities import u
 
 type _SyncState = t.MutableMappingKV[str, str] | None
 type _ServiceFactory = Callable[

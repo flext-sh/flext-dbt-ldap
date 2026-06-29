@@ -10,8 +10,31 @@ _LAZY_IMPORTS = build_lazy_import_map(
         ".test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
         ".test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
         ".test_version": ("TestsFlextDbtLdapVersion",),
+        "flext_tests": (
+            "c",
+            "d",
+            "e",
+            "h",
+            "m",
+            "p",
+            "r",
+            "s",
+            "t",
+            "td",
+            "tf",
+            "tk",
+            "tm",
+            "tv",
+            "u",
+            "x",
+        ),
     },
 )
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    publish_all=False,
+)
