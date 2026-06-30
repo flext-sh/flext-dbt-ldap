@@ -11,12 +11,7 @@ _LOCAL_LAZY_IMPORTS = {
 }
 
 FLEXT_DBT_LDAP_LAZY_IMPORTS = merge_lazy_imports(
-    (
-        "._constants",
-        "._models",
-        "._utilities",
-        ".services",
-    ),
+    (".services",),
     _LOCAL_LAZY_IMPORTS,
     exclude_names=(
         "cleanup_submodule_namespace",
