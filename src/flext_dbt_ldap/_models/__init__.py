@@ -3,8 +3,26 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
+if TYPE_CHECKING:
+    from flext_dbt_ldap._models.configuration import (
+        FlextDbtLdapModelsConfiguration as FlextDbtLdapModelsConfiguration,
+    )
+    from flext_dbt_ldap._models.dimensions import (
+        FlextDbtLdapModelsDimensions as FlextDbtLdapModelsDimensions,
+    )
+    from flext_dbt_ldap._models.results import (
+        FlextDbtLdapModelsResults as FlextDbtLdapModelsResults,
+    )
+    from flext_dbt_ldap._models.schema import (
+        FlextDbtLdapModelsSchema as FlextDbtLdapModelsSchema,
+    )
+    from flext_dbt_ldap._models.shared import (
+        FlextDbtLdapModelsShared as FlextDbtLdapModelsShared,
+    )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
         ".configuration": ("FlextDbtLdapModelsConfiguration",),
@@ -16,4 +34,9 @@ _LAZY_IMPORTS = build_lazy_import_map(
 )
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    publish_all=False,
+)

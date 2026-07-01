@@ -6,10 +6,14 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
-from flext_tests import tm
+from flext_tests import r, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, p, r, t, u
+from tests.constants import c
+from tests.models import m
+from tests.protocols import p
+from tests.typings import t
+from tests.utilities import u
 
 type _SyncState = t.MutableMappingKV[str, str] | None
 type _SyncFactory = Callable[[Path, _SyncState], t.Pair[FlextDbtLdap, Path]]

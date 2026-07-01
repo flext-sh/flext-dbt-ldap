@@ -12,7 +12,8 @@ from collections.abc import (
     Callable,
 )
 
-from flext_dbt_ldap import FlextDbtLdapUtilitiesEntry, c, m, t
+from flext_dbt_ldap import c, m, t
+from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
