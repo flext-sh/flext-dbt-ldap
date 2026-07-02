@@ -8,10 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import pathlib
-from collections.abc import (
-    Callable,
-    Generator,
-)
+from collections.abc import Generator
 from unittest.mock import Mock
 
 import pytest
@@ -21,12 +18,6 @@ from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests.typings import t
 from tests.utilities import u
 
-type _SyncState = t.MutableMappingKV[str, str] | None
-type _ServiceFactory = Callable[
-    [pathlib.Path, _SyncState],
-    t.Pair[FlextDbtLdap, pathlib.Path],
-]
-
 
 def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.JsonValue:
     return Mock()
@@ -35,7 +26,7 @@ def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.JsonValue:
 @pytest.fixture
 def dbt_ldap_service_factory(
     monkeypatch: pytest.MonkeyPatch,
-) -> _ServiceFactory:
+) -> t.DbtLdap.Tests.ServiceFactory:
     """Build a real public facade instance with isolated sync-state storage."""
     monkeypatch.setattr(
         FlextDbtLdap,
@@ -45,7 +36,7 @@ def dbt_ldap_service_factory(
 
     def factory(
         dbt_project_dir: pathlib.Path,
-        initial_state: _SyncState = None,
+        initial_state: t.DbtLdap.Tests.SyncState = None,
     ) -> t.Pair[FlextDbtLdap, pathlib.Path]:
         settings = FlextDbtLdapSettings.model_validate({
             "ldap_base_dn": "dc=example,dc=com",

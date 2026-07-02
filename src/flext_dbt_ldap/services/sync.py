@@ -11,13 +11,13 @@ from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
 logger = u.fetch_logger(__name__)
 
 
-def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:
-    empty_bookmarks: t.MutableMappingKV[str, str] = {}
-    return empty_bookmarks
-
-
 class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     """Warehouse sync mixin for dbt-ldap service facades."""
+
+    @staticmethod
+    def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:
+        empty_bookmarks: t.MutableMappingKV[str, str] = {}
+        return empty_bookmarks
 
     _sync_state_file: Path = u.PrivateAttr()
     _sync_bookmarks: t.MutableStrMapping = u.PrivateAttr(

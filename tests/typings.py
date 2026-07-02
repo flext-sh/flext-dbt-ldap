@@ -9,9 +9,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from pathlib import Path
+
 from flext_tests import FlextTestsTypes
 
-from flext_dbt_ldap import FlextDbtLdapTypes
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapTypes
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
@@ -22,6 +25,12 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
 
         class Tests:
             """Internal tests declarations."""
+
+            type SyncState = FlextDbtLdapTypes.MutableMappingKV[str, str] | None
+            type ServiceFactory = Callable[
+                [Path, SyncState],
+                FlextDbtLdapTypes.Pair[FlextDbtLdap, Path],
+            ]
 
 
 t = TestsFlextDbtLdapTypes
