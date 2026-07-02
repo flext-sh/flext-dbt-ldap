@@ -8,9 +8,6 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._utilities.client import (
-        FlextDbtLdapUtilitiesClient as FlextDbtLdapUtilitiesClient,
-    )
     from flext_dbt_ldap._utilities.entry import (
         FlextDbtLdapUtilitiesEntry as FlextDbtLdapUtilitiesEntry,
     )
@@ -20,16 +17,11 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._utilities.macros import (
         FlextDbtLdapUtilitiesMacros as FlextDbtLdapUtilitiesMacros,
     )
-    from flext_dbt_ldap._utilities.sync import (
-        FlextDbtLdapUtilitiesSync as FlextDbtLdapUtilitiesSync,
-    )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
-        ".client": ("FlextDbtLdapUtilitiesClient",),
         ".entry": ("FlextDbtLdapUtilitiesEntry",),
         ".integration": ("FlextDbtLdapUtilitiesIntegration",),
         ".macros": ("FlextDbtLdapUtilitiesMacros",),
-        ".sync": ("FlextDbtLdapUtilitiesSync",),
     },
 )
 
