@@ -25,31 +25,39 @@ if TYPE_CHECKING:
         x as x,
     )
 
-    from tests.base import (
+    from flext_dbt_ldap.tests.base import (
         TestsFlextDbtLdapServiceBase as TestsFlextDbtLdapServiceBase,
         s as s,
     )
-    from tests.constants import (
+    from flext_dbt_ldap.tests.constants import (
         TestsFlextDbtLdapConstants as TestsFlextDbtLdapConstants,
         c as c,
     )
-    from tests.models import TestsFlextDbtLdapModels as TestsFlextDbtLdapModels, m as m
-    from tests.protocols import (
+    from flext_dbt_ldap.tests.models import (
+        TestsFlextDbtLdapModels as TestsFlextDbtLdapModels,
+        m as m,
+    )
+    from flext_dbt_ldap.tests.protocols import (
         TestsFlextDbtLdapProtocols as TestsFlextDbtLdapProtocols,
         p as p,
     )
-    from tests.settings import TestsFlextDbtLdapSettings as TestsFlextDbtLdapSettings
-    from tests.typings import TestsFlextDbtLdapTypes as TestsFlextDbtLdapTypes, t as t
-    from tests.unit.test_constants_flat_api import (
+    from flext_dbt_ldap.tests.settings import (
+        TestsFlextDbtLdapSettings as TestsFlextDbtLdapSettings,
+    )
+    from flext_dbt_ldap.tests.typings import (
+        TestsFlextDbtLdapTypes as TestsFlextDbtLdapTypes,
+        t as t,
+    )
+    from flext_dbt_ldap.tests.unit.test_constants_flat_api import (
         TestsFlextDbtLdapConstantsFlatApi as TestsFlextDbtLdapConstantsFlatApi,
     )
-    from tests.unit.test_dbt_services_sync import (
+    from flext_dbt_ldap.tests.unit.test_dbt_services_sync import (
         TestsFlextDbtLdapServicesSync as TestsFlextDbtLdapServicesSync,
     )
-    from tests.unit.test_version import (
+    from flext_dbt_ldap.tests.unit.test_version import (
         TestsFlextDbtLdapVersion as TestsFlextDbtLdapVersion,
     )
-    from tests.utilities import (
+    from flext_dbt_ldap.tests.utilities import (
         TestsFlextDbtLdapUtilities as TestsFlextDbtLdapUtilities,
         u as u,
     )
