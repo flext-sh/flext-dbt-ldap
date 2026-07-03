@@ -1,0 +1,45 @@
+"""FlextDbtLdapConstantsTransformation - DBT transformation constants.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
+from __future__ import annotations
+
+from typing import ClassVar, Final
+
+from flext_dbt_ldap import t
+from flext_meltano import c
+
+
+class FlextDbtLdapConstantsTransformation:
+    """DBT-specific transformation configuration constants."""
+
+    STG_USERS: Final[str] = "stg_users"
+    DIM_USERS: Final[str] = "dim_users"
+    STG_GROUPS: Final[str] = "stg_groups"
+    DIM_GROUPS: Final[str] = "dim_groups"
+    FACT_MEMBERSHIPS: Final[str] = "fact_memberships"
+
+    TIMESTAMP: Final[str] = "timestamp"
+    INTEGER: Final[str] = "integer"
+    TEXT: Final[str] = "text"
+
+    DIRECT: Final[str] = "direct"
+    OPERATIONAL: Final[str] = "operational"
+
+    DEFAULT_BATCH_SIZE: Final[int] = c.DEFAULT_SIZE
+    MAX_BATCH_SIZE: Final[int] = c.MAX_ITEMS
+
+    DEFAULT_PROFILES_DIR: Final[str] = "./profiles"
+    DEFAULT_TARGET: Final[str] = "dev"
+    DEFAULT_MODEL_PATHS: ClassVar[t.VariadicTuple[str]] = ("models",)
+    DEFAULT_ANALYSIS_PATHS: ClassVar[t.VariadicTuple[str]] = ("analyses",)
+    DEFAULT_TEST_PATHS: ClassVar[t.VariadicTuple[str]] = ("tests",)
+    DEFAULT_SEED_PATHS: ClassVar[t.VariadicTuple[str]] = ("seeds",)
+    DEFAULT_MACRO_PATHS: ClassVar[t.VariadicTuple[str]] = ("macros",)
+    DEFAULT_SNAPSHOT_PATHS: ClassVar[t.VariadicTuple[str]] = ("snapshots",)
+    DEFAULT_CLEAN_TARGETS: ClassVar[t.VariadicTuple[str]] = (
+        c.Meltano.PREFIX_TARGET,
+        "dbt_packages",
+    )

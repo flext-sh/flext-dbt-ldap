@@ -7,74 +7,74 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, ClassVar
 
-from flext_core import FlextLogger, FlextSettings
-from pydantic import Field, SecretStr
-
-logger = FlextLogger(__name__)
+from flext_dbt_ldap import c, m, t, u
+from flext_meltano import FlextMeltanoSettings
 
 
-class FlextDbtLdapSettings(FlextSettings):
+class FlextDbtLdapSettings(FlextMeltanoSettings):
     """Runtime settings for DBT LDAP transformations."""
 
+    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
+        env_prefix="FLEXT_DBT_LDAP_", extra="ignore"
+    )
+
     # LDAP connection settings
-    ldap_host: Annotated[
-        str, Field(default="localhost", description="LDAP server hostname")
-    ]
-    ldap_port: Annotated[int, Field(default=389, description="LDAP server port")]
+    ldap_host: Annotated[str, u.Field(description="LDAP server hostname")] = c.LOCALHOST
+    ldap_port: Annotated[int, u.Field(description="LDAP server port")] = c.Ldap.PORT
     ldap_use_tls: Annotated[
-        bool, Field(default=False, description="Use TLS for LDAP connection")
-    ]
+        bool,
+        u.Field(
+            description="Use TLS for LDAP connection",
+        ),
+    ] = c.Ldap.DEFAULT_USE_TLS
     ldap_bind_dn: Annotated[
-        SecretStr | None,
-        Field(default=None, description="LDAP bind DN for authentication"),
-    ]
+        t.SecretStr | None, u.Field(description="LDAP bind DN for authentication")
+    ] = None
     ldap_bind_password: Annotated[
-        SecretStr | None, Field(default=None, description="LDAP bind password")
-    ]
+        t.SecretStr | None, u.Field(description="LDAP bind password")
+    ] = None
     ldap_base_dn: Annotated[
-        str, Field(default="dc=example,dc=com", description="LDAP base DN for searches")
-    ]
+        str,
+        u.Field(
+            description="LDAP base DN for searches",
+        ),
+    ] = c.Ldap.EXAMPLE_BASE_DN
 
     # DBT project settings
     dbt_project_dir: Annotated[
-        str, Field(default=".", description="Path to DBT project directory")
-    ]
+        str, u.Field(description="Path to DBT project directory")
+    ] = "."
 
     # Data quality settings
     min_quality_threshold: Annotated[
         float,
-        Field(
-            default=0.8,
+        u.Field(
             ge=0.0,
             le=1.0,
             description="Minimum data quality score threshold",
         ),
-    ]
+    ] = c.DbtLdap.DEFAULT_QUALITY_THRESHOLD
     required_attributes: Annotated[
-        list[str],
-        Field(
-            default_factory=list, description="Required LDAP attributes for validation"
+        t.StrSequence,
+        u.Field(
+            description="Required LDAP attributes for validation",
         ),
-    ]
+    ] = u.Field(default_factory=list)
 
     # Attribute mapping
     ldap_attribute_mapping: Annotated[
-        dict[str, str],
-        Field(
-            default_factory=dict,
+        t.StrMapping,
+        u.Field(
             description="Mapping of LDAP attributes to DBT model attributes",
         ),
-    ]
+    ] = u.Field(default_factory=dict)
 
     # Schema mapping
     ldap_schema_mapping: Annotated[
-        dict[str, str],
-        Field(
-            default_factory=dict, description="Mapping of LDAP schemas to DBT tables"
+        t.StrMapping,
+        u.Field(
+            description="Mapping of LDAP schemas to DBT tables",
         ),
-    ]
-
-
-__all__: list[str] = ["FlextDbtLdapSettings"]
+    ] = u.Field(default_factory=dict)

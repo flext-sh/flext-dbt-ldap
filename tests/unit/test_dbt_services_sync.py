@@ -1,45 +1,165 @@
-"""Tests for DbtLdapService sync methods.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
-"""
+"""Behavior contract for FlextDbtLdap sync methods — public API only."""
 
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import Mock
 
-from flext_core import r
-from pydantic import TypeAdapter
+import pytest
+from flext_tests import r, tm
 
-from flext_dbt_ldap.dbt_services import FlextDbtLdapService
-from flext_dbt_ldap.models import m
-from flext_dbt_ldap.settings import FlextDbtLdapSettings
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
+from tests.constants import c
+from tests.models import m
+from tests.protocols import p
+from tests.typings import t
+from tests.utilities import u
 
-_BOOKMARKS_ADAPTER: TypeAdapter[dict[str, str]] = TypeAdapter(dict[str, str])
 
+class TestsFlextDbtLdapServicesSync:
+    """Behavior contract for FlextDbtLdap sync_users/sync_groups/run_dbt_models."""
 
-def test_sync_users_uses_incremental_bookmark_and_persists_state(
-    tmp_path: Path,
-) -> None:
-    state_file = tmp_path / "sync-state.json"
-    state_file.write_bytes(_BOOKMARKS_ADAPTER.dump_json({"users": "20250101000000Z"}))
-    service = object.__new__(FlextDbtLdapService)
-    service.config = FlextDbtLdapSettings(ldap_base_dn="dc=example,dc=com")
-    service.client = Mock()
-    service.client.run_full_pipeline.return_value = r[m.DbtLdapPipelineResult].ok(
-        m.DbtLdapPipelineResult(extracted_entries=1)
-    )
-    service._sync_state_file = state_file
-    service._sync_bookmarks = service._load_sync_state()
-    service._bookmark_now = lambda: "20260101000000Z"
-    result = service.sync_users_to_warehouse(incremental=True)
-    assert result.is_success
-    call_kwargs = service.client.run_full_pipeline.call_args.kwargs
-    assert (
-        call_kwargs["search_filter"]
-        == "(&(objectClass=person)(modifyTimestamp>=20250101000000Z))"
-    )
-    persisted_state = _BOOKMARKS_ADAPTER.validate_json(state_file.read_bytes())
-    assert persisted_state["users"] == "20260101000000Z"
+    @staticmethod
+    def _read_sync_state(state_file: Path) -> t.JsonMapping:
+        read_result = u.Cli.json_read(state_file)
+        if read_result.failure:
+            pytest.fail(read_result.error or "Failed to read sync state")
+        payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
+            read_result.value or {}
+        )
+        return payload
+
+    @classmethod
+    def _read_bookmark(cls, state_file: Path, sync_key: str) -> str:
+        value = cls._read_sync_state(state_file)[sync_key]
+        return str(value)
+
+    @staticmethod
+    def _install_successful_pipeline_stub(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> t.MutableMappingKV[str, str | t.StrSequence | None]:
+        call_kwargs: t.MutableMappingKV[str, str | t.StrSequence | None] = {}
+
+        def fake_run_full_pipeline(
+            _self: FlextDbtLdap,
+            *,
+            search_base: str | None = None,
+            search_filter: str,
+            attributes: t.StrSequence | None = None,
+            model_names: t.StrSequence | None = None,
+        ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
+            call_kwargs.update({
+                "search_base": search_base,
+                "search_filter": search_filter,
+                "attributes": attributes,
+                "model_names": model_names,
+            })
+            return r[m.DbtLdap.DbtLdapPipelineResult](
+                value=m.DbtLdap.DbtLdapPipelineResult(extracted_entries=1),
+                success=True,
+            )
+
+        monkeypatch.setattr(FlextDbtLdap, "run_full_pipeline", fake_run_full_pipeline)
+        return call_kwargs
+
+    def test_sync_users_applies_incremental_bookmark_and_persists_new_state(
+        self,
+        tmp_path: Path,
+        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        service, state_file = dbt_ldap_service_factory(
+            tmp_path,
+            {"users": "20250101000000Z"},
+        )
+        call_kwargs = self._install_successful_pipeline_stub(monkeypatch)
+        result = service.sync_users_to_warehouse(incremental=True)
+        tm.ok(result)
+        tm.that(
+            call_kwargs["search_filter"],
+            eq="(&(objectClass=person)(modifyTimestamp>=20250101000000Z))",
+        )
+        persisted = self._read_bookmark(state_file, "users")
+        tm.that(persisted.endswith("Z"), eq=True)
+        tm.that(persisted, gt="20250101000000Z")
+
+    def test_sync_groups_applies_incremental_bookmark_and_persists_new_state(
+        self,
+        tmp_path: Path,
+        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        service, state_file = dbt_ldap_service_factory(
+            tmp_path,
+            {"groups": "20250101000000Z"},
+        )
+        call_kwargs = self._install_successful_pipeline_stub(monkeypatch)
+        result = service.sync_groups_to_warehouse(incremental=True)
+        tm.ok(result)
+        tm.that(
+            call_kwargs["search_filter"],
+            eq=f"(&{c.DbtLdap.FILTER_GROUP}(modifyTimestamp>=20250101000000Z))",
+        )
+        persisted = self._read_bookmark(state_file, "groups")
+        tm.that(persisted.endswith("Z"), eq=True)
+        tm.that(persisted, gt="20250101000000Z")
+
+    def test_sync_users_fails_when_state_persistence_raises(
+        self,
+        tmp_path: Path,
+        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        service, state_file = dbt_ldap_service_factory(tmp_path, None)
+        _ = self._install_successful_pipeline_stub(monkeypatch)
+
+        def fake_json_write(
+            path: Path,
+            payload: t.JsonPayload,
+            options: m.Cli.JsonWriteOptions | None = None,
+        ) -> p.Result[bool]:
+            _ = (path, payload, options)
+            return r[bool].fail("json_write: disk full")
+
+        monkeypatch.setattr(u.Cli, "json_write", fake_json_write)
+
+        result = service.sync_users_to_warehouse(incremental=True)
+        tm.fail(result)
+        tm.that(result.error, eq="json_write: disk full")
+        tm.that(state_file.exists(), eq=False)
+
+    def test_service_init_rejects_non_string_sync_state_values(
+        self,
+        tmp_path: Path,
+        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+    ) -> None:
+        _ = dbt_ldap_service_factory
+        state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
+        state_file.write_text('{"users": 1}\n', encoding=c.Cli.ENCODING_DEFAULT)
+        settings = FlextDbtLdapSettings.model_validate({
+            "ldap_base_dn": "dc=example,dc=com",
+            "dbt_project_dir": str(tmp_path),
+        })
+
+        with pytest.raises(TypeError, match="Sync state file values must be strings"):
+            _ = FlextDbtLdap(settings=settings)
+
+    def test_run_dbt_models_propagates_underlying_run_models_failure(
+        self,
+        tmp_path: Path,
+        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        service, _ = dbt_ldap_service_factory(tmp_path, None)
+
+        def fake_run_models(
+            _self: FlextDbtLdap,
+            models: t.StrSequence | None = None,
+        ) -> p.Result[str]:
+            _ = models
+            return r[str].fail("dbt failed")
+
+        monkeypatch.setattr(FlextDbtLdap, "run_models", fake_run_models)
+
+        result = service.run_dbt_models([c.DbtLdap.DIM_USERS])
+        tm.fail(result)
+        tm.that(result.error, eq="dbt failed")
