@@ -39,7 +39,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @property
     @override
     def settings(self) -> FlextDbtLdapSettings:
-        """Return the typed dbt-ldap settings namespace."""
+        """The typed dbt-ldap settings namespace."""
         return FlextDbtLdapSettings.fetch_global()
 
     @property
