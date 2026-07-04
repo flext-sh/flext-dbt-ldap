@@ -45,7 +45,10 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         attributes: t.StrSequence | None = None,
     ) -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
         """Extract LDAP entries for DBT processing."""
-        def _run_extract_ldap_entries() -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
+
+        def _run_extract_ldap_entries() -> p.Result[
+            t.SequenceOf[t.Ldap.OperationAttributes]
+        ]:
             logger.info(
                 "Extracting LDAP entries: base=%s, filter=%s",
                 search_base or self.settings.ldap_base_dn,
@@ -68,6 +71,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
                     result.error,
                 )
             return result
+
         try:
             return _run_extract_ldap_entries()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -117,6 +121,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Transform LDAP data using DBT models."""
+
         def _run_transform_with_dbt() -> p.Result[m.DbtLdap.DbtRunStatus]:
             run_result = self._run_selected_models(model_names)
             if run_result.failure:
@@ -136,6 +141,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             )
             logger.info("DBT transformation completed successfully")
             return r[m.DbtLdap.DbtRunStatus].ok(result_data)
+
         try:
             return _run_transform_with_dbt()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -160,6 +166,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         entries: t.SequenceOf[t.Ldap.OperationAttributes],
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate LDAP data quality for DBT processing."""
+
         def _run_validate_ldap_data() -> p.Result[m.DbtLdap.ValidationMetrics]:
             logger.info("Validating %d LDAP entries for data quality", len(entries))
             required_attributes = self.settings.required_attributes
@@ -188,6 +195,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
                     f"Data quality below threshold: {quality_score} < {self.settings.min_quality_threshold}",
                 )
             return r[m.DbtLdap.ValidationMetrics].ok(metrics)
+
         try:
             return _run_validate_ldap_data()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -261,7 +269,10 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         attributes: t.StrSequence | None,
     ) -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
         """Synchronously perform LDAP search using flext-ldap API."""
-        def _run__search_entries_sync() -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
+
+        def _run__search_entries_sync() -> p.Result[
+            t.SequenceOf[t.Ldap.OperationAttributes]
+        ]:
             search_options = m.Ldap.SearchOptions(
                 base_dn=base_dn,
                 filter_str=search_filter,
@@ -279,6 +290,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail(
                 result.error or "Search returned no results",
             )
+
         try:
             return _run__search_entries_sync()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:

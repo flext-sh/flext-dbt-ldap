@@ -92,7 +92,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         incremental: bool = False,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse."""
-        def _run_sync_groups_to_warehouse() -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
+
+        def _run_sync_groups_to_warehouse() -> p.Result[
+            m.DbtLdap.DbtLdapPipelineResult
+        ]:
             bookmark = self._bookmark_now()
             group_filter = c.DbtLdap.FILTER_GROUP
             if self._should_run_incremental(
@@ -124,6 +127,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                         update_result.error or "Group sync state persistence failed",
                     )
             return result
+
         try:
             return _run_sync_groups_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
@@ -153,6 +157,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         incremental: bool = False,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse."""
+
         def _run_sync_users_to_warehouse() -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
             bookmark = self._bookmark_now()
             user_filter = c.DbtLdap.FILTER_USER
@@ -192,6 +197,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                         update_result.error or "User sync state persistence failed",
                     )
             return result
+
         try:
             return _run_sync_users_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
