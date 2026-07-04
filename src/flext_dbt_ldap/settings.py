@@ -17,7 +17,8 @@ class FlextDbtLdapSettings(FlextMeltanoSettings):
     """Runtime settings for DBT LDAP transformations."""
 
     model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
-        env_prefix="FLEXT_DBT_LDAP_", extra="ignore"
+        env_prefix="FLEXT_DBT_LDAP_",
+        extra="ignore",
     )
 
     # LDAP connection settings
@@ -30,10 +31,12 @@ class FlextDbtLdapSettings(FlextMeltanoSettings):
         ),
     ] = c.Ldap.DEFAULT_USE_TLS
     ldap_bind_dn: Annotated[
-        t.SecretStr | None, u.Field(description="LDAP bind DN for authentication")
+        t.SecretStr | None,
+        u.Field(description="LDAP bind DN for authentication"),
     ] = None
     ldap_bind_password: Annotated[
-        t.SecretStr | None, u.Field(description="LDAP bind password")
+        t.SecretStr | None,
+        u.Field(description="LDAP bind password"),
     ] = None
     ldap_base_dn: Annotated[
         str,
@@ -44,7 +47,8 @@ class FlextDbtLdapSettings(FlextMeltanoSettings):
 
     # DBT project settings
     dbt_project_dir: Annotated[
-        str, u.Field(description="Path to DBT project directory")
+        str,
+        u.Field(description="Path to DBT project directory"),
     ] = "."
 
     # Data quality settings

@@ -31,8 +31,10 @@ class FlextDbtLdapModelsShared:
             u.Field(description="Whether the directory record is active"),
         ] = True
         created_date: Annotated[
-            str | None, u.Field(description="Source creation timestamp")
+            str | None,
+            u.Field(description="Source creation timestamp"),
         ] = None
         modified_date: Annotated[
-            str | None, u.Field(description="Source modification timestamp")
+            str | None,
+            u.Field(description="Source modification timestamp"),
         ] = None

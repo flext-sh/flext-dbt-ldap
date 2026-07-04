@@ -147,7 +147,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"Membership sync error: {e}"
+                f"Membership sync error: {e}",
             )
 
     def sync_users_to_warehouse(
@@ -219,7 +219,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.ValidationMetrics].fail(
-                f"Data quality validation error: {e}"
+                f"Data quality validation error: {e}",
             )
 
     def _bookmark_now(self) -> str:

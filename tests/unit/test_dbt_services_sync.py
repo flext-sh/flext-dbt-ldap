@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 from flext_tests import r, tm
@@ -10,9 +10,13 @@ from flext_tests import r, tm
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests.constants import c
 from tests.models import m
-from tests.protocols import p
 from tests.typings import t
 from tests.utilities import u
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from tests.protocols import p
 
 
 class TestsFlextDbtLdapServicesSync:
@@ -24,7 +28,7 @@ class TestsFlextDbtLdapServicesSync:
         if read_result.failure:
             pytest.fail(read_result.error or "Failed to read sync state")
         payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
-            read_result.value or {}
+            read_result.value or {},
         )
         return payload
 

@@ -6,11 +6,15 @@ provide the generic LDAP and Meltano utility surfaces.
 
 from __future__ import annotations
 
-from flext_dbt_ldap import t
+from typing import TYPE_CHECKING
+
 from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
 from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import u
+
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapUtilities(u, FlextLdapUtilities):

@@ -8,14 +8,17 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Callable,
-)
+from typing import TYPE_CHECKING
 
 from flext_dbt_ldap import c, m, t
 from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
+
+if TYPE_CHECKING:
+    from collections.abc import (
+        Callable,
+    )
 
 
 class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
@@ -145,7 +148,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
                     str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
                 )
                 self._log.exception(
-                    "Failed to transform %s: %s", failure_label, entry_dn
+                    "Failed to transform %s: %s",
+                    failure_label,
+                    entry_dn,
                 )
         self._log.info("Transformed %d %s", len(dimensions), transform_label)
         return dimensions

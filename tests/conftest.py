@@ -7,16 +7,20 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import pathlib
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 from unittest.mock import Mock
 
 import pytest
 from flext_tests import tf
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests.typings import t
 from tests.utilities import u
+
+if TYPE_CHECKING:
+    import pathlib
+    from collections.abc import Generator
+
+    from tests.typings import t
 
 
 def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.JsonValue:

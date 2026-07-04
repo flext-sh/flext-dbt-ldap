@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from flext_dbt_ldap import c, m, p, r, t, u
 from flext_dbt_ldap.base import FlextDbtLdapServiceBase
-from flext_dbt_ldap.settings import FlextDbtLdapSettings
 from flext_ldap import (
     FlextLdap,
     FlextLdapSettings,
 )
+
+if TYPE_CHECKING:
+    from flext_dbt_ldap.settings import FlextDbtLdapSettings
 
 logger = u.fetch_logger(__name__)
 
@@ -110,7 +114,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
                 transform_result.error or "DBT transformation failed",
             )
         pipeline_result = m.DbtLdap.DbtLdapPipelineResult(
-            extracted_entries=len(entries)
+            extracted_entries=len(entries),
         )
         logger.info("Full LDAP-to-DBT pipeline completed successfully")
         return r[m.DbtLdap.DbtLdapPipelineResult].ok(pipeline_result)
@@ -228,7 +232,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
     ) -> bool:
         """Check if LDAP entry matches schema type."""
         object_classes: t.StrSequence = list(
-            entry.get(c.Ldap.AttributeName.OBJECT_CLASS, [])
+            entry.get(c.Ldap.AttributeName.OBJECT_CLASS, []),
         )
         schema_mapping: t.MappingKV[str, t.StrSequence] = {
             c.DbtLdap.USERS: c.DbtLdap.USERS_CLASSES,
@@ -244,7 +248,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
     ) -> t.MappingKV[str, t.SequenceOf[t.ConfigurationMapping]]:
         """Prepare LDAP entries for DBT processing."""
         prepared_data: t.MutableMappingKV[
-            str, t.SequenceOf[t.ConfigurationMapping]
+            str,
+            t.SequenceOf[t.ConfigurationMapping],
         ] = {}
         for schema_name, table_name in self.settings.ldap_schema_mapping.items():
             schema_entries = [

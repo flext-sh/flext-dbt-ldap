@@ -16,17 +16,20 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
         """Validation metrics for LDAP data quality."""
 
         total_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Total LDAP entries evaluated")
+            t.NonNegativeInt,
+            u.Field(description="Total LDAP entries evaluated"),
         ] = 0
         valid_dns: Annotated[
-            t.NonNegativeInt, u.Field(description="Entries with valid DNs")
+            t.NonNegativeInt,
+            u.Field(description="Entries with valid DNs"),
         ] = 0
         valid_entries: Annotated[
             t.NonNegativeInt,
             u.Field(description="Entries satisfying required attributes"),
         ] = 0
         quality_score: Annotated[
-            t.NonNegativeFloat, u.Field(description="Validation quality score")
+            t.NonNegativeFloat,
+            u.Field(description="Validation quality score"),
         ] = 0.0
         validation_passed: Annotated[
             bool,
@@ -37,13 +40,16 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
         """Status of a DBT transformation run."""
 
         status: Annotated[
-            str, u.Field(description="Lifecycle status for the DBT execution")
+            str,
+            u.Field(description="Lifecycle status for the DBT execution"),
         ] = c.Meltano.StreamStatus.PENDING
         models_run: Annotated[
-            t.StrSequence, u.Field(description="DBT models executed during the run")
+            t.StrSequence,
+            u.Field(description="DBT models executed during the run"),
         ] = u.Field(default_factory=tuple)
         entries_processed: Annotated[
-            t.NonNegativeInt, u.Field(description="LDAP entries processed by the run")
+            t.NonNegativeInt,
+            u.Field(description="LDAP entries processed by the run"),
         ] = 0
 
     class DbtLdapPipelineResult(m.Value):
@@ -66,23 +72,28 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
             u.Field(description="Number of successful sync components"),
         ] = 0
         total_components: Annotated[
-            t.NonNegativeInt, u.Field(description="Total sync components evaluated")
+            t.NonNegativeInt,
+            u.Field(description="Total sync components evaluated"),
         ] = 0
 
     class PerformanceAnalysis(m.Value):
         """Performance analysis metrics."""
 
         execution_time: Annotated[
-            t.NonNegativeFloat, u.Field(description="Execution time in seconds")
+            t.NonNegativeFloat,
+            u.Field(description="Execution time in seconds"),
         ] = 0.0
         rows_processed: Annotated[
-            t.NonNegativeInt, u.Field(description="Rows processed by the run")
+            t.NonNegativeInt,
+            u.Field(description="Rows processed by the run"),
         ] = 0
         memory_usage: Annotated[
-            t.NonNegativeFloat, u.Field(description="Peak memory usage in megabytes")
+            t.NonNegativeFloat,
+            u.Field(description="Peak memory usage in megabytes"),
         ] = 0.0
         recommendations: Annotated[
-            t.StrSequence, u.Field(description="Performance tuning recommendations")
+            t.StrSequence,
+            u.Field(description="Performance tuning recommendations"),
         ] = u.Field(default_factory=tuple)
 
     class ServiceStatus(m.Value):
@@ -95,7 +106,8 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
             c.DEFAULT_EMPTY_STRING
         )
         capabilities: Annotated[
-            t.StrSequence, u.Field(description="Supported public service capabilities")
+            t.StrSequence,
+            u.Field(description="Supported public service capabilities"),
         ] = u.Field(default_factory=tuple)
 
     class AnalyticsReport(m.Value):
@@ -105,5 +117,6 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
             c.DbtLdap.DEFAULT_REPORT_TYPE
         )
         generated_at: Annotated[
-            str, u.Field(description="Report generation timestamp")
+            str,
+            u.Field(description="Report generation timestamp"),
         ] = c.DEFAULT_EMPTY_STRING
