@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import contextlib
 from typing import TYPE_CHECKING
 from unittest.mock import Mock
 
@@ -18,9 +19,35 @@ from tests.utilities import u
 
 if TYPE_CHECKING:
     import pathlib
-    from collections.abc import Generator
 
     from tests.typings import t
+
+
+_env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.stash_key[
+    "flext_dbt_ldap_env_stack"
+]
+
+
+def pytest_runtest_setup(item: pytest.Item) -> None:
+    """Set per-test environment variables and temporary directory."""
+    stack = item.stash[_env_stack_key] = contextlib.ExitStack()
+    temp_dir = stack.enter_context(tf().temporary_directory())
+    stack.enter_context(
+        u.Tests.env_vars_context({
+            "FLEXT_ENV": "test",
+            "FLEXT_LOG_LEVEL": "DEBUG",
+            "DBT_PROFILES_DIR": temp_dir,
+            "LDAP_TEST_MODE": "true",
+        }),
+    )
+
+
+def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item | None) -> None:
+    """Clean up per-test environment."""
+    stack = item.stash.get(_env_stack_key, None)
+    if stack is not None:
+        stack.close()
+        del item.stash[_env_stack_key]
 
 
 def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.JsonValue:
@@ -53,18 +80,3 @@ def dbt_ldap_service_factory(
         return FlextDbtLdap(settings=settings), state_file
 
     return factory
-
-
-@pytest.fixture(autouse=True)
-def set_test_environment() -> Generator[None]:
-    """Set test environment variables."""
-    with (
-        tf().temporary_directory() as temp_dir,
-        u.Tests.env_vars_context({
-            "FLEXT_ENV": "test",
-            "FLEXT_LOG_LEVEL": "DEBUG",
-            "DBT_PROFILES_DIR": temp_dir,
-            "LDAP_TEST_MODE": "true",
-        }),
-    ):
-        yield
