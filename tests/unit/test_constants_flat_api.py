@@ -125,7 +125,10 @@ class TestsFlextDbtLdapConstantsFlatApi:
         first = m.DbtLdap.UserDimension.from_ldap_entry(entry)
         second = m.DbtLdap.UserDimension.from_ldap_entry(entry)
 
-        tm.that(first.model_dump(include=set(fields)), eq=second.model_dump(include=set(fields)))
+        tm.that(
+            first.model_dump(include=set(fields)),
+            eq=second.model_dump(include=set(fields)),
+        )
 
     # --- UserDimension validation contract ---------------------------------
 
