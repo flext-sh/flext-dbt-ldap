@@ -40,7 +40,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             bind_dn=ldap_bind_dn or "",
             bind_password=ldap_bind_password or "",
         )
-        return FlextLdap(settings_overrides=ldap_settings.model_dump())
+        return FlextLdap.with_settings(ldap_settings)
 
     def extract_ldap_entries(
         self,

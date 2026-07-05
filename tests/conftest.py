@@ -23,9 +23,7 @@ if TYPE_CHECKING:
     from tests.typings import t
 
 
-_env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.stash_key[
-    "flext_dbt_ldap_env_stack"
-]
+_env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 
 
 def pytest_runtest_setup(item: pytest.Item) -> None:

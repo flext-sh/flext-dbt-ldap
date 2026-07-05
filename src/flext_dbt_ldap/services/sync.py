@@ -223,7 +223,8 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
 
     def _bookmark_now(self) -> str:
-        return u.generate_datetime_utc().strftime("%Y%m%d%H%M%SZ")
+        bookmark: str = u.generate_datetime_utc().strftime("%Y%m%d%H%M%SZ")
+        return bookmark
 
     def _build_incremental_filter(self, base_filter: str, bookmark: str | None) -> str:
         if bookmark is None:

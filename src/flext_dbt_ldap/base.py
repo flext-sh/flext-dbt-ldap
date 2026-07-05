@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_dbt_ldap import FlextDbtLdapSettings, t
+from flext_dbt_ldap import FlextDbtLdapSettings, m, t
 from flext_meltano import FlextMeltanoDbtServiceBase, u
 
 
@@ -23,12 +23,6 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     Adds typed settings for the dbt-ldap domain.
     """
 
-    settings_type: Annotated[
-        type | None,
-        u.Field(
-            description="Settings class for DBT LDAP service initialization",
-        ),
-    ] = FlextDbtLdapSettings
     dbt_project_name: Annotated[
         t.NonEmptyStr,
         u.Field(
@@ -36,11 +30,17 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
         ),
     ] = "dbt-ldap"
 
+    @classmethod
+    def _runtime_bootstrap_options(cls) -> m.RuntimeBootstrapOptions:
+        """Return runtime bootstrap options for DBT LDAP services."""
+        return m.RuntimeBootstrapOptions(settings_type=FlextDbtLdapSettings)
+
     @property
     @override
     def settings(self) -> FlextDbtLdapSettings:
         """The typed dbt-ldap settings namespace."""
-        return FlextDbtLdapSettings.fetch_global()
+        settings: FlextDbtLdapSettings = FlextDbtLdapSettings.fetch_global()
+        return settings
 
     @property
     @override
