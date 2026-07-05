@@ -31,7 +31,9 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
 
     def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
         """Wire all mixin state."""
-        FlextMeltanoDbtServiceBase.__init__(self, settings=settings)
+        FlextMeltanoDbtServiceBase.__init__(self)
+        if settings is not None:
+            self.runtime_settings = settings
         object.__setattr__(self, "_ldap_api", self.create_ldap_api(self.settings))
         object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())
