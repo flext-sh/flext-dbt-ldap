@@ -8,15 +8,9 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._utilities.entry import (
-        FlextDbtLdapUtilitiesEntry as FlextDbtLdapUtilitiesEntry,
-    )
-    from flext_dbt_ldap._utilities.integration import (
-        FlextDbtLdapUtilitiesIntegration as FlextDbtLdapUtilitiesIntegration,
-    )
-    from flext_dbt_ldap._utilities.macros import (
-        FlextDbtLdapUtilitiesMacros as FlextDbtLdapUtilitiesMacros,
-    )
+    from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
+    from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
+    from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
 _LAZY_IMPORTS = build_lazy_import_map(
     {
         ".entry": ("FlextDbtLdapUtilitiesEntry",),
