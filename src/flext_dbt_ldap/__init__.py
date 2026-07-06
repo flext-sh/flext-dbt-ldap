@@ -22,7 +22,7 @@ from flext_dbt_ldap.__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap.api import FlextDbtLdap
+    from flext_dbt_ldap.api import FlextDbtLdap, dbt_ldap
     from flext_dbt_ldap.base import FlextDbtLdapServiceBase, s
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
     from flext_dbt_ldap.models import FlextDbtLdapModels, m
