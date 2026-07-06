@@ -22,17 +22,33 @@ from flext_dbt_ldap.__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap.api import FlextDbtLdap, dbt_ldap
-    from flext_dbt_ldap.base import FlextDbtLdapServiceBase, s
-    from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
-    from flext_dbt_ldap.models import FlextDbtLdapModels, m
-    from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
-    from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
-    from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
-    from flext_dbt_ldap.settings import FlextDbtLdapSettings
-    from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
-    from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
-    from flext_ldap import d, e, h, r, x
+    from flext_dbt_ldap.api import FlextDbtLdap as FlextDbtLdap, dbt_ldap as dbt_ldap
+    from flext_dbt_ldap.base import (
+        FlextDbtLdapServiceBase as FlextDbtLdapServiceBase,
+        s as s,
+    )
+    from flext_dbt_ldap.constants import (
+        FlextDbtLdapConstants as FlextDbtLdapConstants,
+        c as c,
+    )
+    from flext_dbt_ldap.models import FlextDbtLdapModels as FlextDbtLdapModels, m as m
+    from flext_dbt_ldap.protocols import (
+        FlextDbtLdapProtocols as FlextDbtLdapProtocols,
+        p as p,
+    )
+    from flext_dbt_ldap.services.client import (
+        FlextDbtLdapClientMixin as FlextDbtLdapClientMixin,
+    )
+    from flext_dbt_ldap.services.sync import (
+        FlextDbtLdapSyncMixin as FlextDbtLdapSyncMixin,
+    )
+    from flext_dbt_ldap.settings import FlextDbtLdapSettings as FlextDbtLdapSettings
+    from flext_dbt_ldap.typings import FlextDbtLdapTypes as FlextDbtLdapTypes, t as t
+    from flext_dbt_ldap.utilities import (
+        FlextDbtLdapUtilities as FlextDbtLdapUtilities,
+        u as u,
+    )
+    from flext_ldap import d as d, e as e, h as h, r as r, x as x
 _LAZY_IMPORTS = merge_lazy_imports(
     (".services",),
     build_lazy_import_map(
