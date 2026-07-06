@@ -20,7 +20,6 @@ from flext_dbt_ldap._exports import FLEXT_DBT_LDAP_LAZY_IMPORTS
 
 if TYPE_CHECKING:
     from flext_core._root_typing_parts import d as d, e as e, h as h, r as r, x as x
-    from flext_dbt_ldap import services as services
     from flext_dbt_ldap.api import FlextDbtLdap as FlextDbtLdap, dbt_ldap as dbt_ldap
     from flext_dbt_ldap.base import (
         FlextDbtLdapServiceBase as FlextDbtLdapServiceBase,
@@ -92,7 +91,6 @@ _PUBLIC_EXPORTS: tuple[str, ...] = (
     "p",
     "r",
     "s",
-    "services",
     "t",
     "u",
     "x",
@@ -126,7 +124,6 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
-    "services",
     "t",
     "u",
     "x",
