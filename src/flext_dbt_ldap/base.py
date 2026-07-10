@@ -13,7 +13,7 @@ from __future__ import annotations
 from typing import Annotated, override
 
 from flext_dbt_ldap import FlextDbtLdapSettings, m, t
-from flext_meltano import FlextMeltanoDbtServiceBase, u
+from flext_meltano import FlextMeltanoDbtServiceBase, p, u
 
 
 class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
@@ -38,24 +38,29 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @property
     @override
     def settings(self) -> FlextDbtLdapSettings:
-        """The typed dbt-ldap settings namespace."""
-        return settings
+        """Typed dbt-ldap settings from the INJECTED runtime (not the global)."""
+        # NOTE (multi-agent): mro-rn88 — narrow the runtime-injected settings so test
+        # overrides (e.g. dbt_project_dir) are honored; fall back to the typed global.
+        runtime_settings = super().settings
+        if isinstance(runtime_settings, FlextDbtLdapSettings):
+            return runtime_settings
+        return FlextDbtLdapSettings.fetch_global()
 
     @property
     @override
-    def connection_profile(self) -> t.JsonMapping:
-        """Dbt connection profile for LDAP."""
-        s = settings
-        return {
-            "type": "ldap",
-            "host": s.ldap_host,
-            "port": s.ldap_port,
-            "use_tls": s.ldap_use_tls,
-            "base_dn": s.ldap_base_dn,
-            "project": self.dbt_project_name,
-        }
+    def connection_profile(self) -> p.Meltano.DbtConnectionProfile:
+        """Dbt connection profile for LDAP-backed workflows."""
+        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings (runtime,
+        # not the global singleton); connection scalars from Ldap.*, base_dn from DbtLdap.
+        return m.DbtLdap.DbtConnectionProfile(
+            host=self.settings.Ldap.host,
+            port=self.settings.Ldap.port,
+            use_tls=self.settings.Ldap.use_tls,
+            base_dn=self.settings.DbtLdap.ldap_base_dn,
+            project=self.dbt_project_name,
+        )
 
 
 s = FlextDbtLdapServiceBase
 
-__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapServiceBase"]
+__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapServiceBase", "s"]

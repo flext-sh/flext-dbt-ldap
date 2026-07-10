@@ -15,6 +15,7 @@ from flext_dbt_ldap import (
     FlextDbtLdapSettings,
     p,
     r,
+    settings,
     t,
     u,
 )
@@ -31,8 +32,11 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
 
     def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
         """Wire all mixin state."""
-        FlextMeltanoDbtServiceBase.__init__(self, settings=settings)
-        object.__setattr__(self, "_ldap_api", self.create_ldap_api(settings))
+        # NOTE (multi-agent): mro-rn88 — resolve to the global settings singleton when no
+        # override is supplied so create_ldap_api always receives a concrete settings.
+        effective_settings = settings or FlextDbtLdapSettings.fetch_global()
+        FlextMeltanoDbtServiceBase.__init__(self, settings=effective_settings)
+        object.__setattr__(self, "_ldap_api", self.create_ldap_api(effective_settings))
         object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())

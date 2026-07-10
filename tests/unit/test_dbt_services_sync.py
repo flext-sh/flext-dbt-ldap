@@ -299,9 +299,12 @@ class TestsFlextDbtLdapServicesSync:
         _ = dbt_ldap_service_factory
         state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
         state_file.write_text('{"users": 1}\n', encoding=c.Cli.ENCODING_DEFAULT)
+        # NOTE (multi-agent): mro-rn88 — project fields nest under DbtLdap namespace.
         settings = FlextDbtLdapSettings.model_validate({
-            "ldap_base_dn": "dc=example,dc=com",
-            "dbt_project_dir": str(tmp_path),
+            "DbtLdap": {
+                "ldap_base_dn": "dc=example,dc=com",
+                "dbt_project_dir": str(tmp_path),
+            },
         })
 
         with pytest.raises(TypeError, match="Sync state file values must be strings"):

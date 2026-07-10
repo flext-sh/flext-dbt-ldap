@@ -14,11 +14,14 @@ from typing import TYPE_CHECKING, Annotated
 from pydantic import BaseModel, Field
 from pydantic_settings import SettingsConfigDict
 
+# NOTE (multi-agent): mro-rn88 — inherit FlextLdapSettings so LDAP connection scalars
+# come from settings.Ldap.* (SSOT); FlextMeltanoSettings adds the dbt/meltano surface.
+from flext_ldap import FlextLdapSettings
 from flext_meltano import FlextMeltanoSettings
 
 
-class FlextDbtLdapSettings(FlextMeltanoSettings):
-    """Runtime settings for DBT LDAP transformations; fields under ``settings.DbtLdap.*``."""
+class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
+    """DBT LDAP settings; connection via ``Ldap.*``, dbt knobs via ``DbtLdap.*``."""
 
     model_config = SettingsConfigDict(
         env_prefix="FLEXT_DBT_LDAP_",
@@ -27,30 +30,43 @@ class FlextDbtLdapSettings(FlextMeltanoSettings):
     )
 
     class _DbtLdap(BaseModel):
-        """Namespaced dbt-LDAP settings."""
+        """dbt-LDAP knobs only (LDAP connection lives in ``Ldap``)."""
 
-        ldap_host: Annotated[str, Field(default="localhost", description="LDAP server hostname")]
-        ldap_port: Annotated[int, Field(default=389, description="LDAP server port")]
-        ldap_use_tls: Annotated[bool, Field(default=False, description="Use TLS for LDAP connection")]
-        ldap_bind_dn: Annotated[str, Field(default="", description="LDAP bind DN for authentication")]
-        ldap_bind_password: Annotated[str, Field(default="", description="LDAP bind password")]
-        ldap_base_dn: Annotated[str, Field(default="dc=example,dc=com", description="LDAP base DN")]
-        dbt_project_dir: Annotated[str, Field(default=".", description="Path to DBT project directory")]
+        ldap_base_dn: Annotated[
+            str, Field(default="dc=example,dc=com", description="LDAP base DN")
+        ]
+        dbt_project_dir: Annotated[
+            str, Field(default=".", description="Path to DBT project directory")
+        ]
         min_quality_threshold: Annotated[
             float,
-            Field(default=0.8, ge=0.0, le=1.0, description="Minimum data quality score threshold"),
+            Field(
+                default=0.8,
+                ge=0.0,
+                le=1.0,
+                description="Minimum data quality score threshold",
+            ),
         ]
         required_attributes: Annotated[
             list[str],
-            Field(default_factory=list, description="Required LDAP attributes for validation"),
+            Field(
+                default_factory=list,
+                description="Required LDAP attributes for validation",
+            ),
         ]
         ldap_attribute_mapping: Annotated[
             dict[str, str],
-            Field(default_factory=dict, description="Mapping of LDAP attributes to DBT model attributes"),
+            Field(
+                default_factory=dict,
+                description="Mapping of LDAP attributes to DBT model attributes",
+            ),
         ]
         ldap_schema_mapping: Annotated[
             dict[str, str],
-            Field(default_factory=dict, description="Mapping of LDAP schemas to DBT tables"),
+            Field(
+                default_factory=dict,
+                description="Mapping of LDAP schemas to DBT tables",
+            ),
         ]
 
     if TYPE_CHECKING:

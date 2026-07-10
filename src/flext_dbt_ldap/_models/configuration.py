@@ -12,6 +12,21 @@ from flext_meltano import m, u
 class FlextDbtLdapModelsConfiguration:
     """Configuration-oriented dbt-ldap models."""
 
+    # NOTE (multi-agent): mro-rn88 ADR-006 thin-driver — typed connection_profile.
+    class DbtConnectionProfile(m.Value):
+        """Typed dbt LDAP connection profile (satisfies p.Meltano.DbtConnectionProfile)."""
+
+        type: Annotated[str, u.Field(description="Dbt adapter type identifier")] = (
+            "ldap"
+        )
+        host: Annotated[str, u.Field(description="LDAP server hostname")]
+        port: Annotated[int, u.Field(description="LDAP server port")]
+        use_tls: Annotated[bool, u.Field(description="Use TLS for LDAP connection")]
+        base_dn: Annotated[str, u.Field(description="LDAP base DN")]
+        project: Annotated[
+            str, u.Field(description="Dbt project name owning this profile")
+        ]
+
     class DbtProjectConfig(m.Value):
         """DBT project configuration."""
 

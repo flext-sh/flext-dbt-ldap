@@ -67,9 +67,13 @@ def dbt_ldap_service_factory(
         dbt_project_dir: pathlib.Path,
         initial_state: t.DbtLdap.Tests.SyncState = None,
     ) -> t.Pair[FlextDbtLdap, pathlib.Path]:
+        # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
+        # namespace; a flat dict is dropped by extra="ignore" (no isolation).
         settings = FlextDbtLdapSettings.model_validate({
-            "ldap_base_dn": "dc=example,dc=com",
-            "dbt_project_dir": str(dbt_project_dir),
+            "DbtLdap": {
+                "ldap_base_dn": "dc=example,dc=com",
+                "dbt_project_dir": str(dbt_project_dir),
+            },
         })
         state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
         if initial_state is not None:
