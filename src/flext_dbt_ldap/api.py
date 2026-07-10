@@ -32,7 +32,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
     def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
         """Wire all mixin state."""
         FlextMeltanoDbtServiceBase.__init__(self, settings=settings)
-        object.__setattr__(self, "_ldap_api", self.create_ldap_api(self.settings))
+        object.__setattr__(self, "_ldap_api", self.create_ldap_api(settings))
         object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
@@ -40,7 +40,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
     @override
     def execute(self) -> p.Result[t.JsonMapping]:
         """Execute DBT LDAP service — verify readiness."""
-        return r[t.JsonMapping].ok(self.settings.model_dump(exclude_none=True))
+        return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
 
 dbt_ldap = FlextDbtLdap

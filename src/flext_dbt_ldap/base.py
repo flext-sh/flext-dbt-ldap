@@ -39,14 +39,13 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @override
     def settings(self) -> FlextDbtLdapSettings:
         """The typed dbt-ldap settings namespace."""
-        settings: FlextDbtLdapSettings = FlextDbtLdapSettings.fetch_global()
         return settings
 
     @property
     @override
     def connection_profile(self) -> t.JsonMapping:
         """Dbt connection profile for LDAP."""
-        s = self.settings
+        s = settings
         return {
             "type": "ldap",
             "host": s.ldap_host,

@@ -42,7 +42,6 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.services.sync import (
         FlextDbtLdapSyncMixin as FlextDbtLdapSyncMixin,
     )
-    from flext_dbt_ldap.settings import FlextDbtLdapSettings as FlextDbtLdapSettings
     from flext_dbt_ldap.typings import FlextDbtLdapTypes as FlextDbtLdapTypes, t as t
     from flext_dbt_ldap.utilities import (
         FlextDbtLdapUtilities as FlextDbtLdapUtilities,
@@ -53,6 +52,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
     (".services",),
     build_lazy_import_map(
         {
+            "._settings": ("FlextDbtLdapSettings", "settings"),
             ".api": (
                 "FlextDbtLdap",
                 "dbt_ldap",
@@ -75,7 +75,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
             ),
             ".services.client": ("FlextDbtLdapClientMixin",),
             ".services.sync": ("FlextDbtLdapSyncMixin",),
-            ".settings": ("FlextDbtLdapSettings",),
             ".typings": (
                 "FlextDbtLdapTypes",
                 "t",
@@ -117,13 +116,14 @@ _LAZY_IMPORTS = merge_lazy_imports(
 
 
 __all__: tuple[str, ...] = (
+    "FlextDbtLdapSettings",
+    "settings",
     "FlextDbtLdap",
     "FlextDbtLdapClientMixin",
     "FlextDbtLdapConstants",
     "FlextDbtLdapModels",
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
-    "FlextDbtLdapSettings",
     "FlextDbtLdapSyncMixin",
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
