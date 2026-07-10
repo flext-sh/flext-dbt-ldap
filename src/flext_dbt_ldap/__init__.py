@@ -22,6 +22,10 @@ from flext_dbt_ldap.__version__ import (
 )
 
 if TYPE_CHECKING:
+    from flext_dbt_ldap._settings import (
+        FlextDbtLdapSettings as FlextDbtLdapSettings,
+        settings as settings,
+    )
     from flext_dbt_ldap.api import FlextDbtLdap as FlextDbtLdap, dbt_ldap as dbt_ldap
     from flext_dbt_ldap.base import (
         FlextDbtLdapServiceBase as FlextDbtLdapServiceBase,
