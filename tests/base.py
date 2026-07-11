@@ -6,19 +6,15 @@ from typing import override
 
 from flext_tests import s as tests_s
 
-from flext_dbt_ldap import m, settings
+from flext_dbt_ldap import m
 from tests.settings import TestsFlextDbtLdapSettings
 
 
 class TestsFlextDbtLdapServiceBase(tests_s):
     """DBT LDAP test service base with source and test settings namespaces."""
 
-    @classmethod
-    @override
-    def fetch_settings(cls) -> TestsFlextDbtLdapSettings:
-        """Return the typed DBT LDAP+Tests settings singleton."""
-        return settings
-
+    # NOTE (multi-agent): flext-tests owns fetch_settings; this project
+    # declares only its more-specific bootstrap settings type.
     @classmethod
     @override
     def _runtime_bootstrap_options(cls) -> m.RuntimeBootstrapOptions:
