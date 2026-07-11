@@ -207,7 +207,10 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
                 first_value = values_obj[0] if values_obj else ""
                 mapped_attrs[dbt_attr] = first_value
         for attr, values in entry.items():
-            if attr not in self.settings.DbtLdap.ldap_attribute_mapping and attr != dn_attr:
+            if (
+                attr not in self.settings.DbtLdap.ldap_attribute_mapping
+                and attr != dn_attr
+            ):
                 first_value = values[0] if values else ""
                 mapped_attrs[attr] = first_value
         return mapped_attrs
@@ -238,7 +241,10 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             str,
             t.SequenceOf[t.ConfigurationMapping],
         ] = {}
-        for schema_name, table_name in self.settings.DbtLdap.ldap_schema_mapping.items():
+        for (
+            schema_name,
+            table_name,
+        ) in self.settings.DbtLdap.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]
