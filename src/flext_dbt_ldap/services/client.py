@@ -266,7 +266,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         search_filter: str,
         attributes: t.StrSequence | None,
     ) -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
-        """Synchronously perform LDAP search using flext-ldap API."""
+        """Perform LDAP search synchronously using flext-ldap API."""
 
         def _run__search_entries_sync() -> p.Result[
             t.SequenceOf[t.Ldap.OperationAttributes]
