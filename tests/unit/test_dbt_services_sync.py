@@ -24,15 +24,12 @@ import pytest
 from flext_tests import r, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests.constants import c
-from tests.models import m
-from tests.typings import t
-from tests.utilities import u
+from tests import c, m, t, u
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from tests.protocols import p
+    from tests import p
 
 
 class TestsFlextDbtLdapServicesSync:

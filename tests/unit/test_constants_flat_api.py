@@ -13,8 +13,7 @@ import pytest
 from flext_tests import tm
 from pydantic import ValidationError
 
-from tests.constants import c
-from tests.models import m
+from tests import c, m
 
 type LdifEntry = m.Ldif.Entry
 

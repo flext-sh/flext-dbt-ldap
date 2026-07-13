@@ -15,12 +15,12 @@ import pytest
 from flext_tests import tf
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests.utilities import u
+from tests import u
 
 if TYPE_CHECKING:
     import pathlib
 
-    from tests.typings import t
+    from tests import t
 
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
