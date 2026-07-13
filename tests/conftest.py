@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 from unittest.mock import Mock
 
 import pytest
-from flext_tests import tf
+from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests import u
@@ -78,7 +78,7 @@ def dbt_ldap_service_factory(
         state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
         if initial_state is not None:
             write_result = u.Cli.json_write(state_file, initial_state)
-            assert write_result.success, write_result.error
+            tm.ok(write_result)
         return FlextDbtLdap(settings=settings), state_file
 
     return factory
