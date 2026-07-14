@@ -4,11 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from flext_cli import u
-from flext_dbt_ldap import c, m, p, r, t
+from flext_dbt_ldap import c, m, p, r, settings, t, u
 from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
-
-logger = u.fetch_logger(__name__)
 
 
 class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
