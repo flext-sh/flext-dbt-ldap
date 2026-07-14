@@ -9,14 +9,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol, runtime_checkable
+from contextlib import AbstractContextManager
+from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
 from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes, t
-
-if TYPE_CHECKING:
-    from contextlib import AbstractContextManager
 
 
 class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):

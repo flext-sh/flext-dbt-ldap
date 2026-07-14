@@ -17,19 +17,14 @@ returned ``r[T]`` outcome and the persisted state file.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
 from flext_tests import r, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, t, u
-
-if TYPE_CHECKING:
-    from pathlib import Path
-
-    from tests import p
+from tests import c, m, p, t, u
 
 
 class TestsFlextDbtLdapServicesSync:

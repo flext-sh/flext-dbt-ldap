@@ -260,8 +260,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
     def _resolve_sync_state_file(self) -> Path:
         return (
-            Path(self.settings.DbtLdap.dbt_project_dir)
-            / ".flext_dbt_ldap_sync_state.json"
+            Path(settings.DbtLdap.dbt_project_dir) / ".flext_dbt_ldap_sync_state.json"
         )
 
     def _should_run_incremental(

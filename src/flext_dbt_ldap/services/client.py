@@ -2,16 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from flext_dbt_ldap import c, m, p, r, t, u
+from flext_dbt_ldap._settings import FlextDbtLdapSettings
 from flext_dbt_ldap.base import FlextDbtLdapServiceBase
 from flext_ldap import (
     FlextLdap,
 )
-
-if TYPE_CHECKING:
-    from flext_dbt_ldap._settings import FlextDbtLdapSettings
 
 logger = u.fetch_logger(__name__)
 
@@ -41,11 +37,11 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         ]:
             logger.info(
                 "Extracting LDAP entries: base=%s, filter=%s",
-                search_base or self.settings.DbtLdap.ldap_base_dn,
+                search_base or settings.DbtLdap.ldap_base_dn,
                 search_filter,
             )
             result = self._search_entries_sync(
-                base_dn=search_base or self.settings.DbtLdap.ldap_base_dn,
+                base_dn=search_base or settings.DbtLdap.ldap_base_dn,
                 search_filter=search_filter,
                 attributes=attributes,
             )
@@ -159,7 +155,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         def _run_validate_ldap_data() -> p.Result[m.DbtLdap.ValidationMetrics]:
             logger.info("Validating %d LDAP entries for data quality", len(entries))
-            required_attributes = self.settings.DbtLdap.required_attributes
+            required_attributes = settings.DbtLdap.required_attributes
             total_entries = len(entries)
             valid_dns = 0
             valid_entries = 0
@@ -175,7 +171,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
                 valid_entries=valid_entries,
                 quality_score=round(quality_score, 3),
                 validation_passed=quality_score
-                >= self.settings.DbtLdap.min_quality_threshold,
+                >= settings.DbtLdap.min_quality_threshold,
             )
             logger.info(
                 "LDAP data validation completed: quality_score=%.3f",
@@ -183,7 +179,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             )
             if not metrics.validation_passed:
                 return r[m.DbtLdap.ValidationMetrics].fail(
-                    f"Data quality below threshold: {quality_score} < {self.settings.DbtLdap.min_quality_threshold}",
+                    f"Data quality below threshold: {quality_score} < {settings.DbtLdap.min_quality_threshold}",
                 )
             return r[m.DbtLdap.ValidationMetrics].ok(metrics)
 
@@ -201,16 +197,13 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         dn_attr = c.Ldap.AttributeName.DN
         dn_str = entry.get(dn_attr, [""])[0] if entry.get(dn_attr) else ""
         mapped_attrs: t.MutableConfigurationMapping = {dn_attr: dn_str}
-        for ldap_attr, dbt_attr in self.settings.DbtLdap.ldap_attribute_mapping.items():
+        for ldap_attr, dbt_attr in settings.DbtLdap.ldap_attribute_mapping.items():
             if ldap_attr in entry:
                 values_obj = entry[ldap_attr]
                 first_value = values_obj[0] if values_obj else ""
                 mapped_attrs[dbt_attr] = first_value
         for attr, values in entry.items():
-            if (
-                attr not in self.settings.DbtLdap.ldap_attribute_mapping
-                and attr != dn_attr
-            ):
+            if attr not in settings.DbtLdap.ldap_attribute_mapping and attr != dn_attr:
                 first_value = values[0] if values else ""
                 mapped_attrs[attr] = first_value
         return mapped_attrs
@@ -244,7 +237,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         for (
             schema_name,
             table_name,
-        ) in self.settings.DbtLdap.ldap_schema_mapping.items():
+        ) in settings.DbtLdap.ldap_schema_mapping.items():
             schema_entries = [
                 entry for entry in entries if self._matches_schema(entry, schema_name)
             ]

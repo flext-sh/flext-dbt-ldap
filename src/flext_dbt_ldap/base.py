@@ -37,26 +37,15 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @property
     @override
-    def settings(self) -> FlextDbtLdapSettings:
-        """Typed dbt-ldap settings from the INJECTED runtime (not the global)."""
-        # NOTE (multi-agent): mro-rn88 — narrow the runtime-injected settings so test
-        # overrides (e.g. dbt_project_dir) are honored; fall back to the typed global.
-        runtime_settings = super().settings
-        if isinstance(runtime_settings, FlextDbtLdapSettings):
-            return runtime_settings
-        return FlextDbtLdapSettings.fetch_global()
-
-    @property
-    @override
     def connection_profile(self) -> p.Meltano.DbtConnectionProfile:
         """Dbt connection profile for LDAP-backed workflows."""
-        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings (runtime,
+        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via settings (runtime,
         # not the global singleton); connection scalars from Ldap.*, base_dn from DbtLdap.
         return m.DbtLdap.DbtConnectionProfile(
-            host=self.settings.Ldap.host,
-            port=self.settings.Ldap.port,
-            use_tls=self.settings.Ldap.use_tls,
-            base_dn=self.settings.DbtLdap.ldap_base_dn,
+            host=settings.Ldap.host,
+            port=settings.Ldap.port,
+            use_tls=settings.Ldap.use_tls,
+            base_dn=settings.DbtLdap.ldap_base_dn,
             project=self.dbt_project_name,
         )
 
