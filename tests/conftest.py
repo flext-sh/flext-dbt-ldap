@@ -8,20 +8,14 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import contextlib
-from typing import TYPE_CHECKING
+import pathlib
 from unittest.mock import Mock
 
 import pytest
-from flext_tests import tf
+from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import u
-
-if TYPE_CHECKING:
-    import pathlib
-
-    from tests import t
-
+from tests import t, u
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 
@@ -78,7 +72,7 @@ def dbt_ldap_service_factory(
         state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
         if initial_state is not None:
             write_result = u.Cli.json_write(state_file, initial_state)
-            assert write_result.success, write_result.error
+            tm.ok(write_result)
         return FlextDbtLdap(settings=settings), state_file
 
     return factory
