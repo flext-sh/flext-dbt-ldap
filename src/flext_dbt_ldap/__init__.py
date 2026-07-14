@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.models import FlextDbtLdapModels as FlextDbtLdapModels, m as m
     from flext_dbt_ldap.protocols import (
         FlextDbtLdapProtocols as FlextDbtLdapProtocols,
-        p as p,
+        p,
     )
     from flext_dbt_ldap.services.client import (
         FlextDbtLdapClientMixin as FlextDbtLdapClientMixin,
@@ -49,7 +49,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.typings import FlextDbtLdapTypes as FlextDbtLdapTypes, t as t
     from flext_dbt_ldap.utilities import (
         FlextDbtLdapUtilities as FlextDbtLdapUtilities,
-        u as u,
+        u,
     )
     from flext_ldap import d as d, e as e, h as h, r as r, x as x
 _LAZY_IMPORTS = merge_lazy_imports(
