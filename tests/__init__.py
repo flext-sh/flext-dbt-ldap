@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from tests.models import TestsFlextDbtLdapModels as TestsFlextDbtLdapModels, m as m
     from tests.protocols import (
         TestsFlextDbtLdapProtocols as TestsFlextDbtLdapProtocols,
-        p as p,
+        p,
     )
     from tests.settings import TestsFlextDbtLdapSettings as TestsFlextDbtLdapSettings
     from tests.typings import TestsFlextDbtLdapTypes as TestsFlextDbtLdapTypes, t as t
@@ -51,7 +51,7 @@ if TYPE_CHECKING:
     )
     from tests.utilities import (
         TestsFlextDbtLdapUtilities as TestsFlextDbtLdapUtilities,
-        u as u,
+        u,
     )
 _LAZY_IMPORTS = merge_lazy_imports(
     (
