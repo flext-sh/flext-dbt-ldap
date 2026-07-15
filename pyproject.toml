@@ -410,8 +410,6 @@ addopts = [
 ]
 filterwarnings = [
   "ignore:.*cannot collect test class.*because it has a __init__ constructor.*:pytest.PytestCollectionWarning",
-  "ignore:tagMap is deprecated\\. Please use TAG_MAP instead\\.:DeprecationWarning",
-  "ignore:typeMap is deprecated\\. Please use TYPE_MAP instead\\.:DeprecationWarning",
 ]
 markers = [
   "docker: tests requiring Docker",
