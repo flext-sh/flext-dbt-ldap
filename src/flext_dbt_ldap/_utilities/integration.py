@@ -25,8 +25,8 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def transform_groups(
         self,
-        entries: t.SequenceOf[m.Ldif.Entry],
-    ) -> t.SequenceOf[m.DbtLdap.GroupDimension]:
+        entries: t.SequenceOf[p.Ldif.Entry],
+    ) -> t.SequenceOf[p.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions."""
         return self._transform_entries_to_dimensions(
             entries=entries,
@@ -38,14 +38,14 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def transform_memberships(
         self,
-        entries: t.SequenceOf[m.Ldif.Entry],
-    ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
+        entries: t.SequenceOf[p.Ldif.Entry],
+    ) -> t.SequenceOf[p.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts."""
         self._log.info(
             "Transforming %d LDAP entries to membership facts",
             len(entries),
         )
-        memberships: list[m.DbtLdap.MembershipFact] = []
+        memberships: list[p.DbtLdap.MembershipFact] = []
         for entry in entries:
             try:
                 if self.is_group_entry(entry):
@@ -66,8 +66,8 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def transform_users(
         self,
-        entries: t.SequenceOf[m.Ldif.Entry],
-    ) -> t.SequenceOf[m.DbtLdap.UserDimension]:
+        entries: t.SequenceOf[p.Ldif.Entry],
+    ) -> t.SequenceOf[p.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions."""
         return self._transform_entries_to_dimensions(
             entries=entries,
@@ -79,10 +79,10 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def _extract_group_memberships(
         self,
-        entry: m.Ldif.Entry,
-    ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
+        entry: p.Ldif.Entry,
+    ) -> t.SequenceOf[p.DbtLdap.MembershipFact]:
         """Build membership facts from group membership attributes."""
-        memberships: list[m.DbtLdap.MembershipFact] = []
+        memberships: list[p.DbtLdap.MembershipFact] = []
         attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dn = str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
         for attribute in c.DbtLdap.MEMBERSHIP_ATTRIBUTES:
@@ -101,13 +101,13 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
     def _extract_user_memberships(
         self,
-        entry: m.Ldif.Entry,
-    ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
+        entry: p.Ldif.Entry,
+    ) -> t.SequenceOf[p.DbtLdap.MembershipFact]:
         """Build membership facts from a user entry."""
         attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dns = attrs.get(c.DbtLdap.MEMBER_OF, [])
         if not group_dns:
-            empty: list[m.DbtLdap.MembershipFact] = []
+            empty: list[p.DbtLdap.MembershipFact] = []
             return empty
         user_dn = str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
         return [
@@ -122,9 +122,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     def _transform_entries_to_dimensions[DimensionT](
         self,
         *,
-        entries: t.SequenceOf[m.Ldif.Entry],
-        is_entry_target: Callable[[m.Ldif.Entry], bool],
-        build_dimension: Callable[[m.Ldif.Entry], DimensionT],
+        entries: t.SequenceOf[p.Ldif.Entry],
+        is_entry_target: Callable[[p.Ldif.Entry], bool],
+        build_dimension: Callable[[p.Ldif.Entry], DimensionT],
         transform_label: str,
         failure_label: str,
     ) -> t.SequenceOf[DimensionT]:

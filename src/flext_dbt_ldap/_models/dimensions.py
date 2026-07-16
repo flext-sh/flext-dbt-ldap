@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, Self
 
-from flext_ldif import m, u
+from flext_ldif import u
 
 from flext_dbt_ldap import c
 from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
@@ -47,7 +47,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
         @classmethod
-        def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
+        def from_ldap_entry(cls, entry: p.Ldif.Entry) -> Self:
             """Build a user dimension from a LDIF entry."""
             attrs = ul.Ldap.extract_entry_attributes(entry)
             return cls(
@@ -116,7 +116,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
         @classmethod
-        def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
+        def from_ldap_entry(cls, entry: p.Ldif.Entry) -> Self:
             """Build a group dimension from a LDIF entry."""
             attrs = ul.Ldap.extract_entry_attributes(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(

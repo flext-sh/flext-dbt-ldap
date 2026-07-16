@@ -24,43 +24,43 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     @staticmethod
     def generate_analytics_report(
         report_type: str = "summary",
-    ) -> p.Result[m.DbtLdap.AnalyticsReport]:
+    ) -> p.Result[p.DbtLdap.AnalyticsReport]:
         """Generate analytics report from warehouse data."""
         try:
             report = m.DbtLdap.AnalyticsReport(
                 report_type=report_type,
                 generated_at="2025-01-01T00:00:00Z",
             )
-            return r[m.DbtLdap.AnalyticsReport].ok(report)
+            return r[p.DbtLdap.AnalyticsReport].ok(report)
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.AnalyticsReport].fail(f"Report generation error: {e}")
+            return r[p.DbtLdap.AnalyticsReport].fail(f"Report generation error: {e}")
 
     def run_dbt_models(
         self,
         model_names: t.StrSequence | None = None,
-    ) -> p.Result[m.DbtLdap.DbtRunStatus]:
+    ) -> p.Result[p.DbtLdap.DbtRunStatus]:
         """Run DBT models."""
         try:
             run_result = self._run_selected_models(model_names)
             if run_result.failure:
-                return r[m.DbtLdap.DbtRunStatus].fail(
+                return r[p.DbtLdap.DbtRunStatus].fail(
                     run_result.error or "DBT model execution failed",
                 )
-            return r[m.DbtLdap.DbtRunStatus].ok(
+            return r[p.DbtLdap.DbtRunStatus].ok(
                 m.DbtLdap.DbtRunStatus(
                     status=c.Meltano.StreamStatus.COMPLETED,
                     models_run=run_result.value,
                 ),
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtRunStatus].fail(f"DBT model execution error: {e}")
+            return r[p.DbtLdap.DbtRunStatus].fail(f"DBT model execution error: {e}")
 
     def run_full_data_warehouse_sync(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> p.Result[m.DbtLdap.SyncResult]:
+    ) -> p.Result[p.DbtLdap.SyncResult]:
         """Run complete LDAP to data warehouse synchronization."""
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
@@ -79,15 +79,15 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             total_components=len(counts),
         )
         if all(counts):
-            return r[m.DbtLdap.SyncResult].ok(sync_result)
-        return r[m.DbtLdap.SyncResult].fail_op("complete full sync of all components")
+            return r[p.DbtLdap.SyncResult].ok(sync_result)
+        return r[p.DbtLdap.SyncResult].fail_op("complete full sync of all components")
 
     def sync_groups_to_warehouse(
         self,
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[p.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse."""
 
         def _run_sync_groups_to_warehouse() -> p.Result[
@@ -120,7 +120,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                     successful=True,
                 )
                 if update_result.failure:
-                    return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                    return r[p.DbtLdap.DbtLdapPipelineResult].fail(
                         update_result.error or "Group sync state persistence failed",
                     )
             return result
@@ -128,12 +128,12 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         try:
             return _run_sync_groups_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
+            return r[p.DbtLdap.DbtLdapPipelineResult].fail(f"Group sync error: {e}")
 
     def sync_memberships_to_warehouse(
         self,
         search_base: str | None = None,
-    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[p.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse."""
         try:
             return self.run_full_pipeline(
@@ -143,7 +143,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 model_names=[c.DbtLdap.FACT_MEMBERSHIPS],
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+            return r[p.DbtLdap.DbtLdapPipelineResult].fail(
                 f"Membership sync error: {e}",
             )
 
@@ -152,10 +152,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[p.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse."""
 
-        def _run_sync_users_to_warehouse() -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
+        def _run_sync_users_to_warehouse() -> p.Result[p.DbtLdap.DbtLdapPipelineResult]:
             bookmark = self._bookmark_now()
             user_filter = c.DbtLdap.FILTER_USER
             if self._should_run_incremental(
@@ -190,7 +190,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                     successful=True,
                 )
                 if update_result.failure:
-                    return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                    return r[p.DbtLdap.DbtLdapPipelineResult].fail(
                         update_result.error or "User sync state persistence failed",
                     )
             return result
@@ -198,24 +198,24 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         try:
             return _run_sync_users_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"User sync error: {e}")
+            return r[p.DbtLdap.DbtLdapPipelineResult].fail(f"User sync error: {e}")
 
     def validate_warehouse_data_quality(
         self,
         model_names: t.StrSequence | None = None,
-    ) -> p.Result[m.DbtLdap.ValidationMetrics]:
+    ) -> p.Result[p.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse."""
         try:
             run_result = self._run_selected_models(model_names)
             if run_result.failure:
-                return r[m.DbtLdap.ValidationMetrics].fail(
+                return r[p.DbtLdap.ValidationMetrics].fail(
                     run_result.error or "Data quality validation failed",
                 )
-            return r[m.DbtLdap.ValidationMetrics].ok(
+            return r[p.DbtLdap.ValidationMetrics].ok(
                 m.DbtLdap.ValidationMetrics(validation_passed=True),
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.ValidationMetrics].fail(
+            return r[p.DbtLdap.ValidationMetrics].fail(
                 f"Data quality validation error: {e}",
             )
 
