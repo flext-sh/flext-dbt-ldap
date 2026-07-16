@@ -6,7 +6,7 @@ from typing import Annotated, Self
 
 from flext_ldif import u
 
-from flext_dbt_ldap import c
+from flext_dbt_ldap import c, p
 from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 from flext_ldap import FlextLdapUtilities as ul
