@@ -24,7 +24,7 @@ import pytest
 from flext_tests import r, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, p, t, u
+from tests import c, p, t, u
 
 
 class TestsFlextDbtLdapServicesSync:
@@ -208,7 +208,7 @@ class TestsFlextDbtLdapServicesSync:
         def fake_json_write(
             path: Path,
             payload: t.JsonPayload,
-            options: m.Cli.JsonWriteOptions | None = None,
+            options: p.Cli.JsonWriteOptions | None = None,
         ) -> p.Result[bool]:
             _ = (path, payload, options)
             return r[bool].fail("json_write: disk full")
