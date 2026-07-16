@@ -2,7 +2,7 @@
 
 # flext-dbt-ldap Documentation
 
-- Version: `0.12.0-dev`
+- Version: `0.12.0`
 - Project class: `integration`
 - Package: `flext_dbt_ldap`
 - Description: FLEXT dbt LDAP - dbt Models for LDAP Data Transformation
