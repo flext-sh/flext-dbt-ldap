@@ -20,11 +20,11 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-    "flext-cli @ git+https://github.com/flext-sh/flext-cli.git@0.12.0-dev",
-    "flext-core @ git+https://github.com/flext-sh/flext-core.git@0.12.0-dev",
-    "flext-ldap @ git+https://github.com/flext-sh/flext-ldap.git@0.12.0-dev",
-    "flext-ldif @ git+https://github.com/flext-sh/flext-ldif.git@0.12.0-dev",
-    "flext-meltano @ git+https://github.com/flext-sh/flext-meltano.git@0.12.0-dev",
+    "flext-cli @ git+https://github.com/flext-sh/flext-cli.git@0.20.0-dev",
+    "flext-core @ git+https://github.com/flext-sh/flext-core.git@0.20.0-dev",
+    "flext-ldap @ git+https://github.com/flext-sh/flext-ldap.git@0.20.0-dev",
+    "flext-ldif @ git+https://github.com/flext-sh/flext-ldif.git@0.20.0-dev",
+    "flext-meltano @ git+https://github.com/flext-sh/flext-meltano.git@0.20.0-dev",
     "pydantic-core>=2.46.3",
     "pydantic>=2.13.3",
 ]
@@ -34,7 +34,7 @@ license = "MIT"
 name = "flext-dbt-ldap"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
-version = "0.12.0.rc0"
+version = "0.20.0.dev0"
 
 [[project.authors]]
 email = "team@flext.sh"
@@ -56,7 +56,7 @@ dev = [
     "django-stubs>=5.2.2",
     "factory-boy>=3.3.1",
     "faker>=37.4",
-    "flext-cli @ git+https://github.com/flext-sh/flext-cli.git@0.12.0-dev",
+    "flext-cli @ git+https://github.com/flext-sh/flext-cli.git@0.20.0-dev",
     "hypothesis>=6.125",
     "isort>=6.0.1",
     "matplotlib-stubs>=0.3",
