@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import contextlib
-import pathlib
+from typing import TYPE_CHECKING
 from unittest.mock import Mock
 
 import pytest
@@ -16,6 +16,9 @@ from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests import t, u
+
+if TYPE_CHECKING:
+    import pathlib
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 

@@ -6,11 +6,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
-from flext_dbt_ldap import p, t
+from flext_dbt_ldap import p
 from flext_ldap import FlextLdapProtocols
 from flext_meltano import p
+
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapProtocols(p, FlextLdapProtocols):
