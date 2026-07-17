@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 from flext_tests import tm
+from packaging.version import Version
 
 from flext_dbt_ldap.__version__ import (
     __author__,
@@ -26,15 +27,13 @@ class TestsFlextDbtLdapVersion:
         tm.that(__version__, is_=str)
         tm.that(__version__.strip(), ne="")
 
-    def test_version_info_is_tuple_with_at_least_one_part(self) -> None:
+    def test_version_info_is_three_integer_release_tuple(self) -> None:
         tm.that(__version_info__, is_=tuple)
-        tm.that(len(__version_info__), gte=1)
+        tm.that(len(__version_info__), eq=3)
+        assert all(isinstance(part, int) for part in __version_info__)
 
     def test_version_string_and_tuple_are_aligned(self) -> None:
-        parts = tuple(
-            int(part) if part.isdigit() else part for part in __version__.split(".")
-        )
-        tm.that(parts, eq=__version_info__)
+        tm.that(__version_info__, eq=Version(__version__).release)
 
     @pytest.mark.parametrize(
         "field_value",
