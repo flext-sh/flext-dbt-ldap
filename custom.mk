@@ -1,9 +1,12 @@
-.PHONY: dbt-run dbt-test dbt-docs test-unit test-integration build shell
-dbt-run: ## Run dbt models
+# Private project handlers for flext-dbt-ldap.
+# Strict extension: only `_custom_<verb>_<what>` handlers and `(pre|post)-<verb>[-<what>]`
+# hooks. Public targets, toolchain vars, .DEFAULT_GOAL, includes, and help are
+# invalid (base.mk owns those). Invoke via `make run WHAT=<what>`.
+.PHONY: _custom_run_dbt _custom_run_dbt-test _custom_run_dbt-docs
+_custom_run_dbt: ## make run WHAT=dbt — run dbt models
 	$(Q)$(POETRY) run dbt run
-dbt-test: ## Run dbt tests
+_custom_run_dbt-test: ## make run WHAT=dbt-test — run dbt tests
 	$(Q)$(POETRY) run dbt test
-dbt-docs: ## Generate dbt documentation
+_custom_run_dbt-docs: ## make run WHAT=dbt-docs — generate + serve dbt docs
 	$(Q)$(POETRY) run dbt docs generate
 	$(Q)$(POETRY) run dbt docs serve
-.DEFAULT_GOAL := help
