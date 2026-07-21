@@ -16,9 +16,7 @@ from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
 if TYPE_CHECKING:
-    from collections.abc import (
-        Callable,
-    )
+    from collections.abc import Callable
 
 
 class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):

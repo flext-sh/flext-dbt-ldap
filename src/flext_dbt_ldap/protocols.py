@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_dbt_ldap import p
 from flext_ldap import FlextLdapProtocols
-from flext_meltano import p
 
 if TYPE_CHECKING:
     from flext_dbt_ldap import t
