@@ -24,9 +24,7 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     """DBT LDAP settings; connection via ``Ldap.*``, dbt knobs via ``DbtLdap.*``."""
 
     model_config = SettingsConfigDict(
-        env_prefix="FLEXT_DBT_LDAP_",
-        env_nested_delimiter="__",
-        extra="ignore",
+        env_prefix="FLEXT_DBT_LDAP_", env_nested_delimiter="__", extra="ignore"
     )
 
     class _DbtLdap(BaseModel):
@@ -73,8 +71,7 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
         DbtLdap: _DbtLdap
     else:
         DbtLdap: _DbtLdap = Field(
-            default_factory=_DbtLdap,
-            description="Namespaced dbt-LDAP settings.",
+            default_factory=_DbtLdap, description="Namespaced dbt-LDAP settings."
         )
 
 

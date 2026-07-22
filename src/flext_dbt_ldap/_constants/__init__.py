@@ -20,19 +20,12 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._constants.transformation import (
         FlextDbtLdapConstantsTransformation as FlextDbtLdapConstantsTransformation,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        ".attributes": ("FlextDbtLdapConstantsAttributes",),
-        ".base": ("FlextDbtLdapConstantsBase",),
-        ".search": ("FlextDbtLdapConstantsSearch",),
-        ".transformation": ("FlextDbtLdapConstantsTransformation",),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    ".attributes": ("FlextDbtLdapConstantsAttributes",),
+    ".base": ("FlextDbtLdapConstantsBase",),
+    ".search": ("FlextDbtLdapConstantsSearch",),
+    ".transformation": ("FlextDbtLdapConstantsTransformation",),
+})
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

@@ -10,9 +10,9 @@ implementation-layout detail is touched.
 from __future__ import annotations
 
 import pytest
-from flext_tests import tm
 from pydantic import ValidationError
 
+from flext_tests import tm
 from tests import c, m
 
 type LdifEntry = m.Ldif.Entry
@@ -42,9 +42,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         ],
     )
     def test_flat_constant_exposes_expected_public_value(
-        self,
-        actual: str | int,
-        expected: str | int,
+        self, actual: str | int, expected: str | int
     ) -> None:
         tm.that(actual, eq=expected)
 

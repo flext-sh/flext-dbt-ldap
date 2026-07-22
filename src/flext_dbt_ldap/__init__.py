@@ -54,48 +54,19 @@ if TYPE_CHECKING:
     from flext_ldap import d as d, e as e, h as h, r as r, x as x
 _LAZY_IMPORTS = merge_lazy_imports(
     (".services",),
-    build_lazy_import_map(
-        {
-            "._settings": ("FlextDbtLdapSettings", "settings"),
-            ".api": (
-                "FlextDbtLdap",
-                "dbt_ldap",
-            ),
-            ".base": (
-                "FlextDbtLdapServiceBase",
-                "s",
-            ),
-            ".constants": (
-                "FlextDbtLdapConstants",
-                "c",
-            ),
-            ".models": (
-                "FlextDbtLdapModels",
-                "m",
-            ),
-            ".protocols": (
-                "FlextDbtLdapProtocols",
-                "p",
-            ),
-            ".services.client": ("FlextDbtLdapClientMixin",),
-            ".services.sync": ("FlextDbtLdapSyncMixin",),
-            ".typings": (
-                "FlextDbtLdapTypes",
-                "t",
-            ),
-            ".utilities": (
-                "FlextDbtLdapUtilities",
-                "u",
-            ),
-            "flext_ldap": (
-                "d",
-                "e",
-                "h",
-                "r",
-                "x",
-            ),
-        },
-    ),
+    build_lazy_import_map({
+        "._settings": ("FlextDbtLdapSettings", "settings"),
+        ".api": ("FlextDbtLdap", "dbt_ldap"),
+        ".base": ("FlextDbtLdapServiceBase", "s"),
+        ".constants": ("FlextDbtLdapConstants", "c"),
+        ".models": ("FlextDbtLdapModels", "m"),
+        ".protocols": ("FlextDbtLdapProtocols", "p"),
+        ".services.client": ("FlextDbtLdapClientMixin",),
+        ".services.sync": ("FlextDbtLdapSyncMixin",),
+        ".typings": ("FlextDbtLdapTypes", "t"),
+        ".utilities": ("FlextDbtLdapUtilities", "u"),
+        "flext_ldap": ("d", "e", "h", "r", "x"),
+    }),
     exclude_names=(
         "cleanup_submodule_namespace",
         "install_lazy_exports",
@@ -154,9 +125,4 @@ __all__: tuple[str, ...] = (
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    public_exports=__all__,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

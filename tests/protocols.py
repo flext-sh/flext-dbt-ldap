@@ -11,9 +11,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
-from flext_tests import FlextTestsProtocols
-
 from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes, t
+from flext_tests import FlextTestsProtocols
 
 if TYPE_CHECKING:
     from contextlib import AbstractContextManager
@@ -33,18 +32,12 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
         """DB-API 2.0 cursor protocol for type-safe database operations."""
 
         def execute(
-            self,
-            query: str | object,
-            params: t.StrSequence | None = None,
+            self, query: str | object, params: t.StrSequence | None = None
         ) -> TestsFlextDbtLdapProtocols.DbCursor: ...
 
-        def fetchall(
-            self,
-        ) -> t.SequenceOf[tuple[FlextDbtLdapTypes.JsonValue, ...]]: ...
+        def fetchall(self) -> t.SequenceOf[tuple[FlextDbtLdapTypes.JsonValue, ...]]: ...
 
-        def fetchone(
-            self,
-        ) -> tuple[FlextDbtLdapTypes.JsonValue, ...] | None: ...
+        def fetchone(self) -> tuple[FlextDbtLdapTypes.JsonValue, ...] | None: ...
 
     @runtime_checkable
     class DbConnection(Protocol):

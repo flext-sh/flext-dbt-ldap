@@ -12,9 +12,9 @@ import pathlib
 from unittest.mock import Mock
 
 import pytest
-from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
+from flext_tests import tf, tm
 from tests import t, u
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
@@ -30,7 +30,7 @@ def pytest_runtest_setup(item: pytest.Item) -> None:
             "FLEXT_LOG_LEVEL": "DEBUG",
             "DBT_PROFILES_DIR": temp_dir,
             "LDAP_TEST_MODE": "true",
-        }),
+        })
     )
 
 
@@ -52,14 +52,11 @@ def dbt_ldap_service_factory(
 ) -> t.DbtLdap.Tests.ServiceFactory:
     """Build a real public facade instance with isolated sync-state storage."""
     monkeypatch.setattr(
-        FlextDbtLdap,
-        "create_ldap_api",
-        staticmethod(_fake_create_ldap_api),
+        FlextDbtLdap, "create_ldap_api", staticmethod(_fake_create_ldap_api)
     )
 
     def factory(
-        dbt_project_dir: pathlib.Path,
-        initial_state: t.DbtLdap.Tests.SyncState = None,
+        dbt_project_dir: pathlib.Path, initial_state: t.DbtLdap.Tests.SyncState = None
     ) -> t.Pair[FlextDbtLdap, pathlib.Path]:
         # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
         # namespace; a flat dict is dropped by extra="ignore" (no isolation).
@@ -67,7 +64,7 @@ def dbt_ldap_service_factory(
             "DbtLdap": {
                 "ldap_base_dn": "dc=example,dc=com",
                 "dbt_project_dir": str(dbt_project_dir),
-            },
+            }
         })
         state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
         if initial_state is not None:

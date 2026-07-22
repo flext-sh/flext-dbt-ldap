@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-from flext_tests import tm
 from packaging.version import Version
 
 from flext_dbt_ldap.__version__ import (
@@ -16,6 +15,7 @@ from flext_dbt_ldap.__version__ import (
     __version__,
     __version_info__,
 )
+from flext_tests import tm
 
 __all__: list[str] = ["TestsFlextDbtLdapVersion"]
 
