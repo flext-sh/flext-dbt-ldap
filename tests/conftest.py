@@ -34,7 +34,7 @@ def pytest_runtest_setup(item: pytest.Item) -> None:
     )
 
 
-def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item | None) -> None:
+def pytest_runtest_teardown(item: pytest.Item) -> None:
     """Clean up per-test environment."""
     stack = item.stash.get(_env_stack_key, None)
     if stack is not None:
