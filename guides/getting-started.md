@@ -99,16 +99,13 @@ docker run -v $(pwd)/data:/app/data flext:latest
 ### 1. Basic Setup
 
 ```python
-from flext_cli import u
-from flext_core import FlextSettings
+from __future__ import annotations
 
-# Create dependency injection container
-container = FlextContainer()
+from flext_dbt_ldap import settings, u
 
-# Register services (example)
-# container.bind(IService, ServiceImplementation())
 
-u.Cli.print("FLEXT application initialized!")
+# FLEXT resolves application settings from the environment and project config.
+u.Cli.emit_raw(f"FLEXT application initialized: {settings.DbtLdap.dbt_project_dir}")
 ```
 
 ### 2. Using flext-ldif for LDIF Processing
@@ -135,24 +132,26 @@ else:
 ### 3. Railway-Oriented Error Handling
 
 ```python
-from flext_cli import u
-from flext_core import FlextSettings
+from __future__ import annotations
+
+from flext_dbt_ldap import p, r, u
+from flext_ldif import ldif
 
 
 def process_ldif_data(content: str) -> p.Result[str, Exception]:
     # Parse LDIF
-    parse_result = ldif.parse(content)
+    parse_result = ldif.parse_string(content)
     if parse_result.failure:
-        return r.failure(parse_result.failure())
+        return r.fail(parse_result.error or "Unknown parse error")
 
-    entries = parse_result.unwrap()
+    entries = parse_result.unwrap().entries
 
     # Process entries
     try:
         processed_data = process_entries(entries)
-        return r.success(processed_data)
+        return r.ok(processed_data)
     except Exception as e:
-        return r.failure(e)
+        return r.fail(str(e))
 
 
 def process_entries(entries: list) -> str:
@@ -161,11 +160,16 @@ def process_entries(entries: list) -> str:
 
 
 # Usage
+ldif_content = """dn: cn=test,dc=example,dc=com
+cn: test
+sn: user
+objectClass: inetOrgPerson"""
+
 result = process_ldif_data(ldif_content)
 if result.success:
-    u.Cli.print(f"Success: {result.unwrap()}")
+    u.Cli.emit_raw(f"Success: {result.unwrap()}")
 else:
-    u.Cli.print(f"Error: {result.failure()}")
+    u.Cli.emit_raw(f"Error: {result.error}")
 ```
 
 ### 4. CQRS Pattern with Commands and Queries
