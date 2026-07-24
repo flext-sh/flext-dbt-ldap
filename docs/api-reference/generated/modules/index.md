@@ -11,6 +11,5 @@ These pages are generated from public modules and their docstrings.
 - [flext_dbt_ldap.protocols](protocols.md)
 - [flext_dbt_ldap.services.client](services/client.md)
 - [flext_dbt_ldap.services.sync](services/sync.md)
-- [flext_dbt_ldap.settings](settings.md)
 - [flext_dbt_ldap.typings](typings.md)
 - [flext_dbt_ldap.utilities](utilities.md)

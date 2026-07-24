@@ -17,18 +17,11 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._utilities.macros import (
         FlextDbtLdapUtilitiesMacros as FlextDbtLdapUtilitiesMacros,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        ".entry": ("FlextDbtLdapUtilitiesEntry",),
-        ".integration": ("FlextDbtLdapUtilitiesIntegration",),
-        ".macros": ("FlextDbtLdapUtilitiesMacros",),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    ".entry": ("FlextDbtLdapUtilitiesEntry",),
+    ".integration": ("FlextDbtLdapUtilitiesIntegration",),
+    ".macros": ("FlextDbtLdapUtilitiesMacros",),
+})
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

@@ -29,8 +29,7 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
             t.NonNegativeFloat, u.Field(description="Validation quality score")
         ] = 0.0
         validation_passed: Annotated[
-            bool,
-            u.Field(description="Whether validation met the configured threshold"),
+            bool, u.Field(description="Whether validation met the configured threshold")
         ] = False
 
     class DbtRunStatus(m.Value):

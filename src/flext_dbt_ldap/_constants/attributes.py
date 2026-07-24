@@ -6,10 +6,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar, Final
 
-from flext_dbt_ldap import t
 from flext_ldap import FlextLdapConstants
+
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapConstantsAttributes:
@@ -33,21 +35,13 @@ class FlextDbtLdapConstantsAttributes:
     CREATE_TIMESTAMP: Final[str] = "createTimestamp"
     MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
     MEMBER_UID: Final[str] = "memberUid"
-    USER_ID_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (
-        UID,
-        CN,
-        SAM_ACCOUNT_NAME,
-    )
+    USER_ID_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (UID, CN, SAM_ACCOUNT_NAME)
     MEMBERSHIP_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (
         MEMBER,
         UNIQUE_MEMBER,
         MEMBER_UID,
     )
-    USERS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
-        "person",
-        "user",
-        "inetOrgPerson",
-    )
+    USERS_CLASSES: ClassVar[t.VariadicTuple[str]] = ("person", "user", "inetOrgPerson")
     GROUPS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
         "group",
         "groupOfNames",

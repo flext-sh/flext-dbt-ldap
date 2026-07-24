@@ -4,12 +4,11 @@ from __future__ import annotations
 
 from typing import Annotated, Self
 
-from flext_ldif import m, u
-
 from flext_dbt_ldap import c
 from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 from flext_ldap import FlextLdapUtilities as ul
+from flext_ldif import m, u
 
 
 class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
@@ -53,33 +52,24 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 or c.DEFAULT_EMPTY_STRING,
                 email=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.MAIL),
                 display_name=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.DISPLAY_NAME,
+                    attrs, c.DbtLdap.DISPLAY_NAME
                 ),
                 department=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.DEPARTMENT,
+                    attrs, c.DbtLdap.DEPARTMENT
                 ),
-                manager_dn=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.MANAGER,
-                ),
+                manager_dn=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.MANAGER),
                 employee_number=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.EMPLOYEE_NUMBER,
+                    attrs, c.DbtLdap.EMPLOYEE_NUMBER
                 ),
                 phone=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.TELEPHONE_NUMBER,
+                    attrs, c.DbtLdap.TELEPHONE_NUMBER
                 ),
                 is_active=FlextDbtLdapUtilitiesEntry.is_active_entry(attrs),
                 created_date=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.CREATE_TIMESTAMP,
+                    attrs, c.DbtLdap.CREATE_TIMESTAMP
                 ),
                 modified_date=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.MODIFY_TIMESTAMP,
+                    attrs, c.DbtLdap.MODIFY_TIMESTAMP
                 ),
             )
 
@@ -113,7 +103,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             """Build a group dimension from a LDIF entry."""
             attrs = ul.Ldap.extract_entry_attributes(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(
-                attrs.get(c.DbtLdap.UNIQUE_MEMBER, []),
+                attrs.get(c.DbtLdap.UNIQUE_MEMBER, [])
             )
             common_name = (
                 ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.CN)
@@ -123,22 +113,18 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 group_id=common_name,
                 common_name=common_name,
                 description=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.DESCRIPTION,
+                    attrs, c.DbtLdap.DESCRIPTION
                 ),
                 group_type=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.GROUP_TYPE,
+                    attrs, c.DbtLdap.GROUP_TYPE
                 ),
                 member_count=member_count,
                 is_active=True,
                 created_date=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.CREATE_TIMESTAMP,
+                    attrs, c.DbtLdap.CREATE_TIMESTAMP
                 ),
                 modified_date=ul.Ldap.get_first_attribute_value(
-                    attrs,
-                    c.DbtLdap.MODIFY_TIMESTAMP,
+                    attrs, c.DbtLdap.MODIFY_TIMESTAMP
                 ),
             )
 

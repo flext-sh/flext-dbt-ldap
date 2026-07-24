@@ -14,17 +14,10 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.services.sync import (
         FlextDbtLdapSyncMixin as FlextDbtLdapSyncMixin,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        ".client": ("FlextDbtLdapClientMixin",),
-        ".sync": ("FlextDbtLdapSyncMixin",),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    ".client": ("FlextDbtLdapClientMixin",),
+    ".sync": ("FlextDbtLdapSyncMixin",),
+})
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

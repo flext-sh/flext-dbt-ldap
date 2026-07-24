@@ -19,8 +19,7 @@ class FlextDbtLdapModelsSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
-            t.SequenceOf[t.JsonMapping],
-            u.Field(description="DBT model definitions"),
+            t.SequenceOf[t.JsonMapping], u.Field(description="DBT model definitions")
         ] = u.Field(default_factory=tuple)
 
     class DbtTestConfig(m.Value):

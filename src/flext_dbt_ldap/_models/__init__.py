@@ -23,20 +23,13 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._models.shared import (
         FlextDbtLdapModelsShared as FlextDbtLdapModelsShared,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        ".configuration": ("FlextDbtLdapModelsConfiguration",),
-        ".dimensions": ("FlextDbtLdapModelsDimensions",),
-        ".results": ("FlextDbtLdapModelsResults",),
-        ".schema": ("FlextDbtLdapModelsSchema",),
-        ".shared": ("FlextDbtLdapModelsShared",),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    ".configuration": ("FlextDbtLdapModelsConfiguration",),
+    ".dimensions": ("FlextDbtLdapModelsDimensions",),
+    ".results": ("FlextDbtLdapModelsResults",),
+    ".schema": ("FlextDbtLdapModelsSchema",),
+    ".shared": ("FlextDbtLdapModelsShared",),
+})
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
