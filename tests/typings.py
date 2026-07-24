@@ -28,8 +28,7 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
 
             type SyncState = FlextDbtLdapTypes.MutableMappingKV[str, str] | None
             type ServiceFactory = Callable[
-                [Path, SyncState],
-                FlextDbtLdapTypes.Pair[FlextDbtLdap, Path],
+                [Path, SyncState], FlextDbtLdapTypes.Pair[FlextDbtLdap, Path]
             ]
 
 

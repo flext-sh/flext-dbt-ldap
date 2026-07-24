@@ -20,10 +20,7 @@ if TYPE_CHECKING:
 class FlextDbtLdapUtilities(u, FlextLdapUtilities):
     """Thin dbt-ldap utilities facade following the canonical MRO pattern."""
 
-    class DbtLdap(
-        FlextDbtLdapUtilitiesMacros,
-        FlextDbtLdapUtilitiesIntegration,
-    ):
+    class DbtLdap(FlextDbtLdapUtilitiesMacros, FlextDbtLdapUtilitiesIntegration):
         """Project-specific dbt-ldap utility surface."""
 
 

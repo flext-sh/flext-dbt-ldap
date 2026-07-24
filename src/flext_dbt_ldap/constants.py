@@ -16,10 +16,7 @@ from flext_ldap import FlextLdapConstants
 from flext_meltano import c
 
 
-class FlextDbtLdapConstants(
-    c,
-    FlextLdapConstants,
-):
+class FlextDbtLdapConstants(c, FlextLdapConstants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern.
 
     This class acts as a facade, composing all constant subclasses via MRO.

@@ -25,9 +25,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     dbt_project_name: Annotated[
         t.NonEmptyStr,
-        u.Field(
-            description="Canonical dbt project name for the DBT LDAP service",
-        ),
+        u.Field(description="Canonical dbt project name for the DBT LDAP service"),
     ] = "dbt-ldap"
 
     @classmethod

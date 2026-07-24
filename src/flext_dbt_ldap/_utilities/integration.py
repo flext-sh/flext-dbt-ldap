@@ -25,8 +25,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     _log = u.fetch_logger(__name__)
 
     def transform_groups(
-        self,
-        entries: t.SequenceOf[p.Ldif.Entry],
+        self, entries: t.SequenceOf[p.Ldif.Entry]
     ) -> t.SequenceOf[p.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions."""
         return self._transform_entries_to_dimensions(
@@ -38,14 +37,10 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         )
 
     def transform_memberships(
-        self,
-        entries: t.SequenceOf[p.Ldif.Entry],
+        self, entries: t.SequenceOf[p.Ldif.Entry]
     ) -> t.SequenceOf[p.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts."""
-        self._log.info(
-            "Transforming %d LDAP entries to membership facts",
-            len(entries),
-        )
+        self._log.info("Transforming %d LDAP entries to membership facts", len(entries))
         memberships: list[p.DbtLdap.MembershipFact] = []
         for entry in entries:
             try:
@@ -59,15 +54,13 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
                     str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
                 )
                 self._log.exception(
-                    "Failed to transform memberships for entry: %s",
-                    entry_dn,
+                    "Failed to transform memberships for entry: %s", entry_dn
                 )
         self._log.info("Transformed %d membership facts", len(memberships))
         return memberships
 
     def transform_users(
-        self,
-        entries: t.SequenceOf[p.Ldif.Entry],
+        self, entries: t.SequenceOf[p.Ldif.Entry]
     ) -> t.SequenceOf[p.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions."""
         return self._transform_entries_to_dimensions(
@@ -79,8 +72,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         )
 
     def _extract_group_memberships(
-        self,
-        entry: p.Ldif.Entry,
+        self, entry: p.Ldif.Entry
     ) -> t.SequenceOf[p.DbtLdap.MembershipFact]:
         """Build membership facts from group membership attributes."""
         memberships: list[p.DbtLdap.MembershipFact] = []
@@ -101,8 +93,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         return memberships
 
     def _extract_user_memberships(
-        self,
-        entry: p.Ldif.Entry,
+        self, entry: p.Ldif.Entry
     ) -> t.SequenceOf[p.DbtLdap.MembershipFact]:
         """Build membership facts from a user entry."""
         attrs = ul.Ldap.extract_entry_attributes(entry)
@@ -113,9 +104,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         user_dn = str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
         return [
             m.DbtLdap.MembershipFact(
-                user_dn=user_dn,
-                group_dn=group_dn,
-                membership_type=c.DbtLdap.DIRECT,
+                user_dn=user_dn, group_dn=group_dn, membership_type=c.DbtLdap.DIRECT
             )
             for group_dn in group_dns
         ]
@@ -131,9 +120,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     ) -> t.SequenceOf[DimensionT]:
         """Shared entry-to-dimension transformation flow."""
         self._log.info(
-            "Transforming %d LDAP entries to %s",
-            len(entries),
-            transform_label,
+            "Transforming %d LDAP entries to %s", len(entries), transform_label
         )
         dimensions: list[DimensionT] = []
         for entry in entries:
@@ -146,9 +133,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
                     str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
                 )
                 self._log.exception(
-                    "Failed to transform %s: %s",
-                    failure_label,
-                    entry_dn,
+                    "Failed to transform %s: %s", failure_label, entry_dn
                 )
         self._log.info("Transformed %d %s", len(dimensions), transform_label)
         return dimensions

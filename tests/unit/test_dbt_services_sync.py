@@ -56,10 +56,7 @@ class TestsFlextDbtLdapServicesSync:
         return api
 
     def _install_boundaries(
-        self,
-        monkeypatch: pytest.MonkeyPatch,
-        *,
-        entry_count: int = 1,
+        self, monkeypatch: pytest.MonkeyPatch, *, entry_count: int = 1
     ) -> Mock:
         """Wire the LDAP + dbt external boundaries; return the LDAP double."""
         api = self._ldap_api_with_entries(entry_count)
@@ -68,15 +65,12 @@ class TestsFlextDbtLdapServicesSync:
             return api
 
         def fake_run_models(
-            _self: FlextDbtLdap,
-            models: t.StrSequence | None = None,
+            _self: FlextDbtLdap, models: t.StrSequence | None = None
         ) -> p.Result[t.StrSequence]:
             return r[t.StrSequence].ok(list(models) if models else [])
 
         monkeypatch.setattr(
-            FlextDbtLdap,
-            "create_ldap_api",
-            staticmethod(fake_create_ldap_api),
+            FlextDbtLdap, "create_ldap_api", staticmethod(fake_create_ldap_api)
         )
         monkeypatch.setattr(FlextDbtLdap, "run_models", fake_run_models)
         return api
@@ -93,7 +87,7 @@ class TestsFlextDbtLdapServicesSync:
         if read_result.failure:
             pytest.fail(read_result.error or "Failed to read sync state")
         payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
-            read_result.value or {},
+            read_result.value or {}
         )
         return payload
 
@@ -127,8 +121,7 @@ class TestsFlextDbtLdapServicesSync:
     ) -> None:
         api = self._install_boundaries(monkeypatch)
         service, state_file = dbt_ldap_service_factory(
-            tmp_path,
-            {sync_key: "20250101000000Z"},
+            tmp_path, {sync_key: "20250101000000Z"}
         )
 
         result = getattr(service, sync_method)(incremental=True)
@@ -254,8 +247,7 @@ class TestsFlextDbtLdapServicesSync:
         self._install_boundaries(monkeypatch)
 
         def fake_run_models(
-            _self: FlextDbtLdap,
-            models: t.StrSequence | None = None,
+            _self: FlextDbtLdap, models: t.StrSequence | None = None
         ) -> p.Result[t.StrSequence]:
             _ = models
             return r[t.StrSequence].fail("dbt failed")
@@ -287,9 +279,7 @@ class TestsFlextDbtLdapServicesSync:
     # ------------------------------------------------------------------ #
 
     def test_service_init_rejects_non_string_sync_state_values(
-        self,
-        tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
     ) -> None:
         _ = dbt_ldap_service_factory
         state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
@@ -299,7 +289,7 @@ class TestsFlextDbtLdapServicesSync:
             "DbtLdap": {
                 "ldap_base_dn": "dc=example,dc=com",
                 "dbt_project_dir": str(tmp_path),
-            },
+            }
         })
 
         with pytest.raises(TypeError, match="Sync state file values must be strings"):

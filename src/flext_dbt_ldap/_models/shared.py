@@ -27,14 +27,11 @@ class FlextDbtLdapModelsShared:
 
         common_name: Annotated[str, u.Field(description="Canonical common name")]
         is_active: Annotated[
-            bool,
-            u.Field(description="Whether the directory record is active"),
+            bool, u.Field(description="Whether the directory record is active")
         ] = True
         created_date: Annotated[
-            str | None,
-            u.Field(description="Source creation timestamp"),
+            str | None, u.Field(description="Source creation timestamp")
         ] = None
         modified_date: Annotated[
-            str | None,
-            u.Field(description="Source modification timestamp"),
+            str | None, u.Field(description="Source modification timestamp")
         ] = None

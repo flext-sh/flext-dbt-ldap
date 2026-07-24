@@ -26,7 +26,4 @@ class TestsFlextDbtLdapModels(FlextTestsModels, FlextDbtLdapModels):
 
 m = TestsFlextDbtLdapModels
 
-__all__: list[str] = [
-    "TestsFlextDbtLdapModels",
-    "m",
-]
+__all__: list[str] = ["TestsFlextDbtLdapModels", "m"]
