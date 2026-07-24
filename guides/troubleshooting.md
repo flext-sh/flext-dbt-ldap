@@ -237,7 +237,7 @@ env | grep FLEXT_
 
 **Validate configuration:**
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -278,7 +278,7 @@ LdifParsingException: Invalid LDIF format
 
 **Check LDIF content:**
 
-```text
+```python
 from flext_ldif import ldif
 
 content = """dn: cn=test,dc=example,dc=com
@@ -335,7 +335,7 @@ LdifMigrationException: Server compatibility error
 
 **Check server configuration:**
 
-```text
+```python
 from flext_ldif import FlextLdifSettings
 
 settings = FlextLdifSettings(
@@ -408,7 +408,7 @@ profile_memory()
 
 **Optimize batch size:**
 
-```text
+```python
 from flext_ldif import FlextLdifSettings
 
 # Reduce batch size for memory-constrained environments
@@ -451,7 +451,7 @@ logger.error("Error message")
 
 ### 2. Exception Handling
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -471,7 +471,7 @@ def safe_operation(data: dict) -> p.Result[dict]:
 
 ### 3. Debug Mode
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 

@@ -103,7 +103,7 @@ api:
 
 Configure FLEXT programmatically in your code:
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 from flext_ldif import FlextLdifSettings
@@ -124,7 +124,7 @@ ldif_config = FlextLdifSettings(
 
 ### flext-ldif Configuration
 
-```text
+```python
 from flext_ldif import FlextLdifSettings
 
 settings = FlextLdifSettings(
@@ -144,7 +144,7 @@ settings = FlextLdifSettings(
 
 ### flext-api Configuration
 
-```text
+```python
 from flext_api import FlextApiSettings
 
 settings = FlextApiSettings(
@@ -158,7 +158,7 @@ settings = FlextApiSettings(
 
 ### flext-auth Configuration
 
-```text
+```python
 from flext_auth import FlextAuthSettings
 
 settings = FlextAuthSettings(
@@ -211,7 +211,7 @@ api:
 
 All configuration is validated using Pydantic v2 models:
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -227,7 +227,7 @@ except c.ValidationError as e:
 
 FLEXT supports configuration inheritance for complex setups:
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -254,7 +254,7 @@ export FLEXT_API_KEY=your_api_key
 
 ### 2. Validate Configuration Early
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -273,7 +273,7 @@ def main():
 
 ### 3. Use Configuration Classes
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -329,7 +329,7 @@ class FlextLdifSettings(m.BaseModel):
 
 ### Debug Configuration
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 

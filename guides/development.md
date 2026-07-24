@@ -225,7 +225,7 @@ pytest --cov=src --cov-report=html
 
 ### Writing Tests
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 
@@ -394,7 +394,7 @@ Update project README.md files when adding new features:
 
 - Add a "New Feature" section with usage and configuration examples.
 
-```text
+```python
 from flext_newlib import FlextNewlib
 from flext_newlib import FlextNewlibSettings
 

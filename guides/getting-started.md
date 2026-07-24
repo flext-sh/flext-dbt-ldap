@@ -110,7 +110,7 @@ u.Cli.emit_raw(f"FLEXT application initialized: {settings.DbtLdap.dbt_project_di
 
 ### 2. Using flext-ldif for LDIF Processing
 
-```text
+```python
 from flext_ldif import ldif
 
 # Initialize LDIF API
@@ -174,7 +174,7 @@ else:
 
 ### 4. CQRS Pattern with Commands and Queries
 
-```text
+```python
 from flext_cli import u
 from flext_core import FlextSettings
 from dataclasses import dataclass
@@ -228,7 +228,7 @@ export FLEXT_LDIF_STRICT_VALIDATION=true
 
 ### Programmatic Configuration
 
-```text
+```python
 from flext_ldif import FlextLdifSettings
 
 # Create custom configuration
