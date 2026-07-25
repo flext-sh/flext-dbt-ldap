@@ -1,0 +1,49 @@
+"""FLEXT DBT LDAP Constants - Thin MRO Facade.
+
+from flext_core import FlextConstants as Constants
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
+from __future__ import annotations
+
+from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
+from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
+from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
+from flext_dbt_ldap._constants.transformation import (
+    FlextDbtLdapConstantsTransformation,
+)
+from flext_ldap import FlextLdapConstants
+from flext_meltano import c
+
+
+class FlextDbtLdapConstants(
+    c,
+    FlextLdapConstants,
+):
+    """LDAP DBT transformation-specific constants following FLEXT unified pattern.
+
+    This class acts as a facade, composing all constant subclasses via MRO.
+    All constants are accessible via inheritance—do not duplicate parent attributes.
+
+    LDAP protocol constants are inherited from c.Ldap via MRO:
+    - c.Ldap.PORT / c.Ldap.TIMEOUT
+    - c.Ldap.AttributeName (DN, OBJECT_CLASS, COMMON_NAME — protocol-only)
+    - c.Ldap.ALL_ENTRIES_FILTER (protocol-level wildcard)
+
+    Domain-specific constants (attributes, filters, models, data types) live in this class.
+    """
+
+    class DbtLdap(
+        FlextDbtLdapConstantsTransformation,
+        FlextDbtLdapConstantsSearch,
+        FlextDbtLdapConstantsAttributes,
+        FlextDbtLdapConstantsBase,
+    ):
+        """Class."""
+
+
+c = FlextDbtLdapConstants
+
+__all__: tuple[str, ...] = ("FlextDbtLdapConstants", "c")

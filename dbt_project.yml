@@ -1,0 +1,49 @@
+name: "flext_dbt_ldap"
+version: "1.0.0"
+settings-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: "flext_ldap"
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["data"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Enterprise LDAP DBT package configuration
+models:
+  flext_dbt_ldap:
+    # Base models - foundational LDAP entity models
+    +materialized: table
+    +schema: ldap
+    +tags: ["ldap", "enterprise"]
+
+    # Staging models - raw LDAP data transformation
+    staging:
+      +materialized: view
+      +schema: ldap_staging
+      +tags: ["staging", "ldap"]
+
+    # Intermediate models - business logic transformations
+    intermediate:
+      +materialized: view
+      +schema: ldap_intermediate
+      +tags: ["intermediate", "ldap"]
+
+    # Marts models - business-ready data models
+    marts:
+      +materialized: table
+      +schema: ldap_marts
+      +tags: ["marts", "ldap", "business"]
+
+vars:
+  ldap_base_dn: "dc=example,dc=com"
+  ldap_user_base: "ou=users"
+  ldap_group_base: "ou=groups"
+  ldap_ou_base: "ou=departments"
