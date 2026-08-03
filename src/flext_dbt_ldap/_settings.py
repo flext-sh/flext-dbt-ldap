@@ -11,13 +11,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from pydantic import BaseModel, Field
 from pydantic_settings import SettingsConfigDict
 
 # NOTE (multi-agent): mro-rn88 — inherit FlextLdapSettings so LDAP connection scalars
 # come from settings.Ldap.* (SSOT); FlextMeltanoSettings adds the dbt/meltano surface.
 from flext_ldap import FlextLdapSettings
-from flext_meltano import FlextMeltanoSettings
+from flext_meltano import FlextMeltanoSettings, m
 
 
 class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
@@ -27,18 +26,18 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
         env_prefix="FLEXT_DBT_LDAP_", env_nested_delimiter="__", extra="ignore"
     )
 
-    class _DbtLdap(BaseModel):
+    class _DbtLdap(m.BaseModel):
         """dbt-LDAP knobs only (LDAP connection lives in ``Ldap``)."""
 
         ldap_base_dn: Annotated[
-            str, Field(default="dc=example,dc=com", description="LDAP base DN")
+            str, m.Field(default="dc=example,dc=com", description="LDAP base DN")
         ]
         dbt_project_dir: Annotated[
-            str, Field(default=".", description="Path to DBT project directory")
+            str, m.Field(default=".", description="Path to DBT project directory")
         ]
         min_quality_threshold: Annotated[
             float,
-            Field(
+            m.Field(
                 default=0.8,
                 ge=0.0,
                 le=1.0,
@@ -47,21 +46,21 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
         ]
         required_attributes: Annotated[
             list[str],
-            Field(
+            m.Field(
                 default_factory=list,
                 description="Required LDAP attributes for validation",
             ),
         ]
         ldap_attribute_mapping: Annotated[
             dict[str, str],
-            Field(
+            m.Field(
                 default_factory=dict,
                 description="Mapping of LDAP attributes to DBT model attributes",
             ),
         ]
         ldap_schema_mapping: Annotated[
             dict[str, str],
-            Field(
+            m.Field(
                 default_factory=dict,
                 description="Mapping of LDAP schemas to DBT tables",
             ),
@@ -70,7 +69,7 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     if TYPE_CHECKING:
         DbtLdap: _DbtLdap
     else:
-        DbtLdap: _DbtLdap = Field(
+        DbtLdap: _DbtLdap = m.Field(
             default_factory=_DbtLdap, description="Namespaced dbt-LDAP settings."
         )
 
