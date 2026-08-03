@@ -42,9 +42,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     """Compile DBT models for LDAP data processing."""
                     ...
 
-                def get_dbt_manifest(
-                    self,
-                ) -> p.Result[m.DbtLdap.DbtProjectConfig]:
+                def get_dbt_manifest(self) -> p.Result[m.DbtLdap.DbtProjectConfig]:
                     """Get DBT manifest with LDAP model definitions."""
                     ...
 
@@ -64,18 +62,12 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     """Test DBT models with LDAP data validation."""
                     ...
 
-                def validate_dbt_project(
-                    self,
-                    project_path: str,
-                ) -> p.Result[bool]:
+                def validate_dbt_project(self, project_path: str) -> p.Result[bool]:
                     """Validate DBT project configuration."""
                     ...
 
             @runtime_checkable
-            class LdapIntegration(
-                p.Service[m.DbtLdap.DbtLdapPipelineResult],
-                Protocol,
-            ):
+            class LdapIntegration(p.Service[m.DbtLdap.DbtLdapPipelineResult], Protocol):
                 """LDAP integration protocol for dbt LDAP operations."""
 
                 def extract_ldap_data(
@@ -111,10 +103,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class Modeling(
-                p.Service[m.DbtLdap.DbtModelDefinition],
-                Protocol,
-            ):
+            class Modeling(p.Service[m.DbtLdap.DbtModelDefinition], Protocol):
                 """Protocol for LDAP data modeling operations."""
 
                 def create_group_dimension(
@@ -150,10 +139,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class Transformation(
-                p.Service[m.DbtLdap.UserDimension],
-                Protocol,
-            ):
+            class Transformation(p.Service[m.DbtLdap.UserDimension], Protocol):
                 """Protocol for LDAP data transformation operations."""
 
                 def apply_business_rules(
@@ -193,29 +179,25 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                 """Protocol for DBT macro operations with LDAP data."""
 
                 def create_ldap_snapshot_macro(
-                    self,
-                    snapshot_config: m.DbtLdap.DbtConfig,
+                    self, snapshot_config: m.DbtLdap.DbtConfig
                 ) -> p.Result[str]:
                     """Create DBT snapshot macro for LDAP data versioning."""
                     ...
 
                 def create_ldap_test_macro(
-                    self,
-                    test_config: m.DbtLdap.DbtTestConfig,
+                    self, test_config: m.DbtLdap.DbtTestConfig
                 ) -> p.Result[str]:
                     """Create DBT test macro for LDAP data validation."""
                     ...
 
                 def generate_ldap_source_macro(
-                    self,
-                    source_config: m.DbtLdap.DbtSourceDefinition,
+                    self, source_config: m.DbtLdap.DbtSourceDefinition
                 ) -> p.Result[str]:
                     """Generate DBT macro for LDAP data sources."""
                     ...
 
                 def generate_ldap_transformation_macro(
-                    self,
-                    transformation_config: m.DbtLdap.TransformationConfig,
+                    self, transformation_config: m.DbtLdap.TransformationConfig
                 ) -> p.Result[str]:
                     """Generate DBT transformation macro for LDAP data."""
                     ...
@@ -257,10 +239,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     ...
 
             @runtime_checkable
-            class Performance(
-                p.Service[m.DbtLdap.PerformanceAnalysis],
-                Protocol,
-            ):
+            class Performance(p.Service[m.DbtLdap.PerformanceAnalysis], Protocol):
                 """Protocol for DBT LDAP performance optimization."""
 
                 def cache_ldap_extractions(
@@ -272,8 +251,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     ...
 
                 def monitor_dbt_performance(
-                    self,
-                    run_results: m.DbtLdap.DbtRunStatus,
+                    self, run_results: m.DbtLdap.DbtRunStatus
                 ) -> p.Result[m.DbtLdap.PerformanceAnalysis]:
                     """Monitor DBT performance."""
                     ...
@@ -287,8 +265,7 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                     ...
 
                 def optimize_ldap_queries(
-                    self,
-                    query_config: m.DbtLdap.LdapQuery,
+                    self, query_config: m.DbtLdap.LdapQuery
                 ) -> p.Result[m.DbtLdap.LdapQuery]:
                     """Optimize LDAP queries for DBT data extraction."""
                     ...
@@ -298,29 +275,23 @@ class FlextDbtLdapProtocols(p, FlextLdapProtocols):
                 """Protocol for DBT LDAP monitoring operations."""
 
                 def create_monitoring_dashboard(
-                    self,
-                    dashboard_config: m.DbtLdap.DbtConfig,
+                    self, dashboard_config: m.DbtLdap.DbtConfig
                 ) -> p.Result[m.DbtLdap.DbtRunStatus]:
                     """Create monitoring dashboard."""
                     ...
 
-                def get_health_status(
-                    self,
-                ) -> p.Result[m.DbtLdap.ServiceStatus]:
+                def get_health_status(self) -> p.Result[m.DbtLdap.ServiceStatus]:
                     """Get DBT LDAP integration health status."""
                     ...
 
                 def monitor_ldap_data_freshness(
-                    self,
-                    freshness_config: m.DbtLdap.DbtSourceFreshness,
+                    self, freshness_config: m.DbtLdap.DbtSourceFreshness
                 ) -> p.Result[m.DbtLdap.DbtSourceFreshness]:
                     """Monitor LDAP data freshness."""
                     ...
 
                 def track_dbt_run_metrics(
-                    self,
-                    run_id: str,
-                    metrics: m.DbtLdap.PerformanceAnalysis,
+                    self, run_id: str, metrics: m.DbtLdap.PerformanceAnalysis
                 ) -> p.Result[bool]:
                     """Track DBT run metrics."""
                     ...

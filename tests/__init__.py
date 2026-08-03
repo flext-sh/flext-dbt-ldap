@@ -24,7 +24,6 @@ if TYPE_CHECKING:
         tv as tv,
         x as x,
     )
-
     from tests.base import (
         TestsFlextDbtLdapServiceBase as TestsFlextDbtLdapServiceBase,
         s as s,
@@ -54,57 +53,23 @@ if TYPE_CHECKING:
         u as u,
     )
 _LAZY_IMPORTS = merge_lazy_imports(
-    (
-        ".e2e",
-        ".unit",
-    ),
-    build_lazy_import_map(
-        {
-            ".base": (
-                "TestsFlextDbtLdapServiceBase",
-                "s",
-            ),
-            ".conftest": ("conftest",),
-            ".constants": (
-                "TestsFlextDbtLdapConstants",
-                "c",
-            ),
-            ".e2e": ("e2e",),
-            ".models": (
-                "TestsFlextDbtLdapModels",
-                "m",
-            ),
-            ".protocols": (
-                "TestsFlextDbtLdapProtocols",
-                "p",
-            ),
-            ".settings": ("TestsFlextDbtLdapSettings",),
-            ".typings": (
-                "TestsFlextDbtLdapTypes",
-                "t",
-            ),
-            ".unit": ("unit",),
-            ".unit.test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
-            ".unit.test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
-            ".unit.test_version": ("TestsFlextDbtLdapVersion",),
-            ".utilities": (
-                "TestsFlextDbtLdapUtilities",
-                "u",
-            ),
-            "flext_tests": (
-                "d",
-                "e",
-                "h",
-                "r",
-                "td",
-                "tf",
-                "tk",
-                "tm",
-                "tv",
-                "x",
-            ),
-        },
-    ),
+    (".e2e", ".unit"),
+    build_lazy_import_map({
+        ".base": ("TestsFlextDbtLdapServiceBase", "s"),
+        ".conftest": ("conftest",),
+        ".constants": ("TestsFlextDbtLdapConstants", "c"),
+        ".e2e": ("e2e",),
+        ".models": ("TestsFlextDbtLdapModels", "m"),
+        ".protocols": ("TestsFlextDbtLdapProtocols", "p"),
+        ".settings": ("TestsFlextDbtLdapSettings",),
+        ".typings": ("TestsFlextDbtLdapTypes", "t"),
+        ".unit": ("unit",),
+        ".unit.test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
+        ".unit.test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
+        ".unit.test_version": ("TestsFlextDbtLdapVersion",),
+        ".utilities": ("TestsFlextDbtLdapUtilities", "u"),
+        "flext_tests": ("d", "e", "h", "r", "td", "tf", "tk", "tm", "tv", "x"),
+    }),
     exclude_names=(
         "cleanup_submodule_namespace",
         "install_lazy_exports",
@@ -128,9 +93,4 @@ _LAZY_IMPORTS = merge_lazy_imports(
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

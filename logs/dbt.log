@@ -1,0 +1,17 @@
+
+
+============================== 10:50:27.620566 | 425950be-4431-4292-90e8-e83b6058b750 ==============================
+[0m10:50:27.620566 [info ] [MainThread]: Running with dbt=1.11.6
+[0m10:50:27.623977 [warn ] [MainThread]: [[33mWARNING[0m]: Deprecated functionality
+Usage of `--models`, `--model`, and `-m` is deprecated in favor of `--select` or
+`-s`.
+[0m10:50:27.631740 [error] [MainThread]: Encountered an error:
+Runtime Error
+  Could not find profile named 'flext_ldap'
+[0m10:50:27.633585 [warn ] [MainThread]: [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- ModelParamUsageDeprecation: 1 occurrence
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.

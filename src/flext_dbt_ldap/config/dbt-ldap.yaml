@@ -1,0 +1,3 @@
+DbtLdap:
+  name: flext-dbt-ldap
+  version: "0.12.0-dev"
