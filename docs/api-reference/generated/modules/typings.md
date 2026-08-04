@@ -2,6 +2,10 @@
 
 # flext_dbt_ldap.typings
 
+<!-- TOC START -->
+- No sections found
+<!-- TOC END -->
+
 ::: flext_dbt_ldap.typings
     options:
       show_root_heading: true

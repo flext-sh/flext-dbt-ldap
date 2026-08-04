@@ -7,53 +7,38 @@
 > Project profile: `flext-dbt-ldap`
 
 <!-- TOC START -->
-- [flext-dbt-ldap - FLEXT Troubleshooting Guide](#flext-dbt-ldap---flext-troubleshooting-guide)
-  - [Quick Diagnosis](#quick-diagnosis)
-    - [Health Check Commands](#health-check-commands)
-    - [System Status](#system-status)
-  - [Common Issues](#common-issues)
-    - [1. Import Errors](#1-import-errors)
-      - [Problem: ModuleNotFoundError](#problem-modulenotfounderror)
-      - [Solutions](#solutions)
-    - [r](#r)
-    - [2. Type Checking Errors](#2-type-checking-errors)
-      - [Problem: MyPy errors](#problem-mypy-errors)
-      - [Solutions](#solutions-1)
-    - [3. Test Failures](#3-test-failures)
-      - [Problem: Tests failing](#problem-tests-failing)
-      - [Solutions](#solutions-2)
-    - [4. Configuration Issues](#4-configuration-issues)
-      - [Problem: Configuration not loading](#problem-configuration-not-loading)
-      - [Solutions](#solutions-3)
-    - [5. LDIF Processing Issues](#5-ldif-processing-issues)
-      - [Problem: LDIF parsing fails](#problem-ldif-parsing-fails)
-      - [Solutions](#solutions-4)
-    - [6. Migration Issues](#6-migration-issues)
-      - [Problem: Migration fails](#problem-migration-fails)
-      - [Solutions](#solutions-5)
-    - [7. Performance Issues](#7-performance-issues)
-      - [Problem: Slow processing](#problem-slow-processing)
-      - [Solutions](#solutions-6)
-  - [Debugging Techniques](#debugging-techniques)
-    - [1. Logging Configuration](#1-logging-configuration)
-    - [2. Exception Handling](#2-exception-handling)
-    - [3. Debug Mode](#3-debug-mode)
-    - [4. Step-by-Step Debugging](#4-step-by-step-debugging)
-  - [Error Codes Reference](#error-codes-reference)
-    - [FLEXT Core Errors](#flext-core-errors)
-    - [LDIF Processing Errors](#ldif-processing-errors)
-    - [API Errors](#api-errors)
-  - [Performance Troubleshooting](#performance-troubleshooting)
-    - [Memory Issues](#memory-issues)
-    - [CPU Issues](#cpu-issues)
-  - [Getting Help](#getting-help)
-    - [Self-Service Resources](#self-service-resources)
-    - [Community Support](#community-support)
-    - [Reporting Issues](#reporting-issues)
-    - [Your minimal example here](#your-minimal-example-here)
-  - [Prevention](#prevention)
-    - [Best Practices](#best-practices)
-  - [Resources](#resources)
+- [Quick Diagnosis](#quick-diagnosis)
+  - [Health Check Commands](#health-check-commands)
+  - [System Status](#system-status)
+- [Common Issues](#common-issues)
+  - [1. Import Errors](#1-import-errors)
+  - [r](#r)
+  - [2. Type Checking Errors](#2-type-checking-errors)
+  - [3. Test Failures](#3-test-failures)
+  - [4. Configuration Issues](#4-configuration-issues)
+  - [5. LDIF Processing Issues](#5-ldif-processing-issues)
+  - [6. Migration Issues](#6-migration-issues)
+  - [7. Performance Issues](#7-performance-issues)
+- [Debugging Techniques](#debugging-techniques)
+  - [1. Logging Configuration](#1-logging-configuration)
+  - [2. Exception Handling](#2-exception-handling)
+  - [3. Debug Mode](#3-debug-mode)
+  - [4. Step-by-Step Debugging](#4-step-by-step-debugging)
+- [Error Codes Reference](#error-codes-reference)
+  - [FLEXT Core Errors](#flext-core-errors)
+  - [LDIF Processing Errors](#ldif-processing-errors)
+  - [API Errors](#api-errors)
+- [Performance Troubleshooting](#performance-troubleshooting)
+  - [Memory Issues](#memory-issues)
+  - [CPU Issues](#cpu-issues)
+- [Getting Help](#getting-help)
+  - [Self-Service Resources](#self-service-resources)
+  - [Community Support](#community-support)
+  - [Reporting Issues](#reporting-issues)
+  - [Your minimal example here](#your-minimal-example-here)
+- [Prevention](#prevention)
+  - [Best Practices](#best-practices)
+- [Resources](#resources)
 <!-- TOC END -->
 
 This guide covers common issues, their solutions, and debugging techniques for FLEXT applications and libraries.
@@ -245,9 +230,7 @@ try:
     settings = FlextSettings()
     u.Cli.print("Configuration valid")
 except c.ValidationError as e:
-    u.Cli.print(f"Configuration error: {e}")
-```
-
+    u.Cli.print(f"Configuration error: {e}")```
 **Debug configuration loading:**
 
 ```text
@@ -288,9 +271,7 @@ objectClass: inetOrgPerson"""
 result = ldif.parse(content)
 if result.failure:
     u.Cli.print(f"Parse error: {result.failure()}")
-    u.Cli.print(f"Content: {repr(content)}")
-```
-
+    u.Cli.print(f"Content: {content!r}")```
 **Enable debug logging:**
 
 ```text
@@ -345,9 +326,7 @@ settings = FlextLdifSettings(
     handle_schema_extensions=True,
 )
 
-u.Cli.print(f"Config: {settings.model_dump()}")
-```
-
+u.Cli.print(f"Config: {settings.model_dump()}")```
 **Enable server servers:**
 
 ```text
@@ -415,9 +394,7 @@ from flext_ldif import FlextLdifSettings
 settings = FlextLdifSettings(
     batch_size=100,  # Instead of default 1000
     parallel_processing=False,  # Disable for memory issues
-)
-```
-
+)```
 **Enable parallel processing:**
 
 ```text
@@ -452,10 +429,6 @@ logger.error("Error message")
 ### 2. Exception Handling
 
 ```python
-from flext_cli import u
-from flext_core import FlextSettings
-
-
 def safe_operation(data: dict) -> p.Result[dict]:
     try:
         # Your operation here
@@ -466,9 +439,7 @@ def safe_operation(data: dict) -> p.Result[dict]:
         return r.fail(f"Validation failed: {e}")
     except Exception as e:
         logger.error(f"Unexpected error: {e}", exc_info=True)
-        return r.fail(f"Operation failed: {e}")
-```
-
+        return r.fail(f"Operation failed: {e}")```
 ### 3. Debug Mode
 
 ```python
@@ -480,9 +451,7 @@ settings = FlextSettings(debug=True)
 
 # Debug information will be printed
 u.Cli.print(f"Debug mode: {settings.debug}")
-u.Cli.print(f"Log level: {settings.log_level}")
-```
-
+u.Cli.print(f"Log level: {settings.log_level}")```
 ### 4. Step-by-Step Debugging
 
 ```text

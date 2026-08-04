@@ -2,6 +2,10 @@
 
 # flext_dbt_ldap.errors
 
+<!-- TOC START -->
+- No sections found
+<!-- TOC END -->
+
 ::: flext_dbt_ldap.errors
     options:
       show_root_heading: true
