@@ -321,9 +321,7 @@ def test_file_migration(ldif_service, temp_directories):
 ### Unit Test Mocking
 
 ```python
-from unittest.mock import Mock, patch
-from flext_cli import u
-from flext_core import FlextSettings
+from unittest.mock import patch
 
 
 def test_with_mocked_dependency():
@@ -337,15 +335,11 @@ def test_with_mocked_dependency():
 
         # Verify mock was called
         mock_service.process.assert_called_once()
-        assert result.success
-```
-
+        assert result.success```
 ### Integration Test Stubbing
 
 ```python
 from unittest.mock import Mock
-from flext_cli import u
-from flext_core import FlextSettings
 
 
 def test_with_stubbed_service():
@@ -361,9 +355,7 @@ def test_with_stubbed_service():
 
     # Test integration
     result = integration_function()
-    assert result.success
-```
-
+    assert result.success```
 ## Performance Testing
 
 ### Load Testing
