@@ -226,10 +226,6 @@ pytest --cov=src --cov-report=html
 ### Writing Tests
 
 ```python
-from flext_cli import u
-from flext_core import FlextSettings
-
-
 class TestDataProcessing:
     def test_process_valid_data(self):
         """Test processing valid data."""
@@ -244,9 +240,7 @@ class TestDataProcessing:
         result = process_data(None)
 
         assert result.failure
-        assert "Data required" in result.failure()
-```
-
+        assert "Data required" in result.failure()```
 ## Quality Gates
 
 ### Pre-commit Hooks
@@ -401,9 +395,7 @@ from flext_newlib import FlextNewlibSettings
 lib = FlextNewlib()
 result = lib.new_feature()
 
-settings = FlextNewlibSettings(new_setting="value")
-```
-
+settings = FlextNewlibSettings(new_setting="value")```
 ## Contributing
 
 ### Pull Request Process
