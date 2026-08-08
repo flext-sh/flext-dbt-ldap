@@ -252,9 +252,7 @@ FLEXT uses pre-commit hooks to enforce quality standards:
 pre-commit install
 
 # Run hooks manually
-pre-commit run --all-files
-```
-
+pre-commit run --all-files```
 ### Quality Checks
 
 ```bash
@@ -268,9 +266,7 @@ make type-check
 make security
 
 # All quality checks
-make val
-```
-
+make val```
 ## Adding New Projects
 
 ### 1. Create Project Structure
@@ -281,9 +277,7 @@ cp -r flext-api flext-newlib
 cd flext-newlib
 
 # Update project metadata
-# Edit pyproject.toml, README.md, etc.
-```
-
+# Edit pyproject.toml, README.md, etc.```
 ### 2. Implement Core Patterns
 
 ```text
@@ -312,17 +306,13 @@ class FlextNewlibModels:
         data: t.JsonMapping
 
     class Response(m.BaseModel):
-        result: p.Result[t.JsonValue]
-```
-
+        result: p.Result[t.JsonValue]```
 ### 3. Add to Workspace
 
 ```bash
 # Add to workspace pyproject.toml
 # Add to workspace Makefile
-# Update documentation
-```
-
+# Update documentation```
 ## Debugging
 
 ### Type Errors
