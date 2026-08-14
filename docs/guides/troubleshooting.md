@@ -245,18 +245,14 @@ for key, value in os.environ.items():
 
 # Load and print configuration
 settings = FlextSettings()
-u.Cli.print(f"Config: {settings.dict()}")
-```
-
+u.Cli.print(f"Config: {settings.dict()}")```
 ### 5. LDIF Processing Issues
 
 #### Problem: LDIF parsing fails
 
 ```text
 # Error
-LdifParsingException: Invalid LDIF format
-```
-
+LdifParsingException: Invalid LDIF format```
 #### Solutions
 
 **Check LDIF content:**
@@ -279,9 +275,7 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-# Your LDIF processing code
-```
-
+# Your LDIF processing code```
 **Validate LDIF format:**
 
 ```text
@@ -300,18 +294,14 @@ def validate_ldif_content(content: str) -> t.StringList:
         if line and not line.startswith(("dn:", " ", "\t")) and ":" not in line:
             issues.append(f"Invalid line {i + 1}: {line}")
 
-    return issues
-```
-
+    return issues```
 ### 6. Migration Issues
 
 #### Problem: Migration fails
 
 ```text
 # Error
-LdifMigrationException: Server compatibility error
-```
-
+LdifMigrationException: Server compatibility error```
 #### Solutions
 
 **Check server configuration:**
@@ -332,9 +322,7 @@ u.Cli.print(f"Config: {settings.model_dump()}")```
 ```text
 settings = FlextLdifSettings(
     servers_enabled=True, source_server="oid", target_server="oud"
-)
-```
-
+)```
 **Test with sample data:**
 
 ```text
@@ -347,9 +335,7 @@ result = ldif.parse(sample_ldif)
 if result.success:
     u.Cli.print("Sample parsing successful")
 else:
-    u.Cli.print(f"Sample parsing failed: {result.failure()}")
-```
-
+    u.Cli.print(f"Sample parsing failed: {result.failure()}")```
 ### 7. Performance Issues
 
 #### Problem: Slow processing
@@ -358,9 +344,7 @@ else:
 # Symptoms
 # - High memory usage
 # - Slow response times
-# - Timeout errors
-```
-
+# - Timeout errors```
 #### Solutions
 
 **Profile memory usage:**
@@ -382,9 +366,7 @@ def profile_memory():
     u.Cli.print(f"Memory used: {memory_used / 1024 / 1024:.2f} MB")
 
 
-profile_memory()
-```
-
+profile_memory()```
 **Optimize batch size:**
 
 ```python
@@ -401,9 +383,7 @@ settings = FlextLdifSettings(
 settings = FlextLdifSettings(
     parallel_processing=True,
     max_workers=4,  # Adjust based on CPU cores
-)
-```
-
+)```
 ## Debugging Techniques
 
 ### 1. Logging Configuration
@@ -423,9 +403,7 @@ logger = FlextLogger.get_logger(__name__)
 logger.debug("Debug message")
 logger.info("Info message")
 logger.warning("Warning message")
-logger.error("Error message")
-```
-
+logger.error("Error message")```
 ### 2. Exception Handling
 
 ```python
@@ -482,9 +460,7 @@ def debug_ldif_processing(content: str):
         entries = result.unwrap()
         u.Cli.print(f"SUCCESS: Parsed {len(entries)} entries")
     else:
-        u.Cli.print(f"ERROR: Parse failed: {result.failure()}")
-```
-
+        u.Cli.print(f"ERROR: Parse failed: {result.failure()}")```
 ## Error Codes Reference
 
 ### FLEXT Core Errors
@@ -533,9 +509,7 @@ def monitor_memory():
         u.Cli.print("WARNING: High memory usage detected")
 
 
-monitor_memory()
-```
-
+monitor_memory()```
 ### CPU Issues
 
 ```text
@@ -554,9 +528,7 @@ def monitor_cpu():
         time.sleep(1)
 
 
-monitor_cpu()
-```
-
+monitor_cpu()```
 ## Getting Help
 
 ### Self-Service Resources
@@ -675,9 +647,7 @@ def process(data: dict) -> p.Result[ProcessedData]:
 
 # ❌ BAD
 def process(data: dict) -> ProcessedData:
-    return ProcessedData(**data)
-```
-
+    return ProcessedData(**data)```
 1. **Validate Input Early**
 
    ```text
