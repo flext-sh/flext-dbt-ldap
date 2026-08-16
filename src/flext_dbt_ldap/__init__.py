@@ -1,9 +1,11 @@
-# @generated AUTO-GENERATED FILE — Regenerate with: make gen
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Flext Dbt Ldap package."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
+from types import MappingProxyType
 
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
@@ -17,59 +19,18 @@ from .__version__ import __version__ as __version__
 from .__version__ import __version_info__ as __version_info__
 
 if TYPE_CHECKING:
-    from flext_ldap import d as d
-    from flext_ldap import e as e
-    from flext_ldap import h as h
-    from flext_ldap import r as r
-    from flext_ldap import x as x
+    from flext_ldap import d, e, h, r, x
 
-    from ._config import FlextDbtLdapConfig as FlextDbtLdapConfig
-    from ._config import config as config
-    from ._settings import FlextDbtLdapSettings as FlextDbtLdapSettings
-    from ._settings import settings as settings
-    from .api import FlextDbtLdap as FlextDbtLdap
-    from .api import dbt_ldap as dbt_ldap
-    from .base import FlextDbtLdapServiceBase as FlextDbtLdapServiceBase
-
-    s: type[FlextDbtLdapServiceBase]
-    from .constants import FlextDbtLdapConstants as FlextDbtLdapConstants
-
-    c: type[FlextDbtLdapConstants]
-    from .models import FlextDbtLdapModels as FlextDbtLdapModels
-
-    m: type[FlextDbtLdapModels]
-    from .protocols import FlextDbtLdapProtocols as FlextDbtLdapProtocols
-
-    p: type[FlextDbtLdapProtocols]
-    from .typings import FlextDbtLdapTypes as FlextDbtLdapTypes
-
-    t: type[FlextDbtLdapTypes]
-    from .utilities import FlextDbtLdapUtilities as FlextDbtLdapUtilities
-
-    u: type[FlextDbtLdapUtilities]
-
-_LAZY_MODULES: dict[str, tuple[str, ...]] = {
-    "._config": ("FlextDbtLdapConfig", "config"),
-    "._settings": ("FlextDbtLdapSettings", "settings"),
-    ".api": ("FlextDbtLdap", "dbt_ldap"),
-    ".base": ("FlextDbtLdapServiceBase", "s"),
-    ".constants": ("FlextDbtLdapConstants", "c"),
-    ".models": ("FlextDbtLdapModels", "m"),
-    ".protocols": ("FlextDbtLdapProtocols", "p"),
-    ".typings": ("FlextDbtLdapTypes", "t"),
-    ".utilities": ("FlextDbtLdapUtilities", "u"),
-    "flext_ldap": ("d", "e", "h", "r", "x"),
-}
-
-
-_LAZY_ALIAS_GROUPS: dict[str, tuple[tuple[str, str], ...]] = {}
-
-
-_LAZY_IMPORTS = build_lazy_import_map(
-    _LAZY_MODULES, alias_groups=_LAZY_ALIAS_GROUPS, sort_keys=False
-)
-
-_PUBLIC_EXPORTS: tuple[str, ...] = (
+    from ._config import FlextDbtLdapConfig, config
+    from ._settings import FlextDbtLdapSettings, settings
+    from .api import FlextDbtLdap, dbt_ldap
+    from .base import FlextDbtLdapServiceBase, FlextDbtLdapServiceBase as s
+    from .constants import FlextDbtLdapConstants, FlextDbtLdapConstants as c
+    from .models import FlextDbtLdapModels, FlextDbtLdapModels as m
+    from .protocols import FlextDbtLdapProtocols, FlextDbtLdapProtocols as p
+    from .typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
+    from .utilities import FlextDbtLdapUtilities, FlextDbtLdapUtilities as u
+__all__: tuple[str, ...] = (
     "FlextDbtLdap",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConstants",
@@ -103,6 +64,26 @@ _PUBLIC_EXPORTS: tuple[str, ...] = (
     "x",
 )
 
-__all__: tuple[str, ...] = tuple(_PUBLIC_EXPORTS)
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
+install_lazy_exports(
+    __name__,
+    globals(),
+    MappingProxyType(
+        build_lazy_import_map(
+            MappingProxyType({
+                "._config": ("FlextDbtLdapConfig", "config"),
+                "._settings": ("FlextDbtLdapSettings", "settings"),
+                ".api": ("FlextDbtLdap", "dbt_ldap"),
+                ".base": ("FlextDbtLdapServiceBase", "s"),
+                ".constants": ("FlextDbtLdapConstants", "c"),
+                ".models": ("FlextDbtLdapModels", "m"),
+                ".protocols": ("FlextDbtLdapProtocols", "p"),
+                ".typings": ("FlextDbtLdapTypes", "t"),
+                ".utilities": ("FlextDbtLdapUtilities", "u"),
+                "flext_ldap": ("d", "e", "h", "r", "x"),
+            }),
+            alias_groups=MappingProxyType({}),
+            sort_keys=False,
+        )
+    ),
+    public_exports=__all__,
+)
