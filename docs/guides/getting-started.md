@@ -105,9 +105,7 @@ from flext_dbt_ldap import settings, u
 
 
 # FLEXT resolves application settings from the environment and project config.
-u.Cli.emit_raw(f"FLEXT application initialized: {settings.DbtLdap.dbt_project_dir}")
-```
-
+u.Cli.emit_raw(f"FLEXT application initialized: {settings.DbtLdap.dbt_project_dir}")```
 ### 2. Using flext-ldif for LDIF Processing
 
 ```python
@@ -126,9 +124,7 @@ if result.success:
     entries = result.unwrap()
     u.Cli.print(f"Successfully parsed {len(entries)} LDIF entries")
 else:
-    u.Cli.print(f"Failed to parse LDIF: {result.failure()}")
-```
-
+    u.Cli.print(f"Failed to parse LDIF: {result.failure()}")```
 ### 3. Railway-Oriented Error Handling
 
 ```python
@@ -169,14 +165,10 @@ result = process_ldif_data(ldif_content)
 if result.success:
     u.Cli.emit_raw(f"Success: {result.unwrap()}")
 else:
-    u.Cli.emit_raw(f"Error: {result.error}")
-```
-
+    u.Cli.emit_raw(f"Error: {result.error}")```
 ### 4. CQRS Pattern with Commands and Queries
 
 ```python
-from flext_cli import u
-from flext_core import FlextSettings
 from dataclasses import dataclass
 
 
@@ -210,9 +202,7 @@ dispatcher.register_handler(GetUserQuery, user_service.get_user)
 
 # Use the dispatcher
 create_result = dispatcher.dispatch(CreateUserCommand("john", "john@example.com"))
-get_result = dispatcher.dispatch(GetUserQuery("user123"))
-```
-
+get_result = dispatcher.dispatch(GetUserQuery("user123"))```
 ## Configuration
 
 ### Basic Configuration
@@ -223,9 +213,7 @@ FLEXT uses environment variables for configuration:
 # Set configuration
 export FLEXT_LOG_LEVEL=INFO
 export FLEXT_LDIF_DEFAULT_ENCODING=utf-8
-export FLEXT_LDIF_STRICT_VALIDATION=true
-```
-
+export FLEXT_LDIF_STRICT_VALIDATION=true```
 ### Programmatic Configuration
 
 ```python
@@ -240,9 +228,7 @@ settings = FlextLdifSettings(
 )
 
 # Use configuration
-ldif = ldif(settings=settings)
-```
-
+ldif = ldif(settings=settings)```
 ## Next Steps
 
 ### Explore the Ecosystem

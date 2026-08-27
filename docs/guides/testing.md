@@ -28,7 +28,7 @@
   - [Load Testing](#load-testing)
   - [Memory Testing](#memory-testing)
 - [Test Data Management](#test-data-management)
-  - [Test Fixtures Directory](#test-fixtures-directory)
+  - [Test Fixtures Directory```](#test-fixtures-directory)
   - [Loading Test Data](#loading-test-data)
 - [Continuous Integration](#continuous-integration)
   - [GitHub Actions Workflow](#github-actions-workflow)
@@ -321,9 +321,7 @@ def test_file_migration(ldif_service, temp_directories):
 ### Unit Test Mocking
 
 ```python
-from unittest.mock import Mock, patch
-from flext_cli import u
-from flext_core import FlextSettings
+from unittest.mock import patch
 
 
 def test_with_mocked_dependency():
@@ -337,15 +335,11 @@ def test_with_mocked_dependency():
 
         # Verify mock was called
         mock_service.process.assert_called_once()
-        assert result.success
-```
-
+        assert result.success```
 ### Integration Test Stubbing
 
 ```python
 from unittest.mock import Mock
-from flext_cli import u
-from flext_core import FlextSettings
 
 
 def test_with_stubbed_service():
@@ -361,9 +355,7 @@ def test_with_stubbed_service():
 
     # Test integration
     result = integration_function()
-    assert result.success
-```
-
+    assert result.success```
 ## Performance Testing
 
 ### Load Testing
@@ -395,9 +387,7 @@ def test_concurrent_processing():
     assert all(result.success for result in results)
 
     # Verify performance (should complete in < 1 second)
-    assert (end_time - start_time) < 1.0
-```
-
+    assert (end_time - start_time) < 1.0```
 ### Memory Testing
 
 ```text
@@ -422,14 +412,10 @@ def test_memory_usage():
     current_memory = process.memory_info().rss
     memory_used = current_memory - initial_memory
 
-    assert memory_used < 100 * 1024 * 1024  # 100MB
-```
-
+    assert memory_used < 100 * 1024 * 1024  # 100MB```
 ## Test Data Management
 
-### Test Fixtures Directory
-
-```
+### Test Fixtures Directory```
 tests/
 ├── fixtures/
 │   ├── ldif/
@@ -441,9 +427,7 @@ tests/
 │   │   └── prod.yaml
 │   └── data/
 │       ├── users.json
-│       └── schema.json
-```
-
+│       └── schema.json```
 ### Loading Test Data
 
 ```text
@@ -471,9 +455,7 @@ def test_with_fixture():
 
     # Use fixture data in test
     result = process_ldif(ldif_content, config_data)
-    assert result.success
-```
-
+    assert result.success```
 ## Continuous Integration
 
 ### GitHub Actions Workflow

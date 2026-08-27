@@ -57,12 +57,12 @@ class FlextDbtLdapUtilitiesMacros:
         """Get parent DN from a distinguished name."""
         try:
             parts = [p.strip() for p in dn.split(",") if p.strip()]
-            if len(parts) > 1:
-                return ",".join(parts[1:])
-            return None
+            parent = ",".join(parts[1:]) if len(parts) > 1 else None
         except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             logger.exception("Failed to get parent DN: %s", dn)
             return None
+        else:
+            return parent
 
     @staticmethod
     def is_user_active(user_account_control: int | None) -> bool:
@@ -85,14 +85,13 @@ class FlextDbtLdapUtilitiesMacros:
         """Parse specific component from DN."""
         try:
             parts = [p.strip() for p in dn.split(",") if "=" in p]
-            for part in parts:
-                key, value = part.split("=", 1)
-                if key.lower() == component.lower():
-                    return value
-            return None
+            pairs = [part.split("=", 1) for part in parts]
         except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             logger.exception("Failed to parse DN component: %s", dn)
             return None
+        return next(
+            (value for key, value in pairs if key.lower() == component.lower()), None
+        )
 
 
 __all__: t.StrSequence = ("FlextDbtLdapUtilitiesMacros",)
