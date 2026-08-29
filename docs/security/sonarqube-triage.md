@@ -41,7 +41,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        16      '2024-01-01 10:00:00+00', '2024-01-01 11:00:00+00', 'Senior Engineer'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 2 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:12` · **Effort**: 4min
@@ -60,7 +60,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        16      '2024-01-01 10:00:00+00', '2024-01-01 11:00:00+00', 'Senior Engineer'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 3 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:13` · **Effort**: 4min
@@ -79,7 +79,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        17  ),
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 4 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:13` · **Effort**: 4min
@@ -98,7 +98,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        17  ),
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 5 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:14` · **Effort**: 4min
@@ -117,7 +117,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        18  (
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 6 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:14` · **Effort**: 4min
@@ -136,7 +136,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        18  (
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 7 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:14` · **Effort**: 4min
@@ -155,7 +155,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        18  (
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 8 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:15` · **Effort**: 4min
@@ -174,7 +174,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        19      '2024-01-01 12:00:01+00', '2024-01-01 12:00:01+00', 2, 1,
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 9 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:15` · **Effort**: 4min
@@ -193,7 +193,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        19      '2024-01-01 12:00:01+00', '2024-01-01 12:00:01+00', 2, 1,
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 10 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:20` · **Effort**: 4min
@@ -212,7 +212,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        24      '2024-01-01 10:01:00+00', '2024-01-01 11:01:00+00', 'Sales Manager'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 11 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:20` · **Effort**: 4min
@@ -231,7 +231,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        24      '2024-01-01 10:01:00+00', '2024-01-01 11:01:00+00', 'Sales Manager'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 12 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:21` · **Effort**: 4min
@@ -250,7 +250,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        25  ),
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 13 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:23` · **Effort**: 4min
@@ -269,7 +269,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        27      '2024-01-01 12:00:02+00', '2024-01-01 12:00:02+00', 3, 1,
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 14 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:28` · **Effort**: 4min
@@ -288,7 +288,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        32      '2024-01-01 10:02:00+00', '2024-01-01 11:02:00+00', 'Software Developer'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 15 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:28` · **Effort**: 4min
@@ -307,7 +307,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        32      '2024-01-01 10:02:00+00', '2024-01-01 11:02:00+00', 'Software Developer'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 16 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:36` · **Effort**: 4min
@@ -326,7 +326,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        40      '2024-01-01 10:03:00+00', '2024-01-01 11:03:00+00', 'HR Director'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 17 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:36` · **Effort**: 4min
@@ -345,7 +345,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        40      '2024-01-01 10:03:00+00', '2024-01-01 11:03:00+00', 'HR Director'
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 18 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:70` · **Effort**: 4min
@@ -364,7 +364,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        74      '2024-01-01 12:01:01+00', '2024-01-01 12:01:01+00', 2, 1,
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 19 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/e2e/sql/02-insert-test-data.sql:123` · **Effort**: 4min
@@ -383,7 +383,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
       127      '2024-01-01 12:02:01+00', '2024-01-01 12:02:01+00', 2, 1,
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 20 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/generic/test_data_quality.sql:7` · **Effort**: 4min
@@ -402,7 +402,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        11  where failures > 0;
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 21 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/generic/test_data_quality.sql:34` · **Effort**: 4min
@@ -421,7 +421,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        38  
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 22 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/test_macros.sql:6` · **Effort**: 4min
@@ -440,7 +440,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        10  from test_data
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 23 · 🟠 CRITICAL · CODE_SMELL · `plsql:S1192`
 **Local**: `tests/test_macros.sql:125` · **Effort**: 4min
@@ -458,7 +458,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
       128  {% endtest %}
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 24 · 🟡 MAJOR · VULNERABILITY · `githubactions:S8264`
 **Local**: `.github/workflows/docs.yml:18` · **Effort**: 5min
@@ -477,7 +477,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        22  concurrency:
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 25 · 🟡 MAJOR · VULNERABILITY · `githubactions:S8233`
 **Local**: `.github/workflows/docs.yml:19` · **Effort**: 5min
@@ -496,7 +496,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        23    group: pages
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 26 · 🟡 MAJOR · VULNERABILITY · `githubactions:S8233`
 **Local**: `.github/workflows/docs.yml:20` · **Effort**: 5min
@@ -515,7 +515,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        24    cancel-in-progress: false
 ```
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 27 · 🟡 MAJOR · VULNERABILITY · `text:S8565`
 **Local**: `pyproject.toml:-` · **Effort**: 5min
@@ -523,7 +523,7 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
 > Dependency versions are not predictable if the lock file (uv.lock, poetry.lock, pdm.lock or pylock.toml) is missing.
 
 
-**Decisão**: 
+**Decisão**: pendente
 
 ### 28 · ⚪ MINOR · CODE_SMELL · `python:S7504`
 **Local**: `conftest.py:20` · **Effort**: 5min
@@ -542,5 +542,4 @@ Cada issue traz a **mensagem do SonarQube** (descreve o problema e o impacto), o
        24                  sys.modules.pop(module_name, None)
 ```
 
-**Decisão**: 
-
+**Decisão**: pendente
