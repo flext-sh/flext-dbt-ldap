@@ -39,7 +39,4 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         """Execute DBT LDAP service — verify readiness."""
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
-
-dbt_ldap = FlextDbtLdap
-
-__all__: list[str] = ["FlextDbtLdap", "dbt_ldap"]
+__all__: list[str] = ["FlextDbtLdap", ]
