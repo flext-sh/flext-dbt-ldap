@@ -3,94 +3,87 @@
 
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import (
-    build_lazy_import_map,
-    install_lazy_exports,
-    merge_lazy_imports,
-)
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_tests import (
-        d as d,
-        e as e,
-        h as h,
-        r as r,
-        td as td,
-        tf as tf,
-        tk as tk,
-        tm as tm,
-        tv as tv,
-        x as x,
-    )
-    from tests.base import (
-        TestsFlextDbtLdapServiceBase as TestsFlextDbtLdapServiceBase,
-        s as s,
-    )
-    from tests.constants import (
-        TestsFlextDbtLdapConstants as TestsFlextDbtLdapConstants,
-        c as c,
-    )
-    from tests.models import TestsFlextDbtLdapModels as TestsFlextDbtLdapModels, m as m
-    from tests.protocols import (
-        TestsFlextDbtLdapProtocols as TestsFlextDbtLdapProtocols,
-        p as p,
-    )
-    from tests.settings import TestsFlextDbtLdapSettings as TestsFlextDbtLdapSettings
-    from tests.typings import TestsFlextDbtLdapTypes as TestsFlextDbtLdapTypes, t as t
-    from tests.unit.test_constants_flat_api import (
-        TestsFlextDbtLdapConstantsFlatApi as TestsFlextDbtLdapConstantsFlatApi,
-    )
-    from tests.unit.test_dbt_services_sync import (
-        TestsFlextDbtLdapServicesSync as TestsFlextDbtLdapServicesSync,
-    )
-    from tests.unit.test_version import (
-        TestsFlextDbtLdapVersion as TestsFlextDbtLdapVersion,
-    )
-    from tests.utilities import (
-        TestsFlextDbtLdapUtilities as TestsFlextDbtLdapUtilities,
-        u as u,
-    )
-_LAZY_IMPORTS = merge_lazy_imports(
-    (".e2e", ".unit"),
-    build_lazy_import_map({
-        ".base": ("TestsFlextDbtLdapServiceBase", "s"),
-        ".conftest": ("conftest",),
-        ".constants": ("TestsFlextDbtLdapConstants", "c"),
-        ".e2e": ("e2e",),
-        ".models": ("TestsFlextDbtLdapModels", "m"),
-        ".protocols": ("TestsFlextDbtLdapProtocols", "p"),
-        ".settings": ("TestsFlextDbtLdapSettings",),
-        ".typings": ("TestsFlextDbtLdapTypes", "t"),
-        ".unit": ("unit",),
-        ".unit.test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
-        ".unit.test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
-        ".unit.test_version": ("TestsFlextDbtLdapVersion",),
-        ".utilities": ("TestsFlextDbtLdapUtilities", "u"),
-        "flext_tests": ("d", "e", "h", "r", "td", "tf", "tk", "tm", "tv", "x"),
-    }),
-    exclude_names=(
-        "cleanup_submodule_namespace",
-        "install_lazy_exports",
-        "lazy_getattr",
-        "logger",
-        "merge_lazy_imports",
-        "output",
-        "output_reporting",
-        "pytest_addoption",
-        "pytest_collect_file",
-        "pytest_collection_modifyitems",
-        "pytest_configure",
-        "pytest_runtest_setup",
-        "pytest_runtest_teardown",
-        "pytest_sessionfinish",
-        "pytest_sessionstart",
-        "pytest_terminal_summary",
-        "pytest_warning_recorded",
-    ),
-    module_name=__name__,
+    from typing import Final
+
+    from flext_dbt_ldap import FlextDbtLdapConstants
+    from flext_tests import FlextTestsConstants, d, e, h, r, td, tf, tk, tm, tv, x
+
+    from . import e2e as e2e, unit as unit
+    from .base import TestsFlextDbtLdapServiceBase, TestsFlextDbtLdapServiceBase as s
+    from .constants import TestsFlextDbtLdapConstants, TestsFlextDbtLdapConstants as c
+    from .models import TestsFlextDbtLdapModels, TestsFlextDbtLdapModels as m
+    from .protocols import TestsFlextDbtLdapProtocols, TestsFlextDbtLdapProtocols as p
+    from .settings import TestsFlextDbtLdapSettings
+    from .typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
+    from .utilities import TestsFlextDbtLdapUtilities, TestsFlextDbtLdapUtilities as u
+__all__: tuple[str, ...] = (
+    "Final",
+    "FlextDbtLdapConstants",
+    "FlextTestsConstants",
+    "TestsFlextDbtLdapConstants",
+    "TestsFlextDbtLdapModels",
+    "TestsFlextDbtLdapProtocols",
+    "TestsFlextDbtLdapServiceBase",
+    "TestsFlextDbtLdapSettings",
+    "TestsFlextDbtLdapTypes",
+    "TestsFlextDbtLdapUtilities",
+    "c",
+    "d",
+    "e",
+    "e2e",
+    "h",
+    "m",
+    "p",
+    "r",
+    "s",
+    "t",
+    "td",
+    "tf",
+    "tk",
+    "tm",
+    "tv",
+    "u",
+    "unit",
+    "x",
 )
 
+_LAZY_IMPORTS = MappingProxyType(
+    build_lazy_import_map(
+        MappingProxyType({
+            ".base": ("TestsFlextDbtLdapServiceBase", "s"),
+            ".constants": ("TestsFlextDbtLdapConstants", "c"),
+            ".e2e": ("e2e",),
+            ".models": ("TestsFlextDbtLdapModels", "m"),
+            ".protocols": ("TestsFlextDbtLdapProtocols", "p"),
+            ".settings": ("TestsFlextDbtLdapSettings",),
+            ".typings": ("TestsFlextDbtLdapTypes", "t"),
+            ".unit": ("unit",),
+            ".utilities": ("TestsFlextDbtLdapUtilities", "u"),
+            "flext_dbt_ldap": ("FlextDbtLdapConstants",),
+            "flext_tests": (
+                "FlextTestsConstants",
+                "d",
+                "e",
+                "h",
+                "r",
+                "td",
+                "tf",
+                "tk",
+                "tm",
+                "tv",
+                "x",
+            ),
+            "typing": ("Final",),
+        }),
+        alias_groups=MappingProxyType({}),
+        sort_keys=False,
+    )
+)
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

@@ -1,38 +1,20 @@
-# @generated AUTO-GENERATED FILE — Regenerate with: make gen
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Flext Dbt Ldap. Models package."""
 
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from .configuration import (
-        FlextDbtLdapModelsConfiguration as FlextDbtLdapModelsConfiguration,
-    )
-    from .dimensions import FlextDbtLdapModelsDimensions as FlextDbtLdapModelsDimensions
-    from .results import FlextDbtLdapModelsResults as FlextDbtLdapModelsResults
-    from .schema import FlextDbtLdapModelsSchema as FlextDbtLdapModelsSchema
-    from .shared import FlextDbtLdapModelsShared as FlextDbtLdapModelsShared
-
-_LAZY_MODULES: dict[str, tuple[str, ...]] = {
-    ".configuration": ("FlextDbtLdapModelsConfiguration",),
-    ".dimensions": ("FlextDbtLdapModelsDimensions",),
-    ".results": ("FlextDbtLdapModelsResults",),
-    ".schema": ("FlextDbtLdapModelsSchema",),
-    ".shared": ("FlextDbtLdapModelsShared",),
-}
-
-
-_LAZY_ALIAS_GROUPS: dict[str, tuple[tuple[str, str], ...]] = {}
-
-
-_LAZY_IMPORTS = build_lazy_import_map(
-    _LAZY_MODULES, alias_groups=_LAZY_ALIAS_GROUPS, sort_keys=False
-)
-
-_PUBLIC_EXPORTS: tuple[str, ...] = (
+    from .configuration import FlextDbtLdapModelsConfiguration
+    from .dimensions import FlextDbtLdapModelsDimensions
+    from .results import FlextDbtLdapModelsResults
+    from .schema import FlextDbtLdapModelsSchema
+    from .shared import FlextDbtLdapModelsShared
+__all__: tuple[str, ...] = (
     "FlextDbtLdapModelsConfiguration",
     "FlextDbtLdapModelsDimensions",
     "FlextDbtLdapModelsResults",
@@ -40,6 +22,18 @@ _PUBLIC_EXPORTS: tuple[str, ...] = (
     "FlextDbtLdapModelsShared",
 )
 
-__all__: tuple[str, ...] = tuple(_PUBLIC_EXPORTS)
+_LAZY_IMPORTS = MappingProxyType(
+    build_lazy_import_map(
+        MappingProxyType({
+            ".configuration": ("FlextDbtLdapModelsConfiguration",),
+            ".dimensions": ("FlextDbtLdapModelsDimensions",),
+            ".results": ("FlextDbtLdapModelsResults",),
+            ".schema": ("FlextDbtLdapModelsSchema",),
+            ".shared": ("FlextDbtLdapModelsShared",),
+        }),
+        alias_groups=MappingProxyType({}),
+        sort_keys=False,
+    )
+)
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
