@@ -3,19 +3,18 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from . import e2e as e2e
-    from . import unit as unit
-    from flext_dbt_ldap import FlextDbtLdapConstants
-    from flext_tests import FlextTestsConstants, d, e, h, r, td, tf, tk, tm, tv, x
     from typing import Final
 
+    from flext_dbt_ldap import FlextDbtLdapConstants
+    from flext_tests import FlextTestsConstants, d, e, h, r, td, tf, tk, tm, tv, x
+
+    from . import e2e as e2e, unit as unit
     from .base import TestsFlextDbtLdapServiceBase, TestsFlextDbtLdapServiceBase as s
     from .constants import TestsFlextDbtLdapConstants, TestsFlextDbtLdapConstants as c
     from .models import TestsFlextDbtLdapModels, TestsFlextDbtLdapModels as m
