@@ -19,7 +19,8 @@ from .__version__ import __version__ as __version__
 from .__version__ import __version_info__ as __version_info__
 
 if TYPE_CHECKING:
-    from flext_ldap import d, e, h, r, x
+    from . import services as services
+    from flext_ldap import FlextLdapConstants, d, e, h, r, x
 
     from ._config import FlextDbtLdapConfig, config
     from ._settings import FlextDbtLdapSettings, settings
@@ -28,18 +29,23 @@ if TYPE_CHECKING:
     from .constants import FlextDbtLdapConstants, FlextDbtLdapConstants as c
     from .models import FlextDbtLdapModels, FlextDbtLdapModels as m
     from .protocols import FlextDbtLdapProtocols, FlextDbtLdapProtocols as p
+    from .services.client import FlextDbtLdapClientMixin
+    from .services.sync import FlextDbtLdapSyncMixin
     from .typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
     from .utilities import FlextDbtLdapUtilities, FlextDbtLdapUtilities as u
 __all__: tuple[str, ...] = (
     "FlextDbtLdap",
+    "FlextDbtLdapClientMixin",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConstants",
     "FlextDbtLdapModels",
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
     "FlextDbtLdapSettings",
+    "FlextDbtLdapSyncMixin",
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
+    "FlextLdapConstants",
     "__author__",
     "__author_email__",
     "__description__",
@@ -58,32 +64,33 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
+    "services",
     "settings",
     "t",
     "u",
     "x",
 )
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    MappingProxyType(
-        build_lazy_import_map(
-            MappingProxyType({
-                "._config": ("FlextDbtLdapConfig", "config"),
-                "._settings": ("FlextDbtLdapSettings", "settings"),
-                ".api": ("FlextDbtLdap", "dbt_ldap"),
-                ".base": ("FlextDbtLdapServiceBase", "s"),
-                ".constants": ("FlextDbtLdapConstants", "c"),
-                ".models": ("FlextDbtLdapModels", "m"),
-                ".protocols": ("FlextDbtLdapProtocols", "p"),
-                ".typings": ("FlextDbtLdapTypes", "t"),
-                ".utilities": ("FlextDbtLdapUtilities", "u"),
-                "flext_ldap": ("d", "e", "h", "r", "x"),
-            }),
-            alias_groups=MappingProxyType({}),
-            sort_keys=False,
-        )
-    ),
-    public_exports=__all__,
+_LAZY_IMPORTS = MappingProxyType(
+    build_lazy_import_map(
+        MappingProxyType({
+            "._config": ("FlextDbtLdapConfig", "config"),
+            "._settings": ("FlextDbtLdapSettings", "settings"),
+            ".api": ("FlextDbtLdap", "dbt_ldap"),
+            ".base": ("FlextDbtLdapServiceBase", "s"),
+            ".constants": ("FlextDbtLdapConstants", "c"),
+            ".models": ("FlextDbtLdapModels", "m"),
+            ".protocols": ("FlextDbtLdapProtocols", "p"),
+            ".services": ("services",),
+            ".services.client": ("FlextDbtLdapClientMixin",),
+            ".services.sync": ("FlextDbtLdapSyncMixin",),
+            ".typings": ("FlextDbtLdapTypes", "t"),
+            ".utilities": ("FlextDbtLdapUtilities", "u"),
+            "flext_ldap": ("FlextLdapConstants", "d", "e", "h", "r", "x"),
+        }),
+        alias_groups=MappingProxyType({}),
+        sort_keys=False,
+    )
 )
+
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
