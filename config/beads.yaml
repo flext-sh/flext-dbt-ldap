@@ -1,4 +1,4 @@
 version: 1
-workspace: flext-dbt-ldap
-database: flext-dbt-ldap
-issue_prefix: flext-dbt-ldap
+workspace: flext
+database: flext
+issue_prefix: flext

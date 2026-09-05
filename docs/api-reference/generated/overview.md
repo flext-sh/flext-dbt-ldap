@@ -16,16 +16,16 @@
   Database` (+2 more)
 - Project class: `integration`
 - Keywords: `data-transformation`, `dbt`, `enterprise`, `flext`, `sql`, `typed`
-- Main facades: `FlextDbtLdap`, `FlextDbtLdapConfig`, `FlextDbtLdapConstants`,
-  `FlextDbtLdapModels`, `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`,
-  `FlextDbtLdapSettings`, `FlextDbtLdapTypes` (+1 more)
-- Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapConfig`,
+- Main facades: `FlextDbtLdap`, `FlextDbtLdapClientMixin`, `FlextDbtLdapConfig`,
   `FlextDbtLdapConstants`, `FlextDbtLdapModels`, `FlextDbtLdapProtocols`,
-  `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`, `FlextDbtLdapTypes`,
-  `FlextDbtLdapUtilities`, `config` (+2 more)
-- Exported module shortcuts: _none_
-- Generated module pages: `0`
+  `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings` (+3 more)
+- Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
+- Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapClientMixin`,
+  `FlextDbtLdapConfig`, `FlextDbtLdapConstants`, `FlextDbtLdapModels`,
+  `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`,
+  `FlextDbtLdapSyncMixin`, `FlextDbtLdapTypes` (+4 more)
+- Exported module shortcuts: `services`
+- Generated module pages: `10`
 
 ## Next Pages
 
