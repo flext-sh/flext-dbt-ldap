@@ -63,7 +63,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             return _run_extract_ldap_entries()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP extraction")
-            return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail(f"LDAP extraction error: {e}", exception=e)
+            return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail(
+                f"LDAP extraction error: {e}", exception=e
+            )
 
     def run_full_pipeline(
         self,
@@ -121,7 +123,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             return _run_transform_with_dbt()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during DBT transformation")
-            return r[m.DbtLdap.DbtRunStatus].fail(f"DBT transformation error: {e}", exception=e)
+            return r[m.DbtLdap.DbtRunStatus].fail(
+                f"DBT transformation error: {e}", exception=e
+            )
 
     def _run_selected_models(
         self, model_names: t.StrSequence | None = None
@@ -172,7 +176,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             return _run_validate_ldap_data()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP validation")
-            return r[m.DbtLdap.ValidationMetrics].fail(f"LDAP validation error: {e}", exception=e)
+            return r[m.DbtLdap.ValidationMetrics].fail(
+                f"LDAP validation error: {e}", exception=e
+            )
 
     def _map_entry_attributes(
         self, entry: t.Ldap.OperationAttributes

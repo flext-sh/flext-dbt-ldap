@@ -35,7 +35,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
             return r[m.DbtLdap.AnalyticsReport].ok(report)
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.AnalyticsReport].fail(f"Report generation error: {e}", exception=e)
+            return r[m.DbtLdap.AnalyticsReport].fail(
+                f"Report generation error: {e}", exception=e
+            )
 
     def run_dbt_models(
         self, model_names: t.StrSequence | None = None
@@ -51,7 +53,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 )
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtRunStatus].fail(f"DBT model execution error: {e}", exception=e)
+            return r[m.DbtLdap.DbtRunStatus].fail(
+                f"DBT model execution error: {e}", exception=e
+            )
 
     def run_full_data_warehouse_sync(
         self, search_base: str | None = None, *, incremental: bool = False
@@ -99,13 +103,17 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                     "groups", bookmark, successful=True
                 )
                 if update_result.failure:
-                    return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(update_result)
+                    return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(
+                        update_result
+                    )
             return result
 
         try:
             return _run_sync_groups_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"Group sync error: {e}", exception=e)
+            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                f"Group sync error: {e}", exception=e
+            )
 
     def sync_memberships_to_warehouse(
         self, search_base: str | None = None
@@ -119,7 +127,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 model_names=[c.DbtLdap.FACT_MEMBERSHIPS],
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"Membership sync error: {e}", exception=e)
+            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                f"Membership sync error: {e}", exception=e
+            )
 
     def sync_users_to_warehouse(
         self, search_base: str | None = None, *, incremental: bool = False
@@ -155,13 +165,17 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                     c.DbtLdap.USERS, bookmark, successful=True
                 )
                 if update_result.failure:
-                    return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(update_result)
+                    return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(
+                        update_result
+                    )
             return result
 
         try:
             return _run_sync_users_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(f"User sync error: {e}", exception=e)
+            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
+                f"User sync error: {e}", exception=e
+            )
 
     def validate_warehouse_data_quality(
         self, model_names: t.StrSequence | None = None
@@ -175,7 +189,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 m.DbtLdap.ValidationMetrics(validation_passed=True)
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[m.DbtLdap.ValidationMetrics].fail(f"Data quality validation error: {e}", exception=e)
+            return r[m.DbtLdap.ValidationMetrics].fail(
+                f"Data quality validation error: {e}", exception=e
+            )
 
     def _bookmark_now(self) -> str:
         bookmark: str = u.generate_datetime_utc().strftime("%Y%m%d%H%M%SZ")
