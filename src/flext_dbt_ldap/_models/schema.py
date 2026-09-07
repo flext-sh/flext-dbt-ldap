@@ -35,9 +35,7 @@ class FlextDbtLdapModelsSchema:
         columns: Annotated[
             t.Ldap.OperationAttributes,
             u.Field(description="Column-level DBT tests keyed by attribute name"),
-        ] = u.Field(
-            default_factory=lambda: MappingProxyType[str, t.StrSequence]({})
-        )
+        ] = u.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
 
     class TransformationConfig(m.Value):
         """Transformation configuration."""
@@ -80,9 +78,7 @@ class FlextDbtLdapModelsSchema:
         columns: Annotated[
             t.Ldap.OperationAttributes,
             u.Field(description="Column validation configuration keyed by attribute"),
-        ] = u.Field(
-            default_factory=lambda: MappingProxyType[str, t.StrSequence]({})
-        )
+        ] = u.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
 
     class LdapSchema(m.Value):
         """LDAP schema configuration."""
