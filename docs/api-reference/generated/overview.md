@@ -23,7 +23,7 @@
 - Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapClientMixin`,
   `FlextDbtLdapConfig`, `FlextDbtLdapConstants`, `FlextDbtLdapModels`,
   `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`,
-  `FlextDbtLdapSyncMixin`, `FlextDbtLdapTypes` (+3 more)
+  `FlextDbtLdapSyncMixin`, `FlextDbtLdapTypes` (+4 more)
 - Exported module shortcuts: `services`
 - Generated module pages: `10`
 

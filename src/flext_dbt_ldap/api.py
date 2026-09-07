@@ -40,4 +40,6 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
 
-__all__: list[str] = ["FlextDbtLdap"]
+dbt_ldap = FlextDbtLdap
+
+__all__: list[str] = ["FlextDbtLdap", "dbt_ldap"]
