@@ -7,7 +7,11 @@ metadata:
 
 # Configuration Schema Migration
 
+<<<<<<< HEAD
 Read `the complete procedure` (skill file) before changing a
+=======
+Read [the complete procedure](references/procedure.md) before changing a
+>>>>>>> 99a49881ce32fa5b42b832b84307c783d356de13
 configuration schema, serialized representation, environment mapping, loader,
 validator, or generated configuration contract.
 

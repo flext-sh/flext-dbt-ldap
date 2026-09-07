@@ -9,6 +9,10 @@ metadata:
 
 Activate when writing or revising technical prose, including guides, ADRs,
 runbooks, references, and code-facing explanations. Read the
+<<<<<<< HEAD
 `complete procedure` (skill file), preserve meaning and evidence,
+=======
+[complete procedure](references/procedure.md), preserve meaning and evidence,
+>>>>>>> 99a49881ce32fa5b42b832b84307c783d356de13
 and prefer deletion over decorative rewriting. It does not own product voice or
 marketing copy.
