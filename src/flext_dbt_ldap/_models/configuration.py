@@ -78,10 +78,10 @@ class FlextDbtLdapModelsConfiguration:
 
         warn_after: Annotated[
             t.IntMapping, u.Field(description="Warning freshness thresholds")
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+        ] = u.Field(default_factory=lambda: MappingProxyType[str, int]({}))
         error_after: Annotated[
             t.IntMapping, u.Field(description="Error freshness thresholds")
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+        ] = u.Field(default_factory=lambda: MappingProxyType[str, int]({}))
 
     class DbtSourceDefinition(m.Value):
         """Complete DBT source definition."""
