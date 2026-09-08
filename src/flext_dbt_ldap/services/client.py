@@ -9,7 +9,7 @@ from flext_dbt_ldap.base import FlextDbtLdapServiceBase
 from flext_ldap import FlextLdap
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._settings import FlextDbtLdapSettings
+    from .._settings import FlextDbtLdapSettings
 
 logger = u.fetch_logger(__name__)
 

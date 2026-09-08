@@ -11,9 +11,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
+
+from .entry import FlextDbtLdapUtilitiesEntry
 
 if TYPE_CHECKING:
     from collections.abc import Callable

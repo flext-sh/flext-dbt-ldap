@@ -18,6 +18,7 @@ class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):
             """DBT LDAP-specific test constants."""
 
             POSTGRES_READY_MAX_RETRIES: Final[int] = 30
+            DIRECTORY_BASE_DN: Final[str] = "dc=example,dc=com"
 
 
 c = TestsFlextDbtLdapConstants

@@ -40,6 +40,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
 
-dbt_ldap = FlextDbtLdap
+dbt_ldap: FlextDbtLdap = FlextDbtLdap.fetch_global()
+"""Process-wide FlextDbtLdap facade singleton resolved from the service container."""
 
 __all__: list[str] = ["FlextDbtLdap", "dbt_ldap"]
