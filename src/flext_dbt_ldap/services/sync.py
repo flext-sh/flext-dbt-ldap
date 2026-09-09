@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from flext_cli import u
+
 from flext_dbt_ldap import c, m, p, r, t
 from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
 

@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from typing import Final
 
-from flext_dbt_ldap import FlextDbtLdapConstants
 from flext_tests import FlextTestsConstants
+
+from flext_dbt_ldap import FlextDbtLdapConstants
 
 
 class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):

@@ -12,8 +12,9 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
-from flext_dbt_ldap import FlextDbtLdapTypes
 from flext_tests import FlextTestsTypes
+
+from flext_dbt_ldap import FlextDbtLdapTypes
 
 from .utilities import TestsFlextDbtLdapUtilities
 

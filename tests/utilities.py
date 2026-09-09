@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import override
 
+from flext_ldap import FlextLdap
+from flext_tests import FlextTestsUtilities
 from pydantic import PrivateAttr
 
 from flext_dbt_ldap import (
@@ -22,8 +24,6 @@ from flext_dbt_ldap import (
     r,
     t,
 )
-from flext_ldap import FlextLdap
-from flext_tests import FlextTestsUtilities
 
 
 class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):

@@ -21,9 +21,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+from flext_tests import tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from flext_tests import tm
 from tests import c, m, t, u
 
 if TYPE_CHECKING:

@@ -10,9 +10,9 @@ implementation-layout detail is touched.
 from __future__ import annotations
 
 import pytest
+from flext_tests import tm
 from pydantic import ValidationError
 
-from flext_tests import tm
 from tests import c, m
 
 type LdifEntry = m.Ldif.Entry

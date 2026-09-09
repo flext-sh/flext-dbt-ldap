@@ -9,8 +9,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap import FlextDbtLdapModels
 from flext_tests import FlextTestsModels
+
+from flext_dbt_ldap import FlextDbtLdapModels
 
 
 class TestsFlextDbtLdapModels(FlextTestsModels, FlextDbtLdapModels):

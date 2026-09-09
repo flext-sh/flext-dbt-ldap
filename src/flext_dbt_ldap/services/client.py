@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from flext_ldap import FlextLdap
+
 from flext_dbt_ldap import c, m, p, r, t, u
 from flext_dbt_ldap.base import FlextDbtLdapServiceBase
-from flext_ldap import FlextLdap
 
 if TYPE_CHECKING:
     from .._settings import FlextDbtLdapSettings

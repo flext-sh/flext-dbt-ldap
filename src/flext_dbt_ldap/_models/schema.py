@@ -5,8 +5,9 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_dbt_ldap import c, t
 from flext_meltano import m, u
+
+from flext_dbt_ldap import c, t
 
 
 class FlextDbtLdapModelsSchema:

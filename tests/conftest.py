@@ -11,9 +11,9 @@ import contextlib
 import pathlib
 
 import pytest
+from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdapSettings
-from flext_tests import tf, tm
 from tests import c, t, u
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
