@@ -4,12 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_dbt_ldap import c, m, p, r, t, u
-from flext_dbt_ldap.base import FlextDbtLdapServiceBase
 from flext_ldap import FlextLdap
 
+from flext_dbt_ldap import c, m, p, r, t, u
+from flext_dbt_ldap.base import FlextDbtLdapServiceBase
+
 if TYPE_CHECKING:
-    from flext_dbt_ldap._settings import FlextDbtLdapSettings
+    from .._settings import FlextDbtLdapSettings
 
 logger = u.fetch_logger(__name__)
 
@@ -64,7 +65,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP extraction")
             return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail(
-                f"LDAP extraction error: {e}"
+                f"LDAP extraction error: {e}", exception=e
             )
 
     def run_full_pipeline(
@@ -80,20 +81,14 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             search_base, search_filter, attributes
         )
         if extract_result.failure:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                extract_result.error or "LDAP extraction failed"
-            )
+            return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(extract_result)
         entries = extract_result.value or []
         validate_result = self.validate_ldap_data(entries)
         if validate_result.failure:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                validate_result.error or "LDAP validation failed"
-            )
+            return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(validate_result)
         transform_result = self.transform_with_dbt(entries, model_names)
         if transform_result.failure:
-            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                transform_result.error or "DBT transformation failed"
-            )
+            return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(transform_result)
         pipeline_result = m.DbtLdap.DbtLdapPipelineResult(
             extracted_entries=len(entries)
         )
@@ -110,9 +105,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         def _run_transform_with_dbt() -> p.Result[m.DbtLdap.DbtRunStatus]:
             run_result = self._run_selected_models(model_names)
             if run_result.failure:
-                return r[m.DbtLdap.DbtRunStatus].fail(
-                    run_result.error or "DBT transformation failed"
-                )
+                return r[m.DbtLdap.DbtRunStatus].from_failure(run_result)
             logger.info(
                 "Running DBT transformations on %d LDAP entries, models=%s",
                 len(entries),
@@ -131,7 +124,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             return _run_transform_with_dbt()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during DBT transformation")
-            return r[m.DbtLdap.DbtRunStatus].fail(f"DBT transformation error: {e}")
+            return r[m.DbtLdap.DbtRunStatus].fail(
+                f"DBT transformation error: {e}", exception=e
+            )
 
     def _run_selected_models(
         self, model_names: t.StrSequence | None = None
@@ -140,9 +135,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         model_list: t.MutableSequenceOf[str] = list(model_names) if model_names else []
         run_result = self.run_models(models=model_list or None)
         if run_result.failure:
-            return r[t.StrSequence].fail(
-                run_result.error or "DBT model execution failed"
-            )
+            return r[t.StrSequence].from_failure(run_result)
         return r[t.StrSequence].ok(model_list)
 
     def validate_ldap_data(
@@ -184,7 +177,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             return _run_validate_ldap_data()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP validation")
-            return r[m.DbtLdap.ValidationMetrics].fail(f"LDAP validation error: {e}")
+            return r[m.DbtLdap.ValidationMetrics].fail(
+                f"LDAP validation error: {e}", exception=e
+            )
 
     def _map_entry_attributes(
         self, entry: t.Ldap.OperationAttributes

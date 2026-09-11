@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from typing import Final
 
-from flext_dbt_ldap import FlextDbtLdapConstants
 from flext_tests import FlextTestsConstants
+
+from flext_dbt_ldap import FlextDbtLdapConstants
 
 
 class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):
@@ -18,6 +19,7 @@ class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):
             """DBT LDAP-specific test constants."""
 
             POSTGRES_READY_MAX_RETRIES: Final[int] = 30
+            DIRECTORY_BASE_DN: Final[str] = "dc=example,dc=com"
 
 
 c = TestsFlextDbtLdapConstants

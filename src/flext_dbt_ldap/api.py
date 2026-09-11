@@ -11,9 +11,10 @@ from __future__ import annotations
 
 from typing import override
 
+from flext_meltano import FlextMeltanoDbtServiceBase
+
 from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t, u
 from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
-from flext_meltano import FlextMeltanoDbtServiceBase
 
 
 class FlextDbtLdap(FlextDbtLdapSyncMixin):
@@ -40,6 +41,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
 
-dbt_ldap = FlextDbtLdap
+dbt_ldap: FlextDbtLdap = FlextDbtLdap.fetch_global()
+"""Process-wide FlextDbtLdap facade singleton resolved from the service container."""
 
 __all__: list[str] = ["FlextDbtLdap", "dbt_ldap"]

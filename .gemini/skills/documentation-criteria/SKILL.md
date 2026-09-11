@@ -7,6 +7,9 @@ metadata:
 
 # Documentation Criteria
 
+<<<<<<< HEAD
+Select the smallest project-owned documentation set that preserves a current requirement, decision, interface, implementation contract, or execution plan. Do not create documents from file count, generic ceremony, or possible future use. Follow the complete `router procedure` (project file) and preserve its owners, evidence contracts, failure propagation, and required output standard.
+=======
 Select the smallest project-owned documentation set that preserves a current
 requirement, decision, interface, implementation contract, or execution plan.
 Do not create documents from file count, generic ceremony, or possible future use.
@@ -53,3 +56,4 @@ approval leaves no dependent draft, alternate template, or stale superseded file
 Verify links, traceability, measurable acceptance, owner identity, and absence of
 unnecessary documents. Never mark implementation or phase completion from a
 document status alone.
+>>>>>>> 99a49881ce32fa5b42b832b84307c783d356de13

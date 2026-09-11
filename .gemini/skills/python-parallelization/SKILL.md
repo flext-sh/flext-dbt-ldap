@@ -7,7 +7,11 @@ metadata:
 
 # Python Parallelization
 
+<<<<<<< HEAD
+Read `the selection and proof procedure` (skill file) before changing
+=======
 Read [the selection and proof procedure](references/procedure.md) before changing
+>>>>>>> 99a49881ce32fa5b42b832b84307c783d356de13
 Python concurrency, parallelism, or throughput behavior.
 
 This skill owns workload classification, bounded execution, cancellation,

@@ -7,6 +7,9 @@ metadata:
 
 # Security Review
 
+<<<<<<< HEAD
+Activate for credentials, authentication, authorization, untrusted input, dependencies, containers, persistence, network boundaries, or scanner output. Follow the complete `router procedure` (project file) and preserve its owners, evidence contracts, failure propagation, and required output standard.
+=======
 Activate for credentials, authentication, authorization, untrusted input,
 dependencies, containers, persistence, network boundaries, or scanner output.
 
@@ -47,3 +50,4 @@ findings.
 Review one ordered defect at a time. Correct and revalidate the first unclosed
 defect before advancing; reporting it never closes or transfers the review. Do
 not claim the remaining surface clean without executing its declared gates.
+>>>>>>> 99a49881ce32fa5b42b832b84307c783d356de13

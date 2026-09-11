@@ -7,7 +7,11 @@ metadata:
 
 # Architecture Documentation
 
+<<<<<<< HEAD
+Read `the evidence procedure` (skill file) before documenting system
+=======
 Read [the evidence procedure](references/procedure.md) before documenting system
+>>>>>>> 99a49881ce32fa5b42b832b84307c783d356de13
 structure, ownership, data flow, runtime topology, or an architectural decision.
 
 Use maintained code, configuration, schemas, and runtime observations as the

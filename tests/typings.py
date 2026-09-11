@@ -12,8 +12,11 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
-from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapTypes
 from flext_tests import FlextTestsTypes
+
+from flext_dbt_ldap import FlextDbtLdapTypes
+
+from .utilities import TestsFlextDbtLdapUtilities
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
@@ -27,7 +30,10 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
 
             type SyncState = FlextDbtLdapTypes.MutableMappingKV[str, str] | None
             type ServiceFactory = Callable[
-                [Path, SyncState], FlextDbtLdapTypes.Pair[FlextDbtLdap, Path]
+                [Path, SyncState],
+                FlextDbtLdapTypes.Pair[
+                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap, Path
+                ],
             ]
 
 

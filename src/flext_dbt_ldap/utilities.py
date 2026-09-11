@@ -8,10 +8,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
-from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import u
+
+from ._utilities.integration import FlextDbtLdapUtilitiesIntegration
+from ._utilities.macros import FlextDbtLdapUtilitiesMacros
 
 if TYPE_CHECKING:
     from flext_dbt_ldap import t

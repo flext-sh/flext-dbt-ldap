@@ -11,12 +11,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from pydantic_settings import SettingsConfigDict
-
 # NOTE (multi-agent): mro-rn88 — inherit FlextLdapSettings so LDAP connection scalars
 # come from settings.Ldap.* (SSOT); FlextMeltanoSettings adds the dbt/meltano surface.
 from flext_ldap import FlextLdapSettings
 from flext_meltano import FlextMeltanoSettings, m
+from pydantic_settings import SettingsConfigDict
 
 
 class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
