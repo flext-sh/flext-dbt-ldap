@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import pytest
 from flext_tests import tm
-from pydantic import ValidationError
 
 from tests import c, m
 
@@ -130,11 +129,11 @@ class TestsFlextDbtLdapConstantsFlatApi:
     # --- UserDimension validation contract ---------------------------------
 
     def test_construction_rejects_blank_identity_fields(self) -> None:
-        with pytest.raises(ValidationError):
+        with pytest.raises(m.ValidationError):
             m.DbtLdap.UserDimension(user_id="", common_name="")
 
     def test_construction_requires_common_name(self) -> None:
-        with pytest.raises(ValidationError):
+        with pytest.raises(m.ValidationError):
             m.DbtLdap.UserDimension.model_validate({"user_id": "jdoe"})
 
     # --- UserDimension public serialization --------------------------------

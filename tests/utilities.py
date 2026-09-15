@@ -13,7 +13,6 @@ from typing import override
 
 from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
-from pydantic import PrivateAttr
 
 from flext_dbt_ldap import (
     FlextDbtLdap,
@@ -44,13 +43,13 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 directory answers with real ``m.Ldif.Entry`` models.
                 """
 
-                _directory_entries: list[m.Ldif.Entry] = PrivateAttr(
+                _directory_entries: list[m.Ldif.Entry] = u.PrivateAttr(
                     default_factory=list
                 )
-                _directory_requests: list[m.Ldap.SearchOptions] = PrivateAttr(
+                _directory_requests: list[m.Ldap.SearchOptions] = u.PrivateAttr(
                     default_factory=list
                 )
-                _directory_reachable: bool = PrivateAttr(default=True)
+                _directory_reachable: bool = u.PrivateAttr(default=True)
 
                 def serve(self, entries: t.SequenceOf[m.Ldif.Entry]) -> None:
                     """Replace the directory contents with ``entries``."""
@@ -96,8 +95,8 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 real ``m.Meltano.CommandExecutionResult`` models.
                 """
 
-                _dbt_runner_failure: str | None = PrivateAttr(default=None)
-                _dbt_runner_requests: list[tuple[str, ...]] = PrivateAttr(
+                _dbt_runner_failure: str | None = u.PrivateAttr(default=None)
+                _dbt_runner_requests: list[tuple[str, ...]] = u.PrivateAttr(
                     default_factory=list
                 )
 
