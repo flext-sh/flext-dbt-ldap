@@ -111,21 +111,15 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 @override
                 def create_ldap_api(
                     settings: FlextDbtLdapSettings,
-                ) -> (
-                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory
-                ):
+                ) -> TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory:
                     """Create the in-memory directory wired as the LDAP client."""
-                    return (
-                        TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory.with_settings(
-                            settings
-                        )
+                    return TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory.with_settings(
+                        settings
                     )
 
                 def directory(
                     self,
-                ) -> (
-                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory
-                ):
+                ) -> TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory:
                     """Return the in-memory directory serving this facade."""
                     client = self._ldap_api
                     if not isinstance(
