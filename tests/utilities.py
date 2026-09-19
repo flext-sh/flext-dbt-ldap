@@ -14,14 +14,13 @@ from typing import override
 from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
 
-from flext_core import u
+from flext_core import r, u
 from flext_dbt_ldap import (
     FlextDbtLdap,
     FlextDbtLdapSettings,
     FlextDbtLdapUtilities,
     m,
     p,
-    r,
     t,
 )
 
