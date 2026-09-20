@@ -15,13 +15,12 @@ from typing import TYPE_CHECKING, Annotated
 # come from settings.Ldap.* (SSOT); FlextMeltanoSettings adds the dbt/meltano surface.
 from flext_ldap import FlextLdapSettings
 from flext_meltano import FlextMeltanoSettings, m
-from pydantic_settings import SettingsConfigDict
 
 
 class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     """DBT LDAP settings; connection via ``Ldap.*``, dbt knobs via ``DbtLdap.*``."""
 
-    model_config = SettingsConfigDict(
+    model_config = m.SettingsConfigDict(
         env_prefix="FLEXT_DBT_LDAP_", env_nested_delimiter="__", extra="ignore"
     )
 
