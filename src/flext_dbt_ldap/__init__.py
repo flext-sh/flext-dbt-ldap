@@ -20,7 +20,7 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldap import FlextLdapConstants, d, e, h, r, x
+    from flext_core import d, e, h, r, x
 
     from . import services
     from .__version__ import FlextDbtLdapVersion
@@ -48,7 +48,6 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapVersion",
-    "FlextLdapConstants",
     "__author__",
     "__author_email__",
     "__description__",
@@ -90,7 +89,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".services.sync": ("FlextDbtLdapSyncMixin",),
             ".typings": ("FlextDbtLdapTypes", "t"),
             ".utilities": ("FlextDbtLdapUtilities", "u"),
-            "flext_ldap": ("FlextLdapConstants", "d", "e", "h", "r", "x"),
+            "flext_core": ("d", "e", "h", "r", "x"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
