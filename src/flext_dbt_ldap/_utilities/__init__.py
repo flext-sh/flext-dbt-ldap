@@ -13,9 +13,7 @@ if TYPE_CHECKING:
     from .integration import FlextDbtLdapUtilitiesIntegration
     from .macros import FlextDbtLdapUtilitiesMacros
 __all__: tuple[str, ...] = (
-    "FlextDbtLdapUtilitiesEntry",
-    "FlextDbtLdapUtilitiesIntegration",
-    "FlextDbtLdapUtilitiesMacros",
+    "FlextDbtLdapUtilitiesEntry", "FlextDbtLdapUtilitiesIntegration", "FlextDbtLdapUtilitiesMacros",
 )
 
 _LAZY_IMPORTS = MappingProxyType(
