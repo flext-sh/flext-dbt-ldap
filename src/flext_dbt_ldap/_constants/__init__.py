@@ -14,7 +14,10 @@ if TYPE_CHECKING:
     from .search import FlextDbtLdapConstantsSearch
     from .transformation import FlextDbtLdapConstantsTransformation
 __all__: tuple[str, ...] = (
-    "FlextDbtLdapConstantsAttributes", "FlextDbtLdapConstantsBase", "FlextDbtLdapConstantsSearch", "FlextDbtLdapConstantsTransformation",
+    "FlextDbtLdapConstantsAttributes",
+    "FlextDbtLdapConstantsBase",
+    "FlextDbtLdapConstantsSearch",
+    "FlextDbtLdapConstantsTransformation",
 )
 
 _LAZY_IMPORTS = MappingProxyType(
