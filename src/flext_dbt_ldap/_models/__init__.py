@@ -15,7 +15,10 @@ if TYPE_CHECKING:
     from .schema import FlextDbtLdapModelsSchema
     from .shared import FlextDbtLdapModelsShared
 __all__: tuple[str, ...] = (
-    "FlextDbtLdapModelsConfiguration", "FlextDbtLdapModelsDimensions", "FlextDbtLdapModelsResults", "FlextDbtLdapModelsSchema",
+    "FlextDbtLdapModelsConfiguration",
+    "FlextDbtLdapModelsDimensions",
+    "FlextDbtLdapModelsResults",
+    "FlextDbtLdapModelsSchema",
     "FlextDbtLdapModelsShared",
 )
 
