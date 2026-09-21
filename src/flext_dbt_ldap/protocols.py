@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
-from flext_ldap import FlextLdapProtocols
+from flext_ldap import p as _ldap_p
 from flext_meltano import p
 
 from flext_dbt_ldap import t
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap import m
 
 
-class FlextDbtLdapProtocols(p, FlextLdapProtocols):
+class FlextDbtLdapProtocols(p, _ldap_p):
     """DBT LDAP protocols extending LDAP and Meltano protocols."""
 
     class DbtLdap:

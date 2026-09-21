@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from flext_ldap import FlextLdapModels
+from flext_ldap import m as _ldap_m
 from flext_meltano import m
 
 from ._models.configuration import FlextDbtLdapModelsConfiguration
@@ -11,7 +11,7 @@ from ._models.results import FlextDbtLdapModelsResults
 from ._models.schema import FlextDbtLdapModelsSchema
 
 
-class FlextDbtLdapModels(m, FlextLdapModels):
+class FlextDbtLdapModels(m, _ldap_m):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(
