@@ -12,6 +12,8 @@ if TYPE_CHECKING:
     from .test_constants_flat_api import TestsFlextDbtLdapConstantsFlatApi
     from .test_dbt_services_sync import TestsFlextDbtLdapServicesSync
     from .test_version import TestsFlextDbtLdapVersion
+
+
 __all__: tuple[str, ...] = (
     "TestsFlextDbtLdapConstantsFlatApi",
     "TestsFlextDbtLdapServicesSync",

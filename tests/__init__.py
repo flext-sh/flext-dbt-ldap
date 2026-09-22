@@ -9,33 +9,27 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_ldap import adapters, ldap, ldif, servers
+    from flext_cli import cli
+    from flext_ldap import ldap
+    from flext_ldif import ldif
     from flext_meltano import meltano
     from flext_tests import (
+        active_rules,
         api,
-        cli,
         config,
-        core,
-        d,
-        e,
-        from_json,
-        h,
+        discover_repository_root,
         install_local_packages,
-        lazy_attribute,
         load_infra_report,
-        r,
-        services,
         settings,
+        split_csv,
         td,
         tf,
         tk,
         tm,
-        to_json,
-        to_jsonable_python,
         tv,
-        x,
     )
 
+    from flext_core import core, d, e, h, lazy_attribute, r, x
     from flext_dbt_ldap import dbt_ldap, main
 
     from . import e2e, unit
@@ -46,6 +40,8 @@ if TYPE_CHECKING:
     from .settings import TestsFlextDbtLdapSettings
     from .typings import TestsFlextDbtLdapTypes, TestsFlextDbtLdapTypes as t
     from .utilities import TestsFlextDbtLdapUtilities, u
+
+
 __all__: tuple[str, ...] = (
     "TestsFlextDbtLdapConstants",
     "TestsFlextDbtLdapModels",
@@ -54,7 +50,7 @@ __all__: tuple[str, ...] = (
     "TestsFlextDbtLdapSettings",
     "TestsFlextDbtLdapTypes",
     "TestsFlextDbtLdapUtilities",
-    "adapters",
+    "active_rules",
     "api",
     "c",
     "cli",
@@ -62,9 +58,9 @@ __all__: tuple[str, ...] = (
     "core",
     "d",
     "dbt_ldap",
+    "discover_repository_root",
     "e",
     "e2e",
-    "from_json",
     "h",
     "install_local_packages",
     "lazy_attribute",
@@ -77,16 +73,13 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
-    "servers",
-    "services",
     "settings",
+    "split_csv",
     "t",
     "td",
     "tf",
     "tk",
     "tm",
-    "to_json",
-    "to_jsonable_python",
     "tv",
     "u",
     "unit",
@@ -105,32 +98,26 @@ _LAZY_IMPORTS = MappingProxyType(
             ".typings": ("TestsFlextDbtLdapTypes", "t"),
             ".unit": ("unit",),
             ".utilities": ("TestsFlextDbtLdapUtilities", "u"),
+            "flext_cli": ("cli",),
+            "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
             "flext_dbt_ldap": ("dbt_ldap", "main"),
-            "flext_ldap": ("adapters", "ldap", "ldif", "servers"),
+            "flext_ldap": ("ldap",),
+            "flext_ldif": ("ldif",),
             "flext_meltano": ("meltano",),
             "flext_tests": (
+                "active_rules",
                 "api",
-                "cli",
                 "config",
-                "core",
-                "d",
-                "e",
-                "from_json",
-                "h",
+                "discover_repository_root",
                 "install_local_packages",
-                "lazy_attribute",
                 "load_infra_report",
-                "r",
-                "services",
                 "settings",
+                "split_csv",
                 "td",
                 "tf",
                 "tk",
                 "tm",
-                "to_json",
-                "to_jsonable_python",
                 "tv",
-                "x",
             ),
         }),
         alias_groups=MappingProxyType({}),

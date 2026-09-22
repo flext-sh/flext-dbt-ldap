@@ -12,6 +12,8 @@ if TYPE_CHECKING:
     from .entry import FlextDbtLdapUtilitiesEntry
     from .integration import FlextDbtLdapUtilitiesIntegration
     from .macros import FlextDbtLdapUtilitiesMacros
+
+
 __all__: tuple[str, ...] = (
     "FlextDbtLdapUtilitiesEntry",
     "FlextDbtLdapUtilitiesIntegration",
