@@ -14,7 +14,6 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig, m
 
-from flext_core import FlextSettings
 
 
 class _DbtLdapNamespace(m.BaseModel):
@@ -23,7 +22,7 @@ class _DbtLdapNamespace(m.BaseModel):
     model_config = m.ConfigDict(extra="allow", frozen=True)
 
 
-class FlextDbtLdapConfig(FlextSettings, FlextMeltanoConfig):
+class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
     DbtLdap: Annotated[
