@@ -96,7 +96,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 """
 
                 _dbt_runner_failure: str | None = u.PrivateAttr(default=None)
-                _dbt_runner_requests: list[tuple[str, ...]] = u.PrivateAttr(
+                _dbt_runner_requests: list[t.VariadicTuple[str]] = u.PrivateAttr(
                     default_factory=list
                 )
 
@@ -133,7 +133,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     """Make subsequent dbt runs fail with ``message``."""
                     self._dbt_runner_failure = message
 
-                def dbt_requests(self) -> tuple[tuple[str, ...], ...]:
+                def dbt_requests(self) -> tuple[t.VariadicTuple[str], ...]:
                     """Return every model list requested from the dbt runner."""
                     return tuple(self._dbt_runner_requests)
 
