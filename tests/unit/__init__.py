@@ -9,8 +9,6 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_tests import c, d, e, h, m, p, r, s, t, td, tf, tk, tm, tv, u, x
-
     from .test_constants_flat_api import TestsFlextDbtLdapConstantsFlatApi
     from .test_dbt_services_sync import TestsFlextDbtLdapServicesSync
     from .test_version import TestsFlextDbtLdapVersion
@@ -18,22 +16,6 @@ __all__: tuple[str, ...] = (
     "TestsFlextDbtLdapConstantsFlatApi",
     "TestsFlextDbtLdapServicesSync",
     "TestsFlextDbtLdapVersion",
-    "c",
-    "d",
-    "e",
-    "h",
-    "m",
-    "p",
-    "r",
-    "s",
-    "t",
-    "td",
-    "tf",
-    "tk",
-    "tm",
-    "tv",
-    "u",
-    "x",
 )
 
 _LAZY_IMPORTS = MappingProxyType(
@@ -42,24 +24,6 @@ _LAZY_IMPORTS = MappingProxyType(
             ".test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
             ".test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
             ".test_version": ("TestsFlextDbtLdapVersion",),
-            "flext_tests": (
-                "c",
-                "d",
-                "e",
-                "h",
-                "m",
-                "p",
-                "r",
-                "s",
-                "t",
-                "td",
-                "tf",
-                "tk",
-                "tm",
-                "tv",
-                "u",
-                "x",
-            ),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
