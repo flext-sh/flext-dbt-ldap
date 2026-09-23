@@ -20,7 +20,7 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldap import adapters, ldap, ldif, servers
+    from flext_ldap import adapters, ldap, ldif
     from flext_meltano import cli, core, d, e, h, lazy_attribute, meltano, r, x
 
     from . import services
@@ -76,7 +76,6 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
-    "servers",
     "services",
     "settings",
     "t",
@@ -100,7 +99,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".services.sync": ("FlextDbtLdapSyncMixin",),
             ".typings": ("FlextDbtLdapTypes", "t"),
             ".utilities": ("FlextDbtLdapUtilities", "u"),
-            "flext_ldap": ("adapters", "ldap", "ldif", "servers"),
+            "flext_ldap": ("adapters", "ldap", "ldif"),
             "flext_meltano": (
                 "cli",
                 "core",
