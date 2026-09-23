@@ -13,6 +13,8 @@ if TYPE_CHECKING:
     from .base import FlextDbtLdapConstantsBase
     from .search import FlextDbtLdapConstantsSearch
     from .transformation import FlextDbtLdapConstantsTransformation
+
+
 __all__: tuple[str, ...] = (
     "FlextDbtLdapConstantsAttributes",
     "FlextDbtLdapConstantsBase",

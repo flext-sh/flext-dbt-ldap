@@ -40,6 +40,8 @@ if TYPE_CHECKING:
     from .services.sync import FlextDbtLdapSyncMixin
     from .typings import FlextDbtLdapTypes, t
     from .utilities import FlextDbtLdapUtilities, u
+
+
 __all__: tuple[str, ...] = (
     "FlextDbtLdap",
     "FlextDbtLdapClientMixin",

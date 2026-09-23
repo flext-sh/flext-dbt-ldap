@@ -14,6 +14,8 @@ if TYPE_CHECKING:
     from .results import FlextDbtLdapModelsResults
     from .schema import FlextDbtLdapModelsSchema
     from .shared import FlextDbtLdapModelsShared
+
+
 __all__: tuple[str, ...] = (
     "FlextDbtLdapModelsConfiguration",
     "FlextDbtLdapModelsDimensions",
