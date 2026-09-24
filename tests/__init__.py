@@ -9,31 +9,7 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_ldap import adapters, ldap, ldif, servers
-    from flext_meltano import meltano
-    from flext_tests import (
-        api,
-        cli,
-        config,
-        core,
-        d,
-        e,
-        h,
-        install_local_packages,
-        lazy_attribute,
-        load_infra_report,
-        r,
-        services,
-        settings,
-        td,
-        tf,
-        tk,
-        tm,
-        tv,
-        x,
-    )
-
-    from flext_dbt_ldap import dbt_ldap, main
+    from flext_tests import api, d, e, h, r, td, tf, tk, tm, tv, x
 
     from . import e2e, unit
     from .base import TestsFlextDbtLdapServiceBase, TestsFlextDbtLdapServiceBase as s
@@ -53,31 +29,16 @@ __all__: tuple[str, ...] = (
     "TestsFlextDbtLdapSettings",
     "TestsFlextDbtLdapTypes",
     "TestsFlextDbtLdapUtilities",
-    "adapters",
     "api",
     "c",
-    "cli",
-    "config",
-    "core",
     "d",
-    "dbt_ldap",
     "e",
     "e2e",
     "h",
-    "install_local_packages",
-    "lazy_attribute",
-    "ldap",
-    "ldif",
-    "load_infra_report",
     "m",
-    "main",
-    "meltano",
     "p",
     "r",
     "s",
-    "servers",
-    "services",
-    "settings",
     "t",
     "td",
     "tf",
@@ -101,23 +62,12 @@ _LAZY_IMPORTS = MappingProxyType(
             ".typings": ("TestsFlextDbtLdapTypes", "t"),
             ".unit": ("unit",),
             ".utilities": ("TestsFlextDbtLdapUtilities", "u"),
-            "flext_dbt_ldap": ("dbt_ldap", "main"),
-            "flext_ldap": ("adapters", "ldap", "ldif", "servers"),
-            "flext_meltano": ("meltano",),
             "flext_tests": (
                 "api",
-                "cli",
-                "config",
-                "core",
                 "d",
                 "e",
                 "h",
-                "install_local_packages",
-                "lazy_attribute",
-                "load_infra_report",
                 "r",
-                "services",
-                "settings",
                 "td",
                 "tf",
                 "tk",
