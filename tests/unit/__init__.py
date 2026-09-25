@@ -4,31 +4,14 @@
 from __future__ import annotations
 
 from types import MappingProxyType
-from typing import TYPE_CHECKING
 
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
-if TYPE_CHECKING:
-    from .test_constants_flat_api import TestsFlextDbtLdapConstantsFlatApi
-    from .test_dbt_services_sync import TestsFlextDbtLdapServicesSync
-    from .test_version import TestsFlextDbtLdapVersion
-
-
-__all__: tuple[str, ...] = (
-    "TestsFlextDbtLdapConstantsFlatApi",
-    "TestsFlextDbtLdapServicesSync",
-    "TestsFlextDbtLdapVersion",
-)
+__all__: tuple[str, ...] = ()
 
 _LAZY_IMPORTS = MappingProxyType(
     build_lazy_import_map(
-        MappingProxyType({
-            ".test_constants_flat_api": ("TestsFlextDbtLdapConstantsFlatApi",),
-            ".test_dbt_services_sync": ("TestsFlextDbtLdapServicesSync",),
-            ".test_version": ("TestsFlextDbtLdapVersion",),
-        }),
-        alias_groups=MappingProxyType({}),
-        sort_keys=False,
+        MappingProxyType({}), alias_groups=MappingProxyType({}), sort_keys=False
     )
 )
 

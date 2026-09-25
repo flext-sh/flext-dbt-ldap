@@ -28,13 +28,13 @@ if TYPE_CHECKING:
     from .api import FlextDbtLdap, dbt_ldap
     from .base import FlextDbtLdapServiceBase, FlextDbtLdapServiceBase as s
     from .cli import main
-    from .constants import FlextDbtLdapConstants, c
-    from .models import FlextDbtLdapModels, m
-    from .protocols import FlextDbtLdapProtocols, p
+    from .constants import FlextDbtLdapConstants, FlextDbtLdapConstants as c
+    from .models import FlextDbtLdapModels, FlextDbtLdapModels as m
+    from .protocols import FlextDbtLdapProtocols, FlextDbtLdapProtocols as p
     from .services.client import FlextDbtLdapClientMixin
     from .services.sync import FlextDbtLdapSyncMixin
-    from .typings import FlextDbtLdapTypes, t
-    from .utilities import FlextDbtLdapUtilities, u
+    from .typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
+    from .utilities import FlextDbtLdapUtilities, FlextDbtLdapUtilities as u
 
 
 __all__: tuple[str, ...] = (

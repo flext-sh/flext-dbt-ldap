@@ -17,8 +17,6 @@ from flext_dbt_ldap.__version__ import (
     __version_info__,
 )
 
-__all__: list[str] = ["TestsFlextDbtLdapVersion"]
-
 
 class TestsFlextDbtLdapVersion:
     """Behavior contract for flext_dbt_ldap version metadata exports."""
