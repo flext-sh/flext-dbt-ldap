@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_ldap import u as _ldap_u
-from flext_meltano import u
+from flext_ldap import FlextLdapUtilities
+from flext_meltano import FlextMeltanoUtilities
 
 from ._utilities.integration import FlextDbtLdapUtilitiesIntegration
 from ._utilities.macros import FlextDbtLdapUtilitiesMacros
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap import t
 
 
-class FlextDbtLdapUtilities(u, _ldap_u):
+class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
     """Thin dbt-ldap utilities facade following the canonical MRO pattern."""
 
     class DbtLdap(FlextDbtLdapUtilitiesMacros, FlextDbtLdapUtilitiesIntegration):
