@@ -44,8 +44,8 @@ src/flext_dbt_ldap/
 ## Commands
 
 ```bash
-make check PROJECT=flext-dbt-ldap
-make test PROJECT=flext-dbt-ldap # tests/{unit,e2e,generic}
+make check
+make test # tests/{unit,e2e,generic}
 ```
 
 <!-- AIHUB-AGENTS-SCOPE-LOCAL-END -->
