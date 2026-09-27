@@ -148,6 +148,3 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dumped["email"], eq="")
         tm.that(dumped["phone"], eq="")
         tm.that(dumped["is_active"], eq=True)
-
-
-__all__: list[str] = ["TestsFlextDbtLdapConstantsFlatApi"]

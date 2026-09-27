@@ -239,6 +239,3 @@ class TestsFlextDbtLdapServicesSync:
 
         tm.ok(result)
         tm.that(result.value.report_type, eq="membership")
-
-
-__all__: list[str] = ["TestsFlextDbtLdapServicesSync"]

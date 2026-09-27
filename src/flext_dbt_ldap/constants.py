@@ -10,8 +10,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_ldap import c as _ldap_c
-from flext_meltano import c
+from flext_ldap import FlextLdapConstants
+from flext_meltano import FlextMeltanoConstants
 
 from ._constants.attributes import FlextDbtLdapConstantsAttributes
 from ._constants.base import FlextDbtLdapConstantsBase
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap import t
 
 
-class FlextDbtLdapConstants(c, _ldap_c):
+class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern.
 
     This class acts as a facade, composing all constant subclasses via MRO.
