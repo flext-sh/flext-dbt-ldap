@@ -21,21 +21,21 @@ class FlextDbtLdapUtilitiesEntry:
     _log = u.fetch_logger(__name__)
 
     @classmethod
-    def is_active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
+    def active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
         """Return whether the LDAP entry represents an active account."""
-        raw_flag = ul.Ldap.get_first_attribute_value(
+        raw_flag = ul.Ldap.resolve_first_attribute_value(
             attrs, c.DbtLdap.USER_ACCOUNT_CONTROL
         )
         if raw_flag is None:
             return True
         try:
-            return FlextDbtLdapUtilitiesMacros.is_user_active(int(raw_flag))
+            return FlextDbtLdapUtilitiesMacros.user_active(int(raw_flag))
         except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             cls._log.exception("Failed to parse userAccountControl value: %s", raw_flag)
             return True
 
     @classmethod
-    def is_group_entry(cls, entry: lm.Ldif.Entry) -> bool:
+    def group_entry(cls, entry: lm.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured group object classes."""
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
             c.Ldap.AttributeName.OBJECT_CLASS, []
@@ -45,7 +45,7 @@ class FlextDbtLdapUtilitiesEntry:
         )
 
     @classmethod
-    def is_user_entry(cls, entry: lm.Ldif.Entry) -> bool:
+    def user_entry(cls, entry: lm.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured user object classes."""
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
             c.Ldap.AttributeName.OBJECT_CLASS, []

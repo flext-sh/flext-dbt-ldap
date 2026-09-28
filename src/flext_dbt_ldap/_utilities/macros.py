@@ -44,13 +44,13 @@ class FlextDbtLdapUtilitiesMacros:
         return None
 
     @staticmethod
-    def get_parent_dn(dn: str) -> str | None:
+    def resolve_parent_dn(dn: str) -> str | None:
         """Get parent DN from a distinguished name."""
         parts = [p.strip() for p in dn.split(",") if p.strip()]
         return ",".join(parts[1:]) if len(parts) > 1 else None
 
     @staticmethod
-    def is_user_active(user_account_control: int | None) -> bool:
+    def user_active(user_account_control: int | None) -> bool:
         """Check if user account is active based on userAccountControl."""
         if user_account_control is None:
             return True

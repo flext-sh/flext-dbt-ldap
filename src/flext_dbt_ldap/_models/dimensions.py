@@ -48,29 +48,31 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             """Build a user dimension from a LDIF entry."""
             attrs = ul.Ldap.extract_entry_attributes(entry)
             return cls(
-                user_id=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.UID)
+                user_id=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.UID)
                 or c.DEFAULT_EMPTY_STRING,
-                common_name=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.CN)
+                common_name=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.CN)
                 or c.DEFAULT_EMPTY_STRING,
-                email=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.MAIL),
-                display_name=ul.Ldap.get_first_attribute_value(
+                email=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.MAIL),
+                display_name=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.DISPLAY_NAME
                 ),
-                department=ul.Ldap.get_first_attribute_value(
+                department=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.DEPARTMENT
                 ),
-                manager_dn=ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.MANAGER),
-                employee_number=ul.Ldap.get_first_attribute_value(
+                manager_dn=ul.Ldap.resolve_first_attribute_value(
+                    attrs, c.DbtLdap.MANAGER
+                ),
+                employee_number=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.EMPLOYEE_NUMBER
                 ),
-                phone=ul.Ldap.get_first_attribute_value(
+                phone=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.TELEPHONE_NUMBER
                 ),
-                is_active=FlextDbtLdapUtilitiesEntry.is_active_entry(attrs),
-                created_date=ul.Ldap.get_first_attribute_value(
+                is_active=FlextDbtLdapUtilitiesEntry.active_entry(attrs),
+                created_date=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.CREATE_TIMESTAMP
                 ),
-                modified_date=ul.Ldap.get_first_attribute_value(
+                modified_date=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.MODIFY_TIMESTAMP
                 ),
             )
@@ -108,24 +110,24 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 attrs.get(c.DbtLdap.UNIQUE_MEMBER, [])
             )
             common_name = (
-                ul.Ldap.get_first_attribute_value(attrs, c.DbtLdap.CN)
+                ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.CN)
                 or c.DEFAULT_EMPTY_STRING
             )
             return cls(
                 group_id=common_name,
                 common_name=common_name,
-                description=ul.Ldap.get_first_attribute_value(
+                description=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.DESCRIPTION
                 ),
-                group_type=ul.Ldap.get_first_attribute_value(
+                group_type=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.GROUP_TYPE
                 ),
                 member_count=member_count,
                 is_active=True,
-                created_date=ul.Ldap.get_first_attribute_value(
+                created_date=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.CREATE_TIMESTAMP
                 ),
-                modified_date=ul.Ldap.get_first_attribute_value(
+                modified_date=ul.Ldap.resolve_first_attribute_value(
                     attrs, c.DbtLdap.MODIFY_TIMESTAMP
                 ),
             )
