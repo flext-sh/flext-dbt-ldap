@@ -35,7 +35,6 @@ class FlextDbtLdapConstantsAttributes:
     CREATE_TIMESTAMP: Final[str] = "createTimestamp"
     MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
     MEMBER_UID: Final[str] = "memberUid"
-    USER_ID_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (UID, CN, SAM_ACCOUNT_NAME)
     MEMBERSHIP_ATTRIBUTES: ClassVar[t.VariadicTuple[str]] = (
         MEMBER,
         UNIQUE_MEMBER,
