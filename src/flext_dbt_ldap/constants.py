@@ -8,15 +8,21 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
-from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
-from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
-from flext_dbt_ldap._constants.transformation import FlextDbtLdapConstantsTransformation
+from typing import TYPE_CHECKING
+
 from flext_ldap import FlextLdapConstants
-from flext_meltano import c
+from flext_meltano import FlextMeltanoConstants
+
+from ._constants.attributes import FlextDbtLdapConstantsAttributes
+from ._constants.base import FlextDbtLdapConstantsBase
+from ._constants.search import FlextDbtLdapConstantsSearch
+from ._constants.transformation import FlextDbtLdapConstantsTransformation
+
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
-class FlextDbtLdapConstants(c, FlextLdapConstants):
+class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern.
 
     This class acts as a facade, composing all constant subclasses via MRO.
@@ -41,4 +47,4 @@ class FlextDbtLdapConstants(c, FlextLdapConstants):
 
 c = FlextDbtLdapConstants
 
-__all__: tuple[str, ...] = ("FlextDbtLdapConstants", "c")
+__all__: t.VariadicTuple[str] = ("FlextDbtLdapConstants", "c")

@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from flext_dbt_ldap._models.configuration import FlextDbtLdapModelsConfiguration
-from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
-from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
-from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
 from flext_ldap import FlextLdapModels
-from flext_meltano import m
+from flext_meltano import FlextMeltanoModels
+
+from ._models.configuration import FlextDbtLdapModelsConfiguration
+from ._models.dimensions import FlextDbtLdapModelsDimensions
+from ._models.results import FlextDbtLdapModelsResults
+from ._models.schema import FlextDbtLdapModelsSchema
 
 
-class FlextDbtLdapModels(m, FlextLdapModels):
+class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(

@@ -1,6 +1,38 @@
 # AUTO-GENERATED FILE — Regenerate with: make gen
-"""Constants package."""
+"""Flext Dbt Ldap. Constants package."""
 
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ()
+from types import MappingProxyType
+from typing import TYPE_CHECKING
+
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
+
+if TYPE_CHECKING:
+    from .attributes import FlextDbtLdapConstantsAttributes
+    from .base import FlextDbtLdapConstantsBase
+    from .search import FlextDbtLdapConstantsSearch
+    from .transformation import FlextDbtLdapConstantsTransformation
+
+
+__all__: tuple[str, ...] = (
+    "FlextDbtLdapConstantsAttributes",
+    "FlextDbtLdapConstantsBase",
+    "FlextDbtLdapConstantsSearch",
+    "FlextDbtLdapConstantsTransformation",
+)
+
+_LAZY_IMPORTS = MappingProxyType(
+    build_lazy_import_map(
+        MappingProxyType({
+            ".attributes": ("FlextDbtLdapConstantsAttributes",),
+            ".base": ("FlextDbtLdapConstantsBase",),
+            ".search": ("FlextDbtLdapConstantsSearch",),
+            ".transformation": ("FlextDbtLdapConstantsTransformation",),
+        }),
+        alias_groups=MappingProxyType({}),
+        sort_keys=False,
+    )
+)
+
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

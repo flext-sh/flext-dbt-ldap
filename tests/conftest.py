@@ -8,17 +8,13 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import contextlib
-from typing import TYPE_CHECKING
-from unittest.mock import Mock
+import pathlib
 
 import pytest
 from flext_tests import tf, tm
 
-from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import t, u
-
-if TYPE_CHECKING:
-    import pathlib
+from flext_dbt_ldap import FlextDbtLdapSettings
+from tests import c, t, u
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 
@@ -37,7 +33,7 @@ def pytest_runtest_setup(item: pytest.Item) -> None:
     )
 
 
-def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item | None) -> None:
+def pytest_runtest_teardown(item: pytest.Item) -> None:
     """Clean up per-test environment."""
     stack = item.stash.get(_env_stack_key, None)
     if stack is not None:
@@ -45,27 +41,18 @@ def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item | None) -> 
         del item.stash[_env_stack_key]
 
 
-def _fake_create_ldap_api(_settings: FlextDbtLdapSettings) -> t.JsonValue:
-    return Mock()
-
-
 @pytest.fixture
-def dbt_ldap_service_factory(
-    monkeypatch: pytest.MonkeyPatch,
-) -> t.DbtLdap.Tests.ServiceFactory:
+def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
     """Build a real public facade instance with isolated sync-state storage."""
-    monkeypatch.setattr(
-        FlextDbtLdap, "create_ldap_api", staticmethod(_fake_create_ldap_api)
-    )
 
     def factory(
         dbt_project_dir: pathlib.Path, initial_state: t.DbtLdap.Tests.SyncState = None
-    ) -> t.Pair[FlextDbtLdap, pathlib.Path]:
+    ) -> t.Pair[u.DbtLdap.Tests.InMemoryDbtRunnerLdap, pathlib.Path]:
         # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
         # namespace; a flat dict is dropped by extra="ignore" (no isolation).
         settings = FlextDbtLdapSettings.model_validate({
             "DbtLdap": {
-                "ldap_base_dn": "dc=example,dc=com",
+                "ldap_base_dn": c.DbtLdap.Tests.DIRECTORY_BASE_DN,
                 "dbt_project_dir": str(dbt_project_dir),
             }
         })
@@ -73,6 +60,6 @@ def dbt_ldap_service_factory(
         if initial_state is not None:
             write_result = u.Cli.json_write(state_file, initial_state)
             tm.ok(write_result)
-        return FlextDbtLdap(settings=settings), state_file
+        return u.DbtLdap.Tests.InMemoryDbtRunnerLdap(settings=settings), state_file
 
     return factory

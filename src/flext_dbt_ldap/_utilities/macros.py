@@ -9,9 +9,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_dbt_ldap import c, t
-from flext_meltano import u
-
-logger = u.fetch_logger(__name__)
 
 
 class FlextDbtLdapUtilitiesMacros:
@@ -28,15 +25,9 @@ class FlextDbtLdapUtilitiesMacros:
         Date string (YYYY-MM-DD) or None if extraction fails
 
         """
-        try:
-            return (
-                timestamp.split("T", maxsplit=1)[0]
-                if "T" in timestamp
-                else timestamp[:10]
-            )
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
-            logger.exception("Error extracting date from timestamp: %s", timestamp)
-            return None
+        return (
+            timestamp.split("T", maxsplit=1)[0] if "T" in timestamp else timestamp[:10]
+        )
 
     @staticmethod
     def extract_group_name_from_dn(dn: str) -> str | None:
@@ -53,19 +44,13 @@ class FlextDbtLdapUtilitiesMacros:
         return None
 
     @staticmethod
-    def get_parent_dn(dn: str) -> str | None:
+    def resolve_parent_dn(dn: str) -> str | None:
         """Get parent DN from a distinguished name."""
-        try:
-            parts = [p.strip() for p in dn.split(",") if p.strip()]
-            if len(parts) > 1:
-                return ",".join(parts[1:])
-            return None
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
-            logger.exception("Failed to get parent DN: %s", dn)
-            return None
+        parts = [p.strip() for p in dn.split(",") if p.strip()]
+        return ",".join(parts[1:]) if len(parts) > 1 else None
 
     @staticmethod
-    def is_user_active(user_account_control: int | None) -> bool:
+    def user_active(user_account_control: int | None) -> bool:
         """Check if user account is active based on userAccountControl."""
         if user_account_control is None:
             return True
@@ -83,16 +68,11 @@ class FlextDbtLdapUtilitiesMacros:
     @staticmethod
     def parse_dn_component(dn: str, component: str) -> str | None:
         """Parse specific component from DN."""
-        try:
-            parts = [p.strip() for p in dn.split(",") if "=" in p]
-            for part in parts:
-                key, value = part.split("=", 1)
-                if key.lower() == component.lower():
-                    return value
-            return None
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
-            logger.exception("Failed to parse DN component: %s", dn)
-            return None
+        parts = [p.strip() for p in dn.split(",") if "=" in p]
+        pairs = [part.split("=", 1) for part in parts]
+        return next(
+            (value for key, value in pairs if key.lower() == component.lower()), None
+        )
 
 
 __all__: t.StrSequence = ("FlextDbtLdapUtilitiesMacros",)

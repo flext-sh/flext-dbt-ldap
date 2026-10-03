@@ -11,9 +11,11 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t, u
-from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
 from flext_meltano import FlextMeltanoDbtServiceBase
+
+from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t
+
+from .services.sync import FlextDbtLdapSyncMixin
 
 
 class FlextDbtLdap(FlextDbtLdapSyncMixin):
@@ -30,7 +32,6 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         effective_settings = settings or FlextDbtLdapSettings.fetch_global()
         FlextMeltanoDbtServiceBase.__init__(self, settings=effective_settings)
         object.__setattr__(self, "_ldap_api", self.create_ldap_api(effective_settings))
-        object.__setattr__(self, "transformer", u.DbtLdap())
         object.__setattr__(self, "_sync_state_file", self._resolve_sync_state_file())
         object.__setattr__(self, "_sync_bookmarks", self._load_sync_state())
 
@@ -40,6 +41,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
 
-dbt_ldap = FlextDbtLdap
+dbt_ldap: FlextDbtLdap = FlextDbtLdap.fetch_global()
+"""Process-wide FlextDbtLdap facade singleton resolved from the service container."""
 
 __all__: list[str] = ["FlextDbtLdap", "dbt_ldap"]

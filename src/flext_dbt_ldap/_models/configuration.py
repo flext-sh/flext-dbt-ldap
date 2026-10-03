@@ -5,8 +5,9 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_dbt_ldap import c, t
 from flext_meltano import m, u
+
+from flext_dbt_ldap import c, t
 
 
 class FlextDbtLdapModelsConfiguration:
@@ -78,10 +79,10 @@ class FlextDbtLdapModelsConfiguration:
 
         warn_after: Annotated[
             t.IntMapping, u.Field(description="Warning freshness thresholds")
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+        ] = u.Field(default_factory=lambda: MappingProxyType[str, int]({}))
         error_after: Annotated[
             t.IntMapping, u.Field(description="Error freshness thresholds")
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+        ] = u.Field(default_factory=lambda: MappingProxyType[str, int]({}))
 
     class DbtSourceDefinition(m.Value):
         """Complete DBT source definition."""

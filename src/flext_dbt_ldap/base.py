@@ -12,8 +12,9 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_dbt_ldap import FlextDbtLdapSettings, m, p, settings, t, u
-from flext_meltano import FlextMeltanoDbtServiceBase
+from flext_meltano import FlextMeltanoDbtServiceBase, p, u
+
+from flext_dbt_ldap import FlextDbtLdapSettings, m, t
 
 
 class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
@@ -29,21 +30,32 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     ] = "dbt-ldap"
 
     @classmethod
-    def _runtime_bootstrap_options(cls) -> p.RuntimeBootstrapOptions:
+    def runtime_bootstrap_options(cls) -> m.RuntimeBootstrapOptions:
         """Return runtime bootstrap options for DBT LDAP services."""
         return m.RuntimeBootstrapOptions(settings_type=FlextDbtLdapSettings)
 
     @property
     @override
+    def settings(self) -> FlextDbtLdapSettings:
+        """Typed dbt-ldap settings from the INJECTED runtime (not the global)."""
+        # NOTE (multi-agent): mro-rn88 — narrow the runtime-injected settings so test
+        # overrides (e.g. dbt_project_dir) are honored; fall back to the typed global.
+        runtime_settings = super().settings
+        if isinstance(runtime_settings, FlextDbtLdapSettings):
+            return runtime_settings
+        return FlextDbtLdapSettings.fetch_global()
+
+    @property
+    @override
     def connection_profile(self) -> p.Meltano.DbtConnectionProfile:
         """Dbt connection profile for LDAP-backed workflows."""
-        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via settings (runtime,
+        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings (runtime,
         # not the global singleton); connection scalars from Ldap.*, base_dn from DbtLdap.
         return m.DbtLdap.DbtConnectionProfile(
-            host=settings.Ldap.host,
-            port=settings.Ldap.port,
-            use_tls=settings.Ldap.use_tls,
-            base_dn=settings.DbtLdap.ldap_base_dn,
+            host=self.settings.Ldap.host,
+            port=self.settings.Ldap.port,
+            use_tls=self.settings.Ldap.use_tls,
+            base_dn=self.settings.DbtLdap.ldap_base_dn,
             project=self.dbt_project_name,
         )
 

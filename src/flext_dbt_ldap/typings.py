@@ -10,10 +10,10 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_ldap import FlextLdapTypes
-from flext_meltano import t
+from flext_meltano import FlextMeltanoTypes
 
 
-class FlextDbtLdapTypes(t, FlextLdapTypes):
+class FlextDbtLdapTypes(FlextMeltanoTypes, FlextLdapTypes):
     """MRO facade composing Meltano + LDAP type namespaces."""
 
     class DbtLdap:
