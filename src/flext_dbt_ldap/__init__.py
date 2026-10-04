@@ -1,40 +1,43 @@
 # AUTO-GENERATED FILE — Regenerate with: make gen
-"""Flext Dbt Ldap package."""
+"""Flext Dbt Ldap package.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import build_lazy_import_map, install_lazy_exports
-
-from .__version__ import (
-    __author__ as __author__,
-    __author_email__ as __author_email__,
-    __description__ as __description__,
-    __license__ as __license__,
-    __title__ as __title__,
-    __url__ as __url__,
-    __version__ as __version__,
-    __version_info__ as __version_info__,
+from flext_core import build_lazy_import_map, install_lazy_exports
+from flext_dbt_ldap.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
 )
 
 if TYPE_CHECKING:
     from flext_meltano import d, e, h, r, x
 
-    from . import services
-    from ._config import FlextDbtLdapConfig, config
-    from ._settings import FlextDbtLdapSettings, settings
-    from .api import FlextDbtLdap, dbt_ldap
-    from .base import FlextDbtLdapServiceBase, FlextDbtLdapServiceBase as s
-    from .cli import main
-    from .constants import FlextDbtLdapConstants, FlextDbtLdapConstants as c
-    from .models import FlextDbtLdapModels, FlextDbtLdapModels as m
-    from .protocols import FlextDbtLdapProtocols, FlextDbtLdapProtocols as p
-    from .services.client import FlextDbtLdapClientMixin
-    from .services.sync import FlextDbtLdapSyncMixin
-    from .typings import FlextDbtLdapTypes, FlextDbtLdapTypes as t
-    from .utilities import FlextDbtLdapUtilities, FlextDbtLdapUtilities as u
+    from flext_dbt_ldap import services
+    from flext_dbt_ldap._config import FlextDbtLdapConfig, config
+    from flext_dbt_ldap._settings import FlextDbtLdapSettings, settings
+    from flext_dbt_ldap.api import FlextDbtLdap, dbt_ldap
+    from flext_dbt_ldap.base import FlextDbtLdapServiceBase, s
+    from flext_dbt_ldap.cli import main
+    from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
+    from flext_dbt_ldap.models import FlextDbtLdapModels, m
+    from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
+    from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
+    from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
+    from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
+    from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
 
 
 __all__: tuple[str, ...] = (
@@ -95,7 +98,7 @@ _LAZY_IMPORTS = MappingProxyType(
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
-    )
+    ),
 )
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

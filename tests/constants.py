@@ -1,4 +1,9 @@
-"""Test constants for flext-dbt-ldap tests."""
+"""Test constants for flext-dbt-ldap tests.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+tests/constants
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 

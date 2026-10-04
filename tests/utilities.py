@@ -44,10 +44,10 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 """
 
                 _directory_entries: list[m.Ldif.Entry] = u.PrivateAttr(
-                    default_factory=list
+                    default_factory=list,
                 )
                 _directory_requests: list[m.Ldap.SearchOptions] = u.PrivateAttr(
-                    default_factory=list
+                    default_factory=list,
                 )
                 _directory_reachable: bool = u.PrivateAttr(default=True)
 
@@ -60,7 +60,11 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     self._directory_reachable = False
 
                 def last_search_request(self) -> m.Ldap.SearchOptions:
-                    """Return the most recent search request sent by the facade."""
+                    """Return the most recent search request sent by the facade.
+
+                    Raises:
+                        RuntimeError: If No search request reached the directory.
+                    """
                     if not self._directory_requests:
                         msg = "No search request reached the directory"
                         raise RuntimeError(msg)
@@ -68,9 +72,15 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 @override
                 def search(
-                    self, search_options: p.Ldap.SearchOptions, server_type: str = "rfc"
+                    self,
+                    search_options: p.Ldap.SearchOptions,
+                    server_type: str = "rfc",
                 ) -> p.Result[m.Ldap.SearchResult]:
-                    """Serve the directory contents for the recorded request."""
+                    """Serve the directory contents for the recorded request.
+
+                    Returns:
+                        The resulting ``p.Result[m.Ldap.SearchResult]``.
+                    """
                     concrete_options = (
                         search_options
                         if isinstance(search_options, m.Ldap.SearchOptions)
@@ -83,7 +93,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                         m.Ldap.SearchResult(
                             entries=list(self._directory_entries),
                             search_options=concrete_options,
-                        )
+                        ),
                     )
 
             class InMemoryDbtRunnerLdap(FlextDbtLdap):
@@ -97,11 +107,12 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 _dbt_runner_failure: str | None = u.PrivateAttr(default=None)
                 _dbt_runner_requests: list[t.VariadicTuple[str]] = u.PrivateAttr(
-                    default_factory=list
+                    default_factory=list,
                 )
 
                 def __init__(
-                    self, settings: FlextDbtLdapSettings | None = None
+                    self,
+                    settings: FlextDbtLdapSettings | None = None,
                 ) -> None:
                     """Wire the facade state with the canonical settings kwarg."""
                     super().__init__(settings=settings)
@@ -111,15 +122,24 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 def create_ldap_api(
                     settings: FlextDbtLdapSettings,
                 ) -> TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory:
-                    """Create the in-memory directory wired as the LDAP client."""
+                    """Create the in-memory directory wired as the LDAP client.
+
+                    Returns:
+                        The resulting
+                            ``TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory``.
+                    """
                     return TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory.with_settings(
-                        settings
+                        settings,
                     )
 
                 def directory(
                     self,
                 ) -> TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory:
-                    """Return the in-memory directory serving this facade."""
+                    """Return the in-memory directory serving this facade.
+
+                    Raises:
+                        TypeError: If LDAP client is not the in-memory directory.
+                    """
                     client = self._ldap_api
                     if not isinstance(
                         client,
@@ -139,14 +159,19 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 @override
                 def run_models(
-                    self, models: t.StrSequence | None = None
+                    self,
+                    models: t.StrSequence | None = None,
                 ) -> p.Result[m.Meltano.CommandExecutionResult]:
-                    """Serve the dbt boundary from the recorded runner state."""
+                    """Serve the dbt boundary from the recorded runner state.
+
+                    Returns:
+                        The resulting ``p.Result[m.Meltano.CommandExecutionResult]``.
+                    """
                     requested = tuple(models) if models else ()
                     self._dbt_runner_requests.append(requested)
                     if self._dbt_runner_failure is not None:
                         return r[m.Meltano.CommandExecutionResult].fail(
-                            self._dbt_runner_failure
+                            self._dbt_runner_failure,
                         )
                     return r[m.Meltano.CommandExecutionResult].ok(
                         m.Meltano.CommandExecutionResult(
@@ -156,7 +181,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                             output="",
                             error="",
                             execution_time=0.0,
-                        )
+                        ),
                     )
 
 
