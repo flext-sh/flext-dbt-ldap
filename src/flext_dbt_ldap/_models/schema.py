@@ -25,7 +25,8 @@ class FlextDbtLdapModelsSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
-            t.SequenceOf[t.JsonMapping], u.Field(description="DBT model definitions"),
+            t.SequenceOf[t.JsonMapping],
+            u.Field(description="DBT model definitions"),
         ] = u.Field(default_factory=tuple)
 
     class DbtTestConfig(m.Value):
@@ -47,10 +48,12 @@ class FlextDbtLdapModelsSchema:
         """Transformation configuration."""
 
         source_table: Annotated[
-            str, u.Field(description="Source table used by the transformation"),
+            str,
+            u.Field(description="Source table used by the transformation"),
         ] = c.DEFAULT_EMPTY_STRING
         transformations: Annotated[
-            t.StrMapping, u.Field(description="Column transformation expressions"),
+            t.StrMapping,
+            u.Field(description="Column transformation expressions"),
         ] = u.Field(default_factory=lambda: MappingProxyType[str, str]({}))
         filters: Annotated[
             t.StrSequence,
@@ -64,7 +67,8 @@ class FlextDbtLdapModelsSchema:
             c.DEFAULT_EMPTY_STRING
         )
         rules: Annotated[
-            t.StrMapping, u.Field(description="Named transformation rules"),
+            t.StrMapping,
+            u.Field(description="Named transformation rules"),
         ] = u.Field(default_factory=lambda: MappingProxyType[str, str]({}))
 
     class DataValidationConfig(m.Value):
@@ -79,7 +83,8 @@ class FlextDbtLdapModelsSchema:
             u.Field(description="LDAP attributes required for a valid entry"),
         ] = u.Field(default_factory=tuple)
         validate_dns: Annotated[
-            bool, u.Field(description="Whether distinguished names must be present"),
+            bool,
+            u.Field(description="Whether distinguished names must be present"),
         ] = True
         columns: Annotated[
             t.Ldap.OperationAttributes,
@@ -94,7 +99,8 @@ class FlextDbtLdapModelsSchema:
             u.Field(description="LDAP object classes associated with the schema"),
         ] = u.Field(default_factory=tuple)
         required_attributes: Annotated[
-            t.StrSequence, u.Field(description="LDAP attributes required by the schema"),
+            t.StrSequence,
+            u.Field(description="LDAP attributes required by the schema"),
         ] = u.Field(default_factory=tuple)
 
     class LdapQuery(m.Value):
@@ -107,7 +113,8 @@ class FlextDbtLdapModelsSchema:
             c.Ldap.ALL_ENTRIES_FILTER
         )
         attributes: Annotated[
-            t.StrSequence, u.Field(description="LDAP attributes requested by the query"),
+            t.StrSequence,
+            u.Field(description="LDAP attributes requested by the query"),
         ] = u.Field(default_factory=tuple)
         scope: Annotated[str, u.Field(description="LDAP search scope")] = (
             c.Ldap.DEFAULT_SCOPE

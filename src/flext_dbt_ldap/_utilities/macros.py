@@ -95,7 +95,8 @@ class FlextDbtLdapUtilitiesMacros:
         parts = [p.strip() for p in dn.split(",") if "=" in p]
         pairs = [part.split("=", 1) for part in parts]
         return next(
-            (value for key, value in pairs if key.lower() == component.lower()), None,
+            (value for key, value in pairs if key.lower() == component.lower()),
+            None,
         )
 
 

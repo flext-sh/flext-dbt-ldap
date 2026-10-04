@@ -41,16 +41,19 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         """
         try:
             report = m.DbtLdap.AnalyticsReport(
-                report_type=report_type, generated_at="2025-01-01T00:00:00Z",
+                report_type=report_type,
+                generated_at="2025-01-01T00:00:00Z",
             )
             return r[m.DbtLdap.AnalyticsReport].ok(report)
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.AnalyticsReport].fail(
-                f"Report generation error: {e}", exception=e,
+                f"Report generation error: {e}",
+                exception=e,
             )
 
     def run_dbt_models(
-        self, model_names: t.StrSequence | None = None,
+        self,
+        model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Run DBT models.
 
@@ -63,16 +66,21 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 return r[m.DbtLdap.DbtRunStatus].from_failure(run_result)
             return r[m.DbtLdap.DbtRunStatus].ok(
                 m.DbtLdap.DbtRunStatus(
-                    status=c.Meltano.StreamStatus.COMPLETED, models_run=run_result.value,
+                    status=c.Meltano.StreamStatus.COMPLETED,
+                    models_run=run_result.value,
                 ),
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtRunStatus].fail(
-                f"DBT model execution error: {e}", exception=e,
+                f"DBT model execution error: {e}",
+                exception=e,
             )
 
     def run_full_data_warehouse_sync(
-        self, search_base: str | None = None, *, incremental: bool = False,
+        self,
+        search_base: str | None = None,
+        *,
+        incremental: bool = False,
     ) -> p.Result[m.DbtLdap.SyncResult]:
         """Run complete LDAP to data warehouse synchronization.
 
@@ -81,7 +89,8 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         """
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
-            search_base, incremental=incremental,
+            search_base,
+            incremental=incremental,
         )
         membership_result = self.sync_memberships_to_warehouse(search_base)
         counts = [user_result.success, group_result.success, membership_result.success]
@@ -95,7 +104,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         return r[m.DbtLdap.SyncResult].fail_op("complete full sync of all components")
 
     def sync_groups_to_warehouse(
-        self, search_base: str | None = None, *, incremental: bool = False,
+        self,
+        search_base: str | None = None,
+        *,
+        incremental: bool = False,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse.
 
@@ -109,10 +121,13 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             bookmark = self._bookmark_now()
             group_filter = c.DbtLdap.FILTER_GROUP
             if self._should_run_incremental(
-                "groups", requested_incremental=incremental, current_bookmark=bookmark,
+                "groups",
+                requested_incremental=incremental,
+                current_bookmark=bookmark,
             ):
                 group_filter = self._build_incremental_filter(
-                    group_filter, self._sync_bookmarks.get("groups"),
+                    group_filter,
+                    self._sync_bookmarks.get("groups"),
                 )
             result = self.run_full_pipeline(
                 search_base=search_base,
@@ -122,7 +137,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
             if result.success:
                 update_result = self._update_bookmark(
-                    "groups", bookmark, successful=True,
+                    "groups",
+                    bookmark,
+                    successful=True,
                 )
                 if update_result.failure:
                     return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(
@@ -134,11 +151,13 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             return _run_sync_groups_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"Group sync error: {e}", exception=e,
+                f"Group sync error: {e}",
+                exception=e,
             )
 
     def sync_memberships_to_warehouse(
-        self, search_base: str | None = None,
+        self,
+        search_base: str | None = None,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse.
 
@@ -154,11 +173,15 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"Membership sync error: {e}", exception=e,
+                f"Membership sync error: {e}",
+                exception=e,
             )
 
     def sync_users_to_warehouse(
-        self, search_base: str | None = None, *, incremental: bool = False,
+        self,
+        search_base: str | None = None,
+        *,
+        incremental: bool = False,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse.
 
@@ -175,7 +198,8 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 current_bookmark=bookmark,
             ):
                 user_filter = self._build_incremental_filter(
-                    user_filter, self._sync_bookmarks.get(c.DbtLdap.USERS),
+                    user_filter,
+                    self._sync_bookmarks.get(c.DbtLdap.USERS),
                 )
             result = self.run_full_pipeline(
                 search_base=search_base,
@@ -192,7 +216,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
             if result.success:
                 update_result = self._update_bookmark(
-                    c.DbtLdap.USERS, bookmark, successful=True,
+                    c.DbtLdap.USERS,
+                    bookmark,
+                    successful=True,
                 )
                 if update_result.failure:
                     return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(
@@ -204,11 +230,13 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             return _run_sync_users_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"User sync error: {e}", exception=e,
+                f"User sync error: {e}",
+                exception=e,
             )
 
     def validate_warehouse_data_quality(
-        self, model_names: t.StrSequence | None = None,
+        self,
+        model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse.
 
@@ -224,7 +252,8 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             )
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[m.DbtLdap.ValidationMetrics].fail(
-                f"Data quality validation error: {e}", exception=e,
+                f"Data quality validation error: {e}",
+                exception=e,
             )
 
     @staticmethod
@@ -272,7 +301,11 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         )
 
     def _should_run_incremental(
-        self, sync_key: str, *, requested_incremental: bool, current_bookmark: str,
+        self,
+        sync_key: str,
+        *,
+        requested_incremental: bool,
+        current_bookmark: str,
     ) -> bool:
         if not requested_incremental:
             return False
@@ -280,7 +313,11 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         return previous is not None and previous < current_bookmark
 
     def _update_bookmark(
-        self, sync_key: str, bookmark: str, *, successful: bool,
+        self,
+        sync_key: str,
+        bookmark: str,
+        *,
+        successful: bool,
     ) -> p.Result[bool]:
         if not successful:
             return r[bool].ok(True)

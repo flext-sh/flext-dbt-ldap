@@ -46,7 +46,8 @@ class TestsFlextDbtLdapConstantsFlatApi:
         ],
     )
     def test_flat_constant_exposes_expected_public_value(
-        actual: str | int, expected: str | int,
+        actual: str | int,
+        expected: str | int,
     ) -> None:
         """Test flat constant exposes expected public value."""
         tm.that(actual, eq=expected)

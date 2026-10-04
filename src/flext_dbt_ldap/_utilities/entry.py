@@ -28,7 +28,8 @@ class FlextDbtLdapUtilitiesEntry:
     def active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
         """Return whether the LDAP entry represents an active account."""
         raw_flag = ul.Ldap.resolve_first_attribute_value(
-            attrs, c.DbtLdap.USER_ACCOUNT_CONTROL,
+            attrs,
+            c.DbtLdap.USER_ACCOUNT_CONTROL,
         )
         if raw_flag is None:
             return True
@@ -46,7 +47,8 @@ class FlextDbtLdapUtilitiesEntry:
             The resulting ``bool``.
         """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
-            c.Ldap.AttributeName.OBJECT_CLASS, [],
+            c.Ldap.AttributeName.OBJECT_CLASS,
+            [],
         )
         return any(
             ul.Ldap.norm_in(item, object_classes) for item in c.DbtLdap.GROUPS_CLASSES
@@ -60,7 +62,8 @@ class FlextDbtLdapUtilitiesEntry:
             The resulting ``bool``.
         """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
-            c.Ldap.AttributeName.OBJECT_CLASS, [],
+            c.Ldap.AttributeName.OBJECT_CLASS,
+            [],
         )
         return any(
             ul.Ldap.norm_in(item, object_classes) for item in c.DbtLdap.USERS_CLASSES

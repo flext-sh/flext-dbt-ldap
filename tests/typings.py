@@ -31,7 +31,8 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
             type ServiceFactory = Callable[
                 [Path, SyncState],
                 FlextDbtLdapTypes.Pair[
-                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap, Path,
+                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap,
+                    Path,
                 ],
             ]
 

@@ -26,16 +26,20 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         user_id: Annotated[str, u.Field(description="Canonical user identifier")]
         email: Annotated[str | None, u.Field(description="Primary user email")] = None
         display_name: Annotated[
-            str | None, u.Field(description="Display name shown to users"),
+            str | None,
+            u.Field(description="Display name shown to users"),
         ] = None
         department: Annotated[
-            str | None, u.Field(description="User department name"),
+            str | None,
+            u.Field(description="User department name"),
         ] = None
         manager_dn: Annotated[
-            str | None, u.Field(description="Distinguished name of the manager"),
+            str | None,
+            u.Field(description="Distinguished name of the manager"),
         ] = None
         employee_number: Annotated[
-            str | None, u.Field(description="Employee number from LDAP"),
+            str | None,
+            u.Field(description="Employee number from LDAP"),
         ] = None
         phone: Annotated[str | None, u.Field(description="Primary phone number")] = None
 
@@ -69,26 +73,33 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 or c.DEFAULT_EMPTY_STRING,
                 email=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.MAIL),
                 display_name=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.DISPLAY_NAME,
+                    attrs,
+                    c.DbtLdap.DISPLAY_NAME,
                 ),
                 department=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.DEPARTMENT,
+                    attrs,
+                    c.DbtLdap.DEPARTMENT,
                 ),
                 manager_dn=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.MANAGER,
+                    attrs,
+                    c.DbtLdap.MANAGER,
                 ),
                 employee_number=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.EMPLOYEE_NUMBER,
+                    attrs,
+                    c.DbtLdap.EMPLOYEE_NUMBER,
                 ),
                 phone=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.TELEPHONE_NUMBER,
+                    attrs,
+                    c.DbtLdap.TELEPHONE_NUMBER,
                 ),
                 is_active=FlextDbtLdapUtilitiesEntry.active_entry(attrs),
                 created_date=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.CREATE_TIMESTAMP,
+                    attrs,
+                    c.DbtLdap.CREATE_TIMESTAMP,
                 ),
                 modified_date=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.MODIFY_TIMESTAMP,
+                    attrs,
+                    c.DbtLdap.MODIFY_TIMESTAMP,
                 ),
             )
 
@@ -97,13 +108,16 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
         group_id: Annotated[str, u.Field(description="Canonical group identifier")]
         description: Annotated[
-            str | None, u.Field(description="Group description from LDAP"),
+            str | None,
+            u.Field(description="Group description from LDAP"),
         ] = None
         group_type: Annotated[
-            str | None, u.Field(description="Group type classification"),
+            str | None,
+            u.Field(description="Group type classification"),
         ] = None
         member_count: Annotated[
-            int, u.Field(description="Number of direct group members"),
+            int,
+            u.Field(description="Number of direct group members"),
         ] = 0
 
         @u.model_validator(mode="after")
@@ -144,18 +158,22 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 group_id=common_name,
                 common_name=common_name,
                 description=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.DESCRIPTION,
+                    attrs,
+                    c.DbtLdap.DESCRIPTION,
                 ),
                 group_type=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.GROUP_TYPE,
+                    attrs,
+                    c.DbtLdap.GROUP_TYPE,
                 ),
                 member_count=member_count,
                 is_active=True,
                 created_date=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.CREATE_TIMESTAMP,
+                    attrs,
+                    c.DbtLdap.CREATE_TIMESTAMP,
                 ),
                 modified_date=ul.Ldap.resolve_first_attribute_value(
-                    attrs, c.DbtLdap.MODIFY_TIMESTAMP,
+                    attrs,
+                    c.DbtLdap.MODIFY_TIMESTAMP,
                 ),
             )
 
@@ -165,17 +183,20 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         user_dn: Annotated[str, u.Field(description="Member distinguished name")]
         group_dn: Annotated[str, u.Field(description="Group distinguished name")]
         membership_type: Annotated[
-            str, u.Field(description="Membership relationship type"),
+            str,
+            u.Field(description="Membership relationship type"),
         ] = c.DbtLdap.DIRECT
         is_primary: Annotated[
             bool,
             u.Field(description="Whether the membership is the primary assignment"),
         ] = False
         effective_date: Annotated[
-            str | None, u.Field(description="Membership effective timestamp"),
+            str | None,
+            u.Field(description="Membership effective timestamp"),
         ] = None
         expiry_date: Annotated[
-            str | None, u.Field(description="Membership expiry timestamp"),
+            str | None,
+            u.Field(description="Membership expiry timestamp"),
         ] = None
 
         @u.model_validator(mode="after")

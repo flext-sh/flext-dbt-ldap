@@ -72,7 +72,9 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 @override
                 def search(
-                    self, search_options: p.Ldap.SearchOptions, server_type: str = "rfc",
+                    self,
+                    search_options: p.Ldap.SearchOptions,
+                    server_type: str = "rfc",
                 ) -> p.Result[m.Ldap.SearchResult]:
                     """Serve the directory contents for the recorded request.
 
@@ -109,7 +111,8 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 )
 
                 def __init__(
-                    self, settings: FlextDbtLdapSettings | None = None,
+                    self,
+                    settings: FlextDbtLdapSettings | None = None,
                 ) -> None:
                     """Wire the facade state with the canonical settings kwarg."""
                     super().__init__(settings=settings)
@@ -156,7 +159,8 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 @override
                 def run_models(
-                    self, models: t.StrSequence | None = None,
+                    self,
+                    models: t.StrSequence | None = None,
                 ) -> p.Result[m.Meltano.CommandExecutionResult]:
                     """Serve the dbt boundary from the recorded runner state.
 

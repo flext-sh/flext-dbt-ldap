@@ -69,7 +69,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             else:
                 logger.error("LDAP extraction failed: %s", result.error or "")
                 return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail_op(
-                    "LDAP extraction", result.error,
+                    "LDAP extraction",
+                    result.error,
                 )
             return result
 
@@ -78,7 +79,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP extraction")
             return r[t.SequenceOf[t.Ldap.OperationAttributes]].fail(
-                f"LDAP extraction error: {e}", exception=e,
+                f"LDAP extraction error: {e}",
+                exception=e,
             )
 
     def run_full_pipeline(
@@ -95,7 +97,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         """
         logger.info("Starting full LDAP-to-DBT pipeline")
         extract_result = self.extract_ldap_entries(
-            search_base, search_filter, attributes,
+            search_base,
+            search_filter,
+            attributes,
         )
         if extract_result.failure:
             return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(extract_result)
@@ -146,11 +150,13 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during DBT transformation")
             return r[m.DbtLdap.DbtRunStatus].fail(
-                f"DBT transformation error: {e}", exception=e,
+                f"DBT transformation error: {e}",
+                exception=e,
             )
 
     def _run_selected_models(
-        self, model_names: t.StrSequence | None = None,
+        self,
+        model_names: t.StrSequence | None = None,
     ) -> p.Result[t.StrSequence]:
         """Run selected DBT models through the canonical service runtime.
 
@@ -164,7 +170,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         return r[t.StrSequence].ok(model_list)
 
     def validate_ldap_data(
-        self, entries: t.SequenceOf[t.Ldap.OperationAttributes],
+        self,
+        entries: t.SequenceOf[t.Ldap.OperationAttributes],
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate LDAP data quality for DBT processing.
 
@@ -207,11 +214,13 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             logger.exception("Unexpected error during LDAP validation")
             return r[m.DbtLdap.ValidationMetrics].fail(
-                f"LDAP validation error: {e}", exception=e,
+                f"LDAP validation error: {e}",
+                exception=e,
             )
 
     def _map_entry_attributes(
-        self, entry: t.Ldap.OperationAttributes,
+        self,
+        entry: t.Ldap.OperationAttributes,
     ) -> t.ConfigurationMapping:
         """Map LDAP entry attributes using configuration mapping.
 
@@ -237,7 +246,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
     @staticmethod
     def _matches_schema(
-        entry: t.Ldap.OperationAttributes, schema_name: str,
+        entry: t.Ldap.OperationAttributes,
+        schema_name: str,
     ) -> bool:
         """Check if LDAP entry matches schema type.
 
@@ -256,7 +266,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         return any(cls in object_classes for cls in expected_classes)
 
     def _prepare_ldap_data_for_dbt(
-        self, entries: t.SequenceOf[t.Ldap.OperationAttributes],
+        self,
+        entries: t.SequenceOf[t.Ldap.OperationAttributes],
     ) -> t.MappingKV[str, t.SequenceOf[t.ConfigurationMapping]]:
         """Prepare LDAP entries for DBT processing.
 
@@ -264,7 +275,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             The resulting ``t.MappingKV[str, t.SequenceOf[t.ConfigurationMapping]]``.
         """
         prepared_data: t.MutableMappingKV[
-            str, t.SequenceOf[t.ConfigurationMapping],
+            str,
+            t.SequenceOf[t.ConfigurationMapping],
         ] = {}
         for (
             schema_name,
@@ -285,7 +297,11 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         return prepared_data
 
     def _search_entries_sync(
-        self, *, base_dn: str, search_filter: str, attributes: t.StrSequence | None,
+        self,
+        *,
+        base_dn: str,
+        search_filter: str,
+        attributes: t.StrSequence | None,
     ) -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
         """Perform LDAP search synchronously using flext-ldap API.
 
