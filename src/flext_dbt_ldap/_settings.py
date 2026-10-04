@@ -21,17 +21,17 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     """DBT LDAP settings; connection via ``Ldap.*``, dbt knobs via ``DbtLdap.*``."""
 
     model_config = m.SettingsConfigDict(
-        env_prefix="FLEXT_DBT_LDAP_", env_nested_delimiter="__", extra="ignore"
+        env_prefix="FLEXT_DBT_LDAP_", env_nested_delimiter="__", extra="ignore",
     )
 
     class _DbtLdap(m.BaseModel):
         """dbt-LDAP knobs only (LDAP connection lives in ``Ldap``)."""
 
         ldap_base_dn: Annotated[
-            str, m.Field(default="dc=example,dc=com", description="LDAP base DN")
+            str, m.Field(default="dc=example,dc=com", description="LDAP base DN"),
         ]
         dbt_project_dir: Annotated[
-            str, m.Field(default=".", description="Path to DBT project directory")
+            str, m.Field(default=".", description="Path to DBT project directory"),
         ]
         min_quality_threshold: Annotated[
             float,
@@ -68,7 +68,7 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
         DbtLdap: _DbtLdap
     else:
         DbtLdap: _DbtLdap = m.Field(
-            default_factory=_DbtLdap, description="Namespaced dbt-LDAP settings."
+            default_factory=_DbtLdap, description="Namespaced dbt-LDAP settings.",
         )
 
 

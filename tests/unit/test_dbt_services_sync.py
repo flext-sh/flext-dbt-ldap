@@ -14,6 +14,10 @@ boundaries:
 No production method is replaced at runtime: the incremental-filter, bookmark
 and pipeline logic all execute for real and are observed through the returned
 ``r[T]`` outcome, the recorded directory requests and the persisted state file.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+tests/unit/test_dbt_services_sync
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -39,13 +43,17 @@ class TestsFlextDbtLdapServicesSync:
 
     @staticmethod
     def _directory_entries(entry_count: int) -> list[m.Ldif.Entry]:
-        """Build real directory entries served by the in-memory LDAP client."""
+        """Build real directory entries served by the in-memory LDAP client.
+
+        Returns:
+            The resulting ``list[m.Ldif.Entry]``.
+        """
         base_dn = c.DbtLdap.Tests.DIRECTORY_BASE_DN
         return [
             m.Ldif.Entry(
                 dn=m.Ldif.DN(value=f"uid=user{index},{base_dn}"),
                 attributes=m.Ldif.Attributes(
-                    attributes={"uid": [f"user{index}"]}, attribute_metadata={}
+                    attributes={"uid": [f"user{index}"]}, attribute_metadata={},
                 ),
             )
             for index in range(entry_count)
@@ -62,7 +70,7 @@ class TestsFlextDbtLdapServicesSync:
         if read_result.failure:
             pytest.fail(read_result.error or "Failed to read sync state")
         payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
-            read_result.value or {}
+            read_result.value or {},
         )
         return payload
 
@@ -93,8 +101,9 @@ class TestsFlextDbtLdapServicesSync:
         sync_key: str,
         expected_filter: str,
     ) -> None:
+        """Test incremental sync applies prior bookmark to filter and advances state."""
         service, state_file = dbt_ldap_service_factory(
-            tmp_path, {sync_key: "20250101000000Z"}
+            tmp_path, {sync_key: "20250101000000Z"},
         )
         service.directory().serve(self._directory_entries(1))
 
@@ -121,6 +130,7 @@ class TestsFlextDbtLdapServicesSync:
         sync_key: str,
         base_filter: str,
     ) -> None:
+        """Test first incremental run scans with base filter then records bookmark."""
         service, state_file = dbt_ldap_service_factory(tmp_path, None)
         service.directory().serve(self._directory_entries(1))
 
@@ -134,8 +144,9 @@ class TestsFlextDbtLdapServicesSync:
         tm.that(recorded.endswith("Z"), eq=True)
 
     def test_successful_sync_reports_extracted_entry_count(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test successful sync reports extracted entry count."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
         service.directory().serve(self._directory_entries(3))
 
@@ -145,8 +156,9 @@ class TestsFlextDbtLdapServicesSync:
         tm.that(result.value.extracted_entries, eq=3)
 
     def test_full_warehouse_sync_succeeds_across_all_components(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test full warehouse sync succeeds across all components."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
         service.directory().serve(self._directory_entries(2))
 
@@ -161,8 +173,9 @@ class TestsFlextDbtLdapServicesSync:
     # ------------------------------------------------------------------ #
 
     def test_sync_users_fails_when_state_persistence_fails(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test sync users fails when state persistence fails."""
         service, state_file = dbt_ldap_service_factory(tmp_path, None)
         service.directory().serve(self._directory_entries(1))
         # A directory occupying the state-file path makes the real filesystem
@@ -174,9 +187,11 @@ class TestsFlextDbtLdapServicesSync:
         tm.fail(result)
         tm.that(state_file.is_file(), eq=False)
 
+    @staticmethod
     def test_sync_users_fails_when_ldap_extraction_fails(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test sync users fails when ldap extraction fails."""
         service, state_file = dbt_ldap_service_factory(tmp_path, None)
         service.directory().mark_unreachable()
 
@@ -186,9 +201,11 @@ class TestsFlextDbtLdapServicesSync:
         # A failed extraction must not persist any bookmark state.
         tm.that(state_file.exists(), eq=False)
 
+    @staticmethod
     def test_run_dbt_models_propagates_underlying_run_models_failure(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test run dbt models propagates underlying run models failure."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
         service.mark_dbt_failure("dbt failed")
 
@@ -197,9 +214,11 @@ class TestsFlextDbtLdapServicesSync:
         tm.fail(result)
         tm.that(result.error, eq="dbt failed")
 
+    @staticmethod
     def test_run_dbt_models_reports_selected_models_on_success(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test run dbt models reports selected models on success."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
 
         result = service.run_dbt_models([c.DbtLdap.DIM_USERS])
@@ -213,9 +232,11 @@ class TestsFlextDbtLdapServicesSync:
     # Construction contract
     # ------------------------------------------------------------------ #
 
+    @staticmethod
     def test_service_init_rejects_non_string_sync_state_values(
-        self, tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory
+        tmp_path: Path, dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
     ) -> None:
+        """Test service init rejects non string sync state values."""
         _ = dbt_ldap_service_factory
         state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
         state_file.write_text('{"users": 1}\n', encoding=c.Cli.ENCODING_DEFAULT)
@@ -224,7 +245,7 @@ class TestsFlextDbtLdapServicesSync:
             "DbtLdap": {
                 "ldap_base_dn": c.DbtLdap.Tests.DIRECTORY_BASE_DN,
                 "dbt_project_dir": str(tmp_path),
-            }
+            },
         })
 
         with pytest.raises(TypeError, match="Sync state file values must be strings"):
@@ -234,7 +255,9 @@ class TestsFlextDbtLdapServicesSync:
     # Analytics report (pure, no external boundary)
     # ------------------------------------------------------------------ #
 
-    def test_generate_analytics_report_returns_requested_report_type(self) -> None:
+    @staticmethod
+    def test_generate_analytics_report_returns_requested_report_type() -> None:
+        """Test generate analytics report returns requested report type."""
         result = FlextDbtLdap.generate_analytics_report("membership")
 
         tm.ok(result)

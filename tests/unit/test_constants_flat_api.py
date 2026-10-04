@@ -5,6 +5,10 @@ surface exposed by ``c.DbtLdap`` and the public model behaviour of
 ``m.DbtLdap.UserDimension`` (fields, ``from_ldap_entry`` mapping, validation, and
 ``to_dbt_dict`` serialization). No private attribute, internal collaborator, or
 implementation-layout detail is touched.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+tests/unit/test_constants_flat_api
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -22,6 +26,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
 
     # --- Flat constants surface (public contract) --------------------------
 
+    @staticmethod
     @pytest.mark.parametrize(
         ("actual", "expected"),
         [
@@ -41,13 +46,16 @@ class TestsFlextDbtLdapConstantsFlatApi:
         ],
     )
     def test_flat_constant_exposes_expected_public_value(
-        self, actual: str | int, expected: str | int
+        actual: str | int, expected: str | int,
     ) -> None:
+        """Test flat constant exposes expected public value."""
         tm.that(actual, eq=expected)
 
-    def test_common_name_constant_reuses_parent_ldap_attribute_name(self) -> None:
+    @staticmethod
+    def test_common_name_constant_reuses_parent_ldap_attribute_name() -> None:
         # The domain CN constant must stay welded to the inherited protocol value,
         # not shadow it with a private copy.
+        """Test common name constant reuses parent ldap attribute name."""
         tm.that(c.DbtLdap.CN, eq=c.Ldap.AttributeName.COMMON_NAME)
 
     # --- UserDimension.from_ldap_entry mapping -----------------------------
@@ -60,6 +68,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         )
 
     def test_from_ldap_entry_maps_canonical_attributes(self) -> None:
+        """Test from ldap entry maps canonical attributes."""
         entry = self._entry({
             "uid": ["jdoe"],
             "cn": ["John Doe"],
@@ -89,6 +98,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dimension.is_active, eq=True)
 
     def test_from_ldap_entry_leaves_optional_attributes_none_when_absent(self) -> None:
+        """Test from ldap entry leaves optional attributes none when absent."""
         entry = self._entry({
             "uid": ["mnimal"],
             "cn": ["Minimal User"],
@@ -111,6 +121,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dimension.is_active, eq=True)
 
     def test_from_ldap_entry_is_idempotent_for_same_input(self) -> None:
+        """Test from ldap entry is idempotent for same input."""
         entry = self._entry({
             "uid": ["jdoe"],
             "cn": ["John Doe"],
@@ -128,17 +139,23 @@ class TestsFlextDbtLdapConstantsFlatApi:
 
     # --- UserDimension validation contract ---------------------------------
 
-    def test_construction_rejects_blank_identity_fields(self) -> None:
+    @staticmethod
+    def test_construction_rejects_blank_identity_fields() -> None:
+        """Test construction rejects blank identity fields."""
         with pytest.raises(m.ValidationError):
             m.DbtLdap.UserDimension(user_id="", common_name="")
 
-    def test_construction_requires_common_name(self) -> None:
+    @staticmethod
+    def test_construction_requires_common_name() -> None:
+        """Test construction requires common name."""
         with pytest.raises(m.ValidationError):
             m.DbtLdap.UserDimension.model_validate({"user_id": "jdoe"})
 
     # --- UserDimension public serialization --------------------------------
 
-    def test_to_dbt_dict_replaces_missing_optionals_with_empty_string(self) -> None:
+    @staticmethod
+    def test_to_dbt_dict_replaces_missing_optionals_with_empty_string() -> None:
+        """Test to dbt dict replaces missing optionals with empty string."""
         dimension = m.DbtLdap.UserDimension(user_id="jdoe", common_name="John Doe")
 
         dumped = dimension.to_dbt_dict()

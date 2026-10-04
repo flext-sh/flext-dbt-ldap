@@ -1,4 +1,9 @@
-"""Entry normalization helpers for dbt-ldap utilities and models."""
+"""Entry normalization helpers for dbt-ldap utilities and models.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+src/flext_dbt_ldap/_utilities/entry
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
@@ -8,8 +13,7 @@ from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
 from flext_dbt_ldap import c, t
-
-from .macros import FlextDbtLdapUtilitiesMacros
+from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
 
 if TYPE_CHECKING:
     from flext_ldif import m as lm
@@ -24,7 +28,7 @@ class FlextDbtLdapUtilitiesEntry:
     def active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
         """Return whether the LDAP entry represents an active account."""
         raw_flag = ul.Ldap.resolve_first_attribute_value(
-            attrs, c.DbtLdap.USER_ACCOUNT_CONTROL
+            attrs, c.DbtLdap.USER_ACCOUNT_CONTROL,
         )
         if raw_flag is None:
             return True
@@ -36,9 +40,13 @@ class FlextDbtLdapUtilitiesEntry:
 
     @classmethod
     def group_entry(cls, entry: lm.Ldif.Entry) -> bool:
-        """Check whether an entry matches the configured group object classes."""
+        """Check whether an entry matches the configured group object classes.
+
+        Returns:
+            The resulting ``bool``.
+        """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
-            c.Ldap.AttributeName.OBJECT_CLASS, []
+            c.Ldap.AttributeName.OBJECT_CLASS, [],
         )
         return any(
             ul.Ldap.norm_in(item, object_classes) for item in c.DbtLdap.GROUPS_CLASSES
@@ -46,9 +54,13 @@ class FlextDbtLdapUtilitiesEntry:
 
     @classmethod
     def user_entry(cls, entry: lm.Ldif.Entry) -> bool:
-        """Check whether an entry matches the configured user object classes."""
+        """Check whether an entry matches the configured user object classes.
+
+        Returns:
+            The resulting ``bool``.
+        """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
-            c.Ldap.AttributeName.OBJECT_CLASS, []
+            c.Ldap.AttributeName.OBJECT_CLASS, [],
         )
         return any(
             ul.Ldap.norm_in(item, object_classes) for item in c.DbtLdap.USERS_CLASSES

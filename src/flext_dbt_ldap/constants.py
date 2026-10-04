@@ -13,10 +13,10 @@ from typing import TYPE_CHECKING
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
 
-from ._constants.attributes import FlextDbtLdapConstantsAttributes
-from ._constants.base import FlextDbtLdapConstantsBase
-from ._constants.search import FlextDbtLdapConstantsSearch
-from ._constants.transformation import FlextDbtLdapConstantsTransformation
+from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
+from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
+from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
+from flext_dbt_ldap._constants.transformation import FlextDbtLdapConstantsTransformation
 
 if TYPE_CHECKING:
     from flext_dbt_ldap import t

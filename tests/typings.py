@@ -15,8 +15,7 @@ from pathlib import Path
 from flext_tests import FlextTestsTypes
 
 from flext_dbt_ldap import FlextDbtLdapTypes
-
-from .utilities import TestsFlextDbtLdapUtilities
+from tests.utilities import TestsFlextDbtLdapUtilities
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
@@ -32,7 +31,7 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
             type ServiceFactory = Callable[
                 [Path, SyncState],
                 FlextDbtLdapTypes.Pair[
-                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap, Path
+                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap, Path,
                 ],
             ]
 

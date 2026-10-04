@@ -29,7 +29,7 @@ def pytest_runtest_setup(item: pytest.Item) -> None:
             "FLEXT_LOG_LEVEL": "DEBUG",
             "DBT_PROFILES_DIR": temp_dir,
             "LDAP_TEST_MODE": "true",
-        })
+        }),
     )
 
 
@@ -43,10 +43,14 @@ def pytest_runtest_teardown(item: pytest.Item) -> None:
 
 @pytest.fixture
 def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
-    """Build a real public facade instance with isolated sync-state storage."""
+    """Build a real public facade instance with isolated sync-state storage.
+
+    Returns:
+        The resulting ``t.DbtLdap.Tests.ServiceFactory``.
+    """
 
     def factory(
-        dbt_project_dir: pathlib.Path, initial_state: t.DbtLdap.Tests.SyncState = None
+        dbt_project_dir: pathlib.Path, initial_state: t.DbtLdap.Tests.SyncState = None,
     ) -> t.Pair[u.DbtLdap.Tests.InMemoryDbtRunnerLdap, pathlib.Path]:
         # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
         # namespace; a flat dict is dropped by extra="ignore" (no isolation).
@@ -54,7 +58,7 @@ def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
             "DbtLdap": {
                 "ldap_base_dn": c.DbtLdap.Tests.DIRECTORY_BASE_DN,
                 "dbt_project_dir": str(dbt_project_dir),
-            }
+            },
         })
         state_file = dbt_project_dir / ".flext_dbt_ldap_sync_state.json"
         if initial_state is not None:

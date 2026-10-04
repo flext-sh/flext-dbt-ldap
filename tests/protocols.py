@@ -33,12 +33,18 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
         """DB-API 2.0 cursor protocol for type-safe database operations."""
 
         def execute(
-            self, query: str | object, params: t.StrSequence | None = None
-        ) -> TestsFlextDbtLdapProtocols.DbCursor: ...
+            self, query: str | object, params: t.StrSequence | None = None,
+        ) -> TestsFlextDbtLdapProtocols.DbCursor:
+            """Provide ``execute``."""
+            ...
 
-        def fetchall(self) -> t.SequenceOf[tuple[FlextDbtLdapTypes.JsonValue, ...]]: ...
+        def fetchall(self) -> t.SequenceOf[tuple[FlextDbtLdapTypes.JsonValue, ...]]:
+            """Provide ``fetchall``."""
+            ...
 
-        def fetchone(self) -> tuple[FlextDbtLdapTypes.JsonValue, ...] | None: ...
+        def fetchone(self) -> tuple[FlextDbtLdapTypes.JsonValue, ...] | None:
+            """Provide ``fetchone``."""
+            ...
 
     @runtime_checkable
     class DbConnection(Protocol):
@@ -48,9 +54,13 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def cursor(
             self,
-        ) -> AbstractContextManager[TestsFlextDbtLdapProtocols.DbCursor]: ...
+        ) -> AbstractContextManager[TestsFlextDbtLdapProtocols.DbCursor]:
+            """Provide ``cursor``."""
+            ...
 
-        def close(self) -> None: ...
+        def close(self) -> None:
+            """Provide ``close``."""
+            ...
 
 
 p = TestsFlextDbtLdapProtocols

@@ -1,4 +1,9 @@
-"""Shared dbt-ldap model mixins and internal base classes."""
+"""Shared dbt-ldap model mixins and internal base classes.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+src/flext_dbt_ldap/_models/shared
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
@@ -16,7 +21,11 @@ class FlextDbtLdapModelsShared:
         """Base for DBT-serializable models."""
 
         def to_dbt_dict(self) -> t.ConfigurationMapping:
-            """Dump models to DBT-friendly dictionaries."""
+            """Dump models to DBT-friendly dictionaries.
+
+            Returns:
+                The resulting ``t.ConfigurationMapping``.
+            """
             dumped = self.model_dump()
             return {
                 key: value if value is not None else c.DEFAULT_EMPTY_STRING
@@ -28,11 +37,11 @@ class FlextDbtLdapModelsShared:
 
         common_name: Annotated[str, u.Field(description="Canonical common name")]
         is_active: Annotated[
-            bool, u.Field(description="Whether the directory record is active")
+            bool, u.Field(description="Whether the directory record is active"),
         ] = True
         created_date: Annotated[
-            str | None, u.Field(description="Source creation timestamp")
+            str | None, u.Field(description="Source creation timestamp"),
         ] = None
         modified_date: Annotated[
-            str | None, u.Field(description="Source modification timestamp")
+            str | None, u.Field(description="Source modification timestamp"),
         ] = None

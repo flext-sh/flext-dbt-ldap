@@ -9,7 +9,7 @@
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
 - Package: `flext_dbt_ldap`
-- Version: `0.20.0`
+- Version: `0.12.0`
 - Description: FLEXT dbt LDAP - dbt Models for LDAP Data Transformation
 - Doc summary: Flext Dbt Ldap package.
 - Classifiers: Development Status :: 3 - Alpha, Intended Audience :: Developers,
@@ -27,7 +27,7 @@
   `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`,
   `FlextDbtLdapSyncMixin`, `FlextDbtLdapTypes` (+5 more)
 - Exported module shortcuts: `services`
-- Generated module pages: `11`
+- Generated module pages: `8`
 
 ## Next Pages
 

@@ -31,12 +31,20 @@ class FlextDbtLdapUtilitiesMacros:
 
     @staticmethod
     def extract_group_name_from_dn(dn: str) -> str | None:
-        """Extract group name (cn) from DN."""
+        """Extract group name (cn) from DN.
+
+        Returns:
+            The resulting ``str | None``.
+        """
         return FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, c.DbtLdap.CN)
 
     @staticmethod
     def extract_user_id_from_dn(dn: str) -> str | None:
-        """Extract user ID from DN (tries uid, cn, samaccountname)."""
+        """Extract user ID from DN (tries uid, cn, samaccountname).
+
+        Returns:
+            The resulting ``str | None``.
+        """
         for attr in c.DbtLdap.USER_ID_ATTRIBUTES:
             user_id = FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, attr)
             if user_id:
@@ -45,20 +53,32 @@ class FlextDbtLdapUtilitiesMacros:
 
     @staticmethod
     def resolve_parent_dn(dn: str) -> str | None:
-        """Get parent DN from a distinguished name."""
+        """Get parent DN from a distinguished name.
+
+        Returns:
+            The resulting ``str | None``.
+        """
         parts = [p.strip() for p in dn.split(",") if p.strip()]
         return ",".join(parts[1:]) if len(parts) > 1 else None
 
     @staticmethod
     def user_active(user_account_control: int | None) -> bool:
-        """Check if user account is active based on userAccountControl."""
+        """Check if user account is active based on userAccountControl.
+
+        Returns:
+            The resulting ``bool``.
+        """
         if user_account_control is None:
             return True
         return not bool(user_account_control & 2)
 
     @staticmethod
     def normalize_ldap_attribute(value: str | t.StrSequence | None) -> str:
-        """Normalize LDAP attribute value for DBT processing."""
+        """Normalize LDAP attribute value for DBT processing.
+
+        Returns:
+            The resulting ``str``.
+        """
         if value is None:
             return ""
         if isinstance(value, str):
@@ -67,11 +87,15 @@ class FlextDbtLdapUtilitiesMacros:
 
     @staticmethod
     def parse_dn_component(dn: str, component: str) -> str | None:
-        """Parse specific component from DN."""
+        """Parse specific component from DN.
+
+        Returns:
+            The resulting ``str | None``.
+        """
         parts = [p.strip() for p in dn.split(",") if "=" in p]
         pairs = [part.split("=", 1) for part in parts]
         return next(
-            (value for key, value in pairs if key.lower() == component.lower()), None
+            (value for key, value in pairs if key.lower() == component.lower()), None,
         )
 
 
