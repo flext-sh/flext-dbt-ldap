@@ -16,7 +16,11 @@ class FlextDbtLdapUtilitiesMacros:
 
     @staticmethod
     def user_active(user_account_control: int | None) -> bool:
-        """Check if user account is active based on userAccountControl."""
+        """Check if user account is active based on userAccountControl.
+
+        Returns:
+            The resulting ``bool``.
+        """
         if user_account_control is None:
             return True
         return not bool(user_account_control & 2)

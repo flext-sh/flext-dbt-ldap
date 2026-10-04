@@ -14,8 +14,7 @@ from typing import override
 from flext_meltano import FlextMeltanoDbtServiceBase
 
 from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t
-
-from .services.sync import FlextDbtLdapSyncMixin
+from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
 
 
 class FlextDbtLdap(FlextDbtLdapSyncMixin):
@@ -37,7 +36,11 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
 
     @override
     def execute(self) -> p.Result[t.JsonMapping]:
-        """Execute DBT LDAP service — verify readiness."""
+        """Execute DBT LDAP service — verify readiness.
+
+        Returns:
+            The resulting ``p.Result[t.JsonMapping]``.
+        """
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 
 
