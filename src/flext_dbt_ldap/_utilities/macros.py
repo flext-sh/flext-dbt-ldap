@@ -1,6 +1,6 @@
 """FLEXT DBT LDAP Utilities — macro helpers.
 
-Absorbed from macros.py into u.DbtLdap namespace.
+DN parsing is owned by flext-ldif ``u.Ldif.DN``; only dbt-specific helpers live here.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -8,58 +8,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap import c, t
+from flext_dbt_ldap import t
 
 
 class FlextDbtLdapUtilitiesMacros:
     """Unified DBT LDAP macros collection."""
-
-    @staticmethod
-    def extract_date_from_timestamp(timestamp: str) -> str | None:
-        """Extract date part from LDAP timestamp.
-
-        Args:
-        timestamp: LDAP timestamp string (ISO or GeneralizedTime)
-
-        Returns:
-        Date string (YYYY-MM-DD) or None if extraction fails
-
-        """
-        return (
-            timestamp.split("T", maxsplit=1)[0] if "T" in timestamp else timestamp[:10]
-        )
-
-    @staticmethod
-    def extract_group_name_from_dn(dn: str) -> str | None:
-        """Extract group name (cn) from DN.
-
-        Returns:
-            The resulting ``str | None``.
-        """
-        return FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, c.DbtLdap.CN)
-
-    @staticmethod
-    def extract_user_id_from_dn(dn: str) -> str | None:
-        """Extract user ID from DN (tries uid, cn, samaccountname).
-
-        Returns:
-            The resulting ``str | None``.
-        """
-        for attr in c.DbtLdap.USER_ID_ATTRIBUTES:
-            user_id = FlextDbtLdapUtilitiesMacros.parse_dn_component(dn, attr)
-            if user_id:
-                return user_id
-        return None
-
-    @staticmethod
-    def resolve_parent_dn(dn: str) -> str | None:
-        """Get parent DN from a distinguished name.
-
-        Returns:
-            The resulting ``str | None``.
-        """
-        parts = [p.strip() for p in dn.split(",") if p.strip()]
-        return ",".join(parts[1:]) if len(parts) > 1 else None
 
     @staticmethod
     def user_active(user_account_control: int | None) -> bool:
@@ -71,33 +24,6 @@ class FlextDbtLdapUtilitiesMacros:
         if user_account_control is None:
             return True
         return not bool(user_account_control & 2)
-
-    @staticmethod
-    def normalize_ldap_attribute(value: str | t.StrSequence | None) -> str:
-        """Normalize LDAP attribute value for DBT processing.
-
-        Returns:
-            The resulting ``str``.
-        """
-        if value is None:
-            return ""
-        if isinstance(value, str):
-            return value
-        return value[0] if value else ""
-
-    @staticmethod
-    def parse_dn_component(dn: str, component: str) -> str | None:
-        """Parse specific component from DN.
-
-        Returns:
-            The resulting ``str | None``.
-        """
-        parts = [p.strip() for p in dn.split(",") if "=" in p]
-        pairs = [part.split("=", 1) for part in parts]
-        return next(
-            (value for key, value in pairs if key.lower() == component.lower()),
-            None,
-        )
 
 
 __all__: t.StrSequence = ("FlextDbtLdapUtilitiesMacros",)
