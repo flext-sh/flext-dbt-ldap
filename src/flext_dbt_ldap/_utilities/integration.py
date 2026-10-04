@@ -35,13 +35,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.GroupDimension]``.
         """
-        return cls._transform_entries_to_dimensions(
-            entries=entries,
-            is_entry_target=cls.group_entry,
-            build_dimension=m.DbtLdap.GroupDimension.from_ldap_entry,
-            transform_label="group dimensions",
-            failure_label="group entry",
-        )
+        groups = [entry for entry in entries if cls.group_entry(entry)]
+        build = m.DbtLdap.GroupDimension.from_ldap_entry
+        return cls._transform_entries_to_dimensions(groups, build, "group")
 
     @classmethod
     def transform_memberships(
@@ -83,13 +79,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.UserDimension]``.
         """
-        return cls._transform_entries_to_dimensions(
-            entries=entries,
-            is_entry_target=cls.user_entry,
-            build_dimension=m.DbtLdap.UserDimension.from_ldap_entry,
-            transform_label="user dimensions",
-            failure_label="user entry",
-        )
+        users = [entry for entry in entries if cls.user_entry(entry)]
+        build = m.DbtLdap.UserDimension.from_ldap_entry
+        return cls._transform_entries_to_dimensions(users, build, "user")
 
     @classmethod
     def _extract_group_memberships(
@@ -146,12 +138,10 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def _transform_entries_to_dimensions[DimensionT](
         cls,
-        *,
         entries: t.SequenceOf[m.Ldif.Entry],
-        is_entry_target: Callable[[m.Ldif.Entry], bool],
         build_dimension: Callable[[m.Ldif.Entry], DimensionT],
-        transform_label: str,
-        failure_label: str,
+        kind: str,
+        /,
     ) -> t.SequenceOf[DimensionT]:
         """Shared entry-to-dimension transformation flow.
 
@@ -159,14 +149,12 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
             The resulting ``t.SequenceOf[DimensionT]``.
         """
         cls._log.info(
-            "Transforming %d LDAP entries to %s",
+            "Transforming %d LDAP %s entries to dimensions",
             len(entries),
-            transform_label,
+            kind,
         )
         dimensions: list[DimensionT] = []
         for entry in entries:
-            if not is_entry_target(entry):
-                continue
             try:
                 dimensions.append(build_dimension(entry))
             except c.Meltano.SINGER_SAFE_EXCEPTIONS:
@@ -174,11 +162,11 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
                     str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
                 )
                 cls._log.exception(
-                    "Failed to transform %s: %s",
-                    failure_label,
+                    "Failed to transform %s entry: %s",
+                    kind,
                     entry_dn,
                 )
-        cls._log.info("Transformed %d %s", len(dimensions), transform_label)
+        cls._log.info("Transformed %d %s dimensions", len(dimensions), kind)
         return dimensions
 
 
