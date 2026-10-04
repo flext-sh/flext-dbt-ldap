@@ -705,7 +705,7 @@ dev = [
 [[package]]
 name = "flext-infra"
 version = "0.12.0"
-source = { git = "https://github.com/flext-sh/flext-infra.git?rev=0.12.0-dev#15305d222018b13b6649b26ed160ec3b9b54fe5f" }
+source = { git = "https://github.com/flext-sh/flext-infra.git?rev=0.12.0-dev#9e6c642c5ea691ada5a22a55ac1f4ef8eebd89df" }
 dependencies = [
     { name = "annotated-types" },
     { name = "beartype" },
@@ -769,7 +769,7 @@ dependencies = [
 [[package]]
 name = "flext-meltano"
 version = "0.12.0"
-source = { git = "https://github.com/flext-sh/flext-meltano.git?rev=0.12.0-dev#515d85497f7ef7595d14136addd6449c4e961378" }
+source = { git = "https://github.com/flext-sh/flext-meltano.git?rev=0.12.0-dev#9b518ec3a5d6c456d77fe9bf026ded1ef10f7206" }
 dependencies = [
     { name = "annotated-types" },
     { name = "beartype" },
