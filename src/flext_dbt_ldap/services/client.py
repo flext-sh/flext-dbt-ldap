@@ -205,7 +205,8 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             )
             if not metrics.validation_passed:
                 return r[m.DbtLdap.ValidationMetrics].fail(
-                    f"Data quality below threshold: {quality_score} < {self.settings.DbtLdap.min_quality_threshold}",
+                    f"Data quality below threshold: {quality_score} < "
+                    f"{self.settings.DbtLdap.min_quality_threshold}",
                 )
             return r[m.DbtLdap.ValidationMetrics].ok(metrics)
 

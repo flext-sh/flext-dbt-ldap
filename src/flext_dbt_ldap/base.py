@@ -49,8 +49,9 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @override
     def connection_profile(self) -> p.Meltano.DbtConnectionProfile:
         """Dbt connection profile for LDAP-backed workflows."""
-        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings (runtime,
-        # not the global singleton); connection scalars from Ldap.*, base_dn from DbtLdap.
+        # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings
+        # (runtime, not the global singleton); connection scalars from Ldap.*,
+        # base_dn from DbtLdap.
         return m.DbtLdap.DbtConnectionProfile(
             host=self.settings.Ldap.host,
             port=self.settings.Ldap.port,
