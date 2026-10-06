@@ -128,7 +128,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                         The resulting
                             ``TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory``.
                     """
-                    return TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory.with_settings(
+                    return InMemoryLdapDirectory.with_settings(
                         settings,
                     )
 
@@ -186,4 +186,5 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
 
 u = TestsFlextDbtLdapUtilities
-__all__: list[str] = ["TestsFlextDbtLdapUtilities", "u"]
+InMemoryLdapDirectory = TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory
+__all__: list[str] = ["InMemoryLdapDirectory", "TestsFlextDbtLdapUtilities", "u"]

@@ -20,7 +20,7 @@ class FlextDbtLdapModelsConfiguration:
 
     # NOTE (multi-agent): mro-rn88 ADR-006 thin-driver — typed connection_profile.
     class DbtConnectionProfile(m.Value):
-        """Typed dbt LDAP connection profile (satisfies p.Meltano.DbtConnectionProfile)."""
+        """Typed dbt LDAP profile (satisfies p.Meltano.DbtConnectionProfile)."""
 
         type: Annotated[str, u.Field(description="Dbt adapter type identifier")] = (
             "ldap"

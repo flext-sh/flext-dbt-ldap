@@ -9,9 +9,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from flext_cli import u
-
-from flext_dbt_ldap import c, m, p, r, t
+from flext_dbt_ldap import c, m, p, r, t, u
 from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
 
 logger = u.fetch_logger(__name__)
@@ -320,7 +318,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         successful: bool,
     ) -> p.Result[bool]:
         if not successful:
-            return r[bool].ok(True)
+            return r[bool].ok(value=True)
         previous_bookmark = self._sync_bookmarks.get(sync_key)
         self._sync_bookmarks[sync_key] = bookmark
         try:
@@ -331,7 +329,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             else:
                 self._sync_bookmarks[sync_key] = previous_bookmark
             return r[bool].fail(str(error), exception=error)
-        return r[bool].ok(True)
+        return r[bool].ok(value=True)
 
 
 __all__: list[str] = ["FlextDbtLdapSyncMixin"]
