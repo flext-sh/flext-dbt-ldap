@@ -8,8 +8,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
 
@@ -17,9 +15,6 @@ from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
 from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
 from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
 from flext_dbt_ldap._constants.transformation import FlextDbtLdapConstantsTransformation
-
-if TYPE_CHECKING:
-    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
@@ -47,4 +42,4 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
 
 c = FlextDbtLdapConstants
 
-__all__: t.VariadicTuple[str] = ("FlextDbtLdapConstants", "c")
+__all__ = ("FlextDbtLdapConstants", "c")

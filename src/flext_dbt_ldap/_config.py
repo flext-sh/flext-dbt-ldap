@@ -12,7 +12,9 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from flext_meltano import FlextMeltanoConfig, m
+from flext_meltano import FlextMeltanoConfig
+
+from flext_dbt_ldap import m
 
 
 class _DbtLdapNamespace(m.BaseModel):
