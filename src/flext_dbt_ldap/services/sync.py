@@ -318,7 +318,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         successful: bool,
     ) -> p.Result[bool]:
         if not successful:
-            return r[bool].ok(True)
+            return r[bool].ok(value=True)
         previous_bookmark = self._sync_bookmarks.get(sync_key)
         self._sync_bookmarks[sync_key] = bookmark
         try:
@@ -329,7 +329,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             else:
                 self._sync_bookmarks[sync_key] = previous_bookmark
             return r[bool].fail(str(error), exception=error)
-        return r[bool].ok(True)
+        return r[bool].ok(value=True)
 
 
 __all__: list[str] = ["FlextDbtLdapSyncMixin"]

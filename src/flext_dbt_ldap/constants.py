@@ -28,7 +28,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     - c.Ldap.AttributeName (DN, OBJECT_CLASS, COMMON_NAME — protocol-only)
     - c.Ldap.ALL_ENTRIES_FILTER (protocol-level wildcard)
 
-    Domain-specific constants (attributes, filters, models, data types) live in this class.
+    Domain-specific constants (attributes, filters, models, types) live here.
     """
 
     class DbtLdap(
