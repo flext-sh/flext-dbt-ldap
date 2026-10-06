@@ -22,10 +22,11 @@ if TYPE_CHECKING:
     from tests.protocols import TestsFlextDbtLdapProtocols, p
     from tests.settings import TestsFlextDbtLdapSettings
     from tests.typings import TestsFlextDbtLdapTypes, t
-    from tests.utilities import TestsFlextDbtLdapUtilities, u
+    from tests.utilities import InMemoryLdapDirectory, TestsFlextDbtLdapUtilities, u
 
 
 __all__: tuple[str, ...] = (
+    "InMemoryLdapDirectory",
     "TestsFlextDbtLdapConstants",
     "TestsFlextDbtLdapModels",
     "TestsFlextDbtLdapProtocols",
@@ -57,6 +58,7 @@ install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
+        "InMemoryLdapDirectory": ".utilities",
         "TestsFlextDbtLdapConstants": ".constants",
         "TestsFlextDbtLdapModels": ".models",
         "TestsFlextDbtLdapProtocols": ".protocols",
