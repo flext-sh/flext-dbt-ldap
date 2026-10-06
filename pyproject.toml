@@ -446,6 +446,7 @@ runtime-evaluated-base-classes = [
   "flext_dbt_ldap._models.shared.FlextDbtLdapModelsShared.DbtDimensionBase",
   "flext_dbt_ldap._models.shared.FlextDbtLdapModelsShared.DbtSerializable",
   "flext_dbt_ldap.base.FlextDbtLdapServiceBase",
+  "flext_dbt_ldap.m.BaseModel",
   "flext_dbt_ldap.services.client.FlextDbtLdapClientMixin",
   "flext_dbt_ldap.services.sync.FlextDbtLdapSyncMixin",
   "flext_ldap.FlextLdap",
