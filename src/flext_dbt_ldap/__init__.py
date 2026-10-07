@@ -10,7 +10,7 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
-from flext_core import build_lazy_import_map, install_lazy_exports
+from flext_core import install_lazy_exports
 from flext_dbt_ldap.__version__ import (
     __author__,
     __author_email__,
@@ -78,27 +78,37 @@ __all__: tuple[str, ...] = (
     "x",
 )
 
-_LAZY_IMPORTS = MappingProxyType(
-    build_lazy_import_map(
-        MappingProxyType({
-            "._config": ("FlextDbtLdapConfig", "config"),
-            "._settings": ("FlextDbtLdapSettings", "settings"),
-            ".api": ("FlextDbtLdap", "dbt_ldap"),
-            ".base": ("FlextDbtLdapServiceBase", "s"),
-            ".cli": ("main",),
-            ".constants": ("FlextDbtLdapConstants", "c"),
-            ".models": ("FlextDbtLdapModels", "m"),
-            ".protocols": ("FlextDbtLdapProtocols", "p"),
-            ".services": ("services",),
-            ".services.client": ("FlextDbtLdapClientMixin",),
-            ".services.sync": ("FlextDbtLdapSyncMixin",),
-            ".typings": ("FlextDbtLdapTypes", "t"),
-            ".utilities": ("FlextDbtLdapUtilities", "u"),
-            "flext_meltano": ("d", "e", "h", "r", "x"),
-        }),
-        alias_groups=MappingProxyType({}),
-        sort_keys=False,
-    ),
+install_lazy_exports(
+    __name__,
+    globals(),
+    MappingProxyType({
+        "FlextDbtLdap": ".api",
+        "FlextDbtLdapClientMixin": ".services.client",
+        "FlextDbtLdapConfig": "._config",
+        "FlextDbtLdapConstants": ".constants",
+        "FlextDbtLdapModels": ".models",
+        "FlextDbtLdapProtocols": ".protocols",
+        "FlextDbtLdapServiceBase": ".base",
+        "FlextDbtLdapSettings": "._settings",
+        "FlextDbtLdapSyncMixin": ".services.sync",
+        "FlextDbtLdapTypes": ".typings",
+        "FlextDbtLdapUtilities": ".utilities",
+        "c": ".constants",
+        "config": "._config",
+        "d": "flext_meltano",
+        "dbt_ldap": ".api",
+        "e": "flext_meltano",
+        "h": "flext_meltano",
+        "m": ".models",
+        "main": ".cli",
+        "p": ".protocols",
+        "r": "flext_meltano",
+        "s": ".base",
+        "services": ".services",
+        "settings": "._settings",
+        "t": ".typings",
+        "u": ".utilities",
+        "x": "flext_meltano",
+    }),
+    public_exports=__all__,
 )
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
