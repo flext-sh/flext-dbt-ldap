@@ -6,6 +6,9 @@ no per-domain model. Access is ``config.DbtLdap.<domain>[<key>...]``.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -14,19 +17,24 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig
 
-import flext_dbt_ldap._models._dbt_ldap_namespace
 from flext_dbt_ldap import m
+
+
+class _DbtLdapNamespace(m.BaseModel):
+    """Open, frozen namespace exposing every ``config/*.yaml`` domain model-less."""
+
+    model_config = m.ConfigDict(extra="allow", frozen=True)
 
 
 class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
     DbtLdap: Annotated[
-        flext_dbt_ldap._models._dbt_ldap_namespace._DbtLdapNamespace,
+        _DbtLdapNamespace,
         m.Field(
             description="Open namespace exposing ``config/*.yaml`` under ``DbtLdap``.",
         ),
-    ] = flext_dbt_ldap._models._dbt_ldap_namespace._DbtLdapNamespace()
+    ] = _DbtLdapNamespace()
 
 
 config: FlextDbtLdapConfig = FlextDbtLdapConfig.fetch_global()
