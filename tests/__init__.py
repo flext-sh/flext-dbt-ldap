@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from flext_core import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_tests import api, d, e, h, r, td, tf, tk, tm, x
+    from flext_tests import api, d, e, h, r, td, tf, tk, tm, u, x
 
     from tests import e2e, unit
     from tests.base import TestsFlextDbtLdapServiceBase, s
@@ -22,10 +22,16 @@ if TYPE_CHECKING:
     from tests.protocols import TestsFlextDbtLdapProtocols, p
     from tests.settings import TestsFlextDbtLdapSettings
     from tests.typings import TestsFlextDbtLdapTypes, t
-    from tests.utilities import InMemoryLdapDirectory, TestsFlextDbtLdapUtilities, u
+    from tests.utilities import (
+        InMemoryDbtRunnerLdap,
+        InMemoryLdapDirectory,
+        TestsFlextDbtLdapUtilities,
+        tu,
+    )
 
 
 __all__: tuple[str, ...] = (
+    "InMemoryDbtRunnerLdap",
     "InMemoryLdapDirectory",
     "TestsFlextDbtLdapConstants",
     "TestsFlextDbtLdapModels",
@@ -49,6 +55,7 @@ __all__: tuple[str, ...] = (
     "tf",
     "tk",
     "tm",
+    "tu",
     "u",
     "unit",
     "x",
@@ -58,6 +65,7 @@ install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
+        "InMemoryDbtRunnerLdap": ".utilities",
         "InMemoryLdapDirectory": ".utilities",
         "TestsFlextDbtLdapConstants": ".constants",
         "TestsFlextDbtLdapModels": ".models",
@@ -81,7 +89,8 @@ install_lazy_exports(
         "tf": "flext_tests",
         "tk": "flext_tests",
         "tm": "flext_tests",
-        "u": ".utilities",
+        "tu": ".utilities",
+        "u": "flext_tests",
         "unit": ".unit",
         "x": "flext_tests",
     }),
