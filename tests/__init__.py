@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from tests.protocols import TestsFlextDbtLdapProtocols, p
     from tests.settings import TestsFlextDbtLdapSettings
     from tests.typings import TestsFlextDbtLdapTypes, t
-    from tests.utilities import InMemoryLdapDirectory, TestsFlextDbtLdapUtilities, u
+    from tests.utilities import InMemoryLdapDirectory, TestsFlextDbtLdapUtilities, tu
 
 
 __all__: tuple[str, ...] = (
@@ -49,7 +49,7 @@ __all__: tuple[str, ...] = (
     "tf",
     "tk",
     "tm",
-    "u",
+    "tu",
     "unit",
     "x",
 )
@@ -81,7 +81,7 @@ install_lazy_exports(
         "tf": "flext_tests",
         "tk": "flext_tests",
         "tm": "flext_tests",
-        "u": ".utilities",
+        "tu": ".utilities",
         "unit": ".unit",
         "x": "flext_tests",
     }),
