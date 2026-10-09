@@ -47,10 +47,10 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 """
 
                 _directory_entries: list[m.Ldif.Entry] = u.PrivateAttr(
-                    default_factory=list,
+                    default_factory=list[m.Ldif.Entry],
                 )
                 _directory_requests: list[m.Ldap.SearchOptions] = u.PrivateAttr(
-                    default_factory=list,
+                    default_factory=list[m.Ldap.SearchOptions],
                 )
                 _directory_reachable: bool = u.PrivateAttr(default=True)
 
@@ -110,7 +110,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 _dbt_runner_failure: str | None = u.PrivateAttr(default=None)
                 _dbt_runner_requests: list[t.VariadicTuple[str]] = u.PrivateAttr(
-                    default_factory=list,
+                    default_factory=list[t.VariadicTuple[str]],
                 )
 
                 def __init__(
@@ -190,4 +190,10 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
 u = TestsFlextDbtLdapUtilities
 InMemoryLdapDirectory = TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory
-__all__: list[str] = ["InMemoryLdapDirectory", "TestsFlextDbtLdapUtilities", "u"]
+InMemoryDbtRunnerLdap = TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap
+__all__: list[str] = [
+    "InMemoryDbtRunnerLdap",
+    "InMemoryLdapDirectory",
+    "TestsFlextDbtLdapUtilities",
+    "u",
+]

@@ -17,6 +17,7 @@ from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdapSettings
 from tests import c, t, u
+from tests.utilities import InMemoryDbtRunnerLdap
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 
@@ -54,7 +55,7 @@ def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
     def factory(
         dbt_project_dir: pathlib.Path,
         initial_state: t.DbtLdap.Tests.SyncState = None,
-    ) -> t.Pair[u.DbtLdap.Tests.InMemoryDbtRunnerLdap, pathlib.Path]:
+    ) -> t.Pair[InMemoryDbtRunnerLdap, pathlib.Path]:
         # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
         # namespace; a flat dict is dropped by extra="ignore" (no isolation).
         settings = FlextDbtLdapSettings.model_validate({
