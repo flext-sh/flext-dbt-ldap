@@ -188,12 +188,12 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     )
 
 
-u = TestsFlextDbtLdapUtilities
+tu: type[TestsFlextDbtLdapUtilities] = TestsFlextDbtLdapUtilities
 InMemoryLdapDirectory = TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory
 InMemoryDbtRunnerLdap = TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap
 __all__: list[str] = [
     "InMemoryDbtRunnerLdap",
     "InMemoryLdapDirectory",
     "TestsFlextDbtLdapUtilities",
-    "u",
+    "tu",
 ]

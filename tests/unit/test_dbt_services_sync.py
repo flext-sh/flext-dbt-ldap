@@ -28,8 +28,8 @@ import pytest
 from flext_tests import tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, t, u
-from tests.utilities import InMemoryLdapDirectory
+from tests import c, m, t
+from tests.utilities import InMemoryLdapDirectory, tu
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -68,7 +68,7 @@ class TestsFlextDbtLdapServicesSync:
 
     @staticmethod
     def _read_sync_state(state_file: Path) -> t.JsonMapping:
-        read_result = u.Cli.json_read(state_file)
+        read_result = tu.Cli.json_read(state_file)
         if read_result.failure:
             pytest.fail(read_result.error or "Failed to read sync state")
         payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
