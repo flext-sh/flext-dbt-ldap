@@ -29,6 +29,7 @@ from flext_tests import tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
 from tests import c, m, t, u
+from tests.utilities import InMemoryLdapDirectory
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -61,7 +62,7 @@ class TestsFlextDbtLdapServicesSync:
         ]
 
     @staticmethod
-    def _sent_filter(directory: u.DbtLdap.Tests.InMemoryLdapDirectory) -> str:
+    def _sent_filter(directory: InMemoryLdapDirectory) -> str:
         """Return the ``filter_str`` of the last search sent to the directory."""
         return directory.last_search_request().filter_str
 
