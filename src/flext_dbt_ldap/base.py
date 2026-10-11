@@ -4,9 +4,6 @@ Inherits from s which provides dbt command
 execution (run_models, run_tests, compile, docs, manifest, CLI).
 This base adds typed settings access for dbt-ldap domain.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -17,7 +14,9 @@ from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoDbtServiceBase, p, u
 
-from flext_dbt_ldap import FlextDbtLdapSettings, m, t
+from flext_dbt_ldap._settings import FlextDbtLdapSettings
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.typings import t
 
 
 class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):

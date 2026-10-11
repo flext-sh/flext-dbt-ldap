@@ -2,9 +2,6 @@
 
 Absorbed from ldap_integration.py into u.DbtLdap namespace.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -16,7 +13,9 @@ from typing import TYPE_CHECKING
 from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
-from flext_dbt_ldap import c, m, t
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.typings import t
 from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 
 if TYPE_CHECKING:

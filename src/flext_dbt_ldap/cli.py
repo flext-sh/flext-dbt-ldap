@@ -7,7 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap import FlextDbtLdapServiceBase, t
+from flext_dbt_ldap.base import FlextDbtLdapServiceBase
+from flext_dbt_ldap.typings import t
 
 
 def main(args: t.StrSequence | None = None) -> int:

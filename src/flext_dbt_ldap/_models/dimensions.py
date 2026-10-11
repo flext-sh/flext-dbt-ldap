@@ -12,7 +12,7 @@ from typing import Annotated, Self
 from flext_ldap import FlextLdapUtilities as ul
 from flext_ldif import m, u
 
-from flext_dbt_ldap import c
+from flext_dbt_ldap.constants import c
 from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
 

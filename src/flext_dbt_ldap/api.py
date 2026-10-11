@@ -3,9 +3,6 @@
 All service methods available directly on FlextDbtLdap via MRO.
 No internal delegation, no factory wrappers.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -14,9 +11,12 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_meltano import FlextMeltanoDbtServiceBase
+from flext_meltano import FlextMeltanoDbtServiceBase, r
 
-from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t
+from flext_dbt_ldap._settings import FlextDbtLdapSettings, settings
+from flext_dbt_ldap.models import m
+from flext_dbt_ldap.protocols import p
+from flext_dbt_ldap.typings import t
 from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
 
 
