@@ -32,44 +32,38 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     class _DbtLdap(m.BaseModel):
         """dbt-LDAP knobs only (LDAP connection lives in ``Ldap``)."""
 
-        ldap_base_dn: Annotated[
-            str,
-            m.Field(default="dc=example,dc=com", description="LDAP base DN"),
-        ]
+        ldap_base_dn: Annotated[str, m.Field(description="LDAP base DN")] = (
+            "dc=example,dc=com"
+        )
         dbt_project_dir: Annotated[
-            str,
-            m.Field(default=".", description="Path to DBT project directory"),
-        ]
+            str, m.Field(description="Path to DBT project directory")
+        ] = "."
         min_quality_threshold: Annotated[
             float,
             m.Field(
-                default=0.8,
                 ge=0.0,
                 le=1.0,
                 description="Minimum data quality score threshold",
             ),
-        ]
+        ] = 0.8
         required_attributes: Annotated[
             list[str],
             m.Field(
-                default_factory=list,
                 description="Required LDAP attributes for validation",
             ),
-        ]
+        ] = m.Field(default_factory=list)
         ldap_attribute_mapping: Annotated[
             dict[str, str],
             m.Field(
-                default_factory=dict,
                 description="Mapping of LDAP attributes to DBT model attributes",
             ),
-        ]
+        ] = m.Field(default_factory=dict)
         ldap_schema_mapping: Annotated[
             dict[str, str],
             m.Field(
-                default_factory=dict,
                 description="Mapping of LDAP schemas to DBT tables",
             ),
-        ]
+        ] = m.Field(default_factory=dict)
 
     if TYPE_CHECKING:
         DbtLdap: _DbtLdap

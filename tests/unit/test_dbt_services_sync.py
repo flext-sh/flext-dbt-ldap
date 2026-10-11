@@ -27,7 +27,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, t, tm
+from tests import c, m, t, tm, u
 from tests.utilities import InMemoryLdapDirectory, tu
 
 if TYPE_CHECKING:
@@ -70,7 +70,7 @@ class TestsFlextDbtLdapServicesSync:
         read_result = tu.Cli.json_read(state_file)
         if read_result.failure:
             pytest.fail(read_result.error or "Failed to read sync state")
-        payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
+        payload: t.JsonMapping = u.json_mapping_adapter().validate_python(
             read_result.value or {},
         )
         return payload
@@ -251,7 +251,7 @@ class TestsFlextDbtLdapServicesSync:
         """Test service init rejects non string sync state values."""
         _ = dbt_ldap_service_factory
         state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
-        state_file.write_text('{"users": 1}\n', encoding=c.Cli.ENCODING_DEFAULT)
+        state_file.write_text('{"users": 1}\n', encoding=c.DEFAULT_ENCODING)
         # NOTE (multi-agent): mro-rn88 — project fields nest under DbtLdap namespace.
         settings = FlextDbtLdapSettings.model_validate({
             "DbtLdap": {
