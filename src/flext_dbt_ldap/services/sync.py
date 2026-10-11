@@ -272,7 +272,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         payload_result = u.Cli.json_read(self._sync_state_file)
         if payload_result.failure:
             raise OSError(payload_result.error or "Failed to read sync state file")
-        loaded = t.json_dict_adapter().validate_python(payload_result.value)
+        loaded = u.json_dict_adapter().validate_python(payload_result.value)
         data: t.MutableStrMapping = {}
         for key, value in loaded.items():
             if not isinstance(value, str):

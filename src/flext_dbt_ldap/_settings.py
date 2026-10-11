@@ -20,6 +20,14 @@ from flext_ldap import FlextLdapSettings
 from flext_meltano import FlextMeltanoSettings, m
 
 
+def _empty_list_str() -> list[str]:
+    return []
+
+
+def _empty_dict_str_str() -> dict[str, str]:
+    return {}
+
+
 class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     """DBT LDAP settings; connection via ``Ldap.*``, dbt knobs via ``DbtLdap.*``."""
 
@@ -51,19 +59,19 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
             m.Field(
                 description="Required LDAP attributes for validation",
             ),
-        ] = m.Field(default_factory=list)
+        ] = m.Field(default_factory=_empty_list_str)
         ldap_attribute_mapping: Annotated[
             dict[str, str],
             m.Field(
                 description="Mapping of LDAP attributes to DBT model attributes",
             ),
-        ] = m.Field(default_factory=dict)
+        ] = m.Field(default_factory=_empty_dict_str_str)
         ldap_schema_mapping: Annotated[
             dict[str, str],
             m.Field(
                 description="Mapping of LDAP schemas to DBT tables",
             ),
-        ] = m.Field(default_factory=dict)
+        ] = m.Field(default_factory=_empty_dict_str_str)
 
     if TYPE_CHECKING:
         DbtLdap: _DbtLdap
