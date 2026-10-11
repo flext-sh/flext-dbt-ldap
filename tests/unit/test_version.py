@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import pytest
-from flext_tests import tm
 from packaging.version import Version
 
 from flext_dbt_ldap.__version__ import (
@@ -21,6 +20,7 @@ from flext_dbt_ldap.__version__ import (
     __version__,
     __version_info__,
 )
+from tests import tm
 
 
 class TestsFlextDbtLdapVersion:
