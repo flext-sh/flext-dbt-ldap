@@ -48,3 +48,6 @@ class FlextDbtLdapModelsShared:
             str | None,
             u.Field(description="Source modification timestamp"),
         ] = None
+
+
+__all__: list[str] = ["FlextDbtLdapModelsShared"]

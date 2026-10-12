@@ -134,3 +134,6 @@ class FlextDbtLdapModelsConfiguration:
             str,
             u.Field(description="Path to the DBT project directory"),
         ] = c.DEFAULT_EMPTY_STRING
+
+
+__all__: list[str] = ["FlextDbtLdapModelsConfiguration"]

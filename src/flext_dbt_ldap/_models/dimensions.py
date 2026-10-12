@@ -213,3 +213,6 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 msg = "User DN and Group DN are required"
                 raise ValueError(msg)
             return self
+
+
+__all__: list[str] = ["FlextDbtLdapModelsDimensions"]

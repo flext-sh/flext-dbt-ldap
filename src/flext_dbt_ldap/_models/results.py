@@ -126,3 +126,6 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
             str,
             u.Field(description="Report generation timestamp"),
         ] = c.DEFAULT_EMPTY_STRING
+
+
+__all__: list[str] = ["FlextDbtLdapModelsResults"]
