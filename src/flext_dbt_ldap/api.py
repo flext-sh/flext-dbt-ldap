@@ -11,13 +11,16 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_meltano import FlextMeltanoDbtServiceBase, r
+from flext_meltano import FlextMeltanoDbtServiceBase
 
-from flext_dbt_ldap._settings import FlextDbtLdapSettings, settings
-from flext_dbt_ldap.models import m
-from flext_dbt_ldap.protocols import p
-from flext_dbt_ldap.typings import t
-from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
+from flext_dbt_ldap import (
+    FlextDbtLdapSettings,
+    FlextDbtLdapSyncMixin,
+    p,
+    r,
+    settings,
+    t,
+)
 
 
 class FlextDbtLdap(FlextDbtLdapSyncMixin):

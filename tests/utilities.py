@@ -14,15 +14,8 @@ from typing import override
 from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
 
-from flext_core import r, u
-from flext_dbt_ldap import (
-    FlextDbtLdap,
-    FlextDbtLdapSettings,
-    FlextDbtLdapUtilities,
-    m,
-    p,
-    t,
-)
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities, t
+from tests import m, p, r, u
 
 
 class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):

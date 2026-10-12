@@ -11,16 +11,10 @@ from typing import TYPE_CHECKING
 
 from flext_ldap import FlextLdap
 
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import m
-from flext_dbt_ldap.protocols import p
-from flext_meltano import r
-from flext_dbt_ldap.typings import t
-from flext_dbt_ldap.utilities import u
-from flext_dbt_ldap.base import FlextDbtLdapServiceBase
+from flext_dbt_ldap import FlextDbtLdapServiceBase, c, m, p, r, t, u
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._settings import FlextDbtLdapSettings
+    from flext_dbt_ldap import FlextDbtLdapSettings
 
 logger = u.fetch_logger(__name__)
 

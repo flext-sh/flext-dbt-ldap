@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap import t
 
 
 class FlextDbtLdapConstantsSearch:

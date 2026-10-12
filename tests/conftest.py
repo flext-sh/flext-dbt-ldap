@@ -10,11 +10,9 @@ import contextlib
 import pathlib
 
 import pytest
-from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdapSettings
-from tests import c, t
-from tests.utilities import InMemoryDbtRunnerLdap, tu
+from tests import InMemoryDbtRunnerLdap, c, t, tf, tm, tu
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 

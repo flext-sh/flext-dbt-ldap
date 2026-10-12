@@ -7,9 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_meltano import p
-
-from flext_dbt_ldap import FlextDbtLdapServiceBase, m
+from flext_dbt_ldap import FlextDbtLdapServiceBase
+from tests import m, p
 
 
 def test_connection_profile_returns_typed_ldap_wire_shape() -> None:

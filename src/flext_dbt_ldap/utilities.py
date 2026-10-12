@@ -10,16 +10,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 
-from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
-from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
-
-if TYPE_CHECKING:
-    from flext_dbt_ldap import t
+from flext_dbt_ldap import t
+from flext_dbt_ldap._utilities import (
+    FlextDbtLdapUtilitiesIntegration,
+    FlextDbtLdapUtilitiesMacros,
+)
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):

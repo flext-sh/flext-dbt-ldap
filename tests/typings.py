@@ -15,7 +15,7 @@ from pathlib import Path
 from flext_tests import FlextTestsTypes
 
 from flext_dbt_ldap import FlextDbtLdapTypes
-from tests.utilities import TestsFlextDbtLdapUtilities
+from tests import TestsFlextDbtLdapUtilities
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):

@@ -11,9 +11,8 @@ from typing import Annotated
 
 from flext_meltano import m, u
 
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.typings import t
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap import c, t
+from flext_dbt_ldap._models import FlextDbtLdapModelsShared
 
 
 class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
