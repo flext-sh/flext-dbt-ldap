@@ -11,11 +11,14 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from flext_tests import FlextTestsTypes
 
 from flext_dbt_ldap import FlextDbtLdapTypes
-from tests import TestsFlextDbtLdapUtilities
+
+if TYPE_CHECKING:
+    from tests import u
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
@@ -31,7 +34,7 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
             type ServiceFactory = Callable[
                 [Path, SyncState],
                 FlextDbtLdapTypes.Pair[
-                    TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryDbtRunnerLdap,
+                    u.Tests.DbtLdap.InMemoryDbtRunnerLdap,
                     Path,
                 ],
             ]
