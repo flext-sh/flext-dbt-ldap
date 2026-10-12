@@ -14,7 +14,7 @@ from typing import override
 from flext_meltano import FlextMeltanoDbtServiceBase
 
 from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t
-from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
+from flext_dbt_ldap.services import FlextDbtLdapSyncMixin
 
 
 class FlextDbtLdap(FlextDbtLdapSyncMixin):

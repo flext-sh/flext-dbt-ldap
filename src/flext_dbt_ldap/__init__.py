@@ -16,7 +16,7 @@ from flext_dbt_ldap.__version__ import __version__
 if TYPE_CHECKING:
     from flext_meltano import d, e, h, r, x
 
-    from flext_dbt_ldap import _models, _utilities, services
+    from flext_dbt_ldap import _constants, _models, _utilities, services
     from flext_dbt_ldap.__version__ import (
         FlextDbtLdapVersion,
         __author__,
@@ -58,6 +58,7 @@ __all__: tuple[str, ...] = (
     "__url__",
     "__version__",
     "__version_info__",
+    "_constants",
     "_models",
     "_utilities",
     "c",
@@ -99,6 +100,7 @@ install_lazy_exports(
         "__title__": ".__version__",
         "__url__": ".__version__",
         "__version_info__": ".__version__",
+        "_constants": "._constants",
         "_models": "._models",
         "_utilities": "._utilities",
         "c": ".constants",

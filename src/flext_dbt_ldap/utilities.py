@@ -14,9 +14,11 @@ from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 
 from flext_dbt_ldap import t
-from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
-from flext_dbt_ldap._utilities.integration import FlextDbtLdapUtilitiesIntegration
-from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
+from flext_dbt_ldap._utilities import (
+    FlextDbtLdapUtilitiesEntry,
+    FlextDbtLdapUtilitiesIntegration,
+    FlextDbtLdapUtilitiesMacros,
+)
 
 
 class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):

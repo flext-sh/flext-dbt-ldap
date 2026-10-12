@@ -16,3 +16,6 @@ class FlextDbtLdapConstantsBase:
     DBT_SCHEMA_VERSION: Final[str] = "2"
     DEFAULT_REPORT_TYPE: Final[str] = "summary"
     DEFAULT_DBT_SCHEMA: Final[str] = "public"
+
+
+__all__: list[str] = ["FlextDbtLdapConstantsBase"]

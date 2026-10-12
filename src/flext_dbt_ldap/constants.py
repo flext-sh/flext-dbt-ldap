@@ -11,10 +11,12 @@ from __future__ import annotations
 from flext_ldap import FlextLdapConstants
 from flext_meltano import FlextMeltanoConstants
 
-from flext_dbt_ldap._constants.attributes import FlextDbtLdapConstantsAttributes
-from flext_dbt_ldap._constants.base import FlextDbtLdapConstantsBase
-from flext_dbt_ldap._constants.search import FlextDbtLdapConstantsSearch
-from flext_dbt_ldap._constants.transformation import FlextDbtLdapConstantsTransformation
+from flext_dbt_ldap._constants import (
+    FlextDbtLdapConstantsAttributes,
+    FlextDbtLdapConstantsBase,
+    FlextDbtLdapConstantsSearch,
+    FlextDbtLdapConstantsTransformation,
+)
 
 
 class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
