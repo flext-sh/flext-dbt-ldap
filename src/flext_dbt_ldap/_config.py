@@ -12,20 +12,20 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from flext_meltano import FlextMeltanoConfig
+from flext_meltano import FlextMeltanoConfig, m
 
-from flext_dbt_ldap.models import m
+from flext_dbt_ldap._models.configuration import FlextDbtLdapModelsConfiguration
 
 
 class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
     DbtLdap: Annotated[
-        m.DbtLdap.DbtLdapNamespace,
+        FlextDbtLdapModelsConfiguration.DbtLdapNamespace,
         m.Field(
             description="Open namespace exposing ``config/*.yaml`` under ``DbtLdap``.",
         ),
-    ] = m.DbtLdap.DbtLdapNamespace()
+    ] = FlextDbtLdapModelsConfiguration.DbtLdapNamespace()
 
 
 config: FlextDbtLdapConfig = FlextDbtLdapConfig.fetch_global()
