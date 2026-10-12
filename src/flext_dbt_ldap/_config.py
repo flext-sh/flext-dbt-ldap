@@ -14,7 +14,6 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig
 
-import flext_dbt_ldap._models._dbt_ldap_namespace
 from flext_dbt_ldap.models import m
 
 
@@ -22,11 +21,11 @@ class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
     DbtLdap: Annotated[
-        flext_dbt_ldap._models._dbt_ldap_namespace._DbtLdapNamespace,
+        m.DbtLdap.DbtLdapNamespace,
         m.Field(
             description="Open namespace exposing ``config/*.yaml`` under ``DbtLdap``.",
         ),
-    ] = flext_dbt_ldap._models._dbt_ldap_namespace._DbtLdapNamespace()
+    ] = m.DbtLdap.DbtLdapNamespace()
 
 
 config: FlextDbtLdapConfig = FlextDbtLdapConfig.fetch_global()

@@ -19,6 +19,11 @@ from flext_dbt_ldap.typings import t
 class FlextDbtLdapModelsConfiguration:
     """Configuration-oriented dbt-ldap models."""
 
+    class DbtLdapNamespace(m.BaseModel):
+        """Open, frozen namespace exposing every ``config/*.yaml`` domain."""
+
+        model_config = m.ConfigDict(extra="allow", frozen=True)
+
     # NOTE (multi-agent): mro-rn88 ADR-006 thin-driver — typed connection_profile.
     class DbtConnectionProfile(m.Value):
         """Typed dbt LDAP profile (satisfies p.Meltano.DbtConnectionProfile)."""
