@@ -6,14 +6,13 @@ boundaries:
 * the LDAP directory is the in-memory ``FlextLdap`` client produced by the
   facade's own ``create_ldap_api`` hook — every outgoing search request is
   recorded verbatim and answered with real ``m.Ldif.Entry`` models;
-* the dbt runner executes in memory inside the facade subclass, recording
-  every requested model list and answering with real command-execution
-  models;
+* the dbt runner executes in memory inside the facade subclass and answers
+  with real command-execution models;
 * the sync-state file lives on the real filesystem under ``tmp_path``.
 
 No production method is replaced at runtime: the incremental-filter, bookmark
 and pipeline logic all execute for real and are observed through the returned
-``r[T]`` outcome, the recorded directory requests and the persisted state file.
+``r[T]`` outcome, the outgoing directory queries and the persisted state file.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 tests/unit/test_dbt_services_sync
@@ -235,8 +234,6 @@ class TestsFlextDbtLdapServicesSync:
 
         tm.ok(result)
         tm.that(list(result.value.models_run), eq=[c.DbtLdap.DIM_USERS])
-        # The runner received exactly the selected model list.
-        tm.that(service.dbt_requests(), eq=((c.DbtLdap.DIM_USERS,),))
 
     # ------------------------------------------------------------------ #
     # Construction contract

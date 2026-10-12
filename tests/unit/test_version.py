@@ -10,7 +10,7 @@ from __future__ import annotations
 import pytest
 from packaging.version import Version
 
-from flext_dbt_ldap.__version__ import (
+from flext_dbt_ldap import (
     __author__,
     __author_email__,
     __description__,

@@ -11,7 +11,8 @@ from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 
 from flext_dbt_ldap._models import (
-    FlextDbtLdapModelsConfiguration,
+    FlextDbtLdapModelsConfig,
+    FlextDbtLdapModelsDbt,
     FlextDbtLdapModelsDimensions,
     FlextDbtLdapModelsResults,
     FlextDbtLdapModelsSchema,
@@ -23,7 +24,8 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(
-        FlextDbtLdapModelsConfiguration,
+        FlextDbtLdapModelsConfig,
+        FlextDbtLdapModelsDbt,
         FlextDbtLdapModelsDimensions,
         FlextDbtLdapModelsResults,
         FlextDbtLdapModelsShared,

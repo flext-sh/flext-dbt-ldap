@@ -1,7 +1,7 @@
-"""DBT project and execution configuration models for dbt-ldap.
+"""DBT project and execution models for dbt-ldap.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
-src/flext_dbt_ldap/_models/configuration
+src/flext_dbt_ldap/_models/dbt
 SPDX-License-Identifier: MIT
 """
 
@@ -12,17 +12,11 @@ from typing import Annotated
 
 from flext_meltano import m, u
 
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.typings import t
+from flext_dbt_ldap import c, t
 
 
-class FlextDbtLdapModelsConfiguration:
-    """Configuration-oriented dbt-ldap models."""
-
-    class DbtLdapNamespace(m.BaseModel):
-        """Open, frozen namespace exposing every ``config/*.yaml`` domain."""
-
-        model_config = m.ConfigDict(extra="allow", frozen=True)
+class FlextDbtLdapModelsDbt:
+    """DBT-oriented dbt-ldap models."""
 
     # NOTE (multi-agent): mro-rn88 ADR-006 thin-driver — typed connection_profile.
     class DbtConnectionProfile(m.Value):
@@ -136,4 +130,4 @@ class FlextDbtLdapModelsConfiguration:
         ] = c.DEFAULT_EMPTY_STRING
 
 
-__all__: list[str] = ["FlextDbtLdapModelsConfiguration"]
+__all__: list[str] = ["FlextDbtLdapModelsDbt"]

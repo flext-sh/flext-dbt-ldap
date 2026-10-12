@@ -12,8 +12,6 @@ from pathlib import Path
 from flext_dbt_ldap import c, m, p, r, t, u
 from flext_dbt_ldap.services import FlextDbtLdapClientMixin
 
-logger = u.fetch_logger(__name__)
-
 
 class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     """Warehouse sync mixin for dbt-ldap service facades."""
