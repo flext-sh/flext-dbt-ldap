@@ -18,14 +18,14 @@
   Development :: Libraries :: Python Modules, Typing :: Typed
 - Project class: `integration`
 - Keywords: `data-transformation`, `dbt`, `enterprise`, `flext`, `sql`, `typed`
-- Main facades: `FlextDbtLdap`, `FlextDbtLdapClientMixin`, `FlextDbtLdapConfig`,
-  `FlextDbtLdapConstants`, `FlextDbtLdapModels`, `FlextDbtLdapProtocols`,
-  `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings` (+3 more)
+- Main facades: `FlextDbtLdap`, `FlextDbtLdapConfig`, `FlextDbtLdapConstants`,
+  `FlextDbtLdapModels`, `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`,
+  `FlextDbtLdapSettings`, `FlextDbtLdapTypes` (+2 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapClientMixin`,
-  `FlextDbtLdapConfig`, `FlextDbtLdapConstants`, `FlextDbtLdapModels`,
-  `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`,
-  `FlextDbtLdapSyncMixin`, `FlextDbtLdapTypes` (+5 more)
+- Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapConfig`, `FlextDbtLdapConstants`,
+  `FlextDbtLdapModels`, `FlextDbtLdapProtocols`, `FlextDbtLdapServiceBase`,
+  `FlextDbtLdapSettings`, `FlextDbtLdapTypes`, `FlextDbtLdapUtilities`,
+  `FlextDbtLdapVersion` (+4 more)
 - Exported module shortcuts: `services`
 - Generated module pages: `8`
 

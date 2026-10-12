@@ -68,3 +68,6 @@ class FlextDbtLdapUtilitiesEntry:
         return any(
             ul.Ldap.norm_in(item, object_classes) for item in c.DbtLdap.USERS_CLASSES
         )
+
+
+__all__: t.StrSequence = ("FlextDbtLdapUtilitiesEntry",)
