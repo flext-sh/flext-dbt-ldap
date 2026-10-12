@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from flext_dbt_ldap import c, m, p, r, t, u
-from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
+from flext_dbt_ldap.services import FlextDbtLdapClientMixin
 
 logger = u.fetch_logger(__name__)
 

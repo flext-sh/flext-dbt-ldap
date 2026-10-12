@@ -18,7 +18,7 @@ from flext_tests import FlextTestsTypes
 from flext_dbt_ldap import FlextDbtLdapTypes
 
 if TYPE_CHECKING:
-    from tests import u
+    from tests import InMemoryDbtRunnerLdap
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
@@ -34,7 +34,7 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
             type ServiceFactory = Callable[
                 [Path, SyncState],
                 FlextDbtLdapTypes.Pair[
-                    u.Tests.DbtLdap.InMemoryDbtRunnerLdap,
+                    InMemoryDbtRunnerLdap,
                     Path,
                 ],
             ]
