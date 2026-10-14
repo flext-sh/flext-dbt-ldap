@@ -16,7 +16,10 @@ class FlextDbtLdapUtilitiesMacros:
 
     @staticmethod
     def user_active(user_account_control: int | None) -> bool:
-        """Check if user account is active based on userAccountControl.
+        """Check whether a user account is active from ``userAccountControl``.
+
+        Args:
+            user_account_control: Raw ``userAccountControl`` flag value, or None.
 
         Returns:
             The resulting ``bool``.

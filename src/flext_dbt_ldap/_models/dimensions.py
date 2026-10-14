@@ -62,6 +62,9 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a user dimension from a LDIF entry.
 
+            Args:
+                entry: LDIF entry carrying the user LDAP attributes.
+
             Returns:
                 The resulting ``Self``.
             """
@@ -142,6 +145,9 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         @classmethod
         def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a group dimension from a LDIF entry.
+
+            Args:
+                entry: LDIF entry carrying the group LDAP attributes.
 
             Returns:
                 The resulting ``Self``.

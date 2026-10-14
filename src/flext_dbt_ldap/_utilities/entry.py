@@ -26,7 +26,15 @@ class FlextDbtLdapUtilitiesEntry:
 
     @classmethod
     def active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
-        """Return whether the LDAP entry represents an active account."""
+        """Return whether the LDAP entry represents an active account.
+
+        Args:
+            attrs: LDAP entry attributes carrying ``userAccountControl``.
+
+        Returns:
+            True when the account is active or the control flag is absent or
+            unparseable.
+        """
         raw_flag = ul.Ldap.resolve_first_attribute_value(
             attrs,
             c.DbtLdap.USER_ACCOUNT_CONTROL,
@@ -43,6 +51,9 @@ class FlextDbtLdapUtilitiesEntry:
     def group_entry(cls, entry: lm.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured group object classes.
 
+        Args:
+            entry: LDIF entry to inspect.
+
         Returns:
             The resulting ``bool``.
         """
@@ -57,6 +68,9 @@ class FlextDbtLdapUtilitiesEntry:
     @classmethod
     def user_entry(cls, entry: lm.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured user object classes.
+
+        Args:
+            entry: LDIF entry to inspect.
 
         Returns:
             The resulting ``bool``.

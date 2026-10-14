@@ -24,7 +24,10 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
     @staticmethod
     def create_ldap_api(settings: FlextDbtLdapSettings) -> FlextLdap:
-        """Create a ldap API instance from DBT LDAP settings.
+        """Create an LDAP API instance from DBT LDAP settings.
+
+        Args:
+            settings: Typed DBT LDAP settings carrying the LDAP namespace.
 
         Returns:
             The resulting ``FlextLdap``.
@@ -40,6 +43,12 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         attributes: t.StrSequence | None = None,
     ) -> p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]:
         """Extract LDAP entries for DBT processing.
+
+        Args:
+            search_base: Base DN for the search; defaults to the configured
+                ``DbtLdap.ldap_base_dn`` when None.
+            search_filter: LDAP search filter selecting the entries.
+            attributes: Attribute whitelist, or None to request all attributes.
 
         Returns:
             The resulting ``p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]``.
@@ -87,7 +96,13 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         attributes: t.StrSequence | None = None,
         model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
-        """Run complete LDAP to DBT transformation pipeline.
+        """Run the complete LDAP to DBT transformation pipeline.
+
+        Args:
+            search_base: Base DN for the extraction search, or None for default.
+            search_filter: LDAP search filter selecting the entries.
+            attributes: Attribute whitelist, or None to request all attributes.
+            model_names: DBT models to run, or None to run all models.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
@@ -118,7 +133,11 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         entries: t.SequenceOf[t.Ldap.OperationAttributes],
         model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
-        """Transform LDAP data using DBT models.
+        """Transform extracted LDAP data using DBT models.
+
+        Args:
+            entries: LDAP entries prepared for DBT processing.
+            model_names: DBT models to run, or None to run all models.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtRunStatus]``.
@@ -171,6 +190,9 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
         entries: t.SequenceOf[t.Ldap.OperationAttributes],
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate LDAP data quality for DBT processing.
+
+        Args:
+            entries: LDAP entries to validate against the required attributes.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.ValidationMetrics]``.

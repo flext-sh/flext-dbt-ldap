@@ -30,7 +30,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     def generate_analytics_report(
         report_type: str = "summary",
     ) -> p.Result[m.DbtLdap.AnalyticsReport]:
-        """Generate analytics report from warehouse data.
+        """Generate an analytics report from warehouse data.
+
+        Args:
+            report_type: Report selector; defaults to the summary report.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.AnalyticsReport]``.
@@ -52,6 +55,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Run DBT models.
+
+        Args:
+            model_names: DBT models to run, or None to run all models.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtRunStatus]``.
@@ -80,6 +86,11 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.SyncResult]:
         """Run complete LDAP to data warehouse synchronization.
 
+        Args:
+            search_base: Base DN for every component search, or None for default.
+            incremental: When True, restrict each component to entries newer
+                than its stored bookmark.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.SyncResult]``.
         """
@@ -106,6 +117,11 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         incremental: bool = False,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse.
+
+        Args:
+            search_base: Base DN for the group search, or None for default.
+            incremental: When True, restrict the sync to entries newer than the
+                stored ``groups`` bookmark.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
@@ -157,6 +173,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse.
 
+        Args:
+            search_base: Base DN for the membership search, or None for default.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
         """
@@ -180,6 +199,11 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         incremental: bool = False,
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse.
+
+        Args:
+            search_base: Base DN for the user search, or None for default.
+            incremental: When True, restrict the sync to entries newer than the
+                stored ``users`` bookmark.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
@@ -235,6 +259,9 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         model_names: t.StrSequence | None = None,
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse.
+
+        Args:
+            model_names: DBT models to run for validation, or None to run all.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.ValidationMetrics]``.

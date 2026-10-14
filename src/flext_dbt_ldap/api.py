@@ -25,7 +25,12 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
     """
 
     def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
-        """Wire all mixin state."""
+        """Initialize the facade and wire all mixin state.
+
+        Args:
+            settings: Typed settings override, or None to resolve the global
+                ``FlextDbtLdapSettings`` singleton.
+        """
         # NOTE (multi-agent): mro-rn88 — resolve to the global settings singleton
         # when no override is supplied so create_ldap_api always receives a
         # concrete settings.

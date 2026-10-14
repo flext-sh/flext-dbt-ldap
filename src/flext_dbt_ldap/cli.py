@@ -13,6 +13,9 @@ from flext_dbt_ldap import FlextDbtLdapServiceBase, t
 def main(args: t.StrSequence | None = None) -> int:
     """Console-script entry point delegating to the inherited dbt ``cli_main``.
 
+    Args:
+        args: Command-line arguments, or None to read ``sys.argv``.
+
     Returns:
         The resulting ``int``.
     """

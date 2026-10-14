@@ -32,6 +32,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     ) -> t.SequenceOf[m.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions.
 
+        Args:
+            entries: LDAP entries filtered down to group entries.
+
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.GroupDimension]``.
         """
@@ -45,6 +48,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         entries: t.SequenceOf[m.Ldif.Entry],
     ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts.
+
+        Args:
+            entries: LDAP entries (group and user) to extract memberships from.
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
@@ -75,6 +81,9 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         entries: t.SequenceOf[m.Ldif.Entry],
     ) -> t.SequenceOf[m.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions.
+
+        Args:
+            entries: LDAP entries filtered down to user entries.
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.UserDimension]``.

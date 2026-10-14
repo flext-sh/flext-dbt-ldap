@@ -39,7 +39,7 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
         FlextDbtLdapConstantsAttributes,
         FlextDbtLdapConstantsBase,
     ):
-        """Class."""
+        """DBT LDAP constants namespace composed over the family base."""
 
 
 c = FlextDbtLdapConstants
