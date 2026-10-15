@@ -26,7 +26,6 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdapModelsDimensions",
     "FlextDbtLdapModelsResults",
     "FlextDbtLdapModelsSchema",
-    "FlextDbtLdapModelsShared",
 )
 
 install_lazy_exports(
