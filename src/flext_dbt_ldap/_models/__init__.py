@@ -13,11 +13,11 @@ from typing import TYPE_CHECKING
 from flext_core import install_lazy_exports
 
 if TYPE_CHECKING:
+    from flext_dbt_ldap._models.base import FlextDbtLdapModelsShared
     from flext_dbt_ldap._models.configuration import FlextDbtLdapModelsConfiguration
     from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
     from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
     from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
-    from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 
 
 __all__: tuple[str, ...] = (
@@ -36,7 +36,7 @@ install_lazy_exports(
         "FlextDbtLdapModelsDimensions": ".dimensions",
         "FlextDbtLdapModelsResults": ".results",
         "FlextDbtLdapModelsSchema": ".schema",
-        "FlextDbtLdapModelsShared": ".shared",
+        "FlextDbtLdapModelsShared": ".base",
     }),
     public_exports=__all__,
 )

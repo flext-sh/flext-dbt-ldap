@@ -119,3 +119,6 @@ class FlextDbtLdapModelsSchema:
         scope: Annotated[str, u.Field(description="LDAP search scope")] = (
             c.Ldap.DEFAULT_SCOPE
         )
+
+
+__all__: tuple[str, ...] = ("FlextDbtLdapModelsSchema",)

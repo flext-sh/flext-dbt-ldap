@@ -52,3 +52,6 @@ class FlextDbtLdapConstantsAttributes:
     USERS: Final[str] = "users"
     GROUPS: Final[str] = "groups"
     ORG_UNITS: Final[str] = "org_units"
+
+
+__all__: tuple[str, ...] = ("FlextDbtLdapConstantsAttributes",)

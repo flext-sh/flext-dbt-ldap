@@ -32,3 +32,6 @@ class FlextDbtLdapConstantsSearch:
     )
 
     LDAPS_DEFAULT_PORT: Final[int] = 636
+
+
+__all__: tuple[str, ...] = ("FlextDbtLdapConstantsSearch",)

@@ -10,7 +10,7 @@ from __future__ import annotations
 from typing import Annotated, Self
 
 from flext_ldap import FlextLdapUtilities as ul
-from flext_ldif import m, u
+from flext_ldif import t, u
 
 from flext_dbt_ldap import c
 from flext_dbt_ldap._models import FlextDbtLdapModelsShared
@@ -59,7 +59,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
         @classmethod
-        def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
+        def from_ldap_entry(cls, entry: t.Ldif.EntryLike) -> Self:
             """Build a user dimension from a LDIF entry.
 
             Returns:
@@ -140,7 +140,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
         @classmethod
-        def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
+        def from_ldap_entry(cls, entry: t.Ldif.EntryLike) -> Self:
             """Build a group dimension from a LDIF entry.
 
             Returns:
@@ -213,3 +213,6 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 msg = "User DN and Group DN are required"
                 raise ValueError(msg)
             return self
+
+
+__all__: tuple[str, ...] = ("FlextDbtLdapModelsDimensions",)

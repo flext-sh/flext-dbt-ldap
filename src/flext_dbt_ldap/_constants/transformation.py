@@ -44,3 +44,6 @@ class FlextDbtLdapConstantsTransformation:
         c.Meltano.PREFIX_TARGET,
         "dbt_packages",
     )
+
+
+__all__: tuple[str, ...] = ("FlextDbtLdapConstantsTransformation",)

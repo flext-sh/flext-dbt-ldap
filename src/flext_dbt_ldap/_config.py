@@ -14,19 +14,23 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig
 
-import flext_dbt_ldap._models._dbt_ldap_namespace
-from flext_dbt_ldap.models import m
+from flext_core import m
 
 
 class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
+    class Namespace(m.BaseModel):
+        """Open, frozen payload for the owned configuration domain."""
+
+        model_config = m.ConfigDict(extra="allow", frozen=True)
+
     DbtLdap: Annotated[
-        flext_dbt_ldap._models._dbt_ldap_namespace._DbtLdapNamespace,
+        Namespace,
         m.Field(
             description="Open namespace exposing ``config/*.yaml`` under ``DbtLdap``.",
         ),
-    ] = flext_dbt_ldap._models._dbt_ldap_namespace._DbtLdapNamespace()
+    ] = Namespace()
 
 
 config: FlextDbtLdapConfig = FlextDbtLdapConfig.fetch_global()
