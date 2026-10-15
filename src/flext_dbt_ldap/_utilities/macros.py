@@ -23,6 +23,7 @@ class FlextDbtLdapUtilitiesMacros:
 
         Returns:
             The resulting ``bool``.
+
         """
         if user_account_control is None:
             return True

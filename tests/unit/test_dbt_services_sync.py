@@ -45,6 +45,7 @@ class TestsFlextDbtLdapServicesSync:
 
         Returns:
             The resulting ``list[m.Ldif.Entry]``.
+
         """
         base_dn = c.DbtLdap.Tests.DIRECTORY_BASE_DN
         return [

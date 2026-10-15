@@ -18,6 +18,7 @@ def main(args: t.StrSequence | None = None) -> int:
 
     Returns:
         The resulting ``int``.
+
     """
     return FlextDbtLdapServiceBase().cli_main(args)
 

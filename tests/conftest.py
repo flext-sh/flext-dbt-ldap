@@ -45,6 +45,7 @@ def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
 
     Returns:
         The resulting ``t.DbtLdap.Tests.ServiceFactory``.
+
     """
 
     def factory(

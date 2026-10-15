@@ -31,6 +31,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``FlextLdap``.
+
         """
         # NOTE (multi-agent): mro-rn88 — FlextDbtLdapSettings IS-A FlextLdapSettings, so
         # settings.Ldap.* is already populated; inject directly, no manual clone/dedup.
@@ -52,6 +53,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]``.
+
         """
 
         def _run_extract_ldap_entries() -> p.Result[
@@ -106,6 +108,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
         self.logger.info("Starting full LDAP-to-DBT pipeline")
         extract_result = self.extract_ldap_entries(
@@ -141,6 +144,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtRunStatus]``.
+
         """
 
         def _run_transform_with_dbt() -> p.Result[m.DbtLdap.DbtRunStatus]:
@@ -178,6 +182,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``p.Result[t.StrSequence]``.
+
         """
         model_list: t.MutableSequenceOf[str] = list(model_names) if model_names else []
         run_result = self.run_models(models=model_list or None)
@@ -196,6 +201,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.ValidationMetrics]``.
+
         """
 
         def _run_validate_ldap_data() -> p.Result[m.DbtLdap.ValidationMetrics]:
@@ -248,6 +254,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``t.ConfigurationMapping``.
+
         """
         dn_attr = c.Ldap.AttributeName.DN
         dn_str = entry.get(dn_attr, [""])[0] if entry.get(dn_attr) else ""
@@ -275,6 +282,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``bool``.
+
         """
         object_classes: t.StrSequence = list(
             entry.get(c.Ldap.AttributeName.OBJECT_CLASS, []),
@@ -295,6 +303,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``t.MappingKV[str, t.SequenceOf[t.ConfigurationMapping]]``.
+
         """
         prepared_data: t.MutableMappingKV[
             str,
@@ -329,6 +338,7 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
 
         Returns:
             The resulting ``p.Result[t.SequenceOf[t.Ldap.OperationAttributes]]``.
+
         """
 
         def _run__search_entries_sync() -> p.Result[

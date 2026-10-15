@@ -57,6 +57,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Raises:
                         RuntimeError: If No search request reached the directory.
+
                     """
                     if not self._directory_queries:
                         msg = "No search request reached the directory"
@@ -73,6 +74,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Returns:
                         The resulting ``p.Result[m.Ldap.SearchResult]``.
+
                     """
                     concrete_options = (
                         search_options
@@ -117,6 +119,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     Returns:
                         The resulting
                             ``TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory``.
+
                     """
                     return InMemoryLdapDirectory.with_settings(
                         settings,
@@ -129,6 +132,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Raises:
                         TypeError: If LDAP client is not the in-memory directory.
+
                     """
                     client = self._ldap_api
                     if not isinstance(
@@ -152,6 +156,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Returns:
                         The resulting ``p.Result[m.Meltano.CommandExecutionResult]``.
+
                     """
                     if self._dbt_runner_failure is not None:
                         return r[m.Meltano.CommandExecutionResult].fail(

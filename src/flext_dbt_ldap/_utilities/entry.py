@@ -34,6 +34,7 @@ class FlextDbtLdapUtilitiesEntry:
         Returns:
             True when the account is active or the control flag is absent or
             unparseable.
+
         """
         raw_flag = ul.Ldap.resolve_first_attribute_value(
             attrs,
@@ -56,6 +57,7 @@ class FlextDbtLdapUtilitiesEntry:
 
         Returns:
             The resulting ``bool``.
+
         """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
             c.Ldap.AttributeName.OBJECT_CLASS,
@@ -74,6 +76,7 @@ class FlextDbtLdapUtilitiesEntry:
 
         Returns:
             The resulting ``bool``.
+
         """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
             c.Ldap.AttributeName.OBJECT_CLASS,

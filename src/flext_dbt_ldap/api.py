@@ -30,6 +30,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
         Args:
             settings: Typed settings override, or None to resolve the global
                 ``FlextDbtLdapSettings`` singleton.
+
         """
         # NOTE (multi-agent): mro-rn88 — resolve to the global settings singleton
         # when no override is supplied so create_ldap_api always receives a
@@ -46,6 +47,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
 
         Returns:
             The resulting ``p.Result[t.JsonMapping]``.
+
         """
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 

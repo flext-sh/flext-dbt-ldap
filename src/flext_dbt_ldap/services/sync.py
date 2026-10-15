@@ -37,6 +37,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.AnalyticsReport]``.
+
         """
         try:
             report = m.DbtLdap.AnalyticsReport(
@@ -61,6 +62,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtRunStatus]``.
+
         """
         try:
             run_result = self._run_selected_models(model_names)
@@ -93,6 +95,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.SyncResult]``.
+
         """
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
@@ -125,6 +128,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
 
         def _run_sync_groups_to_warehouse() -> p.Result[
@@ -178,6 +182,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
         try:
             return self.run_full_pipeline(
@@ -207,6 +212,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
 
         def _run_sync_users_to_warehouse() -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
@@ -265,6 +271,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.ValidationMetrics]``.
+
         """
         try:
             run_result = self._run_selected_models(model_names)

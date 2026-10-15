@@ -37,6 +37,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.GroupDimension]``.
+
         """
         groups = [entry for entry in entries if cls.group_entry(entry)]
         build = m.DbtLdap.GroupDimension.from_ldap_entry
@@ -54,6 +55,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+
         """
         cls._log.info("Transforming %d LDAP entries to membership facts", len(entries))
         memberships: list[m.DbtLdap.MembershipFact] = []
@@ -87,6 +89,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.UserDimension]``.
+
         """
         users = [entry for entry in entries if cls.user_entry(entry)]
         build = m.DbtLdap.UserDimension.from_ldap_entry
@@ -101,6 +104,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+
         """
         memberships: list[m.DbtLdap.MembershipFact] = []
         attrs = ul.Ldap.extract_entry_attributes(entry)
@@ -128,6 +132,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+
         """
         attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dns = attrs.get(c.DbtLdap.MEMBER_OF, [])
@@ -156,6 +161,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[DimensionT]``.
+
         """
         cls._log.info(
             "Transforming %d LDAP %s entries to dimensions",

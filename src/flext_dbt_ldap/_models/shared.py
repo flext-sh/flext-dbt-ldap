@@ -25,6 +25,7 @@ class FlextDbtLdapModelsShared:
 
             Returns:
                 The resulting ``t.ConfigurationMapping``.
+
             """
             dumped = self.model_dump()
             return {

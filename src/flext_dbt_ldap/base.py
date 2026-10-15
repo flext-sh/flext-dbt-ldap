@@ -35,6 +35,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
         Returns:
             The resulting ``m.RuntimeBootstrapOptions``.
+
         """
         return m.RuntimeBootstrapOptions(settings_type=FlextDbtLdapSettings)
 
@@ -45,6 +46,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
         Returns:
             The resulting ``FlextDbtLdapSettings``.
+
         """
         # NOTE (multi-agent): mro-rn88 — narrow the runtime-injected settings so test
         # overrides (e.g. dbt_project_dir) are honored; fall back to the typed global.
@@ -60,6 +62,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
         Returns:
             The resulting ``p.Meltano.DbtConnectionProfile``.
+
         """
         # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings
         # (runtime, not the global singleton); connection scalars from Ldap.*,

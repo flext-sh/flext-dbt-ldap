@@ -52,6 +52,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
             Raises:
                 ValueError: If User ID and common name are required.
+
             """
             if not self.user_id or not self.common_name:
                 msg = "User ID and common name are required"
@@ -67,6 +68,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
             Returns:
                 The resulting ``Self``.
+
             """
             attrs = ul.Ldap.extract_entry_attributes(entry)
             return cls(
@@ -133,6 +135,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             Raises:
                 ValueError: If Group ID and common name are required; or if Member count
                     cannot be negative.
+
             """
             if not self.group_id or not self.common_name:
                 msg = "Group ID and common name are required"
@@ -151,6 +154,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
             Returns:
                 The resulting ``Self``.
+
             """
             attrs = ul.Ldap.extract_entry_attributes(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(
@@ -214,6 +218,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
             Raises:
                 ValueError: If User DN and Group DN are required.
+
             """
             if not self.user_dn or not self.group_dn:
                 msg = "User DN and Group DN are required"
