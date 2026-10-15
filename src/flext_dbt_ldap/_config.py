@@ -20,6 +20,11 @@ from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
 class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
+    class Namespace(m.BaseModel):
+        """Open, frozen payload for the owned configuration domain."""
+
+        model_config = m.ConfigDict(extra="allow", frozen=True)
+
     DbtLdap: Annotated[
         FlextDbtLdapModelsConfig.DbtLdapNamespace,
         m.Field(

@@ -17,9 +17,9 @@ from flext_dbt_ldap import (
     __license__,
     __title__,
     __url__,
-    __version__,
     __version_info__,
 )
+from flext_dbt_ldap.__version__ import __version__
 from tests import tm
 
 

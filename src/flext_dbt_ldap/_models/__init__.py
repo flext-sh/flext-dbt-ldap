@@ -18,7 +18,6 @@ if TYPE_CHECKING:
     from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
     from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
     from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
-    from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 
 
 __all__: tuple[str, ...] = (
@@ -39,7 +38,7 @@ install_lazy_exports(
         "FlextDbtLdapModelsDimensions": ".dimensions",
         "FlextDbtLdapModelsResults": ".results",
         "FlextDbtLdapModelsSchema": ".schema",
-        "FlextDbtLdapModelsShared": ".shared",
+        "FlextDbtLdapModelsShared": ".base",
     }),
     public_exports=__all__,
 )
