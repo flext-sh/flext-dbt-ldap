@@ -1,8 +1,5 @@
 """FlextDbtLdapConstantsTransformation - DBT transformation constants.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -48,3 +45,6 @@ class FlextDbtLdapConstantsTransformation:
         c.Meltano.PREFIX_TARGET,
         "dbt_packages",
     )
+
+
+__all__: list[str] = ["FlextDbtLdapConstantsTransformation"]

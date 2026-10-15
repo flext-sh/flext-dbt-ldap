@@ -3,9 +3,6 @@
 All service methods available directly on FlextDbtLdap via MRO.
 No internal delegation, no factory wrappers.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -17,7 +14,7 @@ from typing import override
 from flext_meltano import FlextMeltanoDbtServiceBase
 
 from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t
-from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
+from flext_dbt_ldap.services import FlextDbtLdapSyncMixin
 
 
 class FlextDbtLdap(FlextDbtLdapSyncMixin):
@@ -28,7 +25,13 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
     """
 
     def __init__(self, settings: FlextDbtLdapSettings | None = None) -> None:
-        """Wire all mixin state."""
+        """Initialize the facade and wire all mixin state.
+
+        Args:
+            settings: Typed settings override, or None to resolve the global
+                ``FlextDbtLdapSettings`` singleton.
+
+        """
         # NOTE (multi-agent): mro-rn88 — resolve to the global settings singleton
         # when no override is supplied so create_ldap_api always receives a
         # concrete settings.
@@ -44,6 +47,7 @@ class FlextDbtLdap(FlextDbtLdapSyncMixin):
 
         Returns:
             The resulting ``p.Result[t.JsonMapping]``.
+
         """
         return r[t.JsonMapping].ok(settings.model_dump(exclude_none=True))
 

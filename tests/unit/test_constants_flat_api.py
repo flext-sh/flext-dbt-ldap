@@ -14,11 +14,8 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import pytest
-from flext_tests import tm
 
-from tests import c, m
-
-type LdifEntry = m.Ldif.Entry
+from tests import c, m, t, tm
 
 
 class TestsFlextDbtLdapConstantsFlatApi:
@@ -62,7 +59,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
     # --- UserDimension.from_ldap_entry mapping -----------------------------
 
     @staticmethod
-    def _entry(attributes: dict[str, list[str]]) -> LdifEntry:
+    def _entry(attributes: t.StrSequenceMapping) -> m.Ldif.Entry:
         return m.Ldif.Entry(
             dn=m.Ldif.DN(value="uid=jdoe,ou=people,dc=example,dc=com"),
             attributes=m.Ldif.Attributes.model_validate({"attributes": attributes}),

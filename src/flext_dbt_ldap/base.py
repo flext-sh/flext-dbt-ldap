@@ -4,9 +4,6 @@ Inherits from s which provides dbt command
 execution (run_models, run_tests, compile, docs, manifest, CLI).
 This base adds typed settings access for dbt-ldap domain.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -15,9 +12,9 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_meltano import FlextMeltanoDbtServiceBase, p, u
+from flext_meltano import FlextMeltanoDbtServiceBase
 
-from flext_dbt_ldap import FlextDbtLdapSettings, m, t
+from flext_dbt_ldap import FlextDbtLdapSettings, m, p, t, u
 
 
 class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
@@ -34,13 +31,23 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     @classmethod
     def runtime_bootstrap_options(cls) -> m.RuntimeBootstrapOptions:
-        """Return runtime bootstrap options for DBT LDAP services."""
+        """Return runtime bootstrap options for DBT LDAP services.
+
+        Returns:
+            The resulting ``m.RuntimeBootstrapOptions``.
+
+        """
         return m.RuntimeBootstrapOptions(settings_type=FlextDbtLdapSettings)
 
     @property
     @override
     def settings(self) -> FlextDbtLdapSettings:
-        """Typed dbt-ldap settings from the INJECTED runtime (not the global)."""
+        """The typed dbt-ldap settings from the INJECTED runtime (not the global).
+
+        Returns:
+            The resulting ``FlextDbtLdapSettings``.
+
+        """
         # NOTE (multi-agent): mro-rn88 — narrow the runtime-injected settings so test
         # overrides (e.g. dbt_project_dir) are honored; fall back to the typed global.
         runtime_settings = super().settings
@@ -51,7 +58,12 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
     @property
     @override
     def connection_profile(self) -> p.Meltano.DbtConnectionProfile:
-        """Dbt connection profile for LDAP-backed workflows."""
+        """The dbt connection profile for LDAP-backed workflows.
+
+        Returns:
+            The resulting ``p.Meltano.DbtConnectionProfile``.
+
+        """
         # NOTE (multi-agent): mro-rn88 — read INJECTED settings via self.settings
         # (runtime, not the global singleton); connection scalars from Ldap.*,
         # base_dn from DbtLdap.

@@ -13,8 +13,8 @@ from flext_ldap import FlextLdapUtilities as ul
 from flext_ldif import m, u
 
 from flext_dbt_ldap import c
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
-from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
+from flext_dbt_ldap._models import FlextDbtLdapModelsShared
+from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 
 class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
@@ -52,6 +52,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
             Raises:
                 ValueError: If User ID and common name are required.
+
             """
             if not self.user_id or not self.common_name:
                 msg = "User ID and common name are required"
@@ -62,8 +63,12 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a user dimension from a LDIF entry.
 
+            Args:
+                entry: LDIF entry carrying the user LDAP attributes.
+
             Returns:
                 The resulting ``Self``.
+
             """
             attrs = ul.Ldap.extract_entry_attributes(entry)
             return cls(
@@ -130,6 +135,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             Raises:
                 ValueError: If Group ID and common name are required; or if Member count
                     cannot be negative.
+
             """
             if not self.group_id or not self.common_name:
                 msg = "Group ID and common name are required"
@@ -143,8 +149,12 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         def from_ldap_entry(cls, entry: m.Ldif.Entry) -> Self:
             """Build a group dimension from a LDIF entry.
 
+            Args:
+                entry: LDIF entry carrying the group LDAP attributes.
+
             Returns:
                 The resulting ``Self``.
+
             """
             attrs = ul.Ldap.extract_entry_attributes(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(
@@ -208,8 +218,12 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
 
             Raises:
                 ValueError: If User DN and Group DN are required.
+
             """
             if not self.user_dn or not self.group_dn:
                 msg = "User DN and Group DN are required"
                 raise ValueError(msg)
             return self
+
+
+__all__: list[str] = ["FlextDbtLdapModelsDimensions"]

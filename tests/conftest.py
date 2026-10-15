@@ -1,8 +1,5 @@
 """Test configuration and fixtures for flext-dbt-ldap.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -13,11 +10,9 @@ import contextlib
 import pathlib
 
 import pytest
-from flext_tests import tf, tm
 
 from flext_dbt_ldap import FlextDbtLdapSettings
-from tests import c, t
-from tests.utilities import InMemoryDbtRunnerLdap, tu
+from tests import InMemoryDbtRunnerLdap, c, t, tf, tm, tu
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 
@@ -50,6 +45,7 @@ def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
 
     Returns:
         The resulting ``t.DbtLdap.Tests.ServiceFactory``.
+
     """
 
     def factory(

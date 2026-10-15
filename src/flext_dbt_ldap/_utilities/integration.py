@@ -2,9 +2,6 @@
 
 Absorbed from ldap_integration.py into u.DbtLdap namespace.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -17,7 +14,7 @@ from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
 from flext_dbt_ldap import c, m, t
-from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
+from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -35,8 +32,12 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     ) -> t.SequenceOf[m.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions.
 
+        Args:
+            entries: LDAP entries filtered down to group entries.
+
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.GroupDimension]``.
+
         """
         groups = [entry for entry in entries if cls.group_entry(entry)]
         build = m.DbtLdap.GroupDimension.from_ldap_entry
@@ -49,8 +50,12 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts.
 
+        Args:
+            entries: LDAP entries (group and user) to extract memberships from.
+
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+
         """
         cls._log.info("Transforming %d LDAP entries to membership facts", len(entries))
         memberships: list[m.DbtLdap.MembershipFact] = []
@@ -79,8 +84,12 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     ) -> t.SequenceOf[m.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions.
 
+        Args:
+            entries: LDAP entries filtered down to user entries.
+
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.UserDimension]``.
+
         """
         users = [entry for entry in entries if cls.user_entry(entry)]
         build = m.DbtLdap.UserDimension.from_ldap_entry
@@ -95,6 +104,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+
         """
         memberships: list[m.DbtLdap.MembershipFact] = []
         attrs = ul.Ldap.extract_entry_attributes(entry)
@@ -122,6 +132,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+
         """
         attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dns = attrs.get(c.DbtLdap.MEMBER_OF, [])
@@ -150,6 +161,7 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
 
         Returns:
             The resulting ``t.SequenceOf[DimensionT]``.
+
         """
         cls._log.info(
             "Transforming %d LDAP %s entries to dimensions",

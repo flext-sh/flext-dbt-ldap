@@ -12,7 +12,7 @@ from typing import Annotated
 from flext_meltano import m, u
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap._models import FlextDbtLdapModelsShared
 
 
 class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
@@ -126,3 +126,6 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
             str,
             u.Field(description="Report generation timestamp"),
         ] = c.DEFAULT_EMPTY_STRING
+
+
+__all__: list[str] = ["FlextDbtLdapModelsResults"]

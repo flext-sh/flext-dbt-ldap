@@ -1,7 +1,7 @@
-"""DBT project and execution configuration models for dbt-ldap.
+"""DBT project and execution models for dbt-ldap.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
-src/flext_dbt_ldap/_models/configuration
+src/flext_dbt_ldap/_models/dbt
 SPDX-License-Identifier: MIT
 """
 
@@ -15,8 +15,8 @@ from flext_meltano import m, u
 from flext_dbt_ldap import c, t
 
 
-class FlextDbtLdapModelsConfiguration:
-    """Configuration-oriented dbt-ldap models."""
+class FlextDbtLdapModelsDbt:
+    """DBT-oriented dbt-ldap models."""
 
     # NOTE (multi-agent): mro-rn88 ADR-006 thin-driver — typed connection_profile.
     class DbtConnectionProfile(m.Value):
@@ -128,3 +128,6 @@ class FlextDbtLdapModelsConfiguration:
             str,
             u.Field(description="Path to the DBT project directory"),
         ] = c.DEFAULT_EMPTY_STRING
+
+
+__all__: list[str] = ["FlextDbtLdapModelsDbt"]

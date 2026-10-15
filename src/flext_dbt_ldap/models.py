@@ -10,20 +10,24 @@ from __future__ import annotations
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 
-from flext_dbt_ldap._models.configuration import FlextDbtLdapModelsConfiguration
+from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
+from flext_dbt_ldap._models.dbt import FlextDbtLdapModelsDbt
 from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
 from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
 from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
+from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 
 
 class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(
+        FlextDbtLdapModelsConfig,
+        FlextDbtLdapModelsDbt,
         FlextDbtLdapModelsDimensions,
-        FlextDbtLdapModelsSchema,
-        FlextDbtLdapModelsConfiguration,
         FlextDbtLdapModelsResults,
+        FlextDbtLdapModelsShared,
+        FlextDbtLdapModelsSchema,
     ):
         """DBT LDAP domain model namespace."""
 

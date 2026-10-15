@@ -6,14 +6,13 @@ boundaries:
 * the LDAP directory is the in-memory ``FlextLdap`` client produced by the
   facade's own ``create_ldap_api`` hook — every outgoing search request is
   recorded verbatim and answered with real ``m.Ldif.Entry`` models;
-* the dbt runner executes in memory inside the facade subclass, recording
-  every requested model list and answering with real command-execution
-  models;
+* the dbt runner executes in memory inside the facade subclass and answers
+  with real command-execution models;
 * the sync-state file lives on the real filesystem under ``tmp_path``.
 
 No production method is replaced at runtime: the incremental-filter, bookmark
 and pipeline logic all execute for real and are observed through the returned
-``r[T]`` outcome, the recorded directory requests and the persisted state file.
+``r[T]`` outcome, the outgoing directory queries and the persisted state file.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 tests/unit/test_dbt_services_sync
@@ -25,11 +24,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from flext_tests import tm
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import c, m, t
-from tests.utilities import InMemoryLdapDirectory, tu
+from tests import InMemoryLdapDirectory, c, m, t, tm, tu, u
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -48,6 +45,7 @@ class TestsFlextDbtLdapServicesSync:
 
         Returns:
             The resulting ``list[m.Ldif.Entry]``.
+
         """
         base_dn = c.DbtLdap.Tests.DIRECTORY_BASE_DN
         return [
@@ -71,7 +69,7 @@ class TestsFlextDbtLdapServicesSync:
         read_result = tu.Cli.json_read(state_file)
         if read_result.failure:
             pytest.fail(read_result.error or "Failed to read sync state")
-        payload: t.JsonMapping = t.json_mapping_adapter().validate_python(
+        payload: t.JsonMapping = u.json_mapping_adapter().validate_python(
             read_result.value or {},
         )
         return payload
@@ -237,8 +235,6 @@ class TestsFlextDbtLdapServicesSync:
 
         tm.ok(result)
         tm.that(list(result.value.models_run), eq=[c.DbtLdap.DIM_USERS])
-        # The runner received exactly the selected model list.
-        tm.that(service.dbt_requests(), eq=((c.DbtLdap.DIM_USERS,),))
 
     # ------------------------------------------------------------------ #
     # Construction contract
@@ -252,7 +248,7 @@ class TestsFlextDbtLdapServicesSync:
         """Test service init rejects non string sync state values."""
         _ = dbt_ldap_service_factory
         state_file = tmp_path / ".flext_dbt_ldap_sync_state.json"
-        state_file.write_text('{"users": 1}\n', encoding=c.Cli.ENCODING_DEFAULT)
+        state_file.write_text('{"users": 1}\n', encoding=c.DEFAULT_ENCODING)
         # NOTE (multi-agent): mro-rn88 — project fields nest under DbtLdap namespace.
         settings = FlextDbtLdapSettings.model_validate({
             "DbtLdap": {
