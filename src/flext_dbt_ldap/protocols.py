@@ -6,10 +6,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Protocol, runtime_checkable
-
 from flext_ldap import FlextLdapProtocols
 from flext_meltano import FlextMeltanoProtocols
+
+from flext_dbt_ldap._protocols.base import FlextDbtLdapProtocolsBase
 
 
 class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
@@ -18,13 +18,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
     class DbtLdap:
         """DBT domain protocols."""
 
-        @runtime_checkable
-        class DataFrameLike(Protocol):
-            """Protocol for DataFrame-like objects used in DBT Python models."""
-
-            def __len__(self) -> int:
-                """Return the number of rows in the DataFrame."""
-                ...
+        DataFrameLike = FlextDbtLdapProtocolsBase.DataFrameLike
 
 
 p = FlextDbtLdapProtocols
