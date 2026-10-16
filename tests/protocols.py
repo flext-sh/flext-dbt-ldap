@@ -3,9 +3,6 @@
 Provides TestsFlextDbtLdapProtocols, combining TestsFlextProtocols with
 FlextDbtLdapProtocols for test-specific protocol definitions.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -16,7 +13,8 @@ from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
-from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes, t
+from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
+from tests import t
 
 if TYPE_CHECKING:
     from contextlib import AbstractContextManager
@@ -37,7 +35,7 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def execute(
             self,
-            query: str | object,
+            query: str | t.UnconstrainedValue,
             params: t.StrSequence | None = None,
         ) -> TestsFlextDbtLdapProtocols.DbCursor:
             """Provide ``execute``."""

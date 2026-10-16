@@ -3,9 +3,6 @@
 Provides TestsFlextDbtLdapUtilities, combining TestsFlextUtilities with
 FlextDbtLdapUtilities for test-specific utility definitions.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -17,15 +14,8 @@ from typing import override
 from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
 
-from flext_core import r, u
-from flext_dbt_ldap import (
-    FlextDbtLdap,
-    FlextDbtLdapSettings,
-    FlextDbtLdapUtilities,
-    m,
-    p,
-    t,
-)
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities, t
+from tests import m, p, r, u
 
 
 class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
@@ -49,7 +39,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 _directory_entries: list[m.Ldif.Entry] = u.PrivateAttr(
                     default_factory=list[m.Ldif.Entry],
                 )
-                _directory_requests: list[m.Ldap.SearchOptions] = u.PrivateAttr(
+                _directory_queries: list[m.Ldap.SearchOptions] = u.PrivateAttr(
                     default_factory=list[m.Ldap.SearchOptions],
                 )
                 _directory_reachable: bool = u.PrivateAttr(default=True)
@@ -67,11 +57,12 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Raises:
                         RuntimeError: If No search request reached the directory.
+
                     """
-                    if not self._directory_requests:
+                    if not self._directory_queries:
                         msg = "No search request reached the directory"
                         raise RuntimeError(msg)
-                    return self._directory_requests[-1]
+                    return self._directory_queries[-1]
 
                 @override
                 def search(
@@ -83,13 +74,14 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Returns:
                         The resulting ``p.Result[m.Ldap.SearchResult]``.
+
                     """
                     concrete_options = (
                         search_options
                         if isinstance(search_options, m.Ldap.SearchOptions)
                         else m.Ldap.SearchOptions.model_validate(search_options)
                     )
-                    self._directory_requests.append(concrete_options)
+                    self._directory_queries.append(concrete_options)
                     if not self._directory_reachable:
                         return r[m.Ldap.SearchResult].fail("directory unreachable")
                     return r[m.Ldap.SearchResult].ok(
@@ -104,14 +96,11 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                 The LDAP client is the in-memory directory produced by the
                 facade's own ``create_ldap_api`` hook; the dbt runner executes
-                in memory, records every requested model list, and answers with
-                real ``m.Meltano.CommandExecutionResult`` models.
+                in memory and answers with real
+                ``m.Meltano.CommandExecutionResult`` models.
                 """
 
                 _dbt_runner_failure: str | None = u.PrivateAttr(default=None)
-                _dbt_runner_requests: list[t.VariadicTuple[str]] = u.PrivateAttr(
-                    default_factory=list[t.VariadicTuple[str]],
-                )
 
                 def __init__(
                     self,
@@ -130,6 +119,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     Returns:
                         The resulting
                             ``TestsFlextDbtLdapUtilities.DbtLdap.Tests.InMemoryLdapDirectory``.
+
                     """
                     return InMemoryLdapDirectory.with_settings(
                         settings,
@@ -142,6 +132,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
 
                     Raises:
                         TypeError: If LDAP client is not the in-memory directory.
+
                     """
                     client = self._ldap_api
                     if not isinstance(
@@ -156,29 +147,24 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     """Make subsequent dbt runs fail with ``message``."""
                     self._dbt_runner_failure = message
 
-                def dbt_requests(self) -> tuple[t.VariadicTuple[str], ...]:
-                    """Return every model list requested from the dbt runner."""
-                    return tuple(self._dbt_runner_requests)
-
                 @override
                 def run_models(
                     self,
                     models: t.StrSequence | None = None,
                 ) -> p.Result[m.Meltano.CommandExecutionResult]:
-                    """Serve the dbt boundary from the recorded runner state.
+                    """Serve the dbt boundary from the runner state.
 
                     Returns:
                         The resulting ``p.Result[m.Meltano.CommandExecutionResult]``.
+
                     """
-                    requested = tuple(models) if models else ()
-                    self._dbt_runner_requests.append(requested)
                     if self._dbt_runner_failure is not None:
                         return r[m.Meltano.CommandExecutionResult].fail(
                             self._dbt_runner_failure,
                         )
                     return r[m.Meltano.CommandExecutionResult].ok(
                         m.Meltano.CommandExecutionResult(
-                            command=requested,
+                            command=tuple(models) if models else (),
                             success=True,
                             exit_code=0,
                             output="",

@@ -25,6 +25,7 @@ class FlextDbtLdapModelsShared:
 
             Returns:
                 The resulting ``t.ConfigurationMapping``.
+
             """
             dumped = self.model_dump()
             return {
@@ -48,3 +49,6 @@ class FlextDbtLdapModelsShared:
             str | None,
             u.Field(description="Source modification timestamp"),
         ] = None
+
+
+__all__: list[str] = ["FlextDbtLdapModelsShared"]

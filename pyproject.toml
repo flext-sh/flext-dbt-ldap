@@ -2,7 +2,7 @@
 # @flext-owner: flext-infra/config/codegen.yaml + flext-infra/src/flext_infra/templates/project/base/pyproject.toml.j2
 # @flext-adjust: MANAGED=conflict_sections + overwrite_project_keys. CUSTOM=preserve_project_keys and [tool.*] outside conflict_sections. Never edit this projection.
 # @flext-regenerate: make gen
-
+# @flext-rendered-by: flext-infra 0.12.0
 [build-system]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
@@ -28,7 +28,7 @@ dependencies = [
   "flext-ldif @ git+https://github.com/flext-sh/flext-ldif.git@0.12.0-dev",
   "flext-meltano @ git+https://github.com/flext-sh/flext-meltano.git@0.12.0-dev",
   "packaging>=26.3",
-  "pydantic>=2.14.0,<3",
+  "pydantic>=2.14.1,<3",
   "pydantic-settings>=2.15.0",
   "pyyaml>=6.0.3",
   "structlog>=25.5.0,<27",
@@ -57,10 +57,9 @@ flext-dbt-ldap = "flext_dbt_ldap.cli:main"
 Documentation = "https://github.com/flext-sh/flext/blob/main/README.md"
 Homepage = "https://github.com/flext-sh/flext"
 
+[project.optional-dependencies]
+
 [dependency-groups]
-codegen = [
-  "flext-infra @ git+https://github.com/flext-sh/flext-infra.git@0.12.0-dev",
-]
 dev = [
   "actionlint-py>=1.7.12.24",
   "bandit>=1.9.4",
@@ -102,7 +101,6 @@ dev = [
   "types-click>=7.1.8",
   "types-defusedxml>=0.7.0.20260504",
   "types-docker>=7.2.0.20260827",
-  "types-flask>=1.1.6",
   "types-grpcio",
   "types-jsonschema>=4.26.0.20260518",
   "types-ldap3>=2.9.13.20260827",
@@ -122,6 +120,9 @@ dev = [
   "types-toml>=0.10.8.20260518",
   "vulture>=2.16",
   "yamlfix>=1.19.1",
+]
+codegen = [
+  "flext-infra @ git+https://github.com/flext-sh/flext-infra.git@0.12.0-dev",
 ]
 
 [tool.codespell]
@@ -147,8 +148,8 @@ omit = [
 ]
 
 [tool.deptry]
-known_first_party = ["flext_core", "flext_dbt_ldap"]
-pep621_dev_dependency_groups = ["dev"]
+known_first_party = ["flext_dbt_ldap"]
+optional_dependencies_dev_groups = ["dev"]
 
 [tool.flext.docs]
 package_name = "flext_dbt_ldap"
@@ -165,8 +166,14 @@ include = ["/src/flext_dbt_ldap/**"]
 [tool.hatch.build.targets.wheel.sources]
 "src/flext_dbt_ldap" = "flext_dbt_ldap"
 
+[tool.hatch.build.targets.wheel.force-include]
+"pyproject.toml" = "flext_dbt_ldap/pyproject.toml"
+
 [tool.hatch.build.targets.sdist]
 include = ["/src/flext_dbt_ldap/**"]
+
+[tool.hatch.build.targets.sdist.force-include]
+"pyproject.toml" = "pyproject.toml"
 
 [tool.mypy]
 mypy_path = ["src"]
@@ -360,7 +367,7 @@ addopts = [
   "--strict-markers",
   "--markdown-docs",
   "--durations=10",
-  "--timeout=10",
+  "--flext-enforce-strict",
 ]
 flext_slow_timeout_seconds = "30"
 asyncio_default_fixture_loop_scope = "function"
@@ -424,6 +431,7 @@ extend-safe-fixes = [
   "relative-imports",
   "typing-only-first-party-import",
 ]
+extend-select = ["missing-blank-line-after-last-section"]
 ignore = [
   "camelcase-imported-as-lowercase",
   "implicit-namespace-package",
@@ -436,15 +444,11 @@ ignore = [
 ]
 select = ["ALL"]
 unfixable = [
-  "duplicate-value",
   "multi-value-repeated-key-literal",
   "multi-value-repeated-key-variable",
-  "outdated-version-block",
   "p-print",
   "print",
   "pytest-duplicate-parametrize-test-cases",
-  "redefined-while-unused",
-  "unused-variable",
 ]
 
 [tool.ruff.lint.flake8-copyright]
@@ -453,14 +457,13 @@ notice-rgx = "Copyright \\(c\\) \\d{4} \\S[^\\n]*\\. All rights reserved\\."
 [tool.ruff.lint.flake8-type-checking]
 runtime-evaluated-base-classes = [
   "flext_dbt_ldap.FlextDbtLdap",
+  "flext_dbt_ldap.FlextDbtLdapServiceBase",
   "flext_dbt_ldap.FlextDbtLdapSettings",
+  "flext_dbt_ldap._models.FlextDbtLdapModelsShared.DbtDimensionBase",
+  "flext_dbt_ldap._models.FlextDbtLdapModelsShared.DbtSerializable",
   "flext_dbt_ldap._models.shared.DbtSerializable",
-  "flext_dbt_ldap._models.shared.FlextDbtLdapModelsShared.DbtDimensionBase",
-  "flext_dbt_ldap._models.shared.FlextDbtLdapModelsShared.DbtSerializable",
-  "flext_dbt_ldap.base.FlextDbtLdapServiceBase",
-  "flext_dbt_ldap.m.BaseModel",
-  "flext_dbt_ldap.services.client.FlextDbtLdapClientMixin",
-  "flext_dbt_ldap.services.sync.FlextDbtLdapSyncMixin",
+  "flext_dbt_ldap.services.FlextDbtLdapClientMixin",
+  "flext_dbt_ldap.services.FlextDbtLdapSyncMixin",
   "flext_ldap.FlextLdap",
   "flext_ldap.FlextLdapSettings",
   "flext_meltano.FlextMeltanoConfig",
@@ -495,7 +498,7 @@ msg = "Use cli.create_app_with_common_params / cli.register_command from flext_c
 [tool.ruff.lint.isort]
 combine-as-imports = true
 force-single-line = false
-known-first-party = ["flext_core", "flext_dbt_ldap"]
+known-first-party = ["flext_dbt_ldap"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
@@ -595,6 +598,6 @@ section_whitelines = 1
 whitelines = 1
 
 [tool.uv]
-link-mode = "copy"
 constraint-dependencies = ["mypy<2.4.0"]
 environments = ["sys_platform == 'linux'", "sys_platform == 'darwin'"]
+link-mode = "copy"

@@ -1,8 +1,5 @@
 """FlextDbtLdapConstantsSearch - LDAP search and filter constants.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -36,3 +33,6 @@ class FlextDbtLdapConstantsSearch:
     )
 
     LDAPS_DEFAULT_PORT: Final[int] = 636
+
+
+__all__: list[str] = ["FlextDbtLdapConstantsSearch"]

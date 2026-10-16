@@ -3,9 +3,6 @@
 Universal fields via MRO; project fields in the ``DbtLdap`` group with simple
 scalar types (env-settable).
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -17,7 +14,15 @@ from typing import TYPE_CHECKING, Annotated
 # NOTE (multi-agent): mro-rn88 — inherit FlextLdapSettings so LDAP connection scalars
 # come from settings.Ldap.* (SSOT); FlextMeltanoSettings adds the dbt/meltano surface.
 from flext_ldap import FlextLdapSettings
-from flext_meltano import FlextMeltanoSettings, m
+from flext_meltano import FlextMeltanoSettings, m, t
+
+
+def _empty_list_str() -> list[str]:
+    return []
+
+
+def _empty_dict_str_str() -> t.StrMapping:
+    return {}
 
 
 class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
@@ -32,44 +37,38 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
     class _DbtLdap(m.BaseModel):
         """dbt-LDAP knobs only (LDAP connection lives in ``Ldap``)."""
 
-        ldap_base_dn: Annotated[
-            str,
-            m.Field(default="dc=example,dc=com", description="LDAP base DN"),
-        ]
+        ldap_base_dn: Annotated[str, m.Field(description="LDAP base DN")] = (
+            "dc=example,dc=com"
+        )
         dbt_project_dir: Annotated[
-            str,
-            m.Field(default=".", description="Path to DBT project directory"),
-        ]
+            str, m.Field(description="Path to DBT project directory")
+        ] = "."
         min_quality_threshold: Annotated[
             float,
             m.Field(
-                default=0.8,
                 ge=0.0,
                 le=1.0,
                 description="Minimum data quality score threshold",
             ),
-        ]
+        ] = 0.8
         required_attributes: Annotated[
             list[str],
             m.Field(
-                default_factory=list,
                 description="Required LDAP attributes for validation",
             ),
-        ]
+        ] = m.Field(default_factory=_empty_list_str)
         ldap_attribute_mapping: Annotated[
-            dict[str, str],
+            t.StrMapping,
             m.Field(
-                default_factory=dict,
                 description="Mapping of LDAP attributes to DBT model attributes",
             ),
-        ]
+        ] = m.Field(default_factory=_empty_dict_str_str)
         ldap_schema_mapping: Annotated[
-            dict[str, str],
+            t.StrMapping,
             m.Field(
-                default_factory=dict,
                 description="Mapping of LDAP schemas to DBT tables",
             ),
-        ]
+        ] = m.Field(default_factory=_empty_dict_str_str)
 
     if TYPE_CHECKING:
         DbtLdap: _DbtLdap

@@ -2,9 +2,6 @@
 
 DN parsing is owned by flext-ldif ``u.Ldif.DN``; only dbt-specific helpers live here.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -19,10 +16,14 @@ class FlextDbtLdapUtilitiesMacros:
 
     @staticmethod
     def user_active(user_account_control: int | None) -> bool:
-        """Check if user account is active based on userAccountControl.
+        """Check whether a user account is active from ``userAccountControl``.
+
+        Args:
+            user_account_control: Raw ``userAccountControl`` flag value, or None.
 
         Returns:
             The resulting ``bool``.
+
         """
         if user_account_control is None:
             return True

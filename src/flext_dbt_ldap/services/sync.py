@@ -10,9 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from flext_dbt_ldap import c, m, p, r, t, u
-from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
-
-logger = u.fetch_logger(__name__)
+from flext_dbt_ldap.services import FlextDbtLdapClientMixin
 
 
 class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
@@ -32,10 +30,14 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     def generate_analytics_report(
         report_type: str = "summary",
     ) -> p.Result[m.DbtLdap.AnalyticsReport]:
-        """Generate analytics report from warehouse data.
+        """Generate an analytics report from warehouse data.
+
+        Args:
+            report_type: Report selector; defaults to the summary report.
 
         Returns:
             The resulting ``p.Result[m.DbtLdap.AnalyticsReport]``.
+
         """
         try:
             report = m.DbtLdap.AnalyticsReport(
@@ -43,10 +45,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 generated_at="2025-01-01T00:00:00Z",
             )
             return r[m.DbtLdap.AnalyticsReport].ok(report)
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             return r[m.DbtLdap.AnalyticsReport].fail(
-                f"Report generation error: {e}",
-                exception=e,
+                f"Report generation error: {exc}",
+                exception=exc,
             )
 
     def run_dbt_models(
@@ -55,8 +57,12 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Run DBT models.
 
+        Args:
+            model_names: DBT models to run, or None to run all models.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtRunStatus]``.
+
         """
         try:
             run_result = self._run_selected_models(model_names)
@@ -68,10 +74,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                     models_run=run_result.value,
                 ),
             )
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             return r[m.DbtLdap.DbtRunStatus].fail(
-                f"DBT model execution error: {e}",
-                exception=e,
+                f"DBT model execution error: {exc}",
+                exception=exc,
             )
 
     def run_full_data_warehouse_sync(
@@ -82,8 +88,14 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.SyncResult]:
         """Run complete LDAP to data warehouse synchronization.
 
+        Args:
+            search_base: Base DN for every component search, or None for default.
+            incremental: When True, restrict each component to entries newer
+                than its stored bookmark.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.SyncResult]``.
+
         """
         user_result = self.sync_users_to_warehouse(search_base, incremental=incremental)
         group_result = self.sync_groups_to_warehouse(
@@ -109,8 +121,14 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse.
 
+        Args:
+            search_base: Base DN for the group search, or None for default.
+            incremental: When True, restrict the sync to entries newer than the
+                stored ``groups`` bookmark.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
 
         def _run_sync_groups_to_warehouse() -> p.Result[
@@ -147,10 +165,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         try:
             return _run_sync_groups_to_warehouse()
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"Group sync error: {e}",
-                exception=e,
+                f"Group sync error: {exc}",
+                exception=exc,
             )
 
     def sync_memberships_to_warehouse(
@@ -159,8 +177,12 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP memberships to data warehouse.
 
+        Args:
+            search_base: Base DN for the membership search, or None for default.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
         try:
             return self.run_full_pipeline(
@@ -169,10 +191,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
                 attributes=c.DbtLdap.SEARCH_MEMBERSHIP,
                 model_names=[c.DbtLdap.FACT_MEMBERSHIPS],
             )
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"Membership sync error: {e}",
-                exception=e,
+                f"Membership sync error: {exc}",
+                exception=exc,
             )
 
     def sync_users_to_warehouse(
@@ -183,8 +205,14 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP users to data warehouse.
 
+        Args:
+            search_base: Base DN for the user search, or None for default.
+            incremental: When True, restrict the sync to entries newer than the
+                stored ``users`` bookmark.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
+
         """
 
         def _run_sync_users_to_warehouse() -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
@@ -226,10 +254,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
         try:
             return _run_sync_users_to_warehouse()
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             return r[m.DbtLdap.DbtLdapPipelineResult].fail(
-                f"User sync error: {e}",
-                exception=e,
+                f"User sync error: {exc}",
+                exception=exc,
             )
 
     def validate_warehouse_data_quality(
@@ -238,8 +266,12 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse.
 
+        Args:
+            model_names: DBT models to run for validation, or None to run all.
+
         Returns:
             The resulting ``p.Result[m.DbtLdap.ValidationMetrics]``.
+
         """
         try:
             run_result = self._run_selected_models(model_names)
@@ -248,10 +280,10 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
             return r[m.DbtLdap.ValidationMetrics].ok(
                 m.DbtLdap.ValidationMetrics(validation_passed=True),
             )
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             return r[m.DbtLdap.ValidationMetrics].fail(
-                f"Data quality validation error: {e}",
-                exception=e,
+                f"Data quality validation error: {exc}",
+                exception=exc,
             )
 
     @staticmethod
@@ -272,7 +304,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         payload_result = u.Cli.json_read(self._sync_state_file)
         if payload_result.failure:
             raise OSError(payload_result.error or "Failed to read sync state file")
-        loaded = t.json_dict_adapter().validate_python(payload_result.value)
+        loaded = u.json_dict_adapter().validate_python(payload_result.value)
         data: t.MutableStrMapping = {}
         for key, value in loaded.items():
             if not isinstance(value, str):

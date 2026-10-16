@@ -13,7 +13,7 @@ from flext_ldap import FlextLdapUtilities as ul
 from flext_meltano import u
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap._utilities.macros import FlextDbtLdapUtilitiesMacros
+from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesMacros
 
 if TYPE_CHECKING:
     from flext_ldif import m as lm
@@ -26,7 +26,16 @@ class FlextDbtLdapUtilitiesEntry:
 
     @classmethod
     def active_entry(cls, attrs: t.Ldap.OperationAttributes) -> bool:
-        """Return whether the LDAP entry represents an active account."""
+        """Return whether the LDAP entry represents an active account.
+
+        Args:
+            attrs: LDAP entry attributes carrying ``userAccountControl``.
+
+        Returns:
+            True when the account is active or the control flag is absent or
+            unparseable.
+
+        """
         raw_flag = ul.Ldap.resolve_first_attribute_value(
             attrs,
             c.DbtLdap.USER_ACCOUNT_CONTROL,
@@ -43,8 +52,12 @@ class FlextDbtLdapUtilitiesEntry:
     def group_entry(cls, entry: lm.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured group object classes.
 
+        Args:
+            entry: LDIF entry to inspect.
+
         Returns:
             The resulting ``bool``.
+
         """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
             c.Ldap.AttributeName.OBJECT_CLASS,
@@ -58,8 +71,12 @@ class FlextDbtLdapUtilitiesEntry:
     def user_entry(cls, entry: lm.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured user object classes.
 
+        Args:
+            entry: LDIF entry to inspect.
+
         Returns:
             The resulting ``bool``.
+
         """
         object_classes = ul.Ldap.extract_entry_attributes(entry).get(
             c.Ldap.AttributeName.OBJECT_CLASS,
@@ -68,3 +85,6 @@ class FlextDbtLdapUtilitiesEntry:
         return any(
             ul.Ldap.norm_in(item, object_classes) for item in c.DbtLdap.USERS_CLASSES
         )
+
+
+__all__: t.StrSequence = ("FlextDbtLdapUtilitiesEntry",)
