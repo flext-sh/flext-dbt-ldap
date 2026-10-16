@@ -61,6 +61,7 @@ Homepage = "https://github.com/flext-sh/flext"
 
 [dependency-groups]
 dev = [
+  "mkdocstrings-python>=2.0.9",
   "actionlint-py>=1.7.12.24",
   "bandit>=1.9.4",
   "deptry",
@@ -77,7 +78,6 @@ dev = [
   "mkdocs-redirects>=1.2.3",
   "mkdocs-section-index>=0.3.12",
   "mkdocstrings>=1.0.6",
-  "mkdocstrings-python>=2.0.8",
   "msgpack-types",
   "mypy>=2.3.1",
   "platformdirs>=4.12.0",
@@ -149,7 +149,6 @@ omit = [
 
 [tool.deptry]
 known_first_party = ["flext_dbt_ldap"]
-optional_dependencies_dev_groups = ["dev"]
 
 [tool.flext.docs]
 package_name = "flext_dbt_ldap"
@@ -161,7 +160,7 @@ scan_dirs = ["src"]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-include = ["/src/flext_dbt_ldap/**"]
+only-include = ["src/flext_dbt_ldap"]
 
 [tool.hatch.build.targets.wheel.sources]
 "src/flext_dbt_ldap" = "flext_dbt_ldap"
@@ -170,7 +169,7 @@ include = ["/src/flext_dbt_ldap/**"]
 "pyproject.toml" = "flext_dbt_ldap/pyproject.toml"
 
 [tool.hatch.build.targets.sdist]
-include = ["/src/flext_dbt_ldap/**"]
+only-include = ["src/flext_dbt_ldap"]
 
 [tool.hatch.build.targets.sdist.force-include]
 "pyproject.toml" = "pyproject.toml"
@@ -459,9 +458,9 @@ runtime-evaluated-base-classes = [
   "flext_dbt_ldap.FlextDbtLdap",
   "flext_dbt_ldap.FlextDbtLdapServiceBase",
   "flext_dbt_ldap.FlextDbtLdapSettings",
-  "flext_dbt_ldap._models.FlextDbtLdapModelsShared.DbtDimensionBase",
-  "flext_dbt_ldap._models.FlextDbtLdapModelsShared.DbtSerializable",
   "flext_dbt_ldap._models.shared.DbtSerializable",
+  "flext_dbt_ldap._models.shared.FlextDbtLdapModelsShared.DbtDimensionBase",
+  "flext_dbt_ldap._models.shared.FlextDbtLdapModelsShared.DbtSerializable",
   "flext_dbt_ldap.services.FlextDbtLdapClientMixin",
   "flext_dbt_ldap.services.FlextDbtLdapSyncMixin",
   "flext_ldap.FlextLdap",

@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Thin dbt-ldap models facade composed via MRO.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
@@ -10,12 +11,14 @@ from __future__ import annotations
 from flext_ldap import FlextLdapModels
 from flext_meltano import FlextMeltanoModels
 
-from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
-from flext_dbt_ldap._models.dbt import FlextDbtLdapModelsDbt
-from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
-from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
-from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap._models import (
+    FlextDbtLdapModelsConfig,
+    FlextDbtLdapModelsDbt,
+    FlextDbtLdapModelsDimensions,
+    FlextDbtLdapModelsResults,
+    FlextDbtLdapModelsSchema,
+    FlextDbtLdapModelsShared,
+)
 
 
 class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
