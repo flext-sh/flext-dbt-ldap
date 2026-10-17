@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """DBT LDAP protocols for FLEXT ecosystem.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
@@ -9,7 +10,7 @@ from __future__ import annotations
 from flext_ldap import FlextLdapProtocols
 from flext_meltano import FlextMeltanoProtocols
 
-from flext_dbt_ldap._protocols.base import FlextDbtLdapProtocolsBase
+from flext_dbt_ldap._protocols import FlextDbtLdapProtocolsBase
 
 
 class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
