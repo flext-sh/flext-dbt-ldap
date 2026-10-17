@@ -19,7 +19,7 @@ class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
     class DbtLdap:
         """DBT domain protocols."""
 
-        DataFrameLike = FlextDbtLdapProtocolsBase.DataFrameLike
+        type DataFrameLike = FlextDbtLdapProtocolsBase.DataFrameLike
 
 
 p = FlextDbtLdapProtocols
