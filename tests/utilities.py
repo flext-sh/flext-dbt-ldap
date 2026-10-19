@@ -15,7 +15,7 @@ from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities, t
-from tests import m, p, r, u
+from tests import m, p, r
 
 
 class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):

@@ -10,7 +10,7 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_meltano import m, u
+from flext_meltano import m
 
 from flext_dbt_ldap import c, t
 
@@ -21,102 +21,102 @@ class FlextDbtLdapModelsSchema:
     class DbtModelDefinition(m.Value):
         """DBT model definition."""
 
-        version: Annotated[str, u.Field(description="DBT schema.yml version")] = (
+        version: Annotated[str, m.Field(description="DBT schema.yml version")] = (
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
             t.SequenceOf[t.JsonMapping],
-            u.Field(description="DBT model definitions"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="DBT model definitions"),
+        ] = m.Field(default_factory=tuple)
 
     class DbtTestConfig(m.Value):
         """DBT test configuration."""
 
-        version: Annotated[str, u.Field(description="DBT schema.yml version")] = (
+        version: Annotated[str, m.Field(description="DBT schema.yml version")] = (
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
             t.SequenceOf[t.JsonMapping],
-            u.Field(description="DBT test model definitions"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="DBT test model definitions"),
+        ] = m.Field(default_factory=tuple)
         columns: Annotated[
             t.Ldap.OperationAttributes,
-            u.Field(description="Column-level DBT tests keyed by attribute name"),
-        ] = u.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
+            m.Field(description="Column-level DBT tests keyed by attribute name"),
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
 
     class TransformationConfig(m.Value):
         """Transformation configuration."""
 
         source_table: Annotated[
             str,
-            u.Field(description="Source table used by the transformation"),
+            m.Field(description="Source table used by the transformation"),
         ] = c.DEFAULT_EMPTY_STRING
         transformations: Annotated[
             t.StrMapping,
-            u.Field(description="Column transformation expressions"),
-        ] = u.Field(default_factory=lambda: MappingProxyType[str, str]({}))
+            m.Field(description="Column transformation expressions"),
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, str]({}))
         filters: Annotated[
             t.StrSequence,
-            u.Field(description="Filter expressions applied before transformation"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="Filter expressions applied before transformation"),
+        ] = m.Field(default_factory=tuple)
 
     class TransformationRule(m.Value):
         """Transformation rule definition."""
 
-        name: Annotated[str, u.Field(description="Transformation rule name")] = (
+        name: Annotated[str, m.Field(description="Transformation rule name")] = (
             c.DEFAULT_EMPTY_STRING
         )
         rules: Annotated[
             t.StrMapping,
-            u.Field(description="Named transformation rules"),
-        ] = u.Field(default_factory=lambda: MappingProxyType[str, str]({}))
+            m.Field(description="Named transformation rules"),
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, str]({}))
 
     class DataValidationConfig(m.Value):
         """Data validation configuration."""
 
         min_quality_threshold: Annotated[
             t.NonNegativeFloat,
-            u.Field(description="Minimum validation score accepted for LDAP data"),
+            m.Field(description="Minimum validation score accepted for LDAP data"),
         ] = c.DbtLdap.DEFAULT_QUALITY_THRESHOLD
         required_attributes: Annotated[
             t.StrSequence,
-            u.Field(description="LDAP attributes required for a valid entry"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="LDAP attributes required for a valid entry"),
+        ] = m.Field(default_factory=tuple)
         validate_dns: Annotated[
             bool,
-            u.Field(description="Whether distinguished names must be present"),
+            m.Field(description="Whether distinguished names must be present"),
         ] = True
         columns: Annotated[
             t.Ldap.OperationAttributes,
-            u.Field(description="Column validation configuration keyed by attribute"),
-        ] = u.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
+            m.Field(description="Column validation configuration keyed by attribute"),
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
 
     class LdapSchema(m.Value):
         """LDAP schema configuration."""
 
         object_classes: Annotated[
             t.StrSequence,
-            u.Field(description="LDAP object classes associated with the schema"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="LDAP object classes associated with the schema"),
+        ] = m.Field(default_factory=tuple)
         required_attributes: Annotated[
             t.StrSequence,
-            u.Field(description="LDAP attributes required by the schema"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="LDAP attributes required by the schema"),
+        ] = m.Field(default_factory=tuple)
 
     class LdapQuery(m.Value):
         """LDAP query configuration."""
 
-        base_dn: Annotated[str, u.Field(description="LDAP base DN for the query")] = (
+        base_dn: Annotated[str, m.Field(description="LDAP base DN for the query")] = (
             c.DEFAULT_EMPTY_STRING
         )
-        filter_str: Annotated[str, u.Field(description="LDAP search filter")] = (
+        filter_str: Annotated[str, m.Field(description="LDAP search filter")] = (
             c.Ldap.ALL_ENTRIES_FILTER
         )
         attributes: Annotated[
             t.StrSequence,
-            u.Field(description="LDAP attributes requested by the query"),
-        ] = u.Field(default_factory=tuple)
-        scope: Annotated[str, u.Field(description="LDAP search scope")] = (
+            m.Field(description="LDAP attributes requested by the query"),
+        ] = m.Field(default_factory=tuple)
+        scope: Annotated[str, m.Field(description="LDAP search scope")] = (
             c.Ldap.DEFAULT_SCOPE
         )
 

@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 
 from flext_ldap import FlextLdap
 
-from flext_dbt_ldap import FlextDbtLdapServiceBase, c, m, p, r, t, u
+from flext_dbt_ldap import FlextDbtLdapServiceBase, c, m, p, r, t
 
 if TYPE_CHECKING:
     from flext_dbt_ldap import FlextDbtLdapSettings

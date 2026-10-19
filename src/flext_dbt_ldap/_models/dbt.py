@@ -10,7 +10,7 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_meltano import m, u
+from flext_meltano import m
 
 from flext_dbt_ldap import c, t
 
@@ -22,71 +22,71 @@ class FlextDbtLdapModelsDbt:
     class DbtConnectionProfile(m.Value):
         """Typed dbt LDAP profile (satisfies p.Meltano.DbtConnectionProfile)."""
 
-        type: Annotated[str, u.Field(description="Dbt adapter type identifier")] = (
+        type: Annotated[str, m.Field(description="Dbt adapter type identifier")] = (
             "ldap"
         )
-        host: Annotated[str, u.Field(description="LDAP server hostname")]
-        port: Annotated[int, u.Field(description="LDAP server port")]
-        use_tls: Annotated[bool, u.Field(description="Use TLS for LDAP connection")]
-        base_dn: Annotated[str, u.Field(description="LDAP base DN")]
+        host: Annotated[str, m.Field(description="LDAP server hostname")]
+        port: Annotated[int, m.Field(description="LDAP server port")]
+        use_tls: Annotated[bool, m.Field(description="Use TLS for LDAP connection")]
+        base_dn: Annotated[str, m.Field(description="LDAP base DN")]
         project: Annotated[
             str,
-            u.Field(description="Dbt project name owning this profile"),
+            m.Field(description="Dbt project name owning this profile"),
         ]
 
     class DbtProjectConfig(m.Value):
         """DBT project configuration."""
 
-        name: Annotated[str, u.Field(description="DBT project name")]
-        version: Annotated[str, u.Field(description="DBT project version")] = (
+        name: Annotated[str, m.Field(description="DBT project name")]
+        version: Annotated[str, m.Field(description="DBT project version")] = (
             c.Meltano.CONSTANTS_VERSION
         )
-        profile: Annotated[str, u.Field(description="DBT profile name")] = (
+        profile: Annotated[str, m.Field(description="DBT profile name")] = (
             c.DEFAULT_EMPTY_STRING
         )
         model_paths: Annotated[
             t.StrSequence,
-            u.Field(description="Directories containing DBT models"),
+            m.Field(description="Directories containing DBT models"),
         ] = c.DbtLdap.DEFAULT_MODEL_PATHS
         analysis_paths: Annotated[
             t.StrSequence,
-            u.Field(description="Directories containing DBT analyses"),
+            m.Field(description="Directories containing DBT analyses"),
         ] = c.DbtLdap.DEFAULT_ANALYSIS_PATHS
         test_paths: Annotated[
             t.StrSequence,
-            u.Field(description="Directories containing DBT tests"),
+            m.Field(description="Directories containing DBT tests"),
         ] = c.DbtLdap.DEFAULT_TEST_PATHS
         seed_paths: Annotated[
             t.StrSequence,
-            u.Field(description="Directories containing DBT seeds"),
+            m.Field(description="Directories containing DBT seeds"),
         ] = c.DbtLdap.DEFAULT_SEED_PATHS
         macro_paths: Annotated[
             t.StrSequence,
-            u.Field(description="Directories containing DBT macros"),
+            m.Field(description="Directories containing DBT macros"),
         ] = c.DbtLdap.DEFAULT_MACRO_PATHS
         snapshot_paths: Annotated[
             t.StrSequence,
-            u.Field(description="Directories containing DBT snapshots"),
+            m.Field(description="Directories containing DBT snapshots"),
         ] = c.DbtLdap.DEFAULT_SNAPSHOT_PATHS
         target_path: Annotated[
             str,
-            u.Field(description="Directory used for DBT build artifacts"),
+            m.Field(description="Directory used for DBT build artifacts"),
         ] = c.Meltano.PREFIX_TARGET
         clean_targets: Annotated[
             t.StrSequence,
-            u.Field(description="Directories cleaned by DBT maintenance commands"),
+            m.Field(description="Directories cleaned by DBT maintenance commands"),
         ] = c.DbtLdap.DEFAULT_CLEAN_TARGETS
         target_schema: Annotated[
             str,
-            u.Field(description="Default database schema for DBT relations"),
+            m.Field(description="Default database schema for DBT relations"),
         ] = c.DbtLdap.DEFAULT_DBT_SCHEMA
         tags: Annotated[
             t.StrSequence,
-            u.Field(description="Tags applied to generated DBT resources"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="Tags applied to generated DBT resources"),
+        ] = m.Field(default_factory=tuple)
         materialized: Annotated[
             str,
-            u.Field(description="Default DBT materialization strategy"),
+            m.Field(description="Default DBT materialization strategy"),
         ] = c.Meltano.DBT_MATERIALIZATION_TABLE
 
     class DbtSourceFreshness(m.Value):
@@ -94,39 +94,39 @@ class FlextDbtLdapModelsDbt:
 
         warn_after: Annotated[
             t.IntMapping,
-            u.Field(description="Warning freshness thresholds"),
-        ] = u.Field(default_factory=lambda: MappingProxyType[str, int]({}))
+            m.Field(description="Warning freshness thresholds"),
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, int]({}))
         error_after: Annotated[
             t.IntMapping,
-            u.Field(description="Error freshness thresholds"),
-        ] = u.Field(default_factory=lambda: MappingProxyType[str, int]({}))
+            m.Field(description="Error freshness thresholds"),
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, int]({}))
 
     class DbtSourceDefinition(m.Value):
         """Complete DBT source definition."""
 
-        name: Annotated[str, u.Field(description="DBT source name")]
-        description: Annotated[str, u.Field(description="DBT source description")] = (
+        name: Annotated[str, m.Field(description="DBT source name")]
+        description: Annotated[str, m.Field(description="DBT source description")] = (
             c.DEFAULT_EMPTY_STRING
         )
         tables: Annotated[
             t.SequenceOf[t.JsonMapping],
-            u.Field(description="Tables declared for the DBT source"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="Tables declared for the DBT source"),
+        ] = m.Field(default_factory=tuple)
 
     class DbtConfig(m.Value):
         """General DBT execution configuration."""
 
         target: Annotated[
             str,
-            u.Field(description="Named DBT target to execute against"),
+            m.Field(description="Named DBT target to execute against"),
         ] = c.DbtLdap.DEFAULT_TARGET
         profiles_dir: Annotated[
             str,
-            u.Field(description="Path to the DBT profiles directory"),
+            m.Field(description="Path to the DBT profiles directory"),
         ] = c.DbtLdap.DEFAULT_PROFILES_DIR
         project_dir: Annotated[
             str,
-            u.Field(description="Path to the DBT project directory"),
+            m.Field(description="Path to the DBT project directory"),
         ] = c.DEFAULT_EMPTY_STRING
 
 
