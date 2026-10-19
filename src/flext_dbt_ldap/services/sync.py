@@ -21,8 +21,8 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         empty_bookmarks: t.MutableMappingKV[str, str] = {}
         return empty_bookmarks
 
-    _sync_state_file: Path = u.PrivateAttr()
-    _sync_bookmarks: t.MutableStrMapping = u.PrivateAttr(
+    _sync_state_file: Path = m.PrivateAttr()
+    _sync_bookmarks: t.MutableStrMapping = m.PrivateAttr(
         default_factory=_new_sync_bookmarks,
     )
 

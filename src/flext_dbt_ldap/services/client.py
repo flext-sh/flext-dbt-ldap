@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
     """LDAP extraction and DBT transformation mixin for service facades."""
 
-    _ldap_api: p.Ldap.LdapClient = u.PrivateAttr()
+    _ldap_api: p.Ldap.LdapClient = m.PrivateAttr()
 
     @staticmethod
     def create_ldap_api(settings: FlextDbtLdapSettings) -> FlextLdap:
