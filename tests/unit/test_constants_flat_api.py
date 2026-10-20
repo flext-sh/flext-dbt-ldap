@@ -93,7 +93,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dimension.phone, eq="+1-555-0100")
         tm.that(dimension.created_date, eq="20250101000000Z")
         tm.that(dimension.modified_date, eq="20250102000000Z")
-        tm.that(dimension.is_active, eq=True)
+        tm.ok(dimension.is_active)
 
     def test_from_ldap_entry_leaves_optional_attributes_none_when_absent(self) -> None:
         """Test from ldap entry leaves optional attributes none when absent."""
@@ -116,7 +116,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dimension.created_date, eq=None)
         tm.that(dimension.modified_date, eq=None)
         # Absent userAccountControl means the account is treated as active.
-        tm.that(dimension.is_active, eq=True)
+        tm.ok(dimension.is_active)
 
     def test_from_ldap_entry_is_idempotent_for_same_input(self) -> None:
         """Test from ldap entry is idempotent for same input."""
@@ -162,4 +162,4 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dumped["common_name"], eq="John Doe")
         tm.that(dumped["email"], eq="")
         tm.that(dumped["phone"], eq="")
-        tm.that(dumped["is_active"], eq=True)
+        tm.ok(dumped["is_active"])
