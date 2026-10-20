@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_dbt_ldap import FlextDbtLdapServiceBase
-from tests import m, p
+from tests import m, p, tm
 
 
 class TestsFlextDbtLdapConnectionProfile:
@@ -21,11 +21,14 @@ class TestsFlextDbtLdapConnectionProfile:
 
         assert isinstance(profile, m.DbtLdap.DbtConnectionProfile)
         assert isinstance(profile, p.Meltano.DbtConnectionProfile)
-        assert profile.model_dump() == {
-            "type": "ldap",
-            "host": profile.host,
-            "port": profile.port,
-            "use_tls": profile.use_tls,
-            "base_dn": profile.base_dn,
-            "project": "dbt-ldap",
-        }
+        tm.that(
+            profile.model_dump(),
+            eq={
+                "type": "ldap",
+                "host": profile.host,
+                "port": profile.port,
+                "use_tls": profile.use_tls,
+                "base_dn": profile.base_dn,
+                "project": "dbt-ldap",
+            },
+        )
