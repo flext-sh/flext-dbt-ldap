@@ -42,7 +42,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
         ] = None
         phone: Annotated[str | None, m.Field(description="Primary phone number")] = None
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_required_fields(self) -> Self:
             """Validate required business fields.
 
@@ -124,7 +124,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             m.Field(description="Number of direct group members"),
         ] = 0
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_required_fields(self) -> Self:
             """Validate required business fields.
 
@@ -208,7 +208,7 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             m.Field(description="Membership expiry timestamp"),
         ] = None
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_required_fields(self) -> Self:
             """Validate required business fields.
 
