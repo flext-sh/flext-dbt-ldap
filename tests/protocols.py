@@ -14,10 +14,11 @@ from typing import TYPE_CHECKING, Protocol, runtime_checkable
 from flext_tests import FlextTestsProtocols
 
 from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
-from tests import t
 
 if TYPE_CHECKING:
     from contextlib import AbstractContextManager
+
+    from tests import t
 
 
 class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):

@@ -126,7 +126,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
             "mail": ["john.doe@example.com"],
         })
 
-        fields = ("user_id", "common_name", "email", "is_active")
+        fields = (c.ContextKey.USER_ID, "common_name", "email", "is_active")
         first = m.DbtLdap.UserDimension.from_ldap_entry(entry)
         second = m.DbtLdap.UserDimension.from_ldap_entry(entry)
 
@@ -147,7 +147,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
     def test_construction_requires_common_name() -> None:
         """Test construction requires common name."""
         with pytest.raises(m.ValidationError):
-            m.DbtLdap.UserDimension.model_validate({"user_id": "jdoe"})
+            m.DbtLdap.UserDimension.model_validate({c.ContextKey.USER_ID: "jdoe"})
 
     # --- UserDimension public serialization --------------------------------
 
@@ -158,7 +158,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
 
         dumped = dimension.to_dbt_dict()
 
-        tm.that(dumped["user_id"], eq="jdoe")
+        tm.that(dumped[c.ContextKey.USER_ID], eq="jdoe")
         tm.that(dumped["common_name"], eq="John Doe")
         tm.that(dumped["email"], eq="")
         tm.that(dumped["phone"], eq="")

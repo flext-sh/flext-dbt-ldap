@@ -11,14 +11,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from flext_tests import FlextTestsTypes
 
 from flext_dbt_ldap import FlextDbtLdapTypes
-
-if TYPE_CHECKING:
-    from tests import InMemoryDbtRunnerLdap
+from tests import InMemoryDbtRunnerLdap
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):

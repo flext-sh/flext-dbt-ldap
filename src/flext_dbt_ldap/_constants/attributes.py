@@ -40,7 +40,11 @@ class FlextDbtLdapConstantsAttributes:
         UNIQUE_MEMBER,
         MEMBER_UID,
     )
-    USERS_CLASSES: ClassVar[t.VariadicTuple[str]] = ("person", "user", "inetOrgPerson")
+    USERS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
+        "person",
+        "user",
+        "inetOrgPerson",
+    )
     GROUPS_CLASSES: ClassVar[t.VariadicTuple[str]] = (
         "group",
         "groupOfNames",
