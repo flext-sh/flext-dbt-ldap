@@ -35,7 +35,7 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def execute(
             self,
-            query: str | t.UnconstrainedValue,
+            query: str,
             params: t.StrSequence | None = None,
         ) -> TestsFlextDbtLdapProtocols.DbCursor:
             """Provide ``execute``."""

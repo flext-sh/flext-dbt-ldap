@@ -162,4 +162,4 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dumped["common_name"], eq="John Doe")
         tm.that(dumped["email"], eq="")
         tm.that(dumped["phone"], eq="")
-        tm.ok(dumped["is_active"])
+        tm.that(dumped["is_active"], eq=dimension.is_active)
