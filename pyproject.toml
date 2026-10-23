@@ -133,12 +133,14 @@ package_name = "flext_dbt_ldap"
 scan_dirs = ["src"]
 
 [tool.hatch.build.targets.wheel]
+exclude = ["/src/flext_dbt_ldap/config"]
 only-include = ["src/flext_dbt_ldap"]
 
 [tool.hatch.build.targets.wheel.sources]
 "src/flext_dbt_ldap" = "flext_dbt_ldap"
 
 [tool.hatch.build.targets.wheel.force-include]
+"src/flext_dbt_ldap/config" = "flext_dbt_ldap/config"
 "pyproject.toml" = "flext_dbt_ldap/pyproject.toml"
 
 [tool.hatch.build.targets.sdist]
