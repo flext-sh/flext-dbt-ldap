@@ -37,7 +37,7 @@ class TestsFlextDbtLdapVersion:
         """Test version info is three integer release tuple."""
         tm.that(__version_info__, is_=tuple)
         tm.that(len(__version_info__), eq=3)
-        assert all(isinstance(part, int) for part in __version_info__)
+        tm.that(all(isinstance(part, int) for part in __version_info__), truth=True)
 
     @staticmethod
     def test_version_string_and_tuple_are_aligned() -> None:

@@ -19,8 +19,8 @@ class TestsFlextDbtLdapConnectionProfile:
         """Test connection profile returns typed ldap wire shape."""
         profile = FlextDbtLdapServiceBase().connection_profile
 
-        assert isinstance(profile, m.DbtLdap.DbtConnectionProfile)
-        assert isinstance(profile, p.Meltano.DbtConnectionProfile)
+        tm.that(profile, is_=m.DbtLdap.DbtConnectionProfile)
+        tm.that(profile, is_=p.Meltano.DbtConnectionProfile)
         tm.that(
             profile.model_dump(),
             eq={
