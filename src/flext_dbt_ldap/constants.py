@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT DBT LDAP Constants - Thin MRO Facade.
 
 from flext_core import FlextConstants as Constants
@@ -34,10 +35,10 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """
 
     class DbtLdap(
-        FlextDbtLdapConstantsTransformation,
-        FlextDbtLdapConstantsSearch,
         FlextDbtLdapConstantsAttributes,
         FlextDbtLdapConstantsBase,
+        FlextDbtLdapConstantsSearch,
+        FlextDbtLdapConstantsTransformation,
     ):
         """DBT LDAP constants namespace composed over the family base."""
 
