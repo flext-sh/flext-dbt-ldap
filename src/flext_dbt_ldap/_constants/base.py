@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from typing import Final
 
+from flext_meltano import c
+
 
 class FlextDbtLdapConstantsBase:
     """Base constants for DBT LDAP domain."""
