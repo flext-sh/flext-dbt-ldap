@@ -28,7 +28,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
     @staticmethod
     def generate_analytics_report(
-        report_type: str = "summary",
+        report_type: str = c.MetricType.SUMMARY,
     ) -> p.Result[m.DbtLdap.AnalyticsReport]:
         """Generate an analytics report from warehouse data.
 
