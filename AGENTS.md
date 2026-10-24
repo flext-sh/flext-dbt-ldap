@@ -39,7 +39,7 @@ src/flext_dbt_ldap/
 ## Conventions (specific to this package)
 
 - dbt connection profiles are **typed `m.*` models**, not dict roundtrips.
-- Config/settings canonical pattern: ADR-012.
+- Config/settings canonical pattern: ADR-005 (SSOT) and ADR-024 (DI config contract).
 - Codemod governance (ast-grep + make mod): ADR-014.
 
 ## Commands
