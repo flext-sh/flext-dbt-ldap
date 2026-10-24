@@ -26,7 +26,7 @@ def pytest_runtest_setup(item: pytest.Item) -> None:
             "FLEXT_ENV": "test",
             "FLEXT_LOG_LEVEL": "DEBUG",
             "DBT_PROFILES_DIR": temp_dir,
-            "LDAP_TEST_MODE": "true",
+            "LDAP_TEST_MODE": c.ParserBooleanToken.TRUE,
         }),
     )
 

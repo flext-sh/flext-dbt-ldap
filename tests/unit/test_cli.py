@@ -10,6 +10,7 @@ from __future__ import annotations
 import pytest
 
 from flext_dbt_ldap import main
+from tests import tm
 
 
 class TestsFlextDbtLdapCli:
@@ -21,4 +22,4 @@ class TestsFlextDbtLdapCli:
         with pytest.raises(SystemExit) as exit_info:
             main(["not-a-dbt-command"])
 
-        assert exit_info.value.code == 1
+        tm.that(exit_info.value.code, eq=1)

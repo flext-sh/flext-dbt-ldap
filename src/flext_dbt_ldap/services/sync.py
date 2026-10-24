@@ -21,14 +21,14 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         empty_bookmarks: t.MutableMappingKV[str, str] = {}
         return empty_bookmarks
 
-    _sync_state_file: Path = u.PrivateAttr()
-    _sync_bookmarks: t.MutableStrMapping = u.PrivateAttr(
+    _sync_state_file: Path = m.PrivateAttr()
+    _sync_bookmarks: t.MutableStrMapping = m.PrivateAttr(
         default_factory=_new_sync_bookmarks,
     )
 
     @staticmethod
     def generate_analytics_report(
-        report_type: str = "summary",
+        report_type: str = c.MetricType.SUMMARY,
     ) -> p.Result[m.DbtLdap.AnalyticsReport]:
         """Generate an analytics report from warehouse data.
 

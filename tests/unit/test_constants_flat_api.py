@@ -93,7 +93,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dimension.phone, eq="+1-555-0100")
         tm.that(dimension.created_date, eq="20250101000000Z")
         tm.that(dimension.modified_date, eq="20250102000000Z")
-        tm.that(dimension.is_active, eq=True)
+        tm.ok(dimension.is_active)
 
     def test_from_ldap_entry_leaves_optional_attributes_none_when_absent(self) -> None:
         """Test from ldap entry leaves optional attributes none when absent."""
@@ -116,7 +116,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
         tm.that(dimension.created_date, eq=None)
         tm.that(dimension.modified_date, eq=None)
         # Absent userAccountControl means the account is treated as active.
-        tm.that(dimension.is_active, eq=True)
+        tm.ok(dimension.is_active)
 
     def test_from_ldap_entry_is_idempotent_for_same_input(self) -> None:
         """Test from ldap entry is idempotent for same input."""
@@ -126,7 +126,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
             "mail": ["john.doe@example.com"],
         })
 
-        fields = ("user_id", "common_name", "email", "is_active")
+        fields = (c.ContextKey.USER_ID, "common_name", "email", "is_active")
         first = m.DbtLdap.UserDimension.from_ldap_entry(entry)
         second = m.DbtLdap.UserDimension.from_ldap_entry(entry)
 
@@ -147,7 +147,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
     def test_construction_requires_common_name() -> None:
         """Test construction requires common name."""
         with pytest.raises(m.ValidationError):
-            m.DbtLdap.UserDimension.model_validate({"user_id": "jdoe"})
+            m.DbtLdap.UserDimension.model_validate({c.ContextKey.USER_ID: "jdoe"})
 
     # --- UserDimension public serialization --------------------------------
 
@@ -158,8 +158,8 @@ class TestsFlextDbtLdapConstantsFlatApi:
 
         dumped = dimension.to_dbt_dict()
 
-        tm.that(dumped["user_id"], eq="jdoe")
+        tm.that(dumped[c.ContextKey.USER_ID], eq="jdoe")
         tm.that(dumped["common_name"], eq="John Doe")
         tm.that(dumped["email"], eq="")
         tm.that(dumped["phone"], eq="")
-        tm.that(dumped["is_active"], eq=True)
+        tm.that(dumped["is_active"], eq=dimension.is_active)
