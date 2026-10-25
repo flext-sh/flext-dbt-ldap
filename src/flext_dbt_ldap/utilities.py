@@ -14,7 +14,6 @@ from __future__ import annotations
 from flext_ldap import FlextLdapUtilities
 from flext_meltano import FlextMeltanoUtilities
 
-from flext_dbt_ldap import t
 from flext_dbt_ldap._utilities import (
     FlextDbtLdapUtilitiesEntry,
     FlextDbtLdapUtilitiesIntegration,
@@ -34,5 +33,4 @@ class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
 
 
 u = FlextDbtLdapUtilities
-
-__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapUtilities", "u"]
+__all__: list[str] = ["FlextDbtLdapUtilities", "u"]

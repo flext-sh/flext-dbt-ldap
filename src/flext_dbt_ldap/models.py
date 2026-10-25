@@ -36,5 +36,4 @@ class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
 
 
 m = FlextDbtLdapModels
-
 __all__: list[str] = ["FlextDbtLdapModels", "m"]

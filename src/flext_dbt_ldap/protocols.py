@@ -16,12 +16,9 @@ from flext_dbt_ldap._protocols import FlextDbtLdapProtocolsBase
 class FlextDbtLdapProtocols(FlextMeltanoProtocols, FlextLdapProtocols):
     """DBT LDAP protocols extending LDAP and Meltano protocols."""
 
-    class DbtLdap:
+    class DbtLdap(FlextDbtLdapProtocolsBase):
         """DBT domain protocols."""
-
-        type DataFrameLike = FlextDbtLdapProtocolsBase.DataFrameLike
 
 
 p = FlextDbtLdapProtocols
-
 __all__: list[str] = ["FlextDbtLdapProtocols", "p"]
