@@ -9,8 +9,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import FlextLdapConstants
-from flext_meltano import FlextMeltanoConstants
+from flext_ldap import c
+from flext_meltano import c as flext_meltano_c
 
 from flext_dbt_ldap._constants import (
     FlextDbtLdapConstantsAttributes,
@@ -20,7 +20,7 @@ from flext_dbt_ldap._constants import (
 )
 
 
-class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
+class FlextDbtLdapConstants(flext_meltano_c, c):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern.
 
     This class acts as a facade, composing all constant subclasses via MRO.
