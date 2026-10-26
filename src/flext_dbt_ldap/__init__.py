@@ -13,8 +13,8 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_ldap import ldap
-    from flext_meltano import d, e, h, meltano, r, x
+    from flext_ldap import ldap, ldif
+    from flext_meltano import cli, d, e, h, meltano, r, x
 
     from flext_dbt_ldap.__version__ import (
         FlextDbtLdapVersion,
@@ -59,12 +59,14 @@ __all__: tuple[str, ...] = (
     "__version__",
     "__version_info__",
     "c",
+    "cli",
     "config",
     "d",
     "dbt_ldap",
     "e",
     "h",
     "ldap",
+    "ldif",
     "m",
     "main",
     "meltano",
@@ -99,12 +101,14 @@ install_lazy_exports(
         "__url__": ".__version__",
         "__version_info__": ".__version__",
         "c": ".constants",
+        "cli": "flext_meltano",
         "config": "._config",
         "d": "flext_meltano",
         "dbt_ldap": ".api",
         "e": "flext_meltano",
         "h": "flext_meltano",
         "ldap": "flext_ldap",
+        "ldif": "flext_ldap",
         "m": ".models",
         "main": ".cli",
         "meltano": "flext_meltano",

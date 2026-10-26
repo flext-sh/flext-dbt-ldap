@@ -30,7 +30,7 @@ if TYPE_CHECKING:
         x,
     )
 
-    from flext_dbt_ldap import dbt_ldap, ldap, main, meltano
+    from flext_dbt_ldap import cli, dbt_ldap, ldap, ldif, main, meltano
     from tests.base import TestsFlextDbtLdapServiceBase, s
     from tests.constants import TestsFlextDbtLdapConstants, c
     from tests.models import TestsFlextDbtLdapModels, m
@@ -57,6 +57,7 @@ __all__: tuple[str, ...] = (
     "TestsFlextDbtLdapUtilities",
     "api",
     "c",
+    "cli",
     "config",
     "d",
     "dbt_ldap",
@@ -64,6 +65,7 @@ __all__: tuple[str, ...] = (
     "h",
     "install_local_packages",
     "ldap",
+    "ldif",
     "m",
     "main",
     "meltano",
@@ -96,6 +98,7 @@ install_lazy_exports(
         "TestsFlextDbtLdapUtilities": ".utilities",
         "api": "flext_tests",
         "c": ".constants",
+        "cli": "flext_dbt_ldap",
         "config": "flext_tests",
         "d": "flext_tests",
         "dbt_ldap": "flext_dbt_ldap",
@@ -103,6 +106,7 @@ install_lazy_exports(
         "h": "flext_tests",
         "install_local_packages": "flext_tests",
         "ldap": "flext_dbt_ldap",
+        "ldif": "flext_dbt_ldap",
         "m": ".models",
         "main": "flext_dbt_ldap",
         "meltano": "flext_dbt_ldap",
