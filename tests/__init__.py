@@ -15,11 +15,13 @@ from flext_core.lazy import install_lazy_exports
 if TYPE_CHECKING:
     from flext_tests import (
         api,
+        cli,
         config,
         d,
         e,
         h,
         install_local_packages,
+        main,
         r,
         settings,
         td,
@@ -30,7 +32,7 @@ if TYPE_CHECKING:
         x,
     )
 
-    from flext_dbt_ldap import cli, dbt_ldap, ldap, ldif, main, meltano
+    from flext_dbt_ldap import dbt_ldap, ldap, ldif, meltano
     from tests.base import TestsFlextDbtLdapServiceBase, s
     from tests.constants import TestsFlextDbtLdapConstants, c
     from tests.models import TestsFlextDbtLdapModels, m
@@ -98,7 +100,7 @@ install_lazy_exports(
         "TestsFlextDbtLdapUtilities": ".utilities",
         "api": "flext_tests",
         "c": ".constants",
-        "cli": "flext_dbt_ldap",
+        "cli": "flext_tests",
         "config": "flext_tests",
         "d": "flext_tests",
         "dbt_ldap": "flext_dbt_ldap",
@@ -108,7 +110,7 @@ install_lazy_exports(
         "ldap": "flext_dbt_ldap",
         "ldif": "flext_dbt_ldap",
         "m": ".models",
-        "main": "flext_dbt_ldap",
+        "main": "flext_tests",
         "meltano": "flext_dbt_ldap",
         "p": ".protocols",
         "r": "flext_tests",
