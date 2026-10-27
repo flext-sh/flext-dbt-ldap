@@ -24,6 +24,7 @@ dependencies = [
   "flext-ldap @ git+https://github.com/flext-sh/flext-ldap.git@0.12.0-dev",
   "flext-ldif @ git+https://github.com/flext-sh/flext-ldif.git@0.12.0-dev",
   "flext-meltano @ git+https://github.com/flext-sh/flext-meltano.git@0.12.0-dev",
+  "pydantic>=2.14.1,<3",
 ]
 description = "FLEXT dbt LDAP - dbt Models for LDAP Data Transformation"
 keywords = ["data-transformation", "dbt", "enterprise", "flext", "sql", "typed"]
