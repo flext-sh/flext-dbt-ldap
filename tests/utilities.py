@@ -9,12 +9,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import override
 
 from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
 
-from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities, t
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities
 from tests import m, p, r
 
 
@@ -44,7 +45,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 )
                 _directory_reachable: bool = m.PrivateAttr(default=True)
 
-                def serve(self, entries: t.SequenceOf[m.Ldif.Entry]) -> None:
+                def serve(self, entries: Sequence[m.Ldif.Entry]) -> None:
                     """Replace the directory contents with ``entries``."""
                     self._directory_entries = list(entries)
 
@@ -150,7 +151,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 @override
                 def run_models(
                     self,
-                    models: t.StrSequence | None = None,
+                    models: Sequence[str] | None = None,
                 ) -> p.Result[m.Meltano.CommandExecutionResult]:
                     """Serve the dbt boundary from the runner state.
 

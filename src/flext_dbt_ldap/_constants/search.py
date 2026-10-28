@@ -16,13 +16,13 @@ class FlextDbtLdapConstantsSearch:
     FILTER_GROUP: Final[str] = "(objectClass=group)"
     FILTER_MEMBERSHIP: Final[str] = "(|(objectClass=person)(objectClass=group))"
 
-    SEARCH_GROUP: ClassVar[tuple[str], ...] = (
+    SEARCH_GROUP: ClassVar[tuple[str, ...]] = (
         "cn",
         "description",
         "member",
         "groupType",
     )
-    SEARCH_MEMBERSHIP: ClassVar[tuple[str], ...] = (
+    SEARCH_MEMBERSHIP: ClassVar[tuple[str, ...]] = (
         "cn",
         "member",
         "memberOf",

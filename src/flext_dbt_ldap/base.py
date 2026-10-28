@@ -10,6 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import MutableSequence
 from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoDbtServiceBase
@@ -78,4 +79,4 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
 s = FlextDbtLdapServiceBase
 
-__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapServiceBase", "s"]
+__all__: MutableSequence[str] = ["FlextDbtLdapServiceBase", "s"]

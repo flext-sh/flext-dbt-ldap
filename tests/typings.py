@@ -27,7 +27,7 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
         class Tests:
             """Internal tests declarations."""
 
-            type SyncState = FlextDbtLdapTypes.MutableMappingKV[str, str] | None
+            type SyncState = FlextDbtLdapTypes.MutableMapping[str, str] | None
             type ServiceFactory = Callable[
                 [Path, SyncState],
                 FlextDbtLdapTypes.Pair[

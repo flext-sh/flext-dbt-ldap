@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from types import MappingProxyType
 from typing import Annotated
 
@@ -25,7 +26,7 @@ class FlextModelsDbtLdapSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
-            t.SequenceOf[t.JsonMapping],
+            Sequence[t.JsonMapping],
             m.Field(description="DBT model definitions"),
         ] = m.Field(default_factory=tuple)
 
@@ -36,13 +37,13 @@ class FlextModelsDbtLdapSchema:
             c.DbtLdap.DBT_SCHEMA_VERSION
         )
         models: Annotated[
-            t.SequenceOf[t.JsonMapping],
+            Sequence[t.JsonMapping],
             m.Field(description="DBT test model definitions"),
         ] = m.Field(default_factory=tuple)
         columns: Annotated[
             t.Ldap.OperationAttributes,
             m.Field(description="Column-level DBT tests keyed by attribute name"),
-        ] = m.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, Sequence[str]]({}))
 
     class TransformationConfig(m.Value):
         """Transformation configuration."""
@@ -52,11 +53,11 @@ class FlextModelsDbtLdapSchema:
             m.Field(description="Source table used by the transformation"),
         ] = c.DEFAULT_EMPTY_STRING
         transformations: Annotated[
-            t.StrMapping,
+            Mapping[str, str],
             m.Field(description="Column transformation expressions"),
         ] = m.Field(default_factory=lambda: MappingProxyType[str, str]({}))
         filters: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Filter expressions applied before transformation"),
         ] = m.Field(default_factory=tuple)
 
@@ -67,7 +68,7 @@ class FlextModelsDbtLdapSchema:
             c.DEFAULT_EMPTY_STRING
         )
         rules: Annotated[
-            t.StrMapping,
+            Mapping[str, str],
             m.Field(description="Named transformation rules"),
         ] = m.Field(default_factory=lambda: MappingProxyType[str, str]({}))
 
@@ -79,7 +80,7 @@ class FlextModelsDbtLdapSchema:
             m.Field(description="Minimum validation score accepted for LDAP data"),
         ] = c.DbtLdap.DEFAULT_QUALITY_THRESHOLD
         required_attributes: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="LDAP attributes required for a valid entry"),
         ] = m.Field(default_factory=tuple)
         validate_dns: Annotated[
@@ -89,17 +90,17 @@ class FlextModelsDbtLdapSchema:
         columns: Annotated[
             t.Ldap.OperationAttributes,
             m.Field(description="Column validation configuration keyed by attribute"),
-        ] = m.Field(default_factory=lambda: MappingProxyType[str, t.StrSequence]({}))
+        ] = m.Field(default_factory=lambda: MappingProxyType[str, Sequence[str]]({}))
 
     class LdapSchema(m.Value):
         """LDAP schema configuration."""
 
         object_classes: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="LDAP object classes associated with the schema"),
         ] = m.Field(default_factory=tuple)
         required_attributes: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="LDAP attributes required by the schema"),
         ] = m.Field(default_factory=tuple)
 
@@ -113,7 +114,7 @@ class FlextModelsDbtLdapSchema:
             c.Ldap.ALL_ENTRIES_FILTER
         )
         attributes: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="LDAP attributes requested by the query"),
         ] = m.Field(default_factory=tuple)
         scope: Annotated[str, m.Field(description="LDAP search scope")] = (

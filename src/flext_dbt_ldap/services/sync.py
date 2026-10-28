@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping, Sequence
 from pathlib import Path
 
 from flext_dbt_ldap import c, m, p, r, t, u
@@ -17,8 +18,8 @@ class FlextDbtLdapSync(FlextDbtLdapClient):
     """Warehouse sync mixin for dbt-ldap service facades."""
 
     @staticmethod
-    def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:
-        empty_bookmarks: t.MutableMappingKV[str, str] = {}
+    def _new_sync_bookmarks() -> MutableMapping[str, str]:
+        empty_bookmarks: MutableMapping[str, str] = {}
         return empty_bookmarks
 
     _sync_state_file: Path = m.PrivateAttr()
@@ -53,7 +54,7 @@ class FlextDbtLdapSync(FlextDbtLdapClient):
 
     def run_dbt_models(
         self,
-        model_names: t.StrSequence | None = None,
+        model_names: Sequence[str] | None = None,
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Run DBT models.
 
@@ -262,7 +263,7 @@ class FlextDbtLdapSync(FlextDbtLdapClient):
 
     def validate_warehouse_data_quality(
         self,
-        model_names: t.StrSequence | None = None,
+        model_names: Sequence[str] | None = None,
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse.
 

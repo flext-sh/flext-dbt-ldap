@@ -32,22 +32,22 @@ class FlextDbtLdapConstantsAttributes:
     CREATE_TIMESTAMP: Final[str] = "createTimestamp"
     MODIFY_TIMESTAMP: Final[str] = "modifyTimestamp"
     MEMBER_UID: Final[str] = "memberUid"
-    MEMBERSHIP_ATTRIBUTES: ClassVar[tuple[str], ...] = (
+    MEMBERSHIP_ATTRIBUTES: ClassVar[tuple[str, ...]] = (
         MEMBER,
         UNIQUE_MEMBER,
         MEMBER_UID,
     )
-    USERS_CLASSES: ClassVar[tuple[str], ...] = (
+    USERS_CLASSES: ClassVar[tuple[str, ...]] = (
         "person",
         "user",
         "inetOrgPerson",
     )
-    GROUPS_CLASSES: ClassVar[tuple[str], ...] = (
+    GROUPS_CLASSES: ClassVar[tuple[str, ...]] = (
         "group",
         "groupOfNames",
         "groupOfUniqueNames",
     )
-    ORG_UNITS_CLASSES: ClassVar[tuple[str], ...] = (
+    ORG_UNITS_CLASSES: ClassVar[tuple[str, ...]] = (
         "organizationalUnit",
         "organization",
     )

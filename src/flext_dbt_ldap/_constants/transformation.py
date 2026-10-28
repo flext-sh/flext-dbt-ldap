@@ -32,13 +32,13 @@ class FlextDbtLdapConstantsTransformation:
 
     DEFAULT_PROFILES_DIR: Final[str] = "./profiles"
     DEFAULT_TARGET: Final[str] = "dev"
-    DEFAULT_MODEL_PATHS: ClassVar[tuple[str], ...] = ("models",)
-    DEFAULT_ANALYSIS_PATHS: ClassVar[tuple[str], ...] = ("analyses",)
-    DEFAULT_TEST_PATHS: ClassVar[tuple[str], ...] = ("tests",)
-    DEFAULT_SEED_PATHS: ClassVar[tuple[str], ...] = ("seeds",)
-    DEFAULT_MACRO_PATHS: ClassVar[tuple[str], ...] = ("macros",)
-    DEFAULT_SNAPSHOT_PATHS: ClassVar[tuple[str], ...] = ("snapshots",)
-    DEFAULT_CLEAN_TARGETS: ClassVar[tuple[str], ...] = (
+    DEFAULT_MODEL_PATHS: ClassVar[tuple[str, ...]] = ("models",)
+    DEFAULT_ANALYSIS_PATHS: ClassVar[tuple[str, ...]] = ("analyses",)
+    DEFAULT_TEST_PATHS: ClassVar[tuple[str, ...]] = ("tests",)
+    DEFAULT_SEED_PATHS: ClassVar[tuple[str, ...]] = ("seeds",)
+    DEFAULT_MACRO_PATHS: ClassVar[tuple[str, ...]] = ("macros",)
+    DEFAULT_SNAPSHOT_PATHS: ClassVar[tuple[str, ...]] = ("snapshots",)
+    DEFAULT_CLEAN_TARGETS: ClassVar[tuple[str, ...]] = (
         c.Meltano.PREFIX_TARGET,
         "dbt_packages",
     )

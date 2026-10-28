@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Annotated
 
 from flext_meltano import m
@@ -50,7 +51,7 @@ class FlextModelsDbtLdapResults(FlextModelsDbtLdapShared):
             m.Field(description="Lifecycle status for the DBT execution"),
         ] = c.Meltano.StreamStatus.PENDING
         models_run: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="DBT models executed during the run"),
         ] = m.Field(default_factory=tuple)
         entries_processed: Annotated[
@@ -98,7 +99,7 @@ class FlextModelsDbtLdapResults(FlextModelsDbtLdapShared):
             m.Field(description="Peak memory usage in megabytes"),
         ] = 0.0
         recommendations: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Performance tuning recommendations"),
         ] = m.Field(default_factory=tuple)
 
@@ -112,7 +113,7 @@ class FlextModelsDbtLdapResults(FlextModelsDbtLdapShared):
             c.DEFAULT_EMPTY_STRING
         )
         capabilities: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Supported public service capabilities"),
         ] = m.Field(default_factory=tuple)
 

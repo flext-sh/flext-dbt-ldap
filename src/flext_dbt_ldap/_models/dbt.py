@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from types import MappingProxyType
 from typing import Annotated
 
@@ -45,27 +46,27 @@ class FlextModelsDbtLdapDbt:
             c.DEFAULT_EMPTY_STRING
         )
         model_paths: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories containing DBT models"),
         ] = c.DbtLdap.DEFAULT_MODEL_PATHS
         analysis_paths: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories containing DBT analyses"),
         ] = c.DbtLdap.DEFAULT_ANALYSIS_PATHS
         test_paths: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories containing DBT tests"),
         ] = c.DbtLdap.DEFAULT_TEST_PATHS
         seed_paths: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories containing DBT seeds"),
         ] = c.DbtLdap.DEFAULT_SEED_PATHS
         macro_paths: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories containing DBT macros"),
         ] = c.DbtLdap.DEFAULT_MACRO_PATHS
         snapshot_paths: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories containing DBT snapshots"),
         ] = c.DbtLdap.DEFAULT_SNAPSHOT_PATHS
         target_path: Annotated[
@@ -73,7 +74,7 @@ class FlextModelsDbtLdapDbt:
             m.Field(description="Directory used for DBT build artifacts"),
         ] = c.Meltano.PREFIX_TARGET
         clean_targets: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Directories cleaned by DBT maintenance commands"),
         ] = c.DbtLdap.DEFAULT_CLEAN_TARGETS
         target_schema: Annotated[
@@ -81,7 +82,7 @@ class FlextModelsDbtLdapDbt:
             m.Field(description="Default database schema for DBT relations"),
         ] = c.DbtLdap.DEFAULT_DBT_SCHEMA
         tags: Annotated[
-            t.StrSequence,
+            Sequence[str],
             m.Field(description="Tags applied to generated DBT resources"),
         ] = m.Field(default_factory=tuple)
         materialized: Annotated[
@@ -109,7 +110,7 @@ class FlextModelsDbtLdapDbt:
             c.DEFAULT_EMPTY_STRING
         )
         tables: Annotated[
-            t.SequenceOf[t.JsonMapping],
+            Sequence[t.JsonMapping],
             m.Field(description="Tables declared for the DBT source"),
         ] = m.Field(default_factory=tuple)
 

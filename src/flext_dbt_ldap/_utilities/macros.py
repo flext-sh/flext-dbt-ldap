@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap import t
+from collections.abc import Sequence
 
 
 class FlextDbtLdapUtilitiesMacros:
@@ -30,4 +30,4 @@ class FlextDbtLdapUtilitiesMacros:
         return not bool(user_account_control & 2)
 
 
-__all__: t.StrSequence = ("FlextDbtLdapUtilitiesMacros",)
+__all__: Sequence[str] = ("FlextDbtLdapUtilitiesMacros",)

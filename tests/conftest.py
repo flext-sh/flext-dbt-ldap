@@ -51,7 +51,7 @@ def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
     def factory(
         dbt_project_dir: pathlib.Path,
         initial_state: t.DbtLdap.Tests.SyncState = None,
-    ) -> t.Pair[InMemoryDbtRunnerLdap, pathlib.Path]:
+    ) -> tuple[InMemoryDbtRunnerLdap, pathlib.Path]:
         # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
         # namespace; a flat dict is dropped by extra="ignore" (no isolation).
         settings = FlextDbtLdapSettings.model_validate({
