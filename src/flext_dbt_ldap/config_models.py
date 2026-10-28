@@ -9,7 +9,7 @@ from __future__ import annotations
 from pydantic import BaseModel, ConfigDict
 
 
-class FlextDbtLdapModelsConfig:
+class FlextModelsDbtLdapConfig:
     """Config namespace models for model-less ``config/*.yaml`` exposure."""
 
     class DbtLdapNamespace(BaseModel):
@@ -18,4 +18,4 @@ class FlextDbtLdapModelsConfig:
         model_config = ConfigDict(extra="allow", frozen=True)
 
 
-__all__: list[str] = ["FlextDbtLdapModelsConfig"]
+__all__: list[str] = ["FlextModelsDbtLdapConfig"]

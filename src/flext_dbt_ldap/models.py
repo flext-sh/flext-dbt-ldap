@@ -12,28 +12,28 @@ from flext_ldap import m
 from flext_meltano import m as flext_meltano_m
 
 from flext_dbt_ldap._models import (
-    FlextDbtLdapModelsConfig,
-    FlextDbtLdapModelsDbt,
-    FlextDbtLdapModelsDimensions,
-    FlextDbtLdapModelsResults,
-    FlextDbtLdapModelsSchema,
-    FlextDbtLdapModelsShared,
+    FlextModelsDbtLdapConfig,
+    FlextModelsDbtLdapDbt,
+    FlextModelsDbtLdapDimensions,
+    FlextModelsDbtLdapResults,
+    FlextModelsDbtLdapSchema,
+    FlextModelsDbtLdapShared,
 )
 
 
-class FlextDbtLdapModels(flext_meltano_m, m):
+class FlextModelsDbtLdap(flext_meltano_m, m):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(
-        FlextDbtLdapModelsConfig,
-        FlextDbtLdapModelsDbt,
-        FlextDbtLdapModelsDimensions,
-        FlextDbtLdapModelsResults,
-        FlextDbtLdapModelsShared,
-        FlextDbtLdapModelsSchema,
+        FlextModelsDbtLdapConfig,
+        FlextModelsDbtLdapDbt,
+        FlextModelsDbtLdapDimensions,
+        FlextModelsDbtLdapResults,
+        FlextModelsDbtLdapShared,
+        FlextModelsDbtLdapSchema,
     ):
         """DBT LDAP domain model namespace."""
 
 
-m = FlextDbtLdapModels
-__all__: list[str] = ["FlextDbtLdapModels", "m"]
+m = FlextModelsDbtLdap
+__all__: list[str] = ["FlextModelsDbtLdap", "m"]

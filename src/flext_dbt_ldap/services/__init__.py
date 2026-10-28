@@ -13,18 +13,18 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap.services.client import FlextDbtLdapClientMixin
-    from flext_dbt_ldap.services.sync import FlextDbtLdapSyncMixin
+    from flext_dbt_ldap.services.client import FlextDbtLdapClient
+    from flext_dbt_ldap.services.sync import FlextDbtLdapSync
 
 
-__all__: tuple[str, ...] = ("FlextDbtLdapClientMixin", "FlextDbtLdapSyncMixin")
+__all__: tuple[str, ...] = ("FlextDbtLdapClient", "FlextDbtLdapSync")
 
 install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
-        "FlextDbtLdapClientMixin": ".client",
-        "FlextDbtLdapSyncMixin": ".sync",
+        "FlextDbtLdapClient": ".client",
+        "FlextDbtLdapSync": ".sync",
     }),
     public_exports=__all__,
 )

@@ -13,33 +13,33 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
-    from flext_dbt_ldap._models.dbt import FlextDbtLdapModelsDbt
-    from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
-    from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
-    from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
-    from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+    from flext_dbt_ldap._models.config import FlextModelsDbtLdapConfig
+    from flext_dbt_ldap._models.dbt import FlextModelsDbtLdapDbt
+    from flext_dbt_ldap._models.dimensions import FlextModelsDbtLdapDimensions
+    from flext_dbt_ldap._models.results import FlextModelsDbtLdapResults
+    from flext_dbt_ldap._models.schema import FlextModelsDbtLdapSchema
+    from flext_dbt_ldap._models.shared import FlextModelsDbtLdapShared
 
 
 __all__: tuple[str, ...] = (
-    "FlextDbtLdapModelsConfig",
-    "FlextDbtLdapModelsDbt",
-    "FlextDbtLdapModelsDimensions",
-    "FlextDbtLdapModelsResults",
-    "FlextDbtLdapModelsSchema",
-    "FlextDbtLdapModelsShared",
+    "FlextModelsDbtLdapConfig",
+    "FlextModelsDbtLdapDbt",
+    "FlextModelsDbtLdapDimensions",
+    "FlextModelsDbtLdapResults",
+    "FlextModelsDbtLdapSchema",
+    "FlextModelsDbtLdapShared",
 )
 
 install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
-        "FlextDbtLdapModelsConfig": ".config",
-        "FlextDbtLdapModelsDbt": ".dbt",
-        "FlextDbtLdapModelsDimensions": ".dimensions",
-        "FlextDbtLdapModelsResults": ".results",
-        "FlextDbtLdapModelsSchema": ".schema",
-        "FlextDbtLdapModelsShared": ".shared",
+        "FlextModelsDbtLdapConfig": ".config",
+        "FlextModelsDbtLdapDbt": ".dbt",
+        "FlextModelsDbtLdapDimensions": ".dimensions",
+        "FlextModelsDbtLdapResults": ".results",
+        "FlextModelsDbtLdapSchema": ".schema",
+        "FlextModelsDbtLdapShared": ".shared",
     }),
     public_exports=__all__,
 )

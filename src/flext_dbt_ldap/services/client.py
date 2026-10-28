@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap import FlextDbtLdapSettings
 
 
-class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
+class FlextDbtLdapClient(FlextDbtLdapServiceBase):
     """LDAP extraction and DBT transformation mixin for service facades."""
 
     _ldap_api: p.Ldap.LdapClient = m.PrivateAttr()
@@ -372,4 +372,4 @@ class FlextDbtLdapClientMixin(FlextDbtLdapServiceBase):
             )
 
 
-__all__: list[str] = ["FlextDbtLdapClientMixin"]
+__all__: list[str] = ["FlextDbtLdapClient"]

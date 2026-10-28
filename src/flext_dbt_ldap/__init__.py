@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.base import FlextDbtLdapServiceBase, s
     from flext_dbt_ldap.cli import main
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
-    from flext_dbt_ldap.models import FlextDbtLdapModels, m
+    from flext_dbt_ldap.models import FlextModelsDbtLdap, m
     from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
@@ -43,13 +43,13 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdap",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConstants",
-    "FlextDbtLdapModels",
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
     "FlextDbtLdapSettings",
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapVersion",
+    "FlextModelsDbtLdap",
     "__author__",
     "__author_email__",
     "__description__",
@@ -86,7 +86,7 @@ install_lazy_exports(
         "FlextDbtLdap": ".api",
         "FlextDbtLdapConfig": "._config",
         "FlextDbtLdapConstants": ".constants",
-        "FlextDbtLdapModels": ".models",
+        "FlextModelsDbtLdap": ".models",
         "FlextDbtLdapProtocols": ".protocols",
         "FlextDbtLdapServiceBase": ".base",
         "FlextDbtLdapSettings": "._settings",

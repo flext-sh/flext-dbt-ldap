@@ -15,7 +15,7 @@ from flext_meltano import m
 from flext_dbt_ldap import c, t
 
 
-class FlextDbtLdapModelsSchema:
+class FlextModelsDbtLdapSchema:
     """Schema and transformation models for dbt-ldap."""
 
     class DbtModelDefinition(m.Value):
@@ -121,4 +121,4 @@ class FlextDbtLdapModelsSchema:
         )
 
 
-__all__: list[str] = ["FlextDbtLdapModelsSchema"]
+__all__: list[str] = ["FlextModelsDbtLdapSchema"]

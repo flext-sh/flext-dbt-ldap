@@ -15,7 +15,7 @@ from flext_meltano import m
 from flext_dbt_ldap import c, t
 
 
-class FlextDbtLdapModelsDbt:
+class FlextModelsDbtLdapDbt:
     """DBT-oriented dbt-ldap models."""
 
     # NOTE (multi-agent): mro-rn88 ADR-006 thin-driver — typed connection_profile.
@@ -130,4 +130,4 @@ class FlextDbtLdapModelsDbt:
         ] = c.DEFAULT_EMPTY_STRING
 
 
-__all__: list[str] = ["FlextDbtLdapModelsDbt"]
+__all__: list[str] = ["FlextModelsDbtLdapDbt"]

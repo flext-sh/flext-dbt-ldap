@@ -15,7 +15,7 @@ from typing import Annotated
 from flext_meltano import FlextMeltanoConfig
 from pydantic import BaseModel, ConfigDict, Field
 
-from flext_dbt_ldap.config_models import FlextDbtLdapModelsConfig
+from flext_dbt_ldap.config_models import FlextModelsDbtLdapConfig
 
 
 class FlextDbtLdapConfig(FlextMeltanoConfig):
@@ -27,11 +27,11 @@ class FlextDbtLdapConfig(FlextMeltanoConfig):
         model_config = ConfigDict(extra="allow", frozen=True)
 
     DbtLdap: Annotated[
-        FlextDbtLdapModelsConfig.DbtLdapNamespace,
+        FlextModelsDbtLdapConfig.DbtLdapNamespace,
         Field(
             description="Open namespace exposing ``config/*.yaml`` under ``DbtLdap``.",
         ),
-    ] = FlextDbtLdapModelsConfig.DbtLdapNamespace()
+    ] = FlextModelsDbtLdapConfig.DbtLdapNamespace()
 
 
 config: FlextDbtLdapConfig = FlextDbtLdapConfig.fetch_global()

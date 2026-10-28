@@ -1,6 +1,6 @@
 """FLEXT Dbt LDAP Types — MRO composition of parent type namespaces.
 
-All structured data uses Pydantic models via FlextDbtLdapModels (m).
+All structured data uses Pydantic models via FlextModelsDbtLdap (m).
 Canonical mapping/sequence types are inherited from t.Ldap and t.*.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.

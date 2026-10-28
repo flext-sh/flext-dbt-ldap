@@ -10,10 +10,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from flext_dbt_ldap import c, m, p, r, t, u
-from flext_dbt_ldap.services import FlextDbtLdapClientMixin
+from flext_dbt_ldap.services import FlextDbtLdapClient
 
 
-class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
+class FlextDbtLdapSync(FlextDbtLdapClient):
     """Warehouse sync mixin for dbt-ldap service facades."""
 
     @staticmethod
@@ -364,4 +364,4 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         return r[bool].ok(value=True)
 
 
-__all__: list[str] = ["FlextDbtLdapSyncMixin"]
+__all__: list[str] = ["FlextDbtLdapSync"]
