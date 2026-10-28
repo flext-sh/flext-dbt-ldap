@@ -6,12 +6,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Final
+from typing import ClassVar, Final
 
 from flext_meltano import c
-
-if TYPE_CHECKING:
-    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapConstantsTransformation:
@@ -35,13 +32,13 @@ class FlextDbtLdapConstantsTransformation:
 
     DEFAULT_PROFILES_DIR: Final[str] = "./profiles"
     DEFAULT_TARGET: Final[str] = "dev"
-    DEFAULT_MODEL_PATHS: ClassVar[t.VariadicTuple[str]] = ("models",)
-    DEFAULT_ANALYSIS_PATHS: ClassVar[t.VariadicTuple[str]] = ("analyses",)
-    DEFAULT_TEST_PATHS: ClassVar[t.VariadicTuple[str]] = ("tests",)
-    DEFAULT_SEED_PATHS: ClassVar[t.VariadicTuple[str]] = ("seeds",)
-    DEFAULT_MACRO_PATHS: ClassVar[t.VariadicTuple[str]] = ("macros",)
-    DEFAULT_SNAPSHOT_PATHS: ClassVar[t.VariadicTuple[str]] = ("snapshots",)
-    DEFAULT_CLEAN_TARGETS: ClassVar[t.VariadicTuple[str]] = (
+    DEFAULT_MODEL_PATHS: ClassVar[tuple[str], ...] = ("models",)
+    DEFAULT_ANALYSIS_PATHS: ClassVar[tuple[str], ...] = ("analyses",)
+    DEFAULT_TEST_PATHS: ClassVar[tuple[str], ...] = ("tests",)
+    DEFAULT_SEED_PATHS: ClassVar[tuple[str], ...] = ("seeds",)
+    DEFAULT_MACRO_PATHS: ClassVar[tuple[str], ...] = ("macros",)
+    DEFAULT_SNAPSHOT_PATHS: ClassVar[tuple[str], ...] = ("snapshots",)
+    DEFAULT_CLEAN_TARGETS: ClassVar[tuple[str], ...] = (
         c.Meltano.PREFIX_TARGET,
         "dbt_packages",
     )
