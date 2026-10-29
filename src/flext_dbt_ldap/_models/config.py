@@ -6,12 +6,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap.config_models import (
-    FlextDbtLdapModelsConfigNamespace as _ConfigModels,
-)
+from flext_dbt_ldap import FlextDbtLdapModelsConfigNamespace
 
 
-class FlextModelsDbtLdapConfig(_ConfigModels):
+class FlextModelsDbtLdapConfig(FlextDbtLdapModelsConfigNamespace):
     """Expose the single configuration schema owner through the model family."""
 
 

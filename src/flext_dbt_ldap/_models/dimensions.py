@@ -9,10 +9,10 @@ from __future__ import annotations
 
 from typing import Annotated, Self
 
-from flext_ldap import m, t, u
+from flext_ldap import m, u
 
-from flext_dbt_ldap import c
-from flext_dbt_ldap._models.shared import FlextModelsDbtLdapShared
+from flext_dbt_ldap import c, t
+from flext_dbt_ldap._models import FlextModelsDbtLdapShared
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 

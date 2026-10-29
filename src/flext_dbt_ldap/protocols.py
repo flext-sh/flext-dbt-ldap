@@ -7,13 +7,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import p
+from flext_ldap import p as flext_ldap_p
 from flext_meltano import p as flext_meltano_p
 
 from flext_dbt_ldap._protocols import FlextDbtLdapProtocolsBase
 
 
-class FlextDbtLdapProtocols(flext_meltano_p, p):
+class FlextDbtLdapProtocols(flext_meltano_p, flext_ldap_p):
     """DBT LDAP protocols extending LDAP and Meltano protocols."""
 
     class DbtLdap(FlextDbtLdapProtocolsBase):

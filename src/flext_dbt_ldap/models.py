@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import m
+from flext_ldap import m as flext_ldap_m
 from flext_meltano import m as flext_meltano_m
 
 from flext_dbt_ldap._models import (
@@ -17,11 +17,10 @@ from flext_dbt_ldap._models import (
     FlextModelsDbtLdapDimensions,
     FlextModelsDbtLdapResults,
     FlextModelsDbtLdapSchema,
-    FlextModelsDbtLdapShared,
 )
 
 
-class FlextModelsDbtLdap(flext_meltano_m, m):
+class FlextModelsDbtLdap(flext_meltano_m, flext_ldap_m):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(
@@ -29,7 +28,6 @@ class FlextModelsDbtLdap(flext_meltano_m, m):
         FlextModelsDbtLdapDbt,
         FlextModelsDbtLdapDimensions,
         FlextModelsDbtLdapResults,
-        FlextModelsDbtLdapShared,
         FlextModelsDbtLdapSchema,
     ):
         """DBT LDAP domain model namespace."""
