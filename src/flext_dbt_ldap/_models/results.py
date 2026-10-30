@@ -7,15 +7,16 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Annotated
 
-from flext_meltano import m, u
+from flext_meltano import m
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap._models import FlextModelsDbtLdapShared
 
 
-class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
+class FlextModelsDbtLdapResults(FlextModelsDbtLdapShared):
     """Project-specific result models for dbt-ldap."""
 
     class ValidationMetrics(m.Value):
@@ -23,23 +24,23 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
 
         total_entries: Annotated[
             t.NonNegativeInt,
-            u.Field(description="Total LDAP entries evaluated"),
+            m.Field(description="Total LDAP entries evaluated"),
         ] = 0
         valid_dns: Annotated[
             t.NonNegativeInt,
-            u.Field(description="Entries with valid DNs"),
+            m.Field(description="Entries with valid DNs"),
         ] = 0
         valid_entries: Annotated[
             t.NonNegativeInt,
-            u.Field(description="Entries satisfying required attributes"),
+            m.Field(description="Entries satisfying required attributes"),
         ] = 0
         quality_score: Annotated[
             t.NonNegativeFloat,
-            u.Field(description="Validation quality score"),
+            m.Field(description="Validation quality score"),
         ] = 0.0
         validation_passed: Annotated[
             bool,
-            u.Field(description="Whether validation met the configured threshold"),
+            m.Field(description="Whether validation met the configured threshold"),
         ] = False
 
     class DbtRunStatus(m.Value):
@@ -47,15 +48,15 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
 
         status: Annotated[
             str,
-            u.Field(description="Lifecycle status for the DBT execution"),
+            m.Field(description="Lifecycle status for the DBT execution"),
         ] = c.Meltano.StreamStatus.PENDING
         models_run: Annotated[
-            t.StrSequence,
-            u.Field(description="DBT models executed during the run"),
-        ] = u.Field(default_factory=tuple)
+            Sequence[str],
+            m.Field(description="DBT models executed during the run"),
+        ] = m.Field(default_factory=tuple)
         entries_processed: Annotated[
             t.NonNegativeInt,
-            u.Field(description="LDAP entries processed by the run"),
+            m.Field(description="LDAP entries processed by the run"),
         ] = 0
 
     class DbtLdapPipelineResult(m.Value):
@@ -63,7 +64,7 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
 
         extracted_entries: Annotated[
             t.NonNegativeInt,
-            u.Field(description="LDAP entries extracted by the pipeline"),
+            m.Field(description="LDAP entries extracted by the pipeline"),
         ] = 0
 
     class SyncResult(m.Value):
@@ -71,15 +72,15 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
 
         overall_success: Annotated[
             bool,
-            u.Field(description="Whether every sync component completed successfully"),
+            m.Field(description="Whether every sync component completed successfully"),
         ] = False
         successful_components: Annotated[
             t.NonNegativeInt,
-            u.Field(description="Number of successful sync components"),
+            m.Field(description="Number of successful sync components"),
         ] = 0
         total_components: Annotated[
             t.NonNegativeInt,
-            u.Field(description="Total sync components evaluated"),
+            m.Field(description="Total sync components evaluated"),
         ] = 0
 
     class PerformanceAnalysis(m.Value):
@@ -87,45 +88,45 @@ class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
 
         execution_time: Annotated[
             t.NonNegativeFloat,
-            u.Field(description="Execution time in seconds"),
+            m.Field(description="Execution time in seconds"),
         ] = 0.0
         rows_processed: Annotated[
             t.NonNegativeInt,
-            u.Field(description="Rows processed by the run"),
+            m.Field(description="Rows processed by the run"),
         ] = 0
         memory_usage: Annotated[
             t.NonNegativeFloat,
-            u.Field(description="Peak memory usage in megabytes"),
+            m.Field(description="Peak memory usage in megabytes"),
         ] = 0.0
         recommendations: Annotated[
-            t.StrSequence,
-            u.Field(description="Performance tuning recommendations"),
-        ] = u.Field(default_factory=tuple)
+            Sequence[str],
+            m.Field(description="Performance tuning recommendations"),
+        ] = m.Field(default_factory=tuple)
 
     class ServiceStatus(m.Value):
         """Service status and capability summary."""
 
-        status: Annotated[str, u.Field(description="Current service health status")] = (
+        status: Annotated[str, m.Field(description="Current service health status")] = (
             c.DbtLdap.OPERATIONAL
         )
-        service: Annotated[str, u.Field(description="Service name")] = (
+        service: Annotated[str, m.Field(description="Service name")] = (
             c.DEFAULT_EMPTY_STRING
         )
         capabilities: Annotated[
-            t.StrSequence,
-            u.Field(description="Supported public service capabilities"),
-        ] = u.Field(default_factory=tuple)
+            Sequence[str],
+            m.Field(description="Supported public service capabilities"),
+        ] = m.Field(default_factory=tuple)
 
     class AnalyticsReport(m.Value):
         """Analytics report metadata."""
 
-        report_type: Annotated[str, u.Field(description="Report category")] = (
+        report_type: Annotated[str, m.Field(description="Report category")] = (
             c.DbtLdap.DEFAULT_REPORT_TYPE
         )
         generated_at: Annotated[
             str,
-            u.Field(description="Report generation timestamp"),
+            m.Field(description="Report generation timestamp"),
         ] = c.DEFAULT_EMPTY_STRING
 
 
-__all__: list[str] = ["FlextDbtLdapModelsResults"]
+__all__: list[str] = ["FlextModelsDbtLdapResults"]

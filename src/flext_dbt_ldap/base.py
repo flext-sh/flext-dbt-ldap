@@ -10,11 +10,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import MutableSequence
 from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoDbtServiceBase
 
-from flext_dbt_ldap import FlextDbtLdapSettings, m, p, t, u
+from flext_dbt_ldap import FlextDbtLdapSettings, m, p, t
 
 
 class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
@@ -26,7 +27,7 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
     dbt_project_name: Annotated[
         t.NonEmptyStr,
-        u.Field(description="Canonical dbt project name for the DBT LDAP service"),
+        m.Field(description="Canonical dbt project name for the DBT LDAP service"),
     ] = "dbt-ldap"
 
     @classmethod
@@ -78,4 +79,4 @@ class FlextDbtLdapServiceBase(FlextMeltanoDbtServiceBase):
 
 s = FlextDbtLdapServiceBase
 
-__all__: t.MutableSequenceOf[str] = ["FlextDbtLdapServiceBase", "s"]
+__all__: MutableSequence[str] = ["FlextDbtLdapServiceBase", "s"]

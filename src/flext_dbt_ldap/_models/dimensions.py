@@ -9,41 +9,40 @@ from __future__ import annotations
 
 from typing import Annotated, Self
 
-from flext_ldap import FlextLdapUtilities as ul
-from flext_ldif import t, u
+from flext_ldap import m, u
 
-from flext_dbt_ldap import c
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap import c, t
+from flext_dbt_ldap._models import FlextModelsDbtLdapShared
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 
-class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
+class FlextModelsDbtLdapDimensions(FlextModelsDbtLdapShared):
     """Directory-backed dimensions and facts for dbt-ldap."""
 
-    class UserDimension(FlextDbtLdapModelsShared.DbtDimensionBase):
+    class UserDimension(FlextModelsDbtLdapShared.DbtDimensionBase):
         """Canonical user dimension."""
 
-        user_id: Annotated[str, u.Field(description="Canonical user identifier")]
-        email: Annotated[str | None, u.Field(description="Primary user email")] = None
+        user_id: Annotated[str, m.Field(description="Canonical user identifier")]
+        email: Annotated[str | None, m.Field(description="Primary user email")] = None
         display_name: Annotated[
             str | None,
-            u.Field(description="Display name shown to users"),
+            m.Field(description="Display name shown to users"),
         ] = None
         department: Annotated[
             str | None,
-            u.Field(description="User department name"),
+            m.Field(description="User department name"),
         ] = None
         manager_dn: Annotated[
             str | None,
-            u.Field(description="Distinguished name of the manager"),
+            m.Field(description="Distinguished name of the manager"),
         ] = None
         employee_number: Annotated[
             str | None,
-            u.Field(description="Employee number from LDAP"),
+            m.Field(description="Employee number from LDAP"),
         ] = None
-        phone: Annotated[str | None, u.Field(description="Primary phone number")] = None
+        phone: Annotated[str | None, m.Field(description="Primary phone number")] = None
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_required_fields(self) -> Self:
             """Validate required business fields.
 
@@ -70,62 +69,62 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 The resulting ``Self``.
 
             """
-            attrs = ul.Ldap.extract_entry_attributes(entry)
+            attrs = u.Ldap.extract_entry_attributes(entry)
             return cls(
-                user_id=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.UID)
+                user_id=u.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.UID)
                 or c.DEFAULT_EMPTY_STRING,
-                common_name=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.CN)
+                common_name=u.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.CN)
                 or c.DEFAULT_EMPTY_STRING,
-                email=ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.MAIL),
-                display_name=ul.Ldap.resolve_first_attribute_value(
+                email=u.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.MAIL),
+                display_name=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.DISPLAY_NAME,
                 ),
-                department=ul.Ldap.resolve_first_attribute_value(
+                department=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.DEPARTMENT,
                 ),
-                manager_dn=ul.Ldap.resolve_first_attribute_value(
+                manager_dn=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.MANAGER,
                 ),
-                employee_number=ul.Ldap.resolve_first_attribute_value(
+                employee_number=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.EMPLOYEE_NUMBER,
                 ),
-                phone=ul.Ldap.resolve_first_attribute_value(
+                phone=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.TELEPHONE_NUMBER,
                 ),
                 is_active=FlextDbtLdapUtilitiesEntry.active_entry(attrs),
-                created_date=ul.Ldap.resolve_first_attribute_value(
+                created_date=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.CREATE_TIMESTAMP,
                 ),
-                modified_date=ul.Ldap.resolve_first_attribute_value(
+                modified_date=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.MODIFY_TIMESTAMP,
                 ),
             )
 
-    class GroupDimension(FlextDbtLdapModelsShared.DbtDimensionBase):
+    class GroupDimension(FlextModelsDbtLdapShared.DbtDimensionBase):
         """Canonical group dimension."""
 
-        group_id: Annotated[str, u.Field(description="Canonical group identifier")]
+        group_id: Annotated[str, m.Field(description="Canonical group identifier")]
         description: Annotated[
             str | None,
-            u.Field(description="Group description from LDAP"),
+            m.Field(description="Group description from LDAP"),
         ] = None
         group_type: Annotated[
             str | None,
-            u.Field(description="Group type classification"),
+            m.Field(description="Group type classification"),
         ] = None
         member_count: Annotated[
             int,
-            u.Field(description="Number of direct group members"),
+            m.Field(description="Number of direct group members"),
         ] = 0
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_required_fields(self) -> Self:
             """Validate required business fields.
 
@@ -156,60 +155,60 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
                 The resulting ``Self``.
 
             """
-            attrs = ul.Ldap.extract_entry_attributes(entry)
+            attrs = u.Ldap.extract_entry_attributes(entry)
             member_count = len(attrs.get(c.DbtLdap.MEMBER, [])) + len(
                 attrs.get(c.DbtLdap.UNIQUE_MEMBER, []),
             )
             common_name = (
-                ul.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.CN)
+                u.Ldap.resolve_first_attribute_value(attrs, c.DbtLdap.CN)
                 or c.DEFAULT_EMPTY_STRING
             )
             return cls(
                 group_id=common_name,
                 common_name=common_name,
-                description=ul.Ldap.resolve_first_attribute_value(
+                description=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.DESCRIPTION,
                 ),
-                group_type=ul.Ldap.resolve_first_attribute_value(
+                group_type=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.GROUP_TYPE,
                 ),
                 member_count=member_count,
                 is_active=True,
-                created_date=ul.Ldap.resolve_first_attribute_value(
+                created_date=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.CREATE_TIMESTAMP,
                 ),
-                modified_date=ul.Ldap.resolve_first_attribute_value(
+                modified_date=u.Ldap.resolve_first_attribute_value(
                     attrs,
                     c.DbtLdap.MODIFY_TIMESTAMP,
                 ),
             )
 
-    class MembershipFact(FlextDbtLdapModelsShared.DbtSerializable):
+    class MembershipFact(FlextModelsDbtLdapShared.DbtSerializable):
         """Canonical membership fact."""
 
-        user_dn: Annotated[str, u.Field(description="Member distinguished name")]
-        group_dn: Annotated[str, u.Field(description="Group distinguished name")]
+        user_dn: Annotated[str, m.Field(description="Member distinguished name")]
+        group_dn: Annotated[str, m.Field(description="Group distinguished name")]
         membership_type: Annotated[
             str,
-            u.Field(description="Membership relationship type"),
+            m.Field(description="Membership relationship type"),
         ] = c.DbtLdap.DIRECT
         is_primary: Annotated[
             bool,
-            u.Field(description="Whether the membership is the primary assignment"),
+            m.Field(description="Whether the membership is the primary assignment"),
         ] = False
         effective_date: Annotated[
             str | None,
-            u.Field(description="Membership effective timestamp"),
+            m.Field(description="Membership effective timestamp"),
         ] = None
         expiry_date: Annotated[
             str | None,
-            u.Field(description="Membership expiry timestamp"),
+            m.Field(description="Membership expiry timestamp"),
         ] = None
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_required_fields(self) -> Self:
             """Validate required business fields.
 
@@ -226,4 +225,4 @@ class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
             return self
 
 
-__all__: list[str] = ["FlextDbtLdapModelsDimensions"]
+__all__: list[str] = ["FlextModelsDbtLdapDimensions"]

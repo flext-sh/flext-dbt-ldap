@@ -9,12 +9,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
 from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
-from tests import t
 
 if TYPE_CHECKING:
     from contextlib import AbstractContextManager
@@ -35,13 +35,13 @@ class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
 
         def execute(
             self,
-            query: str | t.UnconstrainedValue,
-            params: t.StrSequence | None = None,
+            query: str,
+            params: Sequence[str] | None = None,
         ) -> TestsFlextDbtLdapProtocols.DbCursor:
             """Provide ``execute``."""
             ...
 
-        def fetchall(self) -> t.SequenceOf[tuple[FlextDbtLdapTypes.JsonValue, ...]]:
+        def fetchall(self) -> Sequence[tuple[FlextDbtLdapTypes.JsonValue, ...]]:
             """Provide ``fetchall``."""
             ...
 

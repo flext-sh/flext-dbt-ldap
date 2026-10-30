@@ -9,13 +9,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import override
 
 from flext_ldap import FlextLdap
 from flext_tests import FlextTestsUtilities
 
-from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities, t
-from tests import m, p, r, u
+from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings, FlextDbtLdapUtilities
+from tests import m, p, r
 
 
 class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
@@ -36,15 +37,15 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 directory answers with real ``m.Ldif.Entry`` models.
                 """
 
-                _directory_entries: list[m.Ldif.Entry] = u.PrivateAttr(
+                _directory_entries: list[m.Ldif.Entry] = m.PrivateAttr(
                     default_factory=list[m.Ldif.Entry],
                 )
-                _directory_queries: list[m.Ldap.SearchOptions] = u.PrivateAttr(
+                _directory_queries: list[m.Ldap.SearchOptions] = m.PrivateAttr(
                     default_factory=list[m.Ldap.SearchOptions],
                 )
-                _directory_reachable: bool = u.PrivateAttr(default=True)
+                _directory_reachable: bool = m.PrivateAttr(default=True)
 
-                def serve(self, entries: t.SequenceOf[m.Ldif.Entry]) -> None:
+                def serve(self, entries: Sequence[m.Ldif.Entry]) -> None:
                     """Replace the directory contents with ``entries``."""
                     self._directory_entries = list(entries)
 
@@ -100,7 +101,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 ``m.Meltano.CommandExecutionResult`` models.
                 """
 
-                _dbt_runner_failure: str | None = u.PrivateAttr(default=None)
+                _dbt_runner_failure: str | None = m.PrivateAttr(default=None)
 
                 def __init__(
                     self,
@@ -150,7 +151,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 @override
                 def run_models(
                     self,
-                    models: t.StrSequence | None = None,
+                    models: Sequence[str] | None = None,
                 ) -> p.Result[m.Meltano.CommandExecutionResult]:
                     """Serve the dbt boundary from the runner state.
 

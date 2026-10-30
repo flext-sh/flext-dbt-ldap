@@ -9,12 +9,12 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from flext_meltano import m, u
+from flext_meltano import m
 
 from flext_dbt_ldap import c, t
 
 
-class FlextDbtLdapModelsShared:
+class FlextModelsDbtLdapShared:
     """Shared internal model bases reused across dbt-ldap model mixins."""
 
     class DbtSerializable(m.Entity):
@@ -36,19 +36,19 @@ class FlextDbtLdapModelsShared:
     class DbtDimensionBase(DbtSerializable):
         """Shared fields for directory-backed dimension models."""
 
-        common_name: Annotated[str, u.Field(description="Canonical common name")]
+        common_name: Annotated[str, m.Field(description="Canonical common name")]
         is_active: Annotated[
             bool,
-            u.Field(description="Whether the directory record is active"),
+            m.Field(description="Whether the directory record is active"),
         ] = True
         created_date: Annotated[
             str | None,
-            u.Field(description="Source creation timestamp"),
+            m.Field(description="Source creation timestamp"),
         ] = None
         modified_date: Annotated[
             str | None,
-            u.Field(description="Source modification timestamp"),
+            m.Field(description="Source modification timestamp"),
         ] = None
 
 
-__all__: list[str] = ["FlextDbtLdapModelsShared"]
+__all__: list[str] = ["FlextModelsDbtLdapShared"]

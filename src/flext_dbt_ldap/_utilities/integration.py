@@ -8,12 +8,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from flext_ldap import FlextLdapUtilities as ul
+from flext_ldap import u as ul
 from flext_meltano import u
 
-from flext_dbt_ldap import c, m, t
+from flext_dbt_ldap import c, m
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 if TYPE_CHECKING:
@@ -28,15 +29,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def transform_groups(
         cls,
-        entries: t.SequenceOf[m.Ldif.Entry],
-    ) -> t.SequenceOf[m.DbtLdap.GroupDimension]:
+        entries: Sequence[m.Ldif.Entry],
+    ) -> Sequence[m.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions.
 
         Args:
             entries: LDAP entries filtered down to group entries.
 
         Returns:
-            The resulting ``t.SequenceOf[m.DbtLdap.GroupDimension]``.
+            The resulting ``Sequence[m.DbtLdap.GroupDimension]``.
 
         """
         groups = [entry for entry in entries if cls.group_entry(entry)]
@@ -46,15 +47,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def transform_memberships(
         cls,
-        entries: t.SequenceOf[m.Ldif.Entry],
-    ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
+        entries: Sequence[m.Ldif.Entry],
+    ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts.
 
         Args:
             entries: LDAP entries (group and user) to extract memberships from.
 
         Returns:
-            The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+            The resulting ``Sequence[m.DbtLdap.MembershipFact]``.
 
         """
         cls._log.info("Transforming %d LDAP entries to membership facts", len(entries))
@@ -80,15 +81,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def transform_users(
         cls,
-        entries: t.SequenceOf[m.Ldif.Entry],
-    ) -> t.SequenceOf[m.DbtLdap.UserDimension]:
+        entries: Sequence[m.Ldif.Entry],
+    ) -> Sequence[m.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions.
 
         Args:
             entries: LDAP entries filtered down to user entries.
 
         Returns:
-            The resulting ``t.SequenceOf[m.DbtLdap.UserDimension]``.
+            The resulting ``Sequence[m.DbtLdap.UserDimension]``.
 
         """
         users = [entry for entry in entries if cls.user_entry(entry)]
@@ -99,11 +100,11 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     def _extract_group_memberships(
         cls,
         entry: m.Ldif.Entry,
-    ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
+    ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Build membership facts from group membership attributes.
 
         Returns:
-            The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+            The resulting ``Sequence[m.DbtLdap.MembershipFact]``.
 
         """
         memberships: list[m.DbtLdap.MembershipFact] = []
@@ -127,11 +128,11 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     def _extract_user_memberships(
         cls,
         entry: m.Ldif.Entry,
-    ) -> t.SequenceOf[m.DbtLdap.MembershipFact]:
+    ) -> Sequence[m.DbtLdap.MembershipFact]:
         """Build membership facts from a user entry.
 
         Returns:
-            The resulting ``t.SequenceOf[m.DbtLdap.MembershipFact]``.
+            The resulting ``Sequence[m.DbtLdap.MembershipFact]``.
 
         """
         attrs = ul.Ldap.extract_entry_attributes(entry)
@@ -152,15 +153,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def _transform_entries_to_dimensions[DimensionT](
         cls,
-        entries: t.SequenceOf[m.Ldif.Entry],
+        entries: Sequence[m.Ldif.Entry],
         build_dimension: Callable[[m.Ldif.Entry], DimensionT],
         kind: str,
         /,
-    ) -> t.SequenceOf[DimensionT]:
+    ) -> Sequence[DimensionT]:
         """Shared entry-to-dimension transformation flow.
 
         Returns:
-            The resulting ``t.SequenceOf[DimensionT]``.
+            The resulting ``Sequence[DimensionT]``.
 
         """
         cls._log.info(
@@ -185,4 +186,4 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
         return dimensions
 
 
-__all__: t.StrSequence = ("FlextDbtLdapUtilitiesIntegration",)
+__all__: Sequence[str] = ("FlextDbtLdapUtilitiesIntegration",)

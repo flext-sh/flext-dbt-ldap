@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Thin dbt-ldap models facade composed via MRO.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
@@ -7,31 +8,30 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import FlextLdapModels
-from flext_meltano import FlextMeltanoModels
+from flext_ldap import m as flext_ldap_m
+from flext_meltano import m as flext_meltano_m
 
-from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
-from flext_dbt_ldap._models.dbt import FlextDbtLdapModelsDbt
-from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
-from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
-from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
-from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
+from flext_dbt_ldap._models import (
+    FlextModelsDbtLdapConfig,
+    FlextModelsDbtLdapDbt,
+    FlextModelsDbtLdapDimensions,
+    FlextModelsDbtLdapResults,
+    FlextModelsDbtLdapSchema,
+)
 
 
-class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
+class FlextModelsDbtLdap(flext_meltano_m, flext_ldap_m):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(
-        FlextDbtLdapModelsConfig,
-        FlextDbtLdapModelsDbt,
-        FlextDbtLdapModelsDimensions,
-        FlextDbtLdapModelsResults,
-        FlextDbtLdapModelsShared,
-        FlextDbtLdapModelsSchema,
+        FlextModelsDbtLdapConfig,
+        FlextModelsDbtLdapDbt,
+        FlextModelsDbtLdapDimensions,
+        FlextModelsDbtLdapResults,
+        FlextModelsDbtLdapSchema,
     ):
         """DBT LDAP domain model namespace."""
 
 
-m = FlextDbtLdapModels
-
-__all__: list[str] = ["FlextDbtLdapModels", "m"]
+m = FlextModelsDbtLdap
+__all__: list[str] = ["FlextModelsDbtLdap", "m"]

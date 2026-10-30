@@ -1,7 +1,7 @@
 """Test models for flext-dbt-ldap.
 
 Provides TestsFlextDbtLdapModels, combining TestsFlextModels with
-FlextDbtLdapModels for test-specific model definitions.
+FlextModelsDbtLdap for test-specific model definitions.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -11,13 +11,13 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsModels
 
-from flext_dbt_ldap import FlextDbtLdapModels
+from flext_dbt_ldap import FlextModelsDbtLdap
 
 
-class TestsFlextDbtLdapModels(FlextTestsModels, FlextDbtLdapModels):
+class TestsFlextDbtLdapModels(FlextTestsModels, FlextModelsDbtLdap):
     """Test models combining FlextTestsModels with flext-dbt-ldap models."""
 
-    class DbtLdap(FlextDbtLdapModels.DbtLdap):
+    class DbtLdap(FlextModelsDbtLdap.DbtLdap):
         """DbtLdap test models namespace."""
 
         class Tests:

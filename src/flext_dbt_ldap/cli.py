@@ -7,10 +7,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_dbt_ldap import FlextDbtLdapServiceBase, t
+from collections.abc import Sequence
+
+from flext_dbt_ldap import FlextDbtLdapServiceBase
 
 
-def main(args: t.StrSequence | None = None) -> int:
+def main(args: Sequence[str] | None = None) -> int:
     """Console-script entry point delegating to the inherited dbt ``cli_main``.
 
     Args:

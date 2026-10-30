@@ -7,28 +7,29 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping, Sequence
 from pathlib import Path
 
 from flext_dbt_ldap import c, m, p, r, t, u
-from flext_dbt_ldap.services import FlextDbtLdapClientMixin
+from flext_dbt_ldap.services import FlextDbtLdapClient
 
 
-class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
+class FlextDbtLdapSync(FlextDbtLdapClient):
     """Warehouse sync mixin for dbt-ldap service facades."""
 
     @staticmethod
-    def _new_sync_bookmarks() -> t.MutableMappingKV[str, str]:
-        empty_bookmarks: t.MutableMappingKV[str, str] = {}
+    def _new_sync_bookmarks() -> MutableMapping[str, str]:
+        empty_bookmarks: MutableMapping[str, str] = {}
         return empty_bookmarks
 
-    _sync_state_file: Path = u.PrivateAttr()
-    _sync_bookmarks: t.MutableStrMapping = u.PrivateAttr(
+    _sync_state_file: Path = m.PrivateAttr()
+    _sync_bookmarks: t.MutableStrMapping = m.PrivateAttr(
         default_factory=_new_sync_bookmarks,
     )
 
     @staticmethod
     def generate_analytics_report(
-        report_type: str = "summary",
+        report_type: str = c.MetricType.SUMMARY,
     ) -> p.Result[m.DbtLdap.AnalyticsReport]:
         """Generate an analytics report from warehouse data.
 
@@ -53,7 +54,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
     def run_dbt_models(
         self,
-        model_names: t.StrSequence | None = None,
+        model_names: Sequence[str] | None = None,
     ) -> p.Result[m.DbtLdap.DbtRunStatus]:
         """Run DBT models.
 
@@ -262,7 +263,7 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
 
     def validate_warehouse_data_quality(
         self,
-        model_names: t.StrSequence | None = None,
+        model_names: Sequence[str] | None = None,
     ) -> p.Result[m.DbtLdap.ValidationMetrics]:
         """Validate data quality in the warehouse.
 
@@ -364,4 +365,4 @@ class FlextDbtLdapSyncMixin(FlextDbtLdapClientMixin):
         return r[bool].ok(value=True)
 
 
-__all__: list[str] = ["FlextDbtLdapSyncMixin"]
+__all__: list[str] = ["FlextDbtLdapSync"]

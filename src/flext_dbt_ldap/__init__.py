@@ -12,12 +12,28 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
-from flext_dbt_ldap.__version__ import __version__
-
 if TYPE_CHECKING:
-    from flext_meltano import d, e, h, r, x
+    from flext_ldap import ldap, ldif
+    from flext_meltano import (
+        build_lazy_import_map,
+        cleanup_submodule_namespace,
+        cli,
+        core,
+        d,
+        e,
+        h,
+        install_lazy_exports,
+        lazy,
+        lazy_getattr,
+        lazy_member,
+        meltano,
+        merge_lazy_imports,
+        normalize_lazy_imports,
+        r,
+        resolve_lazy_members,
+        x,
+    )
 
-    from flext_dbt_ldap import _constants, _models, _utilities, services
     from flext_dbt_ldap.__version__ import (
         FlextDbtLdapVersion,
         __author__,
@@ -26,6 +42,7 @@ if TYPE_CHECKING:
         __license__,
         __title__,
         __url__,
+        __version__,
         __version_info__,
     )
     from flext_dbt_ldap._config import FlextDbtLdapConfig, config
@@ -33,8 +50,9 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.api import FlextDbtLdap, dbt_ldap
     from flext_dbt_ldap.base import FlextDbtLdapServiceBase, s
     from flext_dbt_ldap.cli import main
+    from flext_dbt_ldap.config_models import FlextDbtLdapModelsConfigNamespace
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
-    from flext_dbt_ldap.models import FlextDbtLdapModels, m
+    from flext_dbt_ldap.models import FlextModelsDbtLdap, m
     from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
@@ -44,13 +62,14 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdap",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConstants",
-    "FlextDbtLdapModels",
+    "FlextDbtLdapModelsConfigNamespace",
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
     "FlextDbtLdapSettings",
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapVersion",
+    "FlextModelsDbtLdap",
     "__author__",
     "__author_email__",
     "__description__",
@@ -59,21 +78,31 @@ __all__: tuple[str, ...] = (
     "__url__",
     "__version__",
     "__version_info__",
-    "_constants",
-    "_models",
-    "_utilities",
+    "build_lazy_import_map",
     "c",
+    "cleanup_submodule_namespace",
+    "cli",
     "config",
+    "core",
     "d",
     "dbt_ldap",
     "e",
     "h",
+    "install_lazy_exports",
+    "lazy",
+    "lazy_getattr",
+    "lazy_member",
+    "ldap",
+    "ldif",
     "m",
     "main",
+    "meltano",
+    "merge_lazy_imports",
+    "normalize_lazy_imports",
     "p",
     "r",
+    "resolve_lazy_members",
     "s",
-    "services",
     "settings",
     "t",
     "u",
@@ -87,13 +116,14 @@ install_lazy_exports(
         "FlextDbtLdap": ".api",
         "FlextDbtLdapConfig": "._config",
         "FlextDbtLdapConstants": ".constants",
-        "FlextDbtLdapModels": ".models",
+        "FlextDbtLdapModelsConfigNamespace": ".config_models",
         "FlextDbtLdapProtocols": ".protocols",
         "FlextDbtLdapServiceBase": ".base",
         "FlextDbtLdapSettings": "._settings",
         "FlextDbtLdapTypes": ".typings",
         "FlextDbtLdapUtilities": ".utilities",
         "FlextDbtLdapVersion": ".__version__",
+        "FlextModelsDbtLdap": ".models",
         "__author__": ".__version__",
         "__author_email__": ".__version__",
         "__description__": ".__version__",
@@ -101,21 +131,31 @@ install_lazy_exports(
         "__title__": ".__version__",
         "__url__": ".__version__",
         "__version_info__": ".__version__",
-        "_constants": "._constants",
-        "_models": "._models",
-        "_utilities": "._utilities",
+        "build_lazy_import_map": "flext_meltano",
         "c": ".constants",
+        "cleanup_submodule_namespace": "flext_meltano",
+        "cli": "flext_meltano",
         "config": "._config",
+        "core": "flext_meltano",
         "d": "flext_meltano",
         "dbt_ldap": ".api",
         "e": "flext_meltano",
         "h": "flext_meltano",
+        "install_lazy_exports": "flext_meltano",
+        "lazy": "flext_meltano",
+        "lazy_getattr": "flext_meltano",
+        "lazy_member": "flext_meltano",
+        "ldap": "flext_ldap",
+        "ldif": "flext_ldap",
         "m": ".models",
         "main": ".cli",
+        "meltano": "flext_meltano",
+        "merge_lazy_imports": "flext_meltano",
+        "normalize_lazy_imports": "flext_meltano",
         "p": ".protocols",
         "r": "flext_meltano",
+        "resolve_lazy_members": "flext_meltano",
         "s": ".base",
-        "services": ".services",
         "settings": "._settings",
         "t": ".typings",
         "u": ".utilities",
@@ -123,3 +163,6 @@ install_lazy_exports(
     }),
     public_exports=__all__,
 )
+
+if not TYPE_CHECKING:
+    from flext_dbt_ldap.__version__ import __version__

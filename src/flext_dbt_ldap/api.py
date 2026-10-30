@@ -14,10 +14,10 @@ from typing import override
 from flext_meltano import FlextMeltanoDbtServiceBase
 
 from flext_dbt_ldap import FlextDbtLdapSettings, p, r, settings, t
-from flext_dbt_ldap.services import FlextDbtLdapSyncMixin
+from flext_dbt_ldap.services import FlextDbtLdapSync
 
 
-class FlextDbtLdap(FlextDbtLdapSyncMixin):
+class FlextDbtLdap(FlextDbtLdapSync):
     """Unified DBT LDAP facade — MRO-composed from service mixins.
 
     All extraction, transformation, sync, and validation methods
