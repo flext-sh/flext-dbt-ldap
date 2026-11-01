@@ -30,7 +30,7 @@ class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
             type SyncState = MutableMapping[str, str] | None
             type ServiceFactory = Callable[
                 [Path, SyncState],
-                FlextDbtLdapTypes.Pair[
+                tuple[
                     InMemoryDbtRunnerLdap,
                     Path,
                 ],
