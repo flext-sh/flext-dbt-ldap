@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import InMemoryLdapDirectory, c, m, t, tm, tu, u
+from tests import InMemoryLdapDirectory, c, m, p, t, tm, tu, u
 
 if TYPE_CHECKING:
     from pathlib import Path
