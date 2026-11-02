@@ -37,15 +37,15 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 directory answers with real ``m.Ldif.Entry`` models.
                 """
 
-                _directory_entries: list[m.Ldif.Entry] = m.PrivateAttr(
-                    default_factory=list[m.Ldif.Entry],
+                _directory_entries: list[p.Ldif.Entry] = m.PrivateAttr(
+                    default_factory=list[p.Ldif.Entry],
                 )
-                _directory_queries: list[m.Ldap.SearchOptions] = m.PrivateAttr(
-                    default_factory=list[m.Ldap.SearchOptions],
+                _directory_queries: list[p.Ldap.SearchOptions] = m.PrivateAttr(
+                    default_factory=list[p.Ldap.SearchOptions],
                 )
                 _directory_reachable: bool = m.PrivateAttr(default=True)
 
-                def serve(self, entries: Sequence[m.Ldif.Entry]) -> None:
+                def serve(self, entries: Sequence[p.Ldif.Entry]) -> None:
                     """Replace the directory contents with ``entries``."""
                     self._directory_entries = list(entries)
 
@@ -53,7 +53,7 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     """Model a directory server that is unreachable."""
                     self._directory_reachable = False
 
-                def last_search_request(self) -> m.Ldap.SearchOptions:
+                def last_search_request(self) -> p.Ldap.SearchOptions:
                     """Return the most recent search request sent by the facade.
 
                     Raises:
@@ -70,11 +70,11 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     self,
                     search_options: p.Ldap.SearchOptions,
                     server_type: str = "rfc",
-                ) -> p.Result[m.Ldap.SearchResult]:
+                ) -> p.Result[p.Ldap.SearchResult]:
                     """Serve the directory contents for the recorded request.
 
                     Returns:
-                        The resulting ``p.Result[m.Ldap.SearchResult]``.
+                        The resulting ``p.Result[p.Ldap.SearchResult]``.
 
                     """
                     concrete_options = (
@@ -84,8 +84,8 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                     )
                     self._directory_queries.append(concrete_options)
                     if not self._directory_reachable:
-                        return r[m.Ldap.SearchResult].fail("directory unreachable")
-                    return r[m.Ldap.SearchResult].ok(
+                        return r[p.Ldap.SearchResult].fail("directory unreachable")
+                    return r[p.Ldap.SearchResult].ok(
                         m.Ldap.SearchResult(
                             entries=list(self._directory_entries),
                             search_options=concrete_options,
@@ -152,18 +152,18 @@ class TestsFlextDbtLdapUtilities(FlextTestsUtilities, FlextDbtLdapUtilities):
                 def run_models(
                     self,
                     models: Sequence[str] | None = None,
-                ) -> p.Result[m.Meltano.CommandExecutionResult]:
+                ) -> p.Result[p.Meltano.CommandExecutionResult]:
                     """Serve the dbt boundary from the runner state.
 
                     Returns:
-                        The resulting ``p.Result[m.Meltano.CommandExecutionResult]``.
+                        The resulting ``p.Result[p.Meltano.CommandExecutionResult]``.
 
                     """
                     if self._dbt_runner_failure is not None:
-                        return r[m.Meltano.CommandExecutionResult].fail(
+                        return r[p.Meltano.CommandExecutionResult].fail(
                             self._dbt_runner_failure,
                         )
-                    return r[m.Meltano.CommandExecutionResult].ok(
+                    return r[p.Meltano.CommandExecutionResult].ok(
                         m.Meltano.CommandExecutionResult(
                             command=tuple(models) if models else (),
                             success=True,

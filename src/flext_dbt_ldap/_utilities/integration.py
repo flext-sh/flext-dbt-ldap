@@ -29,15 +29,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def transform_groups(
         cls,
-        entries: Sequence[m.Ldif.Entry],
-    ) -> Sequence[m.DbtLdap.GroupDimension]:
+        entries: Sequence[p.Ldif.Entry],
+    ) -> Sequence[p.DbtLdap.GroupDimension]:
         """Transform LDAP entries into typed group dimensions.
 
         Args:
             entries: LDAP entries filtered down to group entries.
 
         Returns:
-            The resulting ``Sequence[m.DbtLdap.GroupDimension]``.
+            The resulting ``Sequence[p.DbtLdap.GroupDimension]``.
 
         """
         groups = [entry for entry in entries if cls.group_entry(entry)]
@@ -47,19 +47,19 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def transform_memberships(
         cls,
-        entries: Sequence[m.Ldif.Entry],
-    ) -> Sequence[m.DbtLdap.MembershipFact]:
+        entries: Sequence[p.Ldif.Entry],
+    ) -> Sequence[p.DbtLdap.MembershipFact]:
         """Transform LDAP entries into membership facts.
 
         Args:
             entries: LDAP entries (group and user) to extract memberships from.
 
         Returns:
-            The resulting ``Sequence[m.DbtLdap.MembershipFact]``.
+            The resulting ``Sequence[p.DbtLdap.MembershipFact]``.
 
         """
         cls._log.info("Transforming %d LDAP entries to membership facts", len(entries))
-        memberships: list[m.DbtLdap.MembershipFact] = []
+        memberships: list[p.DbtLdap.MembershipFact] = []
         for entry in entries:
             try:
                 if cls.group_entry(entry):
@@ -81,15 +81,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def transform_users(
         cls,
-        entries: Sequence[m.Ldif.Entry],
-    ) -> Sequence[m.DbtLdap.UserDimension]:
+        entries: Sequence[p.Ldif.Entry],
+    ) -> Sequence[p.DbtLdap.UserDimension]:
         """Transform LDAP entries into typed user dimensions.
 
         Args:
             entries: LDAP entries filtered down to user entries.
 
         Returns:
-            The resulting ``Sequence[m.DbtLdap.UserDimension]``.
+            The resulting ``Sequence[p.DbtLdap.UserDimension]``.
 
         """
         users = [entry for entry in entries if cls.user_entry(entry)]
@@ -99,15 +99,15 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def _extract_group_memberships(
         cls,
-        entry: m.Ldif.Entry,
-    ) -> Sequence[m.DbtLdap.MembershipFact]:
+        entry: p.Ldif.Entry,
+    ) -> Sequence[p.DbtLdap.MembershipFact]:
         """Build membership facts from group membership attributes.
 
         Returns:
-            The resulting ``Sequence[m.DbtLdap.MembershipFact]``.
+            The resulting ``Sequence[p.DbtLdap.MembershipFact]``.
 
         """
-        memberships: list[m.DbtLdap.MembershipFact] = []
+        memberships: list[p.DbtLdap.MembershipFact] = []
         attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dn = str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
         for attribute in c.DbtLdap.MEMBERSHIP_ATTRIBUTES:
@@ -127,18 +127,18 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def _extract_user_memberships(
         cls,
-        entry: m.Ldif.Entry,
-    ) -> Sequence[m.DbtLdap.MembershipFact]:
+        entry: p.Ldif.Entry,
+    ) -> Sequence[p.DbtLdap.MembershipFact]:
         """Build membership facts from a user entry.
 
         Returns:
-            The resulting ``Sequence[m.DbtLdap.MembershipFact]``.
+            The resulting ``Sequence[p.DbtLdap.MembershipFact]``.
 
         """
         attrs = ul.Ldap.extract_entry_attributes(entry)
         group_dns = attrs.get(c.DbtLdap.MEMBER_OF, [])
         if not group_dns:
-            empty: list[m.DbtLdap.MembershipFact] = []
+            empty: list[p.DbtLdap.MembershipFact] = []
             return empty
         user_dn = str(entry.dn) if entry.dn is not None else c.DEFAULT_EMPTY_STRING
         return [
@@ -153,8 +153,8 @@ class FlextDbtLdapUtilitiesIntegration(FlextDbtLdapUtilitiesEntry):
     @classmethod
     def _transform_entries_to_dimensions[DimensionT](
         cls,
-        entries: Sequence[m.Ldif.Entry],
-        build_dimension: Callable[[m.Ldif.Entry], DimensionT],
+        entries: Sequence[p.Ldif.Entry],
+        build_dimension: Callable[[p.Ldif.Entry], DimensionT],
         kind: str,
         /,
     ) -> Sequence[DimensionT]:

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import pytest
 
-from tests import c, m, t, tm
+from tests import c, m, p, t, tm
 
 
 class TestsFlextDbtLdapConstantsFlatApi:
@@ -59,7 +59,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
     # --- UserDimension.from_ldap_entry mapping -----------------------------
 
     @staticmethod
-    def _entry(attributes: t.StrSequenceMapping) -> m.Ldif.Entry:
+    def _entry(attributes: t.StrSequenceMapping) -> p.Ldif.Entry:
         return m.Ldif.Entry(
             dn=m.Ldif.DN(value="uid=jdoe,ou=people,dc=example,dc=com"),
             attributes=m.Ldif.Attributes.model_validate({"attributes": attributes}),

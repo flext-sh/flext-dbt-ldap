@@ -40,11 +40,11 @@ class TestsFlextDbtLdapServicesSync:
     # ------------------------------------------------------------------ #
 
     @staticmethod
-    def _directory_entries(entry_count: int) -> list[m.Ldif.Entry]:
+    def _directory_entries(entry_count: int) -> list[p.Ldif.Entry]:
         """Build real directory entries served by the in-memory LDAP client.
 
         Returns:
-            The resulting ``list[m.Ldif.Entry]``.
+            The resulting ``list[p.Ldif.Entry]``.
 
         """
         base_dn = c.DbtLdap.Tests.DIRECTORY_BASE_DN
