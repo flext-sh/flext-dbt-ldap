@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 from flext_ldap import u as ul
 from flext_meltano import u
 
-from flext_dbt_ldap import c, m
+from flext_dbt_ldap import c, m, p
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 if TYPE_CHECKING:

@@ -19,13 +19,13 @@
 - Project class: `integration`
 - Keywords: `data-transformation`, `dbt`, `enterprise`, `flext`, `sql`, `typed`
 - Main facades: `FlextDbtLdap`, `FlextDbtLdapConfig`, `FlextDbtLdapConstants`,
-  `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
-  `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`, `FlextDbtLdapTypes` (+3 more)
+  `FlextDbtLdapModels`, `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
+  `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings` (+3 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
 - Public symbol exports: `FlextDbtLdap`, `FlextDbtLdapConfig`, `FlextDbtLdapConstants`,
-  `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
+  `FlextDbtLdapModels`, `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
   `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`, `FlextDbtLdapTypes`,
-  `FlextDbtLdapUtilities`, `FlextDbtLdapVersion` (+5 more)
+  `FlextDbtLdapUtilities` (+5 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `9`
 

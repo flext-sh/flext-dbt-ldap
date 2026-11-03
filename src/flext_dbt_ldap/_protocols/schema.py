@@ -9,18 +9,19 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_meltano import FlextMeltanoProtocols
 
-from flext_dbt_ldap import t
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapProtocolsSchema:
     """Own the structural contracts declared by its model source."""
 
     @runtime_checkable
-    class DbtModelDefinition(FlextMeltanoProtocols.Model, Protocol):
+    class DbtModelDefinition(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -34,7 +35,7 @@ class FlextDbtLdapProtocolsSchema:
             ...
 
     @runtime_checkable
-    class DbtTestConfig(FlextMeltanoProtocols.Model, Protocol):
+    class DbtTestConfig(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -53,7 +54,7 @@ class FlextDbtLdapProtocolsSchema:
             ...
 
     @runtime_checkable
-    class TransformationConfig(FlextMeltanoProtocols.Model, Protocol):
+    class TransformationConfig(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -72,7 +73,7 @@ class FlextDbtLdapProtocolsSchema:
             ...
 
     @runtime_checkable
-    class TransformationRule(FlextMeltanoProtocols.Model, Protocol):
+    class TransformationRule(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -86,7 +87,7 @@ class FlextDbtLdapProtocolsSchema:
             ...
 
     @runtime_checkable
-    class DataValidationConfig(FlextMeltanoProtocols.Model, Protocol):
+    class DataValidationConfig(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -110,7 +111,7 @@ class FlextDbtLdapProtocolsSchema:
             ...
 
     @runtime_checkable
-    class LdapSchema(FlextMeltanoProtocols.Model, Protocol):
+    class LdapSchema(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -124,7 +125,7 @@ class FlextDbtLdapProtocolsSchema:
             ...
 
     @runtime_checkable
-    class LdapQuery(FlextMeltanoProtocols.Model, Protocol):
+    class LdapQuery(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property

@@ -9,18 +9,19 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_meltano import FlextMeltanoProtocols
 
-from flext_dbt_ldap import t
+if TYPE_CHECKING:
+    from flext_dbt_ldap import t
 
 
 class FlextDbtLdapProtocolsDbt:
     """Own the structural contracts declared by its model source."""
 
     @runtime_checkable
-    class DbtConnectionProfile(FlextMeltanoProtocols.Model, Protocol):
+    class DbtConnectionProfile(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -54,7 +55,7 @@ class FlextDbtLdapProtocolsDbt:
             ...
 
     @runtime_checkable
-    class DbtProjectConfig(FlextMeltanoProtocols.Model, Protocol):
+    class DbtProjectConfig(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -128,7 +129,7 @@ class FlextDbtLdapProtocolsDbt:
             ...
 
     @runtime_checkable
-    class DbtSourceFreshness(FlextMeltanoProtocols.Model, Protocol):
+    class DbtSourceFreshness(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -142,7 +143,7 @@ class FlextDbtLdapProtocolsDbt:
             ...
 
     @runtime_checkable
-    class DbtSourceDefinition(FlextMeltanoProtocols.Model, Protocol):
+    class DbtSourceDefinition(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -161,7 +162,7 @@ class FlextDbtLdapProtocolsDbt:
             ...
 
     @runtime_checkable
-    class DbtConfig(FlextMeltanoProtocols.Model, Protocol):
+    class DbtConfig(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
