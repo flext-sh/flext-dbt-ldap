@@ -7,39 +7,38 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_dbt_ldap._models.config import FlextModelsDbtLdapConfig
-    from flext_dbt_ldap._models.dbt import FlextModelsDbtLdapDbt
-    from flext_dbt_ldap._models.dimensions import FlextModelsDbtLdapDimensions
-    from flext_dbt_ldap._models.results import FlextModelsDbtLdapResults
-    from flext_dbt_ldap._models.schema import FlextModelsDbtLdapSchema
-    from flext_dbt_ldap._models.shared import FlextModelsDbtLdapShared
+    from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
+    from flext_dbt_ldap._models.dbt import FlextDbtLdapModelsDbt
+    from flext_dbt_ldap._models.dimensions import FlextDbtLdapModelsDimensions
+    from flext_dbt_ldap._models.results import FlextDbtLdapModelsResults
+    from flext_dbt_ldap._models.schema import FlextDbtLdapModelsSchema
+    from flext_dbt_ldap._models.shared import FlextDbtLdapModelsShared
 
 
 __all__: tuple[str, ...] = (
-    "FlextModelsDbtLdapConfig",
-    "FlextModelsDbtLdapDbt",
-    "FlextModelsDbtLdapDimensions",
-    "FlextModelsDbtLdapResults",
-    "FlextModelsDbtLdapSchema",
-    "FlextModelsDbtLdapShared",
+    "FlextDbtLdapModelsConfig",
+    "FlextDbtLdapModelsDbt",
+    "FlextDbtLdapModelsDimensions",
+    "FlextDbtLdapModelsResults",
+    "FlextDbtLdapModelsSchema",
+    "FlextDbtLdapModelsShared",
 )
 
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({
-        "FlextModelsDbtLdapConfig": ".config",
-        "FlextModelsDbtLdapDbt": ".dbt",
-        "FlextModelsDbtLdapDimensions": ".dimensions",
-        "FlextModelsDbtLdapResults": ".results",
-        "FlextModelsDbtLdapSchema": ".schema",
-        "FlextModelsDbtLdapShared": ".shared",
-    }),
+    {
+        "FlextDbtLdapModelsConfig": ".config",
+        "FlextDbtLdapModelsDbt": ".dbt",
+        "FlextDbtLdapModelsDimensions": ".dimensions",
+        "FlextDbtLdapModelsResults": ".results",
+        "FlextDbtLdapModelsSchema": ".schema",
+        "FlextDbtLdapModelsShared": ".shared",
+    },
     public_exports=__all__,
 )

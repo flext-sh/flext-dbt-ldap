@@ -7,20 +7,38 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_dbt_ldap._protocols.base import FlextDbtLdapProtocolsBase
+    from flext_dbt_ldap._protocols.dbt import FlextDbtLdapProtocolsDbt
+    from flext_dbt_ldap._protocols.dimensions import FlextDbtLdapProtocolsDimensions
+    from flext_dbt_ldap._protocols.results import FlextDbtLdapProtocolsResults
+    from flext_dbt_ldap._protocols.schema import FlextDbtLdapProtocolsSchema
+    from flext_dbt_ldap._protocols.shared import FlextDbtLdapProtocolsShared
 
 
-__all__: tuple[str, ...] = ("FlextDbtLdapProtocolsBase",)
+__all__: tuple[str, ...] = (
+    "FlextDbtLdapProtocolsBase",
+    "FlextDbtLdapProtocolsDbt",
+    "FlextDbtLdapProtocolsDimensions",
+    "FlextDbtLdapProtocolsResults",
+    "FlextDbtLdapProtocolsSchema",
+    "FlextDbtLdapProtocolsShared",
+)
 
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({"FlextDbtLdapProtocolsBase": ".base"}),
+    {
+        "FlextDbtLdapProtocolsBase": ".base",
+        "FlextDbtLdapProtocolsDbt": ".dbt",
+        "FlextDbtLdapProtocolsDimensions": ".dimensions",
+        "FlextDbtLdapProtocolsResults": ".results",
+        "FlextDbtLdapProtocolsSchema": ".schema",
+        "FlextDbtLdapProtocolsShared": ".shared",
+    },
     public_exports=__all__,
 )

@@ -29,7 +29,7 @@ This section is generated from public exports and real docstrings.
 
 - Primary facades: `FlextDbtLdap`, `FlextDbtLdapConfig`, `FlextDbtLdapConstants`,
   `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
-  `FlextDbtLdapServiceBase` (+4 more)
+  `FlextDbtLdapServiceBase` (+5 more)
 - Generated module pages: `9`
 
 Back to [project docs](../index.md).

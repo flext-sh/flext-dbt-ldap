@@ -13,10 +13,10 @@ from typing import Annotated
 from flext_meltano import m
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap._models import FlextModelsDbtLdapShared
+from flext_dbt_ldap._models import FlextDbtLdapModelsShared
 
 
-class FlextModelsDbtLdapResults(FlextModelsDbtLdapShared):
+class FlextDbtLdapModelsResults(FlextDbtLdapModelsShared):
     """Project-specific result models for dbt-ldap."""
 
     class ValidationMetrics(m.Value):
@@ -129,4 +129,4 @@ class FlextModelsDbtLdapResults(FlextModelsDbtLdapShared):
         ] = c.DEFAULT_EMPTY_STRING
 
 
-__all__: list[str] = ["FlextModelsDbtLdapResults"]
+__all__: list[str] = ["FlextDbtLdapModelsResults"]

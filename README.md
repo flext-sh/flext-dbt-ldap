@@ -57,7 +57,7 @@ required validation.
   classes listed under Module Map above.
 - Public extensions exposed by this project: `FlextDbtLdap`, `FlextDbtLdapConfig`,
   `FlextDbtLdapConstants`, `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
-  `FlextDbtLdapServiceBase` (+4 more).
+  `FlextDbtLdapServiceBase` (+5 more).
 - Library abstraction boundaries: see the project `AGENTS.md` and the referenced parent
   architecture rules.
 

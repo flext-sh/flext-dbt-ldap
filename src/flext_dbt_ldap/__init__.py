@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
@@ -33,7 +32,7 @@ if TYPE_CHECKING:
     from flext_dbt_ldap.cli import main
     from flext_dbt_ldap.config_models import FlextDbtLdapModelsConfigNamespace
     from flext_dbt_ldap.constants import FlextDbtLdapConstants, c
-    from flext_dbt_ldap.models import FlextModelsDbtLdap, m
+    from flext_dbt_ldap.models import FlextDbtLdapModels, m
     from flext_dbt_ldap.protocols import FlextDbtLdapProtocols, p
     from flext_dbt_ldap.typings import FlextDbtLdapTypes, t
     from flext_dbt_ldap.utilities import FlextDbtLdapUtilities, u
@@ -43,6 +42,7 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdap",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConstants",
+    "FlextDbtLdapModels",
     "FlextDbtLdapModelsConfigNamespace",
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
@@ -50,7 +50,6 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapVersion",
-    "FlextModelsDbtLdap",
     "__author__",
     "__author_email__",
     "__description__",
@@ -79,10 +78,11 @@ __all__: tuple[str, ...] = (
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({
+    {
         "FlextDbtLdap": ".api",
         "FlextDbtLdapConfig": "._config",
         "FlextDbtLdapConstants": ".constants",
+        "FlextDbtLdapModels": ".models",
         "FlextDbtLdapModelsConfigNamespace": ".config_models",
         "FlextDbtLdapProtocols": ".protocols",
         "FlextDbtLdapServiceBase": ".base",
@@ -90,7 +90,6 @@ install_lazy_exports(
         "FlextDbtLdapTypes": ".typings",
         "FlextDbtLdapUtilities": ".utilities",
         "FlextDbtLdapVersion": ".__version__",
-        "FlextModelsDbtLdap": ".models",
         "__author__": ".__version__",
         "__author_email__": ".__version__",
         "__description__": ".__version__",
@@ -113,7 +112,7 @@ install_lazy_exports(
         "t": ".typings",
         "u": ".utilities",
         "x": "flext_meltano",
-    }),
+    },
     public_exports=__all__,
 )
 

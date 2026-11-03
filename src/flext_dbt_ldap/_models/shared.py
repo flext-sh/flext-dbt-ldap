@@ -14,7 +14,7 @@ from flext_meltano import m
 from flext_dbt_ldap import c, t
 
 
-class FlextModelsDbtLdapShared:
+class FlextDbtLdapModelsShared:
     """Shared internal model bases reused across dbt-ldap model mixins."""
 
     class DbtSerializable(m.Entity):
@@ -51,4 +51,4 @@ class FlextModelsDbtLdapShared:
         ] = None
 
 
-__all__: list[str] = ["FlextModelsDbtLdapShared"]
+__all__: list[str] = ["FlextDbtLdapModelsShared"]

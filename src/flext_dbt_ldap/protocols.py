@@ -10,13 +10,27 @@ from __future__ import annotations
 from flext_ldap import p as flext_ldap_p
 from flext_meltano import p as flext_meltano_p
 
-from flext_dbt_ldap._protocols import FlextDbtLdapProtocolsBase
+from flext_dbt_ldap._protocols import (
+    FlextDbtLdapProtocolsBase,
+    FlextDbtLdapProtocolsDbt,
+    FlextDbtLdapProtocolsDimensions,
+    FlextDbtLdapProtocolsResults,
+    FlextDbtLdapProtocolsSchema,
+    FlextDbtLdapProtocolsShared,
+)
 
 
 class FlextDbtLdapProtocols(flext_meltano_p, flext_ldap_p):
     """DBT LDAP protocols extending LDAP and Meltano protocols."""
 
-    class DbtLdap(FlextDbtLdapProtocolsBase):
+    class DbtLdap(
+        FlextDbtLdapProtocolsBase,
+        FlextDbtLdapProtocolsDbt,
+        FlextDbtLdapProtocolsDimensions,
+        FlextDbtLdapProtocolsResults,
+        FlextDbtLdapProtocolsSchema,
+        FlextDbtLdapProtocolsShared,
+    ):
         """DBT domain protocols."""
 
 

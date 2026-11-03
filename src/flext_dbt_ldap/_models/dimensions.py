@@ -12,14 +12,14 @@ from typing import Annotated, Self
 from flext_ldap import m, u
 
 from flext_dbt_ldap import c, t
-from flext_dbt_ldap._models import FlextModelsDbtLdapShared
+from flext_dbt_ldap._models import FlextDbtLdapModelsShared
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
 
 
-class FlextModelsDbtLdapDimensions(FlextModelsDbtLdapShared):
+class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):
     """Directory-backed dimensions and facts for dbt-ldap."""
 
-    class UserDimension(FlextModelsDbtLdapShared.DbtDimensionBase):
+    class UserDimension(FlextDbtLdapModelsShared.DbtDimensionBase):
         """Canonical user dimension."""
 
         user_id: Annotated[str, m.Field(description="Canonical user identifier")]
@@ -107,7 +107,7 @@ class FlextModelsDbtLdapDimensions(FlextModelsDbtLdapShared):
                 ),
             )
 
-    class GroupDimension(FlextModelsDbtLdapShared.DbtDimensionBase):
+    class GroupDimension(FlextDbtLdapModelsShared.DbtDimensionBase):
         """Canonical group dimension."""
 
         group_id: Annotated[str, m.Field(description="Canonical group identifier")]
@@ -186,7 +186,7 @@ class FlextModelsDbtLdapDimensions(FlextModelsDbtLdapShared):
                 ),
             )
 
-    class MembershipFact(FlextModelsDbtLdapShared.DbtSerializable):
+    class MembershipFact(FlextDbtLdapModelsShared.DbtSerializable):
         """Canonical membership fact."""
 
         user_dn: Annotated[str, m.Field(description="Member distinguished name")]
@@ -225,4 +225,4 @@ class FlextModelsDbtLdapDimensions(FlextModelsDbtLdapShared):
             return self
 
 
-__all__: list[str] = ["FlextModelsDbtLdapDimensions"]
+__all__: list[str] = ["FlextDbtLdapModelsDimensions"]

@@ -9,8 +9,8 @@ from __future__ import annotations
 from flext_dbt_ldap import FlextDbtLdapModelsConfigNamespace
 
 
-class FlextModelsDbtLdapConfig(FlextDbtLdapModelsConfigNamespace):
+class FlextDbtLdapModelsConfig(FlextDbtLdapModelsConfigNamespace):
     """Expose the single configuration schema owner through the model family."""
 
 
-__all__: list[str] = ["FlextModelsDbtLdapConfig"]
+__all__: list[str] = ["FlextDbtLdapModelsConfig"]
