@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import pytest
 from packaging.version import Version
 
 from flext_dbt_ldap import (
@@ -20,7 +19,7 @@ from flext_dbt_ldap import (
     __version_info__,
 )
 from flext_dbt_ldap.__version__ import __version__
-from tests import tm
+from tests import c, tm
 
 
 class TestsFlextDbtLdapVersion:
@@ -45,7 +44,7 @@ class TestsFlextDbtLdapVersion:
         tm.that(__version_info__, eq=Version(__version__).release)
 
     @staticmethod
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         "field_value",
         [
             __title__,

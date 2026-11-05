@@ -78,7 +78,7 @@ class TestsFlextDbtLdapServicesSync:
     # Incremental bookmark → outgoing filter + persisted state
     # ------------------------------------------------------------------ #
 
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         ("sync_method", "sync_key", "expected_filter"),
         [
             (
@@ -116,7 +116,7 @@ class TestsFlextDbtLdapServicesSync:
         tm.ok(persisted.endswith("Z"))
         tm.that(persisted, gt="20250101000000Z")
 
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         ("sync_method", "sync_key", "base_filter"),
         [
             ("sync_users_to_warehouse", c.DbtLdap.USERS, c.DbtLdap.FILTER_USER),

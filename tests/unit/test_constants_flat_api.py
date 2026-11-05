@@ -13,8 +13,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import pytest
-
 from tests import c, m, p, t, tm, u
 
 
@@ -24,7 +22,7 @@ class TestsFlextDbtLdapConstantsFlatApi:
     # --- Flat constants surface (public contract) --------------------------
 
     @staticmethod
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         ("actual", "expected"),
         [
             (c.DbtLdap.CN, c.Ldap.AttributeName.COMMON_NAME),
