@@ -10,13 +10,8 @@ from __future__ import annotations
 from collections.abc import MutableMapping, Sequence
 from pathlib import Path
 
-from flext_dbt_ldap.constants import c
-from flext_dbt_ldap.models import m
-from flext_dbt_ldap.protocols import p
-from flext_dbt_ldap.result import r
+from flext_dbt_ldap import c, m, p, r, t, u
 from flext_dbt_ldap.services import FlextDbtLdapClient
-from flext_dbt_ldap.typings import t
-from flext_dbt_ldap.utilities import u
 
 
 class FlextDbtLdapSync(FlextDbtLdapClient):
