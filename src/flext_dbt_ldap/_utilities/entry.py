@@ -11,10 +11,11 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from flext_ldap import u as ul
-from flext_meltano import u
 
-from flext_dbt_ldap import c, t
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesMacros
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.typings import t
+from flext_dbt_ldap.utilities import u
 
 if TYPE_CHECKING:
     from flext_ldif import m as lm

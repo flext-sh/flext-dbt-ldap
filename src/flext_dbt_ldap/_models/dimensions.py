@@ -9,11 +9,13 @@ from __future__ import annotations
 
 from typing import Annotated, Self
 
-from flext_ldap import m, u
+from flext_ldap import m
 
-from flext_dbt_ldap import c, t
 from flext_dbt_ldap._models import FlextDbtLdapModelsShared
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesEntry
+from flext_dbt_ldap.constants import c
+from flext_dbt_ldap.typings import t
+from flext_dbt_ldap.utilities import u
 
 
 class FlextDbtLdapModelsDimensions(FlextDbtLdapModelsShared):

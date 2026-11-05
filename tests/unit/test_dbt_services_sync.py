@@ -257,7 +257,7 @@ class TestsFlextDbtLdapServicesSync:
             },
         })
 
-        with pytest.raises(TypeError, match="Sync state file values must be strings"):
+        with u.Tests.raises(TypeError, match="Sync state file values must be strings"):
             _ = FlextDbtLdap(settings=settings)
 
     # ------------------------------------------------------------------ #

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import pytest
 
-from tests import c, m, p, t, tm
+from tests import c, m, p, t, tm, u
 
 
 class TestsFlextDbtLdapConstantsFlatApi:
@@ -140,13 +140,13 @@ class TestsFlextDbtLdapConstantsFlatApi:
     @staticmethod
     def test_construction_rejects_blank_identity_fields() -> None:
         """Test construction rejects blank identity fields."""
-        with pytest.raises(m.ValidationError):
+        with u.Tests.raises(m.ValidationError):
             m.DbtLdap.UserDimension(user_id="", common_name="")
 
     @staticmethod
     def test_construction_requires_common_name() -> None:
         """Test construction requires common name."""
-        with pytest.raises(m.ValidationError):
+        with u.Tests.raises(m.ValidationError):
             m.DbtLdap.UserDimension.model_validate({c.ContextKey.USER_ID: "jdoe"})
 
     # --- UserDimension public serialization --------------------------------

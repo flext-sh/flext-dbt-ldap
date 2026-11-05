@@ -7,10 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import pytest
-
 from flext_dbt_ldap import main
-from tests import tm
+from tests import tm, u
 
 
 class TestsFlextDbtLdapCli:
@@ -19,7 +17,7 @@ class TestsFlextDbtLdapCli:
     @staticmethod
     def test_unknown_subcommand_exits_with_failure() -> None:
         """An unsupported dbt subcommand propagates the base failure exit."""
-        with pytest.raises(SystemExit) as exit_info:
+        with u.Tests.raises(SystemExit) as exit_info:
             main(["not-a-dbt-command"])
 
         tm.that(exit_info.value.code, eq=1)
