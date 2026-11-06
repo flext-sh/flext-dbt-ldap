@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import pytest
 from packaging.version import Version
 
 from flext_dbt_ldap import (
@@ -20,7 +19,7 @@ from flext_dbt_ldap import (
     __version_info__,
 )
 from flext_dbt_ldap.__version__ import __version__
-from tests import tm
+from tests import c, tm
 
 
 class TestsFlextDbtLdapVersion:
@@ -37,7 +36,7 @@ class TestsFlextDbtLdapVersion:
         """Test version info is three integer release tuple."""
         tm.that(__version_info__, is_=tuple)
         tm.that(len(__version_info__), eq=3)
-        assert all(isinstance(part, int) for part in __version_info__)
+        tm.that(all(isinstance(part, int) for part in __version_info__), truth=True)
 
     @staticmethod
     def test_version_string_and_tuple_are_aligned() -> None:
@@ -45,7 +44,7 @@ class TestsFlextDbtLdapVersion:
         tm.that(__version_info__, eq=Version(__version__).release)
 
     @staticmethod
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         "field_value",
         [
             __title__,

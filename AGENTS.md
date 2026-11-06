@@ -24,7 +24,7 @@ dbt models for LDAP data transformation. Thin driver over `flext-meltano` dbt ru
 src/flext_dbt_ldap/
 ├── api.py            # FlextDbtLdap (.execute)
 ├── base.py
-├── services/         # client.py (FlextDbtLdapClientMixin), sync.py
+├── services/         # client.py (FlextDbtLdapClient), sync.py
 ├── constants.py typings.py protocols.py models.py utilities.py   # AUTO-GENERATED facets
 └── _constants/ _models/ _utilities/
 ```
@@ -34,12 +34,12 @@ src/flext_dbt_ldap/
 | Symbol                    | Kind  | Location             | Role                                      |
 | ------------------------- | ----- | -------------------- | ----------------------------------------- |
 | `FlextDbtLdap`            | class | `api.py`             | facade (`execute`)                        |
-| `FlextDbtLdapClientMixin` | class | `services/client.py` | `run_full_pipeline`, `transform_with_dbt` |
+| `FlextDbtLdapClient` | class | `services/client.py` | `run_full_pipeline`, `transform_with_dbt` |
 
 ## Conventions (specific to this package)
 
 - dbt connection profiles are **typed `m.*` models**, not dict roundtrips.
-- Config/settings canonical pattern: ADR-012.
+- Config/settings canonical pattern: ADR-005 (SSOT) and ADR-024 (DI config contract).
 - Codemod governance (ast-grep + make mod): ADR-014.
 
 ## Commands

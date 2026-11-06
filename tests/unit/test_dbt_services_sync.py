@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import InMemoryLdapDirectory, c, m, t, tm, tu, u
+from tests import InMemoryLdapDirectory, c, m, p, t, tm, tu, u
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -40,11 +40,11 @@ class TestsFlextDbtLdapServicesSync:
     # ------------------------------------------------------------------ #
 
     @staticmethod
-    def _directory_entries(entry_count: int) -> list[m.Ldif.Entry]:
+    def _directory_entries(entry_count: int) -> list[p.Ldif.Entry]:
         """Build real directory entries served by the in-memory LDAP client.
 
         Returns:
-            The resulting ``list[m.Ldif.Entry]``.
+            The resulting ``list[p.Ldif.Entry]``.
 
         """
         base_dn = c.DbtLdap.Tests.DIRECTORY_BASE_DN
@@ -78,7 +78,7 @@ class TestsFlextDbtLdapServicesSync:
     # Incremental bookmark → outgoing filter + persisted state
     # ------------------------------------------------------------------ #
 
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         ("sync_method", "sync_key", "expected_filter"),
         [
             (
@@ -113,10 +113,10 @@ class TestsFlextDbtLdapServicesSync:
         tm.ok(result)
         tm.that(self._sent_filter(service.directory()), eq=expected_filter)
         persisted = str(self._read_sync_state(state_file)[sync_key])
-        tm.that(persisted.endswith("Z"), eq=True)
+        tm.ok(persisted.endswith("Z"))
         tm.that(persisted, gt="20250101000000Z")
 
-    @pytest.mark.parametrize(
+    @c.Tests.MARK.parametrize(
         ("sync_method", "sync_key", "base_filter"),
         [
             ("sync_users_to_warehouse", c.DbtLdap.USERS, c.DbtLdap.FILTER_USER),
@@ -142,7 +142,7 @@ class TestsFlextDbtLdapServicesSync:
         tm.that(self._sent_filter(service.directory()), eq=base_filter)
         # A fresh bookmark is recorded so the next run can be incremental.
         recorded = str(self._read_sync_state(state_file)[sync_key])
-        tm.that(recorded.endswith("Z"), eq=True)
+        tm.ok(recorded.endswith("Z"))
 
     def test_successful_sync_reports_extracted_entry_count(
         self,
@@ -170,7 +170,7 @@ class TestsFlextDbtLdapServicesSync:
         result = service.run_full_data_warehouse_sync()
 
         tm.ok(result)
-        tm.that(result.value.overall_success, eq=True)
+        tm.ok(result.value.overall_success)
         tm.that(result.value.successful_components, eq=result.value.total_components)
 
     # ------------------------------------------------------------------ #
@@ -192,7 +192,7 @@ class TestsFlextDbtLdapServicesSync:
         result = service.sync_users_to_warehouse(incremental=True)
 
         tm.fail(result)
-        tm.that(state_file.is_file(), eq=False)
+        tm.fail(state_file.is_file())
 
     @staticmethod
     def test_sync_users_fails_when_ldap_extraction_fails(
@@ -207,7 +207,7 @@ class TestsFlextDbtLdapServicesSync:
 
         tm.fail(result)
         # A failed extraction must not persist any bookmark state.
-        tm.that(state_file.exists(), eq=False)
+        tm.fail(state_file.exists())
 
     @staticmethod
     def test_run_dbt_models_propagates_underlying_run_models_failure(
@@ -257,7 +257,7 @@ class TestsFlextDbtLdapServicesSync:
             },
         })
 
-        with pytest.raises(TypeError, match="Sync state file values must be strings"):
+        with u.Tests.raises(TypeError, match="Sync state file values must be strings"):
             _ = FlextDbtLdap(settings=settings)
 
     # ------------------------------------------------------------------ #

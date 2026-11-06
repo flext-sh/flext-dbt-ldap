@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_dbt_ldap import FlextDbtLdapServiceBase
-from tests import m, p
+from tests import m, p, tm
 
 
 class TestsFlextDbtLdapConnectionProfile:
@@ -17,15 +17,19 @@ class TestsFlextDbtLdapConnectionProfile:
     @staticmethod
     def test_connection_profile_returns_typed_ldap_wire_shape() -> None:
         """Test connection profile returns typed ldap wire shape."""
-        profile = FlextDbtLdapServiceBase().connection_profile
+        service = FlextDbtLdapServiceBase()
+        profile = service.connection_profile
 
-        assert isinstance(profile, m.DbtLdap.DbtConnectionProfile)
-        assert isinstance(profile, p.Meltano.DbtConnectionProfile)
-        assert profile.model_dump() == {
-            "type": "ldap",
-            "host": profile.host,
-            "port": profile.port,
-            "use_tls": profile.use_tls,
-            "base_dn": profile.base_dn,
-            "project": "dbt-ldap",
-        }
+        tm.that(profile, is_=m.DbtLdap.DbtConnectionProfile)
+        tm.that(profile, is_=p.Meltano.DbtConnectionProfile)
+        tm.that(
+            profile.model_dump(),
+            eq={
+                "type": "ldap",
+                "host": service.settings.Ldap.host,
+                "port": service.settings.Ldap.port,
+                "use_tls": service.settings.Ldap.use_tls,
+                "base_dn": service.settings.DbtLdap.ldap_base_dn,
+                "project": service.dbt_project_name,
+            },
+        )

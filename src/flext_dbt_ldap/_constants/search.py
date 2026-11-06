@@ -6,10 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Final
-
-if TYPE_CHECKING:
-    from flext_dbt_ldap import t
+from typing import ClassVar, Final
 
 
 class FlextDbtLdapConstantsSearch:
@@ -19,13 +16,13 @@ class FlextDbtLdapConstantsSearch:
     FILTER_GROUP: Final[str] = "(objectClass=group)"
     FILTER_MEMBERSHIP: Final[str] = "(|(objectClass=person)(objectClass=group))"
 
-    SEARCH_GROUP: ClassVar[t.VariadicTuple[str]] = (
+    SEARCH_GROUP: ClassVar[tuple[str, ...]] = (
         "cn",
         "description",
         "member",
         "groupType",
     )
-    SEARCH_MEMBERSHIP: ClassVar[t.VariadicTuple[str]] = (
+    SEARCH_MEMBERSHIP: ClassVar[tuple[str, ...]] = (
         "cn",
         "member",
         "memberOf",

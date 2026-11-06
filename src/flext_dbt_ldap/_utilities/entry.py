@@ -7,9 +7,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from flext_ldap import FlextLdapUtilities as ul
+from flext_ldap import u as ul
 from flext_meltano import u
 
 from flext_dbt_ldap import c, t
@@ -87,4 +88,4 @@ class FlextDbtLdapUtilitiesEntry:
         )
 
 
-__all__: t.StrSequence = ("FlextDbtLdapUtilitiesEntry",)
+__all__: Sequence[str] = ("FlextDbtLdapUtilitiesEntry",)

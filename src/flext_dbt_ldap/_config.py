@@ -12,25 +12,26 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from flext_meltano import FlextMeltanoConfig, m
+from flext_meltano import FlextMeltanoConfig
+from pydantic import BaseModel, ConfigDict, Field
 
-from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
+from flext_dbt_ldap.config_models import FlextDbtLdapModelsConfigNamespace
 
 
 class FlextDbtLdapConfig(FlextMeltanoConfig):
     """DbtLdap config auto-loaded model-less from ``config/*.yaml``."""
 
-    class Namespace(m.BaseModel):
+    class Namespace(BaseModel):
         """Open, frozen payload for the owned configuration domain."""
 
-        model_config = m.ConfigDict(extra="allow", frozen=True)
+        model_config = ConfigDict(extra="allow", frozen=True)
 
     DbtLdap: Annotated[
-        FlextDbtLdapModelsConfig.DbtLdapNamespace,
-        m.Field(
+        FlextDbtLdapModelsConfigNamespace.DbtLdapNamespace,
+        Field(
             description="Open namespace exposing ``config/*.yaml`` under ``DbtLdap``.",
         ),
-    ] = FlextDbtLdapModelsConfig.DbtLdapNamespace()
+    ] = FlextDbtLdapModelsConfigNamespace.DbtLdapNamespace()
 
 
 config: FlextDbtLdapConfig = FlextDbtLdapConfig.fetch_global()

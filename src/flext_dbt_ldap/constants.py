@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT DBT LDAP Constants - Thin MRO Facade.
 
 from flext_core import FlextConstants as Constants
@@ -8,8 +9,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import FlextLdapConstants
-from flext_meltano import FlextMeltanoConstants
+from flext_ldap import c as flext_ldap_c
+from flext_meltano import c as flext_meltano_c
 
 from flext_dbt_ldap._constants import (
     FlextDbtLdapConstantsAttributes,
@@ -19,7 +20,7 @@ from flext_dbt_ldap._constants import (
 )
 
 
-class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
+class FlextDbtLdapConstants(flext_meltano_c, flext_ldap_c):
     """LDAP DBT transformation-specific constants following FLEXT unified pattern.
 
     This class acts as a facade, composing all constant subclasses via MRO.
@@ -34,14 +35,13 @@ class FlextDbtLdapConstants(FlextMeltanoConstants, FlextLdapConstants):
     """
 
     class DbtLdap(
-        FlextDbtLdapConstantsTransformation,
-        FlextDbtLdapConstantsSearch,
         FlextDbtLdapConstantsAttributes,
         FlextDbtLdapConstantsBase,
+        FlextDbtLdapConstantsSearch,
+        FlextDbtLdapConstantsTransformation,
     ):
         """DBT LDAP constants namespace composed over the family base."""
 
 
 c = FlextDbtLdapConstants
-
-__all__ = ("FlextDbtLdapConstants", "c")
+__all__: list[str] = ["FlextDbtLdapConstants", "c"]

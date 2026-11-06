@@ -9,19 +9,20 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Annotated
 
 # NOTE (multi-agent): mro-rn88 — inherit FlextLdapSettings so LDAP connection scalars
 # come from settings.Ldap.* (SSOT); FlextMeltanoSettings adds the dbt/meltano surface.
 from flext_ldap import FlextLdapSettings
-from flext_meltano import FlextMeltanoSettings, m, t
+from flext_meltano import FlextMeltanoSettings, m
 
 
 def _empty_list_str() -> list[str]:
     return []
 
 
-def _empty_dict_str_str() -> t.StrMapping:
+def _empty_dict_str_str() -> Mapping[str, str]:
     return {}
 
 
@@ -58,13 +59,13 @@ class FlextDbtLdapSettings(FlextLdapSettings, FlextMeltanoSettings):
             ),
         ] = m.Field(default_factory=_empty_list_str)
         ldap_attribute_mapping: Annotated[
-            t.StrMapping,
+            Mapping[str, str],
             m.Field(
                 description="Mapping of LDAP attributes to DBT model attributes",
             ),
         ] = m.Field(default_factory=_empty_dict_str_str)
         ldap_schema_mapping: Annotated[
-            t.StrMapping,
+            Mapping[str, str],
             m.Field(
                 description="Mapping of LDAP schemas to DBT tables",
             ),
