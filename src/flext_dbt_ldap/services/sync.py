@@ -119,7 +119,7 @@ class FlextDbtLdapSync(FlextDbtLdapClient):
         search_base: str | None = None,
         *,
         incremental: bool = False,
-    ) -> p.Result[p.DbtLdap.DbtLdapPipelineResult]:
+    ) -> p.Result[m.DbtLdap.DbtLdapPipelineResult]:
         """Synchronize LDAP groups to data warehouse.
 
         Args:
@@ -128,7 +128,7 @@ class FlextDbtLdapSync(FlextDbtLdapClient):
                 stored ``groups`` bookmark.
 
         Returns:
-            The resulting ``p.Result[p.DbtLdap.DbtLdapPipelineResult]``.
+            The resulting ``p.Result[m.DbtLdap.DbtLdapPipelineResult]``.
 
         """
 
@@ -159,15 +159,15 @@ class FlextDbtLdapSync(FlextDbtLdapClient):
                     successful=True,
                 )
                 if update_result.failure:
-                    return r[p.DbtLdap.DbtLdapPipelineResult].from_failure(
+                    return r[m.DbtLdap.DbtLdapPipelineResult].from_failure(
                         update_result,
                     )
-            return result
+            return result.map(m.DbtLdap.DbtLdapPipelineResult.model_validate)
 
         try:
             return _run_sync_groups_to_warehouse()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
-            return r[p.DbtLdap.DbtLdapPipelineResult].fail(
+            return r[m.DbtLdap.DbtLdapPipelineResult].fail(
                 f"Group sync error: {exc}",
                 exception=exc,
             )
