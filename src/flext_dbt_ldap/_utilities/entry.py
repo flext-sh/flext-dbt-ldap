@@ -17,7 +17,7 @@ from flext_dbt_ldap import c, t
 from flext_dbt_ldap._utilities import FlextDbtLdapUtilitiesMacros
 
 if TYPE_CHECKING:
-    from flext_ldif import m as lm
+    from flext_ldif import p as lp
 
 
 class FlextDbtLdapUtilitiesEntry:
@@ -50,7 +50,7 @@ class FlextDbtLdapUtilitiesEntry:
             return True
 
     @classmethod
-    def group_entry(cls, entry: lm.Ldif.Entry) -> bool:
+    def group_entry(cls, entry: lp.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured group object classes.
 
         Args:
@@ -69,7 +69,7 @@ class FlextDbtLdapUtilitiesEntry:
         )
 
     @classmethod
-    def user_entry(cls, entry: lm.Ldif.Entry) -> bool:
+    def user_entry(cls, entry: lp.Ldif.Entry) -> bool:
         """Check whether an entry matches the configured user object classes.
 
         Args:
