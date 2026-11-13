@@ -8,8 +8,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import m as flext_ldap_m
-from flext_meltano import m as flext_meltano_m
+from flext_ldap import FlextLdapModels
+from flext_meltano import FlextMeltanoModels
 
 from flext_dbt_ldap._models import (
     FlextDbtLdapModelsConfig,
@@ -20,7 +20,7 @@ from flext_dbt_ldap._models import (
 )
 
 
-class FlextDbtLdapModels(flext_meltano_m, flext_ldap_m):
+class FlextDbtLdapModels(FlextMeltanoModels, FlextLdapModels):
     """Project-specific dbt-ldap models composed on top of parent facades."""
 
     class DbtLdap(

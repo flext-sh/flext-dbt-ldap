@@ -11,8 +11,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldap import u as flext_ldap_u
-from flext_meltano import u as flext_meltano_u
+from flext_ldap import FlextLdapUtilities
+from flext_meltano import FlextMeltanoUtilities
 
 from flext_dbt_ldap._utilities import (
     FlextDbtLdapUtilitiesIntegration,
@@ -20,7 +20,7 @@ from flext_dbt_ldap._utilities import (
 )
 
 
-class FlextDbtLdapUtilities(flext_meltano_u, flext_ldap_u):
+class FlextDbtLdapUtilities(FlextMeltanoUtilities, FlextLdapUtilities):
     """Thin dbt-ldap utilities facade following the canonical MRO pattern."""
 
     class DbtLdap(
