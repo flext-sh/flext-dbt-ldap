@@ -26,7 +26,7 @@
   `FlextDbtLdapModels`, `FlextDbtLdapModelsConfigNamespace`, `FlextDbtLdapProtocols`,
   `FlextDbtLdapServiceBase`, `FlextDbtLdapSettings`, `FlextDbtLdapTypes`,
   `FlextDbtLdapUtilities` (+5 more)
-- Exported module shortcuts: _none_
+- Exported module shortcuts: *none*
 - Generated module pages: `9`
 
 ## Next Pages
