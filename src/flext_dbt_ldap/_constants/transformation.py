@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar, Final
+from typing import ClassVar
 
 from flext_meltano import c
 
@@ -14,24 +14,24 @@ from flext_meltano import c
 class FlextDbtLdapConstantsTransformation:
     """DBT-specific transformation configuration constants."""
 
-    STG_USERS: Final[str] = "stg_users"
-    DIM_USERS: Final[str] = "dim_users"
-    STG_GROUPS: Final[str] = "stg_groups"
-    DIM_GROUPS: Final[str] = "dim_groups"
-    FACT_MEMBERSHIPS: Final[str] = "fact_memberships"
+    STG_USERS: ClassVar[str] = "stg_users"
+    DIM_USERS: ClassVar[str] = "dim_users"
+    STG_GROUPS: ClassVar[str] = "stg_groups"
+    DIM_GROUPS: ClassVar[str] = "dim_groups"
+    FACT_MEMBERSHIPS: ClassVar[str] = "fact_memberships"
 
-    TIMESTAMP: Final[str] = "timestamp"
-    INTEGER: Final[str] = "integer"
-    TEXT: Final[str] = "text"
+    TIMESTAMP: ClassVar[str] = "timestamp"
+    INTEGER: ClassVar[str] = "integer"
+    TEXT: ClassVar[str] = "text"
 
-    DIRECT: Final[str] = "direct"
-    OPERATIONAL: Final[str] = "operational"
+    DIRECT: ClassVar[str] = "direct"
+    OPERATIONAL: ClassVar[str] = "operational"
 
-    DEFAULT_BATCH_SIZE: Final[int] = c.DEFAULT_SIZE
-    MAX_BATCH_SIZE: Final[int] = c.MAX_ITEMS
+    DEFAULT_BATCH_SIZE: ClassVar[int] = c.DEFAULT_SIZE
+    MAX_BATCH_SIZE: ClassVar[int] = c.MAX_ITEMS
 
-    DEFAULT_PROFILES_DIR: Final[str] = "./profiles"
-    DEFAULT_TARGET: Final[str] = "dev"
+    DEFAULT_PROFILES_DIR: ClassVar[str] = "./profiles"
+    DEFAULT_TARGET: ClassVar[str] = "dev"
     DEFAULT_MODEL_PATHS: ClassVar[tuple[str, ...]] = ("models",)
     DEFAULT_ANALYSIS_PATHS: ClassVar[tuple[str, ...]] = ("analyses",)
     DEFAULT_TEST_PATHS: ClassVar[tuple[str, ...]] = ("tests",)

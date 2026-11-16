@@ -6,15 +6,15 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar, Final
+from typing import ClassVar
 
 
 class FlextDbtLdapConstantsSearch:
     """Project-specific LDAP search filters and configurations."""
 
-    FILTER_USER: Final[str] = "(objectClass=person)"
-    FILTER_GROUP: Final[str] = "(objectClass=group)"
-    FILTER_MEMBERSHIP: Final[str] = "(|(objectClass=person)(objectClass=group))"
+    FILTER_USER: ClassVar[str] = "(objectClass=person)"
+    FILTER_GROUP: ClassVar[str] = "(objectClass=group)"
+    FILTER_MEMBERSHIP: ClassVar[str] = "(|(objectClass=person)(objectClass=group))"
 
     SEARCH_GROUP: ClassVar[tuple[str, ...]] = (
         "cn",
@@ -29,7 +29,7 @@ class FlextDbtLdapConstantsSearch:
         "uniqueMember",
     )
 
-    LDAPS_DEFAULT_PORT: Final[int] = 636
+    LDAPS_DEFAULT_PORT: ClassVar[int] = 636
 
 
 __all__: list[str] = ["FlextDbtLdapConstantsSearch"]
