@@ -41,4 +41,41 @@ install_lazy_exports(
         "FlextDbtLdapProtocolsShared": ".shared",
     },
     public_exports=__all__,
+    deferred_members={
+        "FlextDbtLdapProtocolsBase": ("DataFrameLike",),
+        "FlextDbtLdapProtocolsDbt": (
+            "DbtConnectionProfile",
+            "DbtProjectConfig",
+            "DbtSourceFreshness",
+            "DbtSourceDefinition",
+            "DbtConfig",
+        ),
+        "FlextDbtLdapProtocolsDimensions": (
+            "UserDimension",
+            "GroupDimension",
+            "MembershipFact",
+        ),
+        "FlextDbtLdapProtocolsResults": (
+            "ValidationMetrics",
+            "DbtRunStatus",
+            "DbtLdapPipelineResult",
+            "SyncResult",
+            "PerformanceAnalysis",
+            "ServiceStatus",
+            "AnalyticsReport",
+        ),
+        "FlextDbtLdapProtocolsSchema": (
+            "DbtModelDefinition",
+            "DbtTestConfig",
+            "TransformationConfig",
+            "TransformationRule",
+            "DataValidationConfig",
+            "LdapSchema",
+            "LdapQuery",
+        ),
+        "FlextDbtLdapProtocolsShared": (
+            "DbtSerializable",
+            "DbtDimensionBase",
+        ),
+    },
 )
