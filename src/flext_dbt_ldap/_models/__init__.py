@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import defer_lazy_bases, install_lazy_exports
+from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_dbt_ldap._models.config import FlextDbtLdapModelsConfig
@@ -41,52 +41,12 @@ install_lazy_exports(
         "FlextDbtLdapModelsShared": ".shared",
     },
     public_exports=__all__,
-    deferred_members={
-        "FlextDbtLdapModelsConfig": (),
-        "FlextDbtLdapModelsDbt": (
-            "DbtConnectionProfile",
-            "DbtProjectConfig",
-            "DbtSourceFreshness",
-            "DbtSourceDefinition",
-            "DbtConfig",
-        ),
-        "FlextDbtLdapModelsDimensions": (
-            "UserDimension",
-            "GroupDimension",
-            "MembershipFact",
-        ),
-        "FlextDbtLdapModelsResults": (
-            "ValidationMetrics",
-            "DbtRunStatus",
-            "DbtLdapPipelineResult",
-            "SyncResult",
-            "PerformanceAnalysis",
-            "ServiceStatus",
-            "AnalyticsReport",
-        ),
-        "FlextDbtLdapModelsSchema": (
-            "DbtModelDefinition",
-            "DbtTestConfig",
-            "TransformationConfig",
-            "TransformationRule",
-            "DataValidationConfig",
-            "LdapSchema",
-            "LdapQuery",
-        ),
-        "FlextDbtLdapModelsShared": (
-            "DbtSerializable",
-            "DbtDimensionBase",
-        ),
-    },
-)
-
-defer_lazy_bases(
-    __name__,
-    {
-        "FlextDbtLdapModelsConfig": (
-            ("flext_dbt_ldap", "FlextDbtLdapModelsConfigNamespace"),
-        ),
-        "FlextDbtLdapModelsDimensions": ((".", "FlextDbtLdapModelsShared"),),
-        "FlextDbtLdapModelsResults": ((".", "FlextDbtLdapModelsShared"),),
-    },
+    deferred_members=(
+        "FlextDbtLdapModelsConfig",
+        "FlextDbtLdapModelsDbt",
+        "FlextDbtLdapModelsDimensions",
+        "FlextDbtLdapModelsResults",
+        "FlextDbtLdapModelsSchema",
+        "FlextDbtLdapModelsShared",
+    ),
 )

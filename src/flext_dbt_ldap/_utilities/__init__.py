@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import defer_lazy_bases, install_lazy_exports
+from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_dbt_ldap._utilities.entry import FlextDbtLdapUtilitiesEntry
@@ -32,29 +32,9 @@ install_lazy_exports(
         "FlextDbtLdapUtilitiesMacros": ".macros",
     },
     public_exports=__all__,
-    deferred_members={
-        "FlextDbtLdapUtilitiesEntry": (
-            "_log",
-            "active_entry",
-            "group_entry",
-            "user_entry",
-        ),
-        "FlextDbtLdapUtilitiesIntegration": (
-            "_log",
-            "transform_groups",
-            "transform_memberships",
-            "transform_users",
-            "_extract_group_memberships",
-            "_extract_user_memberships",
-            "_transform_entries_to_dimensions",
-        ),
-        "FlextDbtLdapUtilitiesMacros": ("user_active",),
-    },
-)
-
-defer_lazy_bases(
-    __name__,
-    {
-        "FlextDbtLdapUtilitiesIntegration": ((".", "FlextDbtLdapUtilitiesEntry"),),
-    },
+    deferred_members=(
+        "FlextDbtLdapUtilitiesEntry",
+        "FlextDbtLdapUtilitiesIntegration",
+        "FlextDbtLdapUtilitiesMacros",
+    ),
 )

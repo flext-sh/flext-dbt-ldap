@@ -114,9 +114,7 @@ install_lazy_exports(
         "x": "flext_meltano",
     },
     public_exports=__all__,
-    deferred_members={
-        "FlextDbtLdapModelsConfigNamespace": ("DbtLdapNamespace",),
-    },
+    deferred_members=("FlextDbtLdapModelsConfigNamespace",),
 )
 
 if not TYPE_CHECKING:
