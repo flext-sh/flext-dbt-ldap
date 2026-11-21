@@ -11,30 +11,30 @@ from __future__ import annotations
 
 from collections.abc import Callable, MutableMapping
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from flext_tests import FlextTestsTypes
 
-from flext_dbt_ldap import FlextDbtLdapTypes
-from tests import InMemoryDbtRunnerLdap
+from tests import FlextDbtLdapTypes
+
+if TYPE_CHECKING:
+    from tests import InMemoryDbtRunnerLdap
 
 
 class TestsFlextDbtLdapTypes(FlextTestsTypes, FlextDbtLdapTypes):
     """Test types combining TestsFlextTypes with flext-dbt-ldap types."""
 
-    class DbtLdap(FlextDbtLdapTypes.DbtLdap):
-        """DbtLdap test types namespace."""
+    class Tests(FlextTestsTypes.Tests):
+        """Internal tests declarations."""
 
-        class Tests:
-            """Internal tests declarations."""
-
-            type SyncState = MutableMapping[str, str] | None
-            type ServiceFactory = Callable[
-                [Path, SyncState],
-                tuple[
-                    InMemoryDbtRunnerLdap,
-                    Path,
-                ],
-            ]
+        type SyncState = MutableMapping[str, str] | None
+        type ServiceFactory = Callable[
+            [Path, SyncState],
+            tuple[
+                InMemoryDbtRunnerLdap,
+                Path,
+            ],
+        ]
 
 
 t = TestsFlextDbtLdapTypes

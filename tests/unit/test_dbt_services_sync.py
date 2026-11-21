@@ -25,8 +25,18 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from flext_dbt_ldap import FlextDbtLdap, FlextDbtLdapSettings
-from tests import InMemoryLdapDirectory, c, m, p, t, tm, tu, u
+from tests import (
+    FlextDbtLdap,
+    FlextDbtLdapSettings,
+    InMemoryLdapDirectory,
+    c,
+    m,
+    p,
+    t,
+    tm,
+    tu,
+    u,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -47,7 +57,7 @@ class TestsFlextDbtLdapServicesSync:
             The resulting ``list[p.Ldif.Entry]``.
 
         """
-        base_dn = c.DbtLdap.Tests.DIRECTORY_BASE_DN
+        base_dn = c.Tests.DIRECTORY_BASE_DN
         return [
             m.Ldif.Entry(
                 dn=m.Ldif.DN(value=f"uid=user{index},{base_dn}"),
@@ -96,7 +106,7 @@ class TestsFlextDbtLdapServicesSync:
     def test_incremental_sync_applies_prior_bookmark_to_filter_and_advances_state(
         self,
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
         sync_method: str,
         sync_key: str,
         expected_filter: str,
@@ -126,7 +136,7 @@ class TestsFlextDbtLdapServicesSync:
     def test_first_incremental_run_scans_with_base_filter_then_records_bookmark(
         self,
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
         sync_method: str,
         sync_key: str,
         base_filter: str,
@@ -147,7 +157,7 @@ class TestsFlextDbtLdapServicesSync:
     def test_successful_sync_reports_extracted_entry_count(
         self,
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test successful sync reports extracted entry count."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
@@ -161,7 +171,7 @@ class TestsFlextDbtLdapServicesSync:
     def test_full_warehouse_sync_succeeds_across_all_components(
         self,
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test full warehouse sync succeeds across all components."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
@@ -180,7 +190,7 @@ class TestsFlextDbtLdapServicesSync:
     def test_sync_users_fails_when_state_persistence_fails(
         self,
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test sync users fails when state persistence fails."""
         service, state_file = dbt_ldap_service_factory(tmp_path, None)
@@ -197,7 +207,7 @@ class TestsFlextDbtLdapServicesSync:
     @staticmethod
     def test_sync_users_fails_when_ldap_extraction_fails(
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test sync users fails when ldap extraction fails."""
         service, state_file = dbt_ldap_service_factory(tmp_path, None)
@@ -212,7 +222,7 @@ class TestsFlextDbtLdapServicesSync:
     @staticmethod
     def test_run_dbt_models_propagates_underlying_run_models_failure(
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test run dbt models propagates underlying run models failure."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
@@ -226,7 +236,7 @@ class TestsFlextDbtLdapServicesSync:
     @staticmethod
     def test_run_dbt_models_reports_selected_models_on_success(
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test run dbt models reports selected models on success."""
         service, _ = dbt_ldap_service_factory(tmp_path, None)
@@ -243,7 +253,7 @@ class TestsFlextDbtLdapServicesSync:
     @staticmethod
     def test_service_init_rejects_non_string_sync_state_values(
         tmp_path: Path,
-        dbt_ldap_service_factory: t.DbtLdap.Tests.ServiceFactory,
+        dbt_ldap_service_factory: t.Tests.ServiceFactory,
     ) -> None:
         """Test service init rejects non string sync state values."""
         _ = dbt_ldap_service_factory
@@ -252,7 +262,7 @@ class TestsFlextDbtLdapServicesSync:
         # NOTE (multi-agent): mro-rn88 — project fields nest under DbtLdap namespace.
         settings = FlextDbtLdapSettings.model_validate({
             "DbtLdap": {
-                "ldap_base_dn": c.DbtLdap.Tests.DIRECTORY_BASE_DN,
+                "ldap_base_dn": c.Tests.DIRECTORY_BASE_DN,
                 "dbt_project_dir": str(tmp_path),
             },
         })

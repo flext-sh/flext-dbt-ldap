@@ -11,8 +11,7 @@ import pathlib
 
 import pytest
 
-from flext_dbt_ldap import FlextDbtLdapSettings
-from tests import InMemoryDbtRunnerLdap, c, t, tf, tm, tu
+from tests import FlextDbtLdapSettings, InMemoryDbtRunnerLdap, c, t, tf, tm, tu
 
 _env_stack_key: pytest.StashKey[contextlib.ExitStack] = pytest.StashKey()
 
@@ -40,23 +39,23 @@ def pytest_runtest_teardown(item: pytest.Item) -> None:
 
 
 @pytest.fixture
-def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
+def dbt_ldap_service_factory() -> t.Tests.ServiceFactory:
     """Build a real public facade instance with isolated sync-state storage.
 
     Returns:
-        The resulting ``t.DbtLdap.Tests.ServiceFactory``.
+        The resulting ``t.Tests.ServiceFactory``.
 
     """
 
     def factory(
         dbt_project_dir: pathlib.Path,
-        initial_state: t.DbtLdap.Tests.SyncState = None,
+        initial_state: t.Tests.SyncState = None,
     ) -> tuple[InMemoryDbtRunnerLdap, pathlib.Path]:
         # NOTE (multi-agent): mro-rn88 — project fields live under the nested DbtLdap
         # namespace; a flat dict is dropped by extra="ignore" (no isolation).
         settings = FlextDbtLdapSettings.model_validate({
             "DbtLdap": {
-                "ldap_base_dn": c.DbtLdap.Tests.DIRECTORY_BASE_DN,
+                "ldap_base_dn": c.Tests.DIRECTORY_BASE_DN,
                 "dbt_project_dir": str(dbt_project_dir),
             },
         })
@@ -64,6 +63,6 @@ def dbt_ldap_service_factory() -> t.DbtLdap.Tests.ServiceFactory:
         if initial_state is not None:
             write_result = tu.Cli.json_write(state_file, initial_state)
             tm.ok(write_result)
-        return tu.DbtLdap.Tests.InMemoryDbtRunnerLdap(settings=settings), state_file
+        return tu.Tests.InMemoryDbtRunnerLdap(settings=settings), state_file
 
     return factory
