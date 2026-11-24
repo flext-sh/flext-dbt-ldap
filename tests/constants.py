@@ -11,20 +11,17 @@ from typing import ClassVar
 
 from flext_tests import FlextTestsConstants
 
-from flext_dbt_ldap import FlextDbtLdapConstants
+from tests import FlextDbtLdapConstants
 
 
 class TestsFlextDbtLdapConstants(FlextTestsConstants, FlextDbtLdapConstants):
     """Constants for flext-dbt-ldap tests."""
 
-    class DbtLdap(FlextDbtLdapConstants.DbtLdap):
-        """DBT LDAP domain test constants namespace."""
+    class Tests(FlextTestsConstants.Tests):
+        """DBT LDAP-specific test constants."""
 
-        class Tests(FlextTestsConstants.Tests):
-            """DBT LDAP-specific test constants."""
-
-            POSTGRES_READY_MAX_RETRIES: ClassVar[int] = 30
-            DIRECTORY_BASE_DN: ClassVar[str] = "dc=example,dc=com"
+        POSTGRES_READY_MAX_RETRIES: ClassVar[int] = 30
+        DIRECTORY_BASE_DN: ClassVar[str] = "dc=example,dc=com"
 
 
 c = TestsFlextDbtLdapConstants

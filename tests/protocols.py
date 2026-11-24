@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
-from flext_dbt_ldap import FlextDbtLdapProtocols, FlextDbtLdapTypes
+from tests import FlextDbtLdapProtocols, FlextDbtLdapTypes
 
 if TYPE_CHECKING:
     from contextlib import AbstractContextManager
@@ -23,11 +23,8 @@ if TYPE_CHECKING:
 class TestsFlextDbtLdapProtocols(FlextTestsProtocols, FlextDbtLdapProtocols):
     """Test protocols combining TestsFlextProtocols and FlextDbtLdapProtocols."""
 
-    class DbtLdap(FlextDbtLdapProtocols.DbtLdap):
-        """DbtLdap test protocols namespace."""
-
-        class Tests:
-            """DbtLdap-specific test protocols."""
+    class Tests(FlextTestsProtocols.Tests):
+        """DbtLdap-specific test protocols."""
 
     @runtime_checkable
     class DbCursor(Protocol):
