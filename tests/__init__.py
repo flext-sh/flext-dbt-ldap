@@ -31,6 +31,7 @@ if TYPE_CHECKING:
         main,
         settings,
     )
+    from flext_dbt_ldap.services import FlextDbtLdapClient, FlextDbtLdapSync
     from tests.base import TestsFlextDbtLdapServiceBase, s
     from tests.constants import TestsFlextDbtLdapConstants, c
     from tests.models import TestsFlextDbtLdapModels, m
@@ -47,6 +48,7 @@ if TYPE_CHECKING:
 
 __all__: tuple[str, ...] = (
     "FlextDbtLdap",
+    "FlextDbtLdapClient",
     "FlextDbtLdapConfig",
     "FlextDbtLdapConstants",
     "FlextDbtLdapModels",
@@ -54,6 +56,7 @@ __all__: tuple[str, ...] = (
     "FlextDbtLdapProtocols",
     "FlextDbtLdapServiceBase",
     "FlextDbtLdapSettings",
+    "FlextDbtLdapSync",
     "FlextDbtLdapTypes",
     "FlextDbtLdapUtilities",
     "FlextDbtLdapVersion",
@@ -94,6 +97,7 @@ install_lazy_exports(
     globals(),
     {
         "FlextDbtLdap": "flext_dbt_ldap",
+        "FlextDbtLdapClient": "flext_dbt_ldap.services",
         "FlextDbtLdapConfig": "flext_dbt_ldap",
         "FlextDbtLdapConstants": "flext_dbt_ldap",
         "FlextDbtLdapModels": "flext_dbt_ldap",
@@ -101,6 +105,7 @@ install_lazy_exports(
         "FlextDbtLdapProtocols": "flext_dbt_ldap",
         "FlextDbtLdapServiceBase": "flext_dbt_ldap",
         "FlextDbtLdapSettings": "flext_dbt_ldap",
+        "FlextDbtLdapSync": "flext_dbt_ldap.services",
         "FlextDbtLdapTypes": "flext_dbt_ldap",
         "FlextDbtLdapUtilities": "flext_dbt_ldap",
         "FlextDbtLdapVersion": "flext_dbt_ldap",
